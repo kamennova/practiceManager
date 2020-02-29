@@ -4,9 +4,9 @@ import React from 'react';
 import { AppBg, DrawerContentStyle, DrawerStyle } from "./AppStyle";
 import { SessionStartModal } from "./components/basic/Modals/SessionStartModal";
 import { CustomDrawerContent } from "./components/basic/Navigation/CustomDrawer";
-import { Dashboard } from "./components/Dashboard/Dashboard";
-import { MyPieces } from "./components/Pieces/MyPieces";
+import { Dashboard } from "./components/Dashboard";
 import { PieceScreen } from "./components/Pieces/PieceScreen";
+import { RepertoireScreen } from "./components/Pieces/RepertoireScreen";
 import { SessionPlanScreen, SessionPlansList } from "./components/SessionPlan";
 import { SessionPlanForm } from "./components/SessionPlan/SessionPlanForm";
 import { FreeSessionActivityChoice } from "./components/SessionTimer/FreeSessionActivityChoice";
@@ -14,7 +14,7 @@ import { FreeSessionTimer } from "./components/SessionTimer/FreeSessionTimer";
 import { PlannedSessionScreen } from "./components/SessionTimer/PlannedSessionScreen";
 import { SessionEndScreen } from "./components/SessionTimer/SessionEndScreen";
 import { AppSettings } from "./components/Settings/Settings";
-import { StartScreen } from "./components/StartScreen/StartScreen";
+import { StartScreen } from "./components/StartScreen";
 import { pieces, plans } from "./exampleData";
 
 const Drawer = createDrawerNavigator();
@@ -31,7 +31,7 @@ export default function App() {
                               drawerContent={props => (<CustomDrawerContent {...props} />)}>
                 <Drawer.Screen name={'StartScreen'} component={StartScreen}/>
 
-                <Drawer.Screen name={'MyPieces'} component={MyPieces.bind(undefined, { pieces: pieces })}/>
+                <Drawer.Screen name={'Repertoire'} component={RepertoireScreen.bind(undefined, { pieces: pieces })}/>
                 <Drawer.Screen name={'Piece'} component={PieceScreen}/>
 
                 <Drawer.Screen name={'SessionPlansList'}
