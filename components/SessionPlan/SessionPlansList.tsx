@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, TouchableWithoutFeedback, View } from "react-native";
 import { AppPaddingStyle, ListItemTitleStyle } from "../../AppStyle";
+import { SESSION_PLAN, SESSION_PLAN_FORM } from "../../NavigationPath";
 import { SessionPlan } from "../../types/SessionPlan";
 import { AddButton } from "../basic/Buttons/AddButton";
 import { ListItemWrapper } from "../basic/Lists/ListItem";
@@ -25,10 +26,10 @@ export const SessionPlansList = (props: { plans: SessionPlan[] }) => {
                         position: 'absolute',
                         right: 0,
                         top: 0,
-                    }} onPress={() => nav.navigate('SessionPlanForm')}/>
+                    }} onPress={() => nav.navigate(SESSION_PLAN_FORM)}/>
                 </View>
                 {props.plans.map(plan => (
-                    <SessionPlanItem plan={plan} onPress={() => nav.navigate('SessionPlan', { plan: plan })}/>
+                    <SessionPlanItem plan={plan} onPress={() => nav.navigate(SESSION_PLAN, { plan: plan })}/>
                 ))}
             </View>
         </ScreenWrapper>

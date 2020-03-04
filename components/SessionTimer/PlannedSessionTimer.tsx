@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, Route, View } from "react-native";
 import { SessionScreenStyle } from "../../AppStyle";
+import { SESSION_END } from "../../NavigationPath";
 import { ActivityType, ComplexActivity, SimpleActivity } from "../../types/Activity";
 import {
     TimerBreakButton,
@@ -31,7 +32,7 @@ export const PlannedSessionTimer = (props: SessionScreenProps) => {
 
     const changeScreen = () => {
         if (activityIndex === plan.schedule.length - 1) { // this activity was the last one
-            nav.navigate('SessionEndScreen');
+            nav.navigate(SESSION_END);
         } else {
             updateActivityIndex(activityIndex + 1);
         }
@@ -43,7 +44,7 @@ export const PlannedSessionTimer = (props: SessionScreenProps) => {
 
     const endSession = () => {
         clearTimeout(timer);
-        nav.navigate('EndSessionScreen', { history: history });
+        nav.navigate(SESSION_END, { history: history });
     };
 
     const skip = () => {
