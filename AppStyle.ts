@@ -1,6 +1,6 @@
-import { TextStyle, ViewStyle } from "react-native";
+import { Dimensions, TextStyle, ViewStyle } from "react-native";
 
-export const AppBg = '#efe7e2';
+export const AppBg = '#f1f1f3';
 
 export const AppSidePadding = 17;
 
@@ -18,7 +18,8 @@ export const ListItemStyle = {
 };
 
 export const ButtonStyle: ViewStyle = {
-    borderWidth: 1,
+    minWidth: 200,
+    // width: '100%',
     flexGrow: 0,
     alignSelf: 'center',
     alignItems: 'center',
@@ -27,6 +28,13 @@ export const ButtonStyle: ViewStyle = {
     paddingBottom: 10,
     paddingLeft: 25,
     paddingRight: 25,
+    // backgroundColor: 'lightgrey',
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+};
+
+export const PrimaryButtonStyle: ViewStyle = {
+  borderColor: 'blue',
 };
 
 export const BigButtonStyle: ViewStyle = {
@@ -81,33 +89,69 @@ export const AddButtonStyle: ViewStyle = {
 };
 
 export const ModalStyle: ViewStyle = {
-    padding: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    padding: 25,
+    paddingTop: 20,
+    paddingBottom: 20,
     backgroundColor: 'white',
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: 'lightgrey',
     alignSelf: 'center',
     justifyContent: 'center',
     margin: 'auto',
-    marginTop: 300,
+    // marginTop: 270,
+    minWidth: Dimensions.get('screen').width * 0.8,
 };
 
 export const ModalTitleStyle: TextStyle = {
-    marginBottom: 20,
+    marginBottom: 40,
     textAlign: 'center',
     color: 'black',
-    fontSize: 20
+    fontSize: 23,
 };
 
 export const PlanOptionStyle = (isSelected: boolean): ViewStyle => ({
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
-    borderWidth: isSelected ? 1 : 0,
-    borderColor: 'black',
+    paddingTop: 15,
+    paddingBottom: 15,
+    marginBottom: 10,
+    borderWidth: isSelected ? 0.4 : 0,
+    borderColor: 'lightgrey'
 });
 
+export const PickerWrapperStyle = {
+    borderWidth: 1,
+    width: '100%',
+    flexShrink: 1,
+    borderColor: 'lightgrey',
+    marginBottom: 20,
+};
+
 export const PickerStyle = {
-    height: 50,
-    width: 200,
-    backgroundColor: 'white',
+    width: '100%',
+    flexShrink: 1,
+};
+
+export const PickerItemStyle = {
+    // padding: 22,
+};
+
+export const FullScreenModalStyle: ViewStyle = {
+    ...AppPaddingStyle,
+    alignContent: 'center',
+    paddingTop: 220,
+    height: '100%',
+};
+
+export const SessionScreenStyle: ViewStyle = {
+    height: '100%',
+    paddingBottom: 40,
+    ...AppPaddingStyle,
+};
+
+export const TimeTrackerTextStyle: TextStyle = {
+    fontSize: 50,
+    color: 'black',
+    textAlign: 'center',
 };

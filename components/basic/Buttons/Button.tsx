@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableWithoutFeedback, View } from "react-native";
+import { Text, TouchableWithoutFeedback, View } from "react-native";
 import { ButtonStyle } from "../../../AppStyle";
 import { ButtonProps } from "./ButtonProps";
 
@@ -9,11 +9,13 @@ export const Button = (props: ButtonProps) => {
             <View style={{
                 ...ButtonStyle,
                 ...props.style,
-                backgroundColor: 'red'
             }}>
-                {/*<Text>*/}
-                {props.children}
-                {/*</Text>*/}
+                <Text style={{
+                    fontSize: 19,
+                    ...props.textStyle,
+                }}>
+                    {props.children}
+                </Text>
             </View>
         </TouchableWithoutFeedback>
     );

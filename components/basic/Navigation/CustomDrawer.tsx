@@ -15,7 +15,7 @@ export const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             <CustomDrawerItem label={'Repertoire'} onPress={() => nav.navigate('MyPieces')}/>
             <CustomDrawerItem label={'Practice plans'} onPress={() => nav.navigate('SessionPlansList')}/>
             <CustomDrawerItem label={'Settings'} onPress={() => nav.navigate('Settings')}/>
-            <CustomDrawerItem label={'Start session'} onPress={() => nav.navigate('SessionStartModal')}/>
+            <CustomDrawerItem label={'Start session'} onPress={() => nav.navigate('SessionStartScreen')}/>
         </DrawerContentScrollView>
     );
 };
