@@ -17,6 +17,16 @@ import { SessionStartScreen } from "./components/SessionTimer/SessionStartScreen
 import { AppSettings } from "./components/Settings/Settings";
 import { StartScreen } from "./components/StartScreen";
 import { pieces, plans } from "./exampleData";
+import {
+    DASHBOARD, FREE_SESSION_ACTIVITY_CHOICE, FREE_SESSION_TIMER, INITIAL_SCREEN,
+    PIECE, PLANNED_SESSION_TIMER,
+    REPERTOIRE, SESSION_END,
+    SESSION_PLAN,
+    SESSION_PLAN_FORM,
+    SESSION_PLAN_LIST,
+    SESSION_START, SETTINGS,
+    START_SCREEN
+} from "./NavigationPath";
 
 const Drawer = createDrawerNavigator();
 
@@ -24,30 +34,31 @@ export default function App() {
 
     return (
         <NavigationContainer>
-            <Drawer.Navigator initialRouteName='Dashboard'
+            <Drawer.Navigator initialRouteName={INITIAL_SCREEN}
                               sceneContainerStyle={{ backgroundColor: AppBg }}
                               drawerContentOptions={{ contentContainerStyle: DrawerContentStyle }}
                               backBehavior={'history'}
                               drawerStyle={DrawerStyle}
                               drawerContent={props => (<CustomDrawerContent {...props} />)}>
-                <Drawer.Screen name={'StartScreen'} component={StartScreen}/>
+                <Drawer.Screen name={START_SCREEN} component={StartScreen}/>
 
-                <Drawer.Screen name={'Repertoire'} component={RepertoireScreen.bind(undefined, { pieces: pieces })}/>
-                <Drawer.Screen name={'Piece'} component={PieceScreen}/>
+                <Drawer.Screen name={REPERTOIRE} component={RepertoireScreen.bind(undefined, { pieces: pieces })}/>
+                <Drawer.Screen name={PIECE} component={PieceScreen}/>
 
-                <Drawer.Screen name={'SessionPlansList'}
+                <Drawer.Screen name={SESSION_PLAN_LIST}
                                component={SessionPlansList.bind(undefined, { plans: plans })}/>
-                <Drawer.Screen name={'SessionPlan'} component={SessionPlanScreen}/>
-                <Drawer.Screen name={'SessionPlanForm'} component={SessionPlanForm}/>
-                <Drawer.Screen name={'SessionStartScreen'} component={SessionStartScreen}/>
+                <Drawer.Screen name={SESSION_PLAN} component={SessionPlanScreen}/>
+                <Drawer.Screen name={SESSION_PLAN_FORM} component={SessionPlanForm}/>
 
-                <Drawer.Screen name={'PlannedSessionTimer'} component={PlannedSessionTimer}/>
-                <Drawer.Screen name={'FreeSessionTimer'} component={FreeSessionTimer}/>
-                <Drawer.Screen name={'FreeSessionActivityChoice'} component={FreeSessionActivityChoice}/>
-                <Drawer.Screen name={'SessionEndScreen'} component={SessionEndScreen}/>
+                <Drawer.Screen name={SESSION_START} component={SessionStartScreen}/>
 
-                <Drawer.Screen name={'Dashboard'} component={Dashboard}/>
-                <Drawer.Screen name={'Settings'} component={AppSettings}/>
+                <Drawer.Screen name={PLANNED_SESSION_TIMER} component={PlannedSessionTimer}/>
+                <Drawer.Screen name={FREE_SESSION_TIMER} component={FreeSessionTimer}/>
+                <Drawer.Screen name={FREE_SESSION_ACTIVITY_CHOICE} component={FreeSessionActivityChoice}/>
+                <Drawer.Screen name={SESSION_END} component={SessionEndScreen}/>
+
+                <Drawer.Screen name={DASHBOARD} component={Dashboard}/>
+                <Drawer.Screen name={SETTINGS} component={AppSettings}/>
             </Drawer.Navigator>
         </NavigationContainer>
     );

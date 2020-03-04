@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, Route, View } from "react-native";
 import { SessionScreenStyle } from "../../AppStyle";
+import { FREE_SESSION_ACTIVITY_CHOICE, FREE_SESSION_TIMER, SESSION_END } from "../../NavigationPath";
 import { Activity, ActivityType } from "../../types/Activity";
 import {
     TimerBreakButton,
@@ -35,7 +36,7 @@ export const FreeSessionTimer = (props: FreeSessionTimerProps) => {
         let newHistory = history;
         newHistory[newHistory.length - 1].duration = Math.floor(seconds / 60);
 
-        nav.navigate('FreeSessionTimer', {
+        nav.navigate(FREE_SESSION_TIMER, {
             history: [...history, {
                 type: ActivityType.Break,
                 duration: 0,
@@ -45,17 +46,17 @@ export const FreeSessionTimer = (props: FreeSessionTimerProps) => {
 
     const changeActivity = () => {
         clearTimeout(timer);
-        nav.navigate('FreeSessionActivityChoice');
+        nav.navigate(FREE_SESSION_ACTIVITY_CHOICE);
     };
 
     const resumeActivity = () => {
         const preBreakActivity = history[history.length - 2];
-        nav.navigate('FreeSessionTimer', { history: [...history, { ...preBreakActivity, duration: 0 }] });
+        nav.navigate(FREE_SESSION_TIMER, { history: [...history, { ...preBreakActivity, duration: 0 }] });
     };
 
     const endSession = () => {
         clearTimeout(timer);
-        nav.navigate('SessionEndScreen', { history: history });
+        nav.navigate(SESSION_END, { history: history });
     };
 
     return (

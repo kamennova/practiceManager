@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Route, View } from "react-native";
 import { FullScreenModalStyle } from "../../AppStyle";
 import { pieces } from "../../exampleData";
+import { FREE_SESSION_TIMER } from "../../NavigationPath";
 import { Activity, ActivityType, ComplexActivityType } from "../../types/Activity";
 import { Button } from "../basic/Buttons/Button";
 import { MyPicker } from "../basic/Inputs/Picker";
@@ -29,7 +30,7 @@ export const FreeSessionActivityChoice = (props: { route: Route }) => {
         const newHistory = [...history];
         newHistory.push(newActivity);
 
-        nav.navigate('FreeSessionTimer', { history: newHistory });
+        nav.navigate(FREE_SESSION_TIMER, { history: newHistory });
     };
 
     return (

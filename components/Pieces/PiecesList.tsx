@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, TouchableWithoutFeedback, View } from "react-native";
 import { ListItemStyle } from "../../AppStyle";
+import { PIECE } from "../../NavigationPath";
 import { Piece } from "../../types/Piece";
 
 export const PiecesList = (props: { pieces: Piece[] }) => {
@@ -10,7 +11,7 @@ export const PiecesList = (props: { pieces: Piece[] }) => {
     return (
         <View style={{}}>
             {props.pieces.map(piece => (
-                <PieceItem onPress={() => navigation.navigate('Piece', { piece: piece })} {...piece} />
+                <PieceItem onPress={() => navigation.navigate(PIECE, { piece: piece })} {...piece} />
             ))}
         </View>
     );

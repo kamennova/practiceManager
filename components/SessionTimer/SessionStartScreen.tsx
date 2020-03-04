@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import { Text, TouchableWithoutFeedback, View } from "react-native";
 import { FullScreenModalStyle, PlanOptionStyle, PrimaryButtonStyle } from "../../AppStyle";
 import { plans } from "../../exampleData";
+import { DASHBOARD, FREE_SESSION_ACTIVITY_CHOICE, PLANNED_SESSION_TIMER } from "../../NavigationPath";
 import { Button } from "../basic/Buttons/Button";
 import { MyPicker } from "../basic/Inputs/Picker";
 import { ModalTitle } from "../basic/Titles/ModalTitle";
 import { TimerIcon, TimerOffIcon } from "../icons";
-
 
 export const SessionStartScreen = (props: { navigation: any }) => {
     const [usePlan, updateUsePlan] = useState(false);
     const [planName, updatePlanName] = useState('daily');
 
     const navigateToTimer = () => usePlan ?
-        props.navigation.navigate('PlannedSessionTimer', { plan: plans[0] }) :
-        props.navigation.navigate('FreeSessionActivityChoice', { history: [] });
+        props.navigation.navigate(PLANNED_SESSION_TIMER, { plan: plans[0] }) :
+        props.navigation.navigate(FREE_SESSION_ACTIVITY_CHOICE, { history: [] });
 
     return (
         <View style={{
@@ -45,7 +45,7 @@ export const SessionStartScreen = (props: { navigation: any }) => {
             </View>
 
             <Button onPress={navigateToTimer} style={{ ...PrimaryButtonStyle, marginBottom: 15 }}> Start </Button>
-            <Button onPress={() => props.navigation.navigate('Dashboard')}>Cancel</Button>
+            <Button onPress={() => props.navigation.navigate(DASHBOARD)}>Cancel</Button>
         </View>
     );
 };
