@@ -1,8 +1,9 @@
 import React from 'react';
-import {Text} from 'react-native';
+import { Text, TextStyle } from 'react-native';
 
-type TitleProps = {
+export type TitleProps = {
     children: string | string[],
+    style?: TextStyle,
 }
 
 export const ScreenTitle = (props: TitleProps) => (
@@ -11,6 +12,7 @@ export const ScreenTitle = (props: TitleProps) => (
         color: 'black',
         fontSize: 22,
         fontWeight: 'bold',
+        ...props.style
     }}>
         {props.children}
     </Text>

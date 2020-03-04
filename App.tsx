@@ -2,7 +2,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import React from 'react';
 import { AppBg, DrawerContentStyle, DrawerStyle } from "./AppStyle";
-import { SessionStartModal } from "./components/basic/Modals/SessionStartModal";
+
 import { CustomDrawerContent } from "./components/basic/Navigation/CustomDrawer";
 import { Dashboard } from "./components/Dashboard";
 import { PieceScreen } from "./components/Pieces/PieceScreen";
@@ -10,9 +10,10 @@ import { RepertoireScreen } from "./components/Pieces/RepertoireScreen";
 import { SessionPlanScreen, SessionPlansList } from "./components/SessionPlan";
 import { SessionPlanForm } from "./components/SessionPlan/SessionPlanForm";
 import { FreeSessionActivityChoice } from "./components/SessionTimer/FreeSessionActivityChoice";
-import { FreeSessionTimer } from "./components/SessionTimer/FreeSessionTimer";
-import { PlannedSessionScreen } from "./components/SessionTimer/PlannedSessionScreen";
-import { SessionEndScreen } from "./components/SessionTimer/SessionEndScreen";
+import { FreeSessionTimer } from "./components/SessionTimer";
+import { PlannedSessionTimer } from "./components/SessionTimer";
+import { SessionEndScreen } from "./components/SessionTimer";
+import { SessionStartScreen } from "./components/SessionTimer/SessionStartScreen";
 import { AppSettings } from "./components/Settings/Settings";
 import { StartScreen } from "./components/StartScreen";
 import { pieces, plans } from "./exampleData";
@@ -38,9 +39,9 @@ export default function App() {
                                component={SessionPlansList.bind(undefined, { plans: plans })}/>
                 <Drawer.Screen name={'SessionPlan'} component={SessionPlanScreen}/>
                 <Drawer.Screen name={'SessionPlanForm'} component={SessionPlanForm}/>
-                <Drawer.Screen name={'SessionStartModal'} component={SessionStartModal}/>
+                <Drawer.Screen name={'SessionStartScreen'} component={SessionStartScreen}/>
 
-                <Drawer.Screen name={'PlannedSessionScreen'} component={PlannedSessionScreen}/>
+                <Drawer.Screen name={'PlannedSessionTimer'} component={PlannedSessionTimer}/>
                 <Drawer.Screen name={'FreeSessionTimer'} component={FreeSessionTimer}/>
                 <Drawer.Screen name={'FreeSessionActivityChoice'} component={FreeSessionActivityChoice}/>
                 <Drawer.Screen name={'SessionEndScreen'} component={SessionEndScreen}/>
