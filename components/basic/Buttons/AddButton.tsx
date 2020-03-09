@@ -7,6 +7,9 @@ export const AddButton = (props: { onPress: () => void, style?: ViewStyle }) => 
         <TouchableWithoutFeedback onPress={props.onPress}>
             <View style={{
                 ...AddButtonStyle,
+                position: 'absolute',
+                right: 0,
+                top: 0,
                 ...props.style,
             }}>
                 <Text>Add new</Text>
