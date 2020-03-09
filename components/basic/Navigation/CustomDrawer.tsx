@@ -1,5 +1,6 @@
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import React from "react";
+import { DASHBOARD, REPERTOIRE, SESSION_PLAN_LIST, SESSION_START, SETTINGS } from "../../../NavigationPath";
 
 type ItemProps = {
     label: string,
@@ -11,11 +12,11 @@ export const CustomDrawerContent = (props: DrawerContentComponentProps) => {
 
     return (
         <DrawerContentScrollView {...props}>
-            <CustomDrawerItem label={'Dashboard'} onPress={() => nav.navigate('Dashboard')}/>
-            <CustomDrawerItem label={'Repertoire'} onPress={() => nav.navigate('MyPieces')}/>
-            <CustomDrawerItem label={'Practice plans'} onPress={() => nav.navigate('SessionPlansList')}/>
-            <CustomDrawerItem label={'Settings'} onPress={() => nav.navigate('Settings')}/>
-            <CustomDrawerItem label={'Start session'} onPress={() => nav.navigate('SessionStartScreen')}/>
+            <CustomDrawerItem label={'Dashboard'} onPress={() => nav.navigate(DASHBOARD)}/>
+            <CustomDrawerItem label={'Repertoire'} onPress={() => nav.navigate(REPERTOIRE)}/>
+            <CustomDrawerItem label={'Practice plans'} onPress={() => nav.navigate(SESSION_PLAN_LIST)}/>
+            <CustomDrawerItem label={'Settings'} onPress={() => nav.navigate(SETTINGS)}/>
+            <CustomDrawerItem label={'Start session'} onPress={() => nav.navigate(SESSION_START)}/>
         </DrawerContentScrollView>
     );
 };

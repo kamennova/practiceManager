@@ -34,7 +34,7 @@ export const ButtonStyle: ViewStyle = {
 };
 
 export const PrimaryButtonStyle: ViewStyle = {
-  borderColor: 'blue',
+    borderColor: 'blue',
 };
 
 export const BigButtonStyle: ViewStyle = {
@@ -131,6 +131,30 @@ export const PickerWrapperStyle = {
 export const PickerStyle = {
     width: '100%',
     flexShrink: 1,
+};
+
+export const TextInputStyle = {
+    width: '100%',
+    borderWidth: 0.4,
+    borderColor: 'grey',
+    padding: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+    marginBottom: 15,
+    fontSize: 18,
+};
+
+export const CheckboxWrapperStyle: ViewStyle = {
+    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center'
+};
+
+export const CheckboxStyle = {
+    width: 20,
+    height: 20,
+    marginRight: 15,
+    marginTop: 0,
 };
 
 export const PickerItemStyle = {

@@ -2,10 +2,14 @@ export type Piece = {
     name: string,
     timeSpent: number,
 
+    notificationsOn: boolean,
+    notificationsInterval: number,
+
     complexity?: PieceComplexity,
     status?: PieceStatus,
-    composers?: string[],
-    arrangers?: string[],
+    tags?: string[],
+
+    authors?: string[],
 }
 
 export enum PieceComplexity {
