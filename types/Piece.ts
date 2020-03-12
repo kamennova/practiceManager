@@ -5,6 +5,9 @@ export type Piece = {
     notificationsOn: boolean,
     notificationsInterval: number,
 
+    lastPracticedOn?: Date,
+    addedOn?: Date,
+
     complexity?: PieceComplexity,
     status?: PieceStatus,
     tags?: string[],

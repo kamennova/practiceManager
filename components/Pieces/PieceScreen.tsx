@@ -17,9 +17,9 @@ export const PieceScreen = (props: { route: Route }) => {
                 <ScreenTitle>
                     {piece.name}
                 </ScreenTitle>
-                {piece.composers !== undefined ?
+                {piece.authors !== undefined ?
                     <Text>
-                        {piece.composers.reduce((a, b) => a + ', ' + b)}
+                        {piece.authors.reduce((a, b) => a + ', ' + b)}
                     </Text>
                     : undefined}
                 <Text>

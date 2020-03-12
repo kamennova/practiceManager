@@ -157,9 +157,19 @@ export const CheckboxStyle = {
     marginTop: 0,
 };
 
-export const PickerItemStyle = {
-    // padding: 22,
+export const DaysInputStyle: ViewStyle & TextStyle = {
+    width: 'auto',
+    borderColor: 'lightgrey',
+    textAlign: 'center',
+    borderWidth: 1,
+    paddingLeft: 3,
+    paddingRight: 3,
+    marginRight: 5,
+    marginLeft: 5,
+    fontSize: 17
 };
+
+// ---
 
 export const FullScreenModalStyle: ViewStyle = {
     ...AppPaddingStyle,
@@ -178,4 +188,14 @@ export const TimeTrackerTextStyle: TextStyle = {
     fontSize: 50,
     color: 'black',
     textAlign: 'center',
+};
+
+export const ErrorAlertStyle: ViewStyle = {
+    padding: 8,
+    backgroundColor: 'pink',
+};
+
+export const ErrorAlertTextStyle: TextStyle = {
+    fontSize: 16,
+    color: 'red',
 };

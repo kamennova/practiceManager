@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { Component } from 'react';
 import { Text, View } from "react-native";
-import { AppPaddingStyle } from "../../AppStyle";
+import { AppPaddingStyle, PrimaryButtonStyle } from "../../AppStyle";
+import { validatePiece } from "../../backend/validation";
+import { PIECE } from "../../NavigationPath";
 import { Piece } from "../../types/Piece";
 import { Button } from "../basic/Buttons/Button";
+import { ErrorAlert } from "../basic/ErrorAlert";
 import { MyCheckbox } from "../basic/Inputs/Checkbox";
 import { DaysInput } from "../basic/Inputs/DaysInput";
 import { MyTextInput } from "../basic/Inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ScreenTitle } from "../basic/Titles/Titles";
+import db from './../../backend/Database';
 
 const EmptyPiece: Piece = {
     name: '',
@@ -16,70 +21,94 @@ const EmptyPiece: Piece = {
     notificationsOn: true,
 };
 
-export const PieceForm = () => {
-    const [piece, updatePiece] = useState<Piece>(EmptyPiece);
-    const [errors, updateErrors] = useState('');
-    const [notifOn, updateNotifOn] = useState(false);
+const { addPiece } = db();
 
-    const validateAndSave = () => {
-        if (validate(piece)) {
-            // addPiece(piece);
+export class PieceForm extends Component {
+    state = {
+        piece: EmptyPiece,
+        errors: '',
+    };
+
+    updatePiece(pieceUpd: Piece) {
+
+        this.setState({
+            ...this.state,
+            piece: pieceUpd
+        });
+    };
+
+    async validateAndSave() {
+        const res = await validatePiece(this.state.piece);
+
+        if (res.valid) {
+            this.setState({ ...this.state, errors: '' });
+            await addPiece(this.state.piece);
+
+            useNavigation().navigate(PIECE, { piece: this.state.piece });
         } else {
-            updateErrors('Error str');
+            this.setState({ ...this.state, errors: res.errors });
         }
     };
 
-    return (
-        <ScreenWrapper>
-            <View style={{
-                borderWidth :3,
-                borderColor: 'red',
-                ...AppPaddingStyle,
-                flexGrow: 1,
-                justifyContent: 'flex-start'
-                // height: '100%',
-            }}>
-                <ScreenTitle>
-                    Add piece
-                </ScreenTitle>
-                <View style={{ marginTop: 15 }}>
-                    <View>
-                        <MyTextInput onChangeText={(val) => updatePiece({ ...piece, name: val })}
-                                     placeholder={'Piece title'}/>
-                        <MyTextInput placeholder={'Authors'}
-                                     onChangeText={(val) => updatePiece({ ...piece, authors: [val] })}/>
+    render() {
+        return (
+            <ScreenWrapper fullHeight={true}>
+                <View style={{
+                    ...AppPaddingStyle,
+                    paddingBottom: 30,
+                    flexGrow: 1,
+                }}>
+                    <ScreenTitle>Add piece</ScreenTitle>
 
-                        <MyTextInput placeholder={'Tags'}
-                                     onChangeText={(val) => updatePiece({ ...piece, tags: [val] })}/>
+                    <View style={{ marginTop: 15 }}>
+                        <View>
+                            <MyTextInput onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
+                                         placeholder={'Piece title'}/>
+                            <MyTextInput placeholder={'Authors'}
+                                         onChangeText={(val) => this.updatePiece({
+                                             ...this.state.piece,
+                                             authors: [val]
+                                         })}/>
 
+                            <MyTextInput placeholder={'Tags'}
+                                         onChangeText={(val) => this.updatePiece({
+                                             ...this.state.piece,
+                                             tags: [val]
+                                         })}/>
 
-                        <View style={{
-                            width: '100%',
-                            height: 1,
-                            backgroundColor: 'grey',
-                            marginBottom: 20,
-                            marginTop: 14
-                        }}/>
+                            {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
 
-                        <MyCheckbox onValueChange={() => updateNotifOn(false)} value={notifOn}
-                                    title={'Notifications on'}/>
+                            <View style={{
+                                width: '100%',
+                                height: 1,
+                                backgroundColor: 'grey',
+                                marginBottom: 20,
+                                marginTop: 14
+                            }}/>
 
-                        <Text style={{
-                            fontSize: 16,
-                        }}>Remind every <DaysInput value={'1'}
-                                                   onChange={(val) => updatePiece({
-                                                       ...piece,
-                                                       notificationsInterval: Number(val)
-                                                   })}/> day</Text>
+                            <MyCheckbox onValueChange={() => this.updatePiece({
+                                ...this.state.piece,
+                                notificationsOn: !this.state.piece.notificationsOn
+                            })} value={this.state.piece.notificationsOn}
+                                        title={'Notifications on'}/>
+
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={{ fontSize: 16, }}>Remind to practice every</Text>
+                                <DaysInput value={this.state.piece.notificationsInterval}
+                                           onChange={(val) => this.updatePiece({
+                                               ...this.state.piece,
+                                               notificationsInterval: val
+                                           })}
+                                           minVal={1} maxVal={100}/>
+                                <Text>day{this.state.piece.notificationsInterval > 1 ? 's' : undefined} </Text>
+                            </View>
+                        </View>
                     </View>
-                </View>
-                <Text>{errors}</Text>
-                <Button onPress={validateAndSave} style={{ marginTop: 20 }}>Save</Button>
-            </View>
-        </ScreenWrapper>
-    );
-};
 
-const validate = (piece: Piece): boolean => {
-    return (piece.name.length !== 0)
-};
+                    <Button onPress={async () => await this.validateAndSave()}
+                            style={{ marginTop: 'auto', ...PrimaryButtonStyle }}>Save</Button>
+                </View>
+            </ScreenWrapper>
+        );
+    }
+}

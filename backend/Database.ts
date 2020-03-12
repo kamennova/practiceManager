@@ -6,7 +6,12 @@ export default () => {
 
     db.transaction(tx => {
         tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS Pieces (id integer primary key not null, pieceName varchar(225) not null, authors varchar(255), addedOnDate timestamp not null, lastPracticedOnDate timestamp)',
+            'CREATE TABLE IF NOT EXISTS Pieces (' +
+            'id integer primary key not null,' +
+            ' pieceName varchar(225) not null,' +
+            ' authors varchar(255),' +
+            ' addedOnDate timestamp not null,' +
+            ' lastPracticedOnDate timestamp)',
             [],
             undefined,
             (_tr, err) => {
@@ -33,6 +38,15 @@ export default () => {
         );
     });
 
+    const rowToPiece = (row: any) => ({
+        name: row.pieceName,
+        timeSpent: 0,
+        notificationsOn: false,
+        notificationsInterval: 2,
+        authors: row.authors.split(','),
+        lastPracticedOn: new Date(row.lastPracticedOnDate),
+    });
+
     const getAllPieces = async (): Promise<Piece[]> =>
         new Promise((resolve, reject) =>
             db.transaction(tx =>
@@ -40,14 +54,7 @@ export default () => {
                     [],
                     (_, { rows }) => resolve(
                         // @ts-ignore
-                        rows._array.map(row => ({
-                            name: row.pieceName,
-                            timeSpent: 0,
-                            notificationsOn: false,
-                            notificationsInterval: 2,
-                            authors: row.authors.split(','),
-                            lastPracticedOnDate: new Date(row.lastPracticedOnDate),
-                        }))
+                        rows._array.map(rowToPiece)
                     ),
                     (_tr, err) => {
                         reject(err);
@@ -55,13 +62,37 @@ export default () => {
                     }
                 )));
 
-    const addPiece = (piece: Piece) => {
-        const timestamp = Date.now();
+    const addPiece = async (piece: Piece): Promise<void> =>
+        new Promise((_resolve, reject) =>
+            db.transaction(tx => {
+                tx.executeSql(`INSERT INTO Pieces (pieceName, authors, addedOnDate)
+                               values (?, ?, ?)`,
+                    [piece.name, piece.authors, Date.now()],
+                    undefined,
+                    (_tr, err) => {
+                        reject(err);
+                        return false;
+                    }
+                )
+            }));
 
-        db.transaction(tx => {
-            tx.executeSql(`INSERT INTO Pieces (pieceName, authors, addedOnDate) values (${piece.name}, ${piece.authors}, ${timestamp})`)
-        })
-    };
+    const getPiecesByName = async (name: string): Promise<Piece[]> =>
+        new Promise((resolve, reject) => db.transaction(tx => {
+            tx.executeSql(
+                    `SELECT *
+                     FROM Pieces
+                     WHERE pieceName = ?`,
+                [name],
+                (_, { rows }) => resolve(
+                    // @ts-ignore
+                    rows._array.map(rowToPiece)
+                ),
+                (_tr, err) => {
+                    reject(err);
+                    return false
+                }
+            )
+        }));
 
-    return { getAllPieces, addPiece };
+    return { getAllPieces, addPiece, getPiecesByName };
 };

@@ -46,7 +46,6 @@ export default class App extends Component {
 
     async componentDidMount() {
         this.setState({ pieces: await getAllPieces() });
-        console.log(this.state.pieces);
     }
 
     render() {
