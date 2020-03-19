@@ -1,8 +1,10 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import React, { Component } from 'react';
+import { getRepository } from "typeorm";
 import { AppBg, DrawerContentStyle, DrawerStyle } from "./AppStyle";
-import db from './backend/Database';
+import { connectToDb } from "./backend";
+import { PieceEntity } from "./backend/entity/Piece";
 
 import { CustomDrawerContent } from "./components/basic/Navigation/CustomDrawer";
 import { Dashboard } from "./components/Dashboard";
@@ -37,15 +39,19 @@ import {
 
 const Drawer = createDrawerNavigator();
 
-const { getAllPieces } = db();
-
 export default class App extends Component {
     state = {
         pieces: [],
     };
 
     async componentDidMount() {
-        this.setState({ pieces: await getAllPieces() });
+        await connectToDb();
+        await this.fetchPieces();
+    }
+
+    async fetchPieces() {
+        let pieceRepository = getRepository(PieceEntity);
+        this.setState({ pieces: await pieceRepository.find() });
     }
 
     render() {

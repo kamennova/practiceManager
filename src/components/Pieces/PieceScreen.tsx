@@ -8,6 +8,7 @@ import { ScreenTitle } from "../basic/Titles/Titles";
 
 export const PieceScreen = (props: { route: Route }) => {
     const piece: Piece = props.route.params.piece;
+    console.log(piece);
 
     return (
         <ScreenWrapper>
@@ -17,7 +18,7 @@ export const PieceScreen = (props: { route: Route }) => {
                 <ScreenTitle>
                     {piece.name}
                 </ScreenTitle>
-                {piece.authors !== undefined ?
+                {piece.authors.length > 0 ?
                     <Text>
                         {piece.authors.reduce((a, b) => a + ', ' + b)}
                     </Text>

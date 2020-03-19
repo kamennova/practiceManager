@@ -1,9 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { Component } from 'react';
-import { Text, View } from "react-native";
+import { Route, Text, View } from "react-native";
 import { AppPaddingStyle, PrimaryButtonStyle } from "../../AppStyle";
+import { addPiece } from "../../backend/db";
 import { validatePiece } from "../../backend/validation";
 import { PIECE } from "../../NavigationPath";
+import { ActionType } from "../../types/FormType";
 import { Piece } from "../../types/Piece";
 import { Button } from "../basic/Buttons/Button";
 import { ErrorAlert } from "../basic/ErrorAlert";
@@ -12,20 +13,25 @@ import { DaysInput } from "../basic/Inputs/DaysInput";
 import { MyTextInput } from "../basic/Inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ScreenTitle } from "../basic/Titles/Titles";
-import db from './../../backend/Database';
 
 const EmptyPiece: Piece = {
     name: '',
     timeSpent: 0,
     notificationsInterval: 1,
     notificationsOn: true,
+    authors: [],
+    tags: [],
 };
 
-const { addPiece } = db();
+type FormProps = {
+    route: Route,
+    navigation: any,
+    updatePieces: () => void
+};
 
-export class PieceForm extends Component {
+export class PieceForm extends Component<FormProps> {
     state = {
-        piece: EmptyPiece,
+        piece: this.props.route.params.mode === ActionType.Create ? EmptyPiece : this.props.route.params.piece,
         errors: '',
     };
 
@@ -42,9 +48,9 @@ export class PieceForm extends Component {
 
         if (res.valid) {
             this.setState({ ...this.state, errors: '' });
-            await addPiece(this.state.piece);
+            const addedPiece = await addPiece(this.state.piece);
 
-            useNavigation().navigate(PIECE, { piece: this.state.piece });
+            this.props.navigation.navigate(PIECE, { piece: addedPiece });
         } else {
             this.setState({ ...this.state, errors: res.errors });
         }

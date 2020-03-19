@@ -1,4 +1,5 @@
 export type Piece = {
+    id: number,
     name: string,
     timeSpent: number,
 
@@ -10,9 +11,8 @@ export type Piece = {
 
     complexity?: PieceComplexity,
     status?: PieceStatus,
-    tags?: string[],
-
-    authors?: string[],
+    tags: string[],
+    authors: string[],
 }
 
 export enum PieceComplexity {

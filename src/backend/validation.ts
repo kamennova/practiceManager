@@ -1,19 +1,18 @@
-import { Piece } from "../types/Piece";
-import db from "./Database";
-
-const { getPiecesByName } = db();
+import { getRepository } from "typeorm";
+import { PieceEntity } from "./entity/Piece";
 
 export type CheckResult = {
     valid: boolean,
     errors?: string,
 }
 
-export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
+export const validatePiece = async (piece: PieceEntity): Promise<CheckResult> => {
     if (piece.name.length === 0) {
         return Promise.resolve({ valid: false, errors: 'Piece title should be filled' });
     }
 
-    const piecesWithSameName = await getPiecesByName(piece.name);
+    const pieceRepo = getRepository(PieceEntity);
+    const piecesWithSameName = await pieceRepo.find({ where: { name: piece.name }, relations: ['authors'] });
 
     if (piecesWithSameName.length > 0) {
         if (piecesWithSameName.find(item => item.authors === piece.authors) !== undefined) {

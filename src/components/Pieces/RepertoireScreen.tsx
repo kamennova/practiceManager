@@ -3,6 +3,7 @@ import React from 'react';
 import { View } from "react-native";
 import { AppPaddingStyle } from "../../AppStyle";
 import { PIECE_FORM } from "../../NavigationPath";
+import { ActionType } from "../../types/FormType";
 import { Piece } from "../../types/Piece";
 import { AddButton } from "../basic/Buttons/AddButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
@@ -23,7 +24,7 @@ export const RepertoireScreen = (props: { pieces: Piece[] }) => {
                     marginBottom: 20,
                 }}>
                     <ScreenTitle>Repertoire</ScreenTitle>
-                    <AddButton onPress={() => nav.navigate(PIECE_FORM)}/>
+                    <AddButton onPress={() => nav.navigate(PIECE_FORM, { mode: ActionType.Create, navigation: nav })}/>
                     <PieceFilters/>
                 </View>
                 <PiecesList pieces={props.pieces}/>
