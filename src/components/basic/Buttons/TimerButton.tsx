@@ -34,28 +34,28 @@ export const TimerButton = (props: ButtonProps & { icon?: ImageSourcePropType })
 
 export const TimerNextButton = (props: ButtonProps) => (
     <TimerButton textStyle={props.textStyle} style={props.style} onPress={props.onPress}
-                 icon={require('../../../assets/skip_next.png')}>
+                 icon={require('../../../../assets/skip_next.png')}>
         {props.children}
     </TimerButton>
 );
 
 export const TimerBreakButton = (props: ButtonProps) => (
     <TimerButton textStyle={props.textStyle} style={props.style} onPress={props.onPress}
-                 icon={require('../../../assets/pause.png')}>
+                 icon={require('../../../../assets/pause.png')}>
         {props.children}
     </TimerButton>
 );
 
 export const TimerFinishButton = (props: ButtonProps) => (
     <TimerButton textStyle={props.textStyle} style={props.style} onPress={props.onPress}
-                 icon={require('../../../assets/stop.png')}>
+                 icon={require('../../../../assets/stop.png')}>
         {props.children}
     </TimerButton>
 );
 
 export const TimerResumeButton = (props: ButtonProps) => (
     <TimerButton textStyle={props.textStyle} style={props.style} onPress={props.onPress}
-                 icon={require('../../../assets/play.png')}>
+                 icon={require('../../../../assets/play.png')}>
         {props.children}
     </TimerButton>
 );

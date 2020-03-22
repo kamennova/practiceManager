@@ -6,5 +6,5 @@ type IconProps = {
 }
 
 export const TimerOffIcon = (props: IconProps) => (
-    <Image style={props.style} source={require('../../assets/timer_off.png')}/>
+    <Image style={props.style} source={require('../../../assets/timer_off.png')}/>
 );
