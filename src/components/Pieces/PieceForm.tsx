@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Route, Text, View } from "react-native";
+import { connect } from "react-redux";
 import { AppPaddingStyle, PrimaryButtonStyle } from "../../AppStyle";
-import { addPiece } from "../../backend/db";
 import { validatePiece } from "../../backend/validation";
 import { PIECE } from "../../NavigationPath";
-import { ActionType } from "../../types/FormType";
+import { thunkAddPiece } from "../../thunks";
+import { ActionType } from "../../types/ActionType";
 import { Piece } from "../../types/Piece";
 import { Button } from "../basic/Buttons/Button";
 import { ErrorAlert } from "../basic/ErrorAlert";
@@ -15,6 +16,7 @@ import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ScreenTitle } from "../basic/Titles/Titles";
 
 const EmptyPiece: Piece = {
+    id: 0,
     name: '',
     timeSpent: 0,
     notificationsInterval: 1,
@@ -23,22 +25,27 @@ const EmptyPiece: Piece = {
     tags: [],
 };
 
+const mapDispatchToProps = (dispatch: any) => ({
+    onSavePiece: (piece: Piece) => {
+        dispatch(thunkAddPiece(piece));
+    },
+});
+
 type FormProps = {
     route: Route,
+    onSavePiece: (piece: Piece) => any,
     navigation: any,
-    updatePieces: () => void
 };
 
-export class PieceForm extends Component<FormProps> {
+class PieceFormComponent extends Component<FormProps> {
     state = {
         piece: this.props.route.params.mode === ActionType.Create ? EmptyPiece : this.props.route.params.piece,
         errors: '',
     };
 
     updatePiece(pieceUpd: Piece) {
-
         this.setState({
-            ...this.state,
+            errors: this.state.errors,
             piece: pieceUpd
         });
     };
@@ -47,12 +54,12 @@ export class PieceForm extends Component<FormProps> {
         const res = await validatePiece(this.state.piece);
 
         if (res.valid) {
-            this.setState({ ...this.state, errors: '' });
-            const addedPiece = await addPiece(this.state.piece);
+            this.setState({ piece: this.state.piece, errors: '' });
+            const addedPiece = await this.props.onSavePiece(this.state.piece);
 
             this.props.navigation.navigate(PIECE, { piece: addedPiece });
         } else {
-            this.setState({ ...this.state, errors: res.errors });
+            this.setState({ piece: this.state.piece, errors: res.errors });
         }
     };
 
@@ -112,9 +119,12 @@ export class PieceForm extends Component<FormProps> {
                     </View>
 
                     <Button onPress={async () => await this.validateAndSave()}
-                            style={{ marginTop: 'auto', ...PrimaryButtonStyle }}>Save</Button>
+                            style={{ marginTop: 'auto', marginBottom: 15, ...PrimaryButtonStyle }}>Save</Button>
+                    <Button onPress={() => this.props.navigation.goBack()}>Cancel</Button>
                 </View>
             </ScreenWrapper>
         );
     }
 }
+
+export const PieceForm = connect(undefined, mapDispatchToProps)(PieceFormComponent);

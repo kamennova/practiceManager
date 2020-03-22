@@ -3,10 +3,12 @@ import { Activity, ActivityType, ComplexActivity, SimpleActivity } from "./Activ
 export type SessionSchedule = (SimpleActivity | ComplexActivity)[];
 
 export class SessionPlan {
+    id: number;
     name: string;
     schedule: SessionSchedule; // order is important
 
-    constructor(name: string, schedule: SessionSchedule) {
+    constructor(id: number, name: string, schedule: SessionSchedule) {
+        this.id = id;
         this.name = name;
         this.schedule = schedule;
     }
