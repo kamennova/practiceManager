@@ -1,9 +1,6 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import React from 'react';
-import { Provider } from "react-redux";
-import { applyMiddleware, createStore } from "redux";
-import thunk from "redux-thunk";
 import { AppBg, DrawerContentStyle, DrawerStyle } from "./AppStyle";
 
 import { CustomDrawerContent } from "./components/basic/Navigation/CustomDrawer";
@@ -36,43 +33,38 @@ import {
     SETTINGS,
     START_SCREEN
 } from "./NavigationPath";
-import { practiceManagerApp } from "./reducers";
-
-const store = createStore(practiceManagerApp, applyMiddleware(thunk));
 
 const Drawer = createDrawerNavigator();
 
-export const App = () => (
-    <Provider store={store}>
-        <NavigationContainer>
-            <Drawer.Navigator initialRouteName={INITIAL_SCREEN}
-                              sceneContainerStyle={{ backgroundColor: AppBg }}
-                              drawerContentOptions={{ contentContainerStyle: DrawerContentStyle }}
-                              backBehavior={'history'}
-                              drawerStyle={DrawerStyle}
-                              drawerContent={props => (<CustomDrawerContent {...props} />)}>
-                <Drawer.Screen name={START_SCREEN} component={StartScreen}/>
+export const Main = () => (
+    <NavigationContainer>
+        <Drawer.Navigator initialRouteName={INITIAL_SCREEN}
+                          sceneContainerStyle={{ backgroundColor: AppBg }}
+                          drawerContentOptions={{ contentContainerStyle: DrawerContentStyle }}
+                          backBehavior={'history'}
+                          drawerStyle={DrawerStyle}
+                          drawerContent={props => (<CustomDrawerContent {...props} />)}>
+            <Drawer.Screen name={START_SCREEN} component={StartScreen}/>
 
-                <Drawer.Screen name={REPERTOIRE}
-                               component={RepertoireScreen}/>
-                <Drawer.Screen name={PIECE} component={PieceScreen}/>
-                <Drawer.Screen name={PIECE_FORM} component={PieceForm}/>
+            <Drawer.Screen name={REPERTOIRE}
+                           component={RepertoireScreen}/>
+            <Drawer.Screen name={PIECE} component={PieceScreen}/>
+            <Drawer.Screen name={PIECE_FORM} component={PieceForm}/>
 
-                <Drawer.Screen name={SESSION_PLAN_LIST}
-                               component={SessionPlansList.bind(undefined, { plans: plans })}/>
-                <Drawer.Screen name={SESSION_PLAN} component={SessionPlanScreen}/>
-                <Drawer.Screen name={SESSION_PLAN_FORM} component={SessionPlanForm}/>
+            <Drawer.Screen name={SESSION_PLAN_LIST}
+                           component={SessionPlansList.bind(undefined, { plans: plans })}/>
+            <Drawer.Screen name={SESSION_PLAN} component={SessionPlanScreen}/>
+            <Drawer.Screen name={SESSION_PLAN_FORM} component={SessionPlanForm}/>
 
-                <Drawer.Screen name={SESSION_START} component={SessionStartScreen}/>
+            <Drawer.Screen name={SESSION_START} component={SessionStartScreen}/>
 
-                <Drawer.Screen name={PLANNED_SESSION_TIMER} component={PlannedSessionTimer}/>
-                <Drawer.Screen name={FREE_SESSION_TIMER} component={FreeSessionTimer}/>
-                <Drawer.Screen name={FREE_SESSION_ACTIVITY_CHOICE} component={FreeSessionActivityChoice}/>
-                <Drawer.Screen name={SESSION_END} component={SessionEndScreen}/>
+            <Drawer.Screen name={PLANNED_SESSION_TIMER} component={PlannedSessionTimer}/>
+            <Drawer.Screen name={FREE_SESSION_TIMER} component={FreeSessionTimer}/>
+            <Drawer.Screen name={FREE_SESSION_ACTIVITY_CHOICE} component={FreeSessionActivityChoice}/>
+            <Drawer.Screen name={SESSION_END} component={SessionEndScreen}/>
 
-                <Drawer.Screen name={DASHBOARD} component={Dashboard}/>
-                <Drawer.Screen name={SETTINGS} component={AppSettings}/>
-            </Drawer.Navigator>
-        </NavigationContainer>
-    </Provider>
+            <Drawer.Screen name={DASHBOARD} component={Dashboard}/>
+            <Drawer.Screen name={SETTINGS} component={AppSettings}/>
+        </Drawer.Navigator>
+    </NavigationContainer>
 );
