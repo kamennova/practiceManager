@@ -17,11 +17,11 @@ const mapStateToProps = (state: StateShape) => ({
     pieces: state.pieces,
 });
 
-const mapDispatchToProps = () => ({
-    getPieces: thunkGetPieces,
+const mapDispatchToProps = (dispatch: any) => ({
+    getPieces: () => dispatch(thunkGetPieces()),
 });
 
-class Repertoire extends Component<{ pieces: Piece[], getPieces: () => any, navigation: any }> {
+class Repertoire extends Component<{ pieces: Piece[], getPieces: () => void, navigation: any }> {
     componentDidMount() {
         this.props.getPieces();
     }

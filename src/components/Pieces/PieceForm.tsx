@@ -28,9 +28,7 @@ const EmptyPiece: Piece = {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    onSavePiece: (piece: Piece) => {
-        dispatch(thunkAddPiece(piece));
-    },
+    onSavePiece: (piece: Piece) => dispatch(thunkAddPiece(piece)),
 });
 
 type FormProps = {

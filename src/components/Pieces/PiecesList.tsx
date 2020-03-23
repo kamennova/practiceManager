@@ -23,7 +23,7 @@ const PieceItem = (props: Piece & { onPress: () => void }) => (
             <PieceName>
                 {props.name}
             </PieceName>
-            {props.authors !== undefined ? <PieceAuthor authors={props.authors}/> : undefined}
+            {props.authors.length > 0 ? <PieceAuthor authors={props.authors}/> : undefined}
         </View>
     </TouchableWithoutFeedback>
 );

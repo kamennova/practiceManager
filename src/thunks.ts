@@ -7,16 +7,14 @@ import { Piece } from "./types/Piece";
 
 export type ThunkResult = ActionCreator<ThunkAction<Promise<Action>, StateShape, void, Action<void>>>;
 
-export const thunkGetPieces: ThunkResult =
-    () => async (dispatch: Dispatch) => {
-        const pieces = await getPieces();
+export const thunkGetPieces: ThunkResult = () => async (dispatch: Dispatch) => {
+    const pieces = await getPieces();
 
-        return dispatch(setPieces(pieces));
-    };
+    return dispatch(setPieces(pieces));
+};
 
-export const thunkAddPiece: ThunkResult =
-    (piece: Piece) => async (dispatch: Dispatch) => {
-        await addPieceToDb(piece);
+export const thunkAddPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
+    await addPieceToDb(piece);
 
-        return dispatch(addPiece(piece));
-    };
+    return dispatch(addPiece(piece));
+};

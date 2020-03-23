@@ -11,7 +11,7 @@ import {
     PieceActionTypes,
     PlanActionTypes,
     RENAME_PLAN,
-    RenamePlanAction
+    RenamePlanAction, SET_PIECES
 } from "./actions";
 import { initialState } from "./StoreState";
 import { Piece } from "./types/Piece";
@@ -40,6 +40,8 @@ const pieces = (state: Piece[] = initialState.pieces, action: PieceActionTypes):
             return state.filter(p => p.id !== action.id);
         case EDIT_PIECE:
             return replacePiece(state, action);
+        case SET_PIECES:
+            return action.pieces;
         default:
             return state;
     }
