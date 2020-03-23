@@ -25,17 +25,17 @@ export const TagInput = (props: InputProps) => {
     const sendTag = () => {
         const last = val.length - 1;
         const input = (val[last] === separator ? val.slice(0, last) : val).trim();
+        updateVal('');
 
         if (input !== '' && list.find(v => v === input) === undefined) {
+            props.onUpdateTags([...list, input]);
             updateList([...list, input]);
         }
-
-        updateVal('');
-        props.onUpdateTags(list);
     };
 
     const deleteTag = (tag: string) => {
         updateList(list.filter(t => t !== tag));
+        props.onUpdateTags(list);
     };
 
     return (
