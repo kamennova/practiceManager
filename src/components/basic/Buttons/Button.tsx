@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, TouchableWithoutFeedback, View } from "react-native";
-import { ButtonStyle } from "../../../AppStyle";
+import { Text, TextStyle, TouchableWithoutFeedback, View } from "react-native";
+import { ButtonStyle, MinorButtonStyle, PrimaryButtonStyle, PrimaryButtonTextStyle } from "../../../AppStyle";
 import { ButtonProps } from "./ButtonProps";
 
 export const Button = (props: ButtonProps) => {
@@ -20,3 +20,14 @@ export const Button = (props: ButtonProps) => {
         </TouchableWithoutFeedback>
     );
 };
+
+export const PrimaryButton = (props: ButtonProps) => (
+    <Button {...props} style={{ ...PrimaryButtonStyle, ...props.style, }} textStyle={{...PrimaryButtonTextStyle}} children={props.children}/>);
+
+export const MinorButton = (props: ButtonProps & { style?: TextStyle }) => (
+    <TouchableWithoutFeedback onPress={props.onPress}>
+        <Text style={{ ...MinorButtonStyle, ...props.style }}>
+            {props.children}
+        </Text>
+    </TouchableWithoutFeedback>
+);

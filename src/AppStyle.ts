@@ -4,6 +4,9 @@ export const AppBg = '#f1f1f3';
 
 export const AppSidePadding = 17;
 
+export const Primary = '#6895ff',
+    Dark = '#2d60d8';
+
 export const ListItemTitleStyle = {
     fontSize: 18,
     marginBottom: 3,
@@ -34,7 +37,19 @@ export const ButtonStyle: ViewStyle = {
 };
 
 export const PrimaryButtonStyle: ViewStyle = {
-    borderColor: 'blue',
+    paddingTop: 12,
+    paddingBottom: 12,
+    borderColor: Dark,
+    borderWidth: 0,
+    backgroundColor: Primary,
+};
+
+export const PrimaryButtonTextStyle: TextStyle = {
+    color: 'darkblue',
+    textTransform: 'uppercase',
+    fontSize: 13,
+    fontWeight: 'bold',
+    letterSpacing: 1
 };
 
 export const BigButtonStyle: ViewStyle = {
@@ -43,6 +58,14 @@ export const BigButtonStyle: ViewStyle = {
     paddingLeft: 37,
     paddingRight: 37,
 };
+
+export const MinorButtonStyle: TextStyle = {
+    fontSize: 17,
+    color: 'grey',
+    padding: 6,
+};
+
+// ---
 
 export const DrawerStyle: ViewStyle = {
     backgroundColor: 'lightgrey',
@@ -204,7 +227,6 @@ export const TimeTrackerTextStyle: TextStyle = {
 
 export const ErrorAlertStyle: ViewStyle = {
     padding: 8,
-    backgroundColor: 'pink',
 };
 
 export const ErrorAlertTextStyle: TextStyle = {
