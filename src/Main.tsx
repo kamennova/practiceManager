@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import React from 'react';
 import { AppBg, DrawerContentStyle, DrawerStyle } from "./AppStyle";
 
-import { CustomDrawerContent } from "./components/basic/Navigation/CustomDrawer";
+import { CustomDrawerContent } from "./components/basic/CustomDrawer";
 import { Dashboard } from "./components/Dashboard";
 import { PieceForm } from "./components/Pieces/PieceForm";
 import { PieceScreen } from "./components/Pieces/PieceScreen";
