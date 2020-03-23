@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Route, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle, PrimaryButtonStyle } from "../../AppStyle";
+import { getPieceById } from "../../backend/db";
 import { validatePiece } from "../../backend/validation";
 import { PIECE } from "../../NavigationPath";
+import { StateShape } from "../../StoreState";
 import { thunkAddPiece } from "../../thunks";
 import { ActionType } from "../../types/ActionType";
 import { Piece } from "../../types/Piece";
@@ -31,9 +33,14 @@ const mapDispatchToProps = (dispatch: any) => ({
     onSavePiece: (piece: Piece) => dispatch(thunkAddPiece(piece)),
 });
 
+const mapStateToProps = (state: StateShape) => ({
+    addedPieceId: state.pieces.lastAddedId,
+});
+
 type FormProps = {
     route: Route,
     onSavePiece: (piece: Piece) => any,
+    addedPieceId?: number,
     navigation: any,
 };
 
@@ -55,9 +62,16 @@ class PieceFormComponent extends Component<FormProps> {
 
         if (res.valid) {
             this.setState({ piece: this.state.piece, errors: '' });
-            const addedPiece = await this.props.onSavePiece(this.state.piece);
 
-            this.props.navigation.navigate(PIECE, { piece: addedPiece });
+            this.props.onSavePiece(this.state.piece)
+                .then(() => {
+                    if (this.props.addedPieceId === undefined) {
+                        throw new Error('Added piece id should be already updated ');
+                    }
+
+                    return getPieceById(this.props.addedPieceId);
+                })
+                .then((piece: Piece) => this.props.navigation.navigate(PIECE, { piece }));
         } else {
             this.setState({ piece: this.state.piece, errors: res.errors });
         }
@@ -133,4 +147,4 @@ class PieceFormComponent extends Component<FormProps> {
     }
 }
 
-export const PieceForm = connect(undefined, mapDispatchToProps)(PieceFormComponent);
+export const PieceForm = connect(mapStateToProps, mapDispatchToProps)(PieceFormComponent);

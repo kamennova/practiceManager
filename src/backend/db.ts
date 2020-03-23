@@ -31,6 +31,16 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
     return Promise.resolve({ ...piece, id: newPiece.id });
 };
 
+export const getPieceById = async (id: number): Promise<Piece | undefined> => {
+    const ent = await getRepository(PieceEntity).findOne(id, { relations: ['authors', 'tags'] });
+
+    if (ent === undefined) {
+        return Promise.resolve(undefined);
+    }
+
+    return Promise.resolve(pieceFromEntity(ent));
+};
+
 export const getPieces = async (): Promise<Piece[]> =>
     (await getRepository(PieceEntity).find({ relations: ['authors', 'tags'] })).map(pieceFromEntity);
 

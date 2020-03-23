@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { connect } from 'react-redux'
 import { AppPaddingStyle } from "../../AppStyle";
 import { PIECE_FORM } from "../../NavigationPath";
@@ -14,7 +14,7 @@ import { PieceFilters } from "./PieceFilters";
 import { PiecesList } from "./PiecesList";
 
 const mapStateToProps = (state: StateShape) => ({
-    pieces: state.pieces,
+    pieces: state.pieces.items,
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -29,21 +29,20 @@ class Repertoire extends Component<{ pieces: Piece[], getPieces: () => void, nav
     render() {
         return (
             <ScreenWrapper>
-                <View style={{
-                    ...AppPaddingStyle
+                <ScrollView style={{
+                    ...AppPaddingStyle,
+                    marginBottom: 100
                 }}>
                     <View style={{
                         marginBottom: 20,
                     }}>
                         <ScreenTitle>Repertoire</ScreenTitle>
                         <AddButton
-                            onPress={() => this.props.navigation.navigate(PIECE_FORM, {
-                                mode: ActionType.Create,
-                            })}/>
+                            onPress={() => this.props.navigation.navigate(PIECE_FORM, { mode: ActionType.Create, })}/>
                         <PieceFilters/>
                     </View>
                     <PiecesList pieces={this.props.pieces}/>
-                </View>
+                </ScrollView>
             </ScreenWrapper>
         );
     }

@@ -6,9 +6,8 @@ import { minutesToHumanlyFormat } from "../../types/Time";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ScreenTitle } from "../basic/Titles/Titles";
 
-export const PieceScreen = (props: { route: Route }) => {
-    const piece: Piece = props.route.params.piece;
-    console.log(piece);
+export const PieceScreen = (props: { route: Route & { params: { piece: Piece } } }) => {
+    const piece = props.route.params.piece;
 
     return (
         <ScreenWrapper>
@@ -23,6 +22,7 @@ export const PieceScreen = (props: { route: Route }) => {
                         {piece.authors.reduce((a, b) => a + ', ' + b)}
                     </Text>
                     : undefined}
+                {piece.tags.length > 0 ? <PieceTags tags={piece.tags}/> : undefined}
                 <Text>
                     Complexity level: intermediate
                 </Text>
@@ -33,3 +33,17 @@ export const PieceScreen = (props: { route: Route }) => {
         </ScreenWrapper>
     );
 };
+
+const PieceTags = (props: { tags: string[] }) => (
+    <View style={{ flexDirection: 'row' }}>
+        {props.tags.map(tag => <Tag tag={tag}/>)}
+    </View>
+);
+
+const Tag = (props: { tag: string }) => (
+    <View style={{ padding: 25, borderWidth: 1 }}>
+        <Text style={{}}>
+            {props.tag}
+        </Text>
+    </View>
+);
