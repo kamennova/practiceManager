@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Text, View } from "react-native";
 import { connect } from "react-redux";
-import { AppPaddingStyle, PrimaryButtonStyle } from "../../AppStyle";
+import { AppPaddingStyle } from "../../AppStyle";
 import { getPieceById } from "../../backend/db";
 import { validatePiece } from "../../backend/validation";
 import { PIECE } from "../../NavigationPath";
@@ -9,7 +9,8 @@ import { StateShape } from "../../StoreState";
 import { thunkAddPiece } from "../../thunks";
 import { ActionType } from "../../types/ActionType";
 import { Piece } from "../../types/Piece";
-import { Button } from "../basic/Buttons/Button";
+import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
+import { Divider } from "../basic/Divider";
 import { ErrorAlert } from "../basic/ErrorAlert";
 import { MyCheckbox } from "../basic/Inputs/Checkbox";
 import { DaysInput } from "../basic/Inputs/DaysInput";
@@ -62,10 +63,9 @@ class PieceFormComponent extends Component<FormProps> {
         const res = await validatePiece(this.state.piece);
 
         if (res.valid) {
-            this.setState({ piece: this.state.piece, errors: '' });
-
             this.props.onSavePiece(this.state.piece)
                 .then(() => {
+                    this.setState({ piece: EmptyPiece, errors: '' });
                     if (this.props.addedPieceId === undefined) {
                         throw new Error('Added piece id should be already updated ');
                     }
@@ -86,55 +86,49 @@ class PieceFormComponent extends Component<FormProps> {
                     paddingBottom: 30,
                     flexGrow: 1,
                 }}>
-                    <ScreenTitle>Add piece</ScreenTitle>
+                    <ScreenTitle style={{ marginBottom: 25 }}>Add piece</ScreenTitle>
 
-                    <View style={{ marginTop: 15 }}>
-                        <View>
-                            <MyTextInput onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
-                                         placeholder={'Piece title'}/>
-                            <TagInput placeholder={'Authors (separated by «,»)'}
-                                      onUpdateTags={authors => this.updatePiece({ ...this.state.piece, authors })}/>
+                    <MyTextInput onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
+                                 placeholder={'Piece title'}/>
 
-                            <TagInput onUpdateTags={tags => this.updatePiece({ ...this.state.piece, tags })}/>
+                    <TagInput placeholder={'Authors (separated by «,»)'}
+                              onUpdateTags={authors => this.updatePiece({ ...this.state.piece, authors })}/>
 
-                            {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
+                    <TagInput onUpdateTags={tags => this.updatePiece({ ...this.state.piece, tags })}/>
 
-                            <View style={{
-                                width: '100%',
-                                height: 1,
-                                backgroundColor: 'grey',
-                                marginBottom: 20,
-                                marginTop: 14
-                            }}/>
+                    {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
 
-                            <MyCheckbox onValueChange={() => this.updatePiece({
-                                ...this.state.piece,
-                                notifications: {
-                                    interval: this.state.piece.notifications.interval,
-                                    enabled: !this.state.piece.notifications.enabled
-                                }
-                            })} value={this.state.piece.notifications.enabled}
-                                        title={'Notifications on'}/>
+                    <Divider style={{ marginBottom: 25, marginTop: 10 }}/>
 
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ fontSize: 16, }}>Remind to practice every</Text>
-                                <DaysInput value={this.state.piece.notifications.interval}
-                                           onChange={(val) => this.updatePiece({
-                                               ...this.state.piece,
-                                               notifications: {
-                                                   interval: val,
-                                                   enabled: this.state.piece.notifications.enabled
-                                               }
-                                           })}
-                                           minVal={1} maxVal={100}/>
-                                <Text>day{this.state.piece.notifications.interval > 1 ? 's' : undefined} </Text>
-                            </View>
-                        </View>
+                    <MyCheckbox onValueChange={() => this.updatePiece({
+                        ...this.state.piece,
+                        notifications: {
+                            interval: this.state.piece.notifications.interval,
+                            enabled: !this.state.piece.notifications.enabled
+                        }
+                    })} value={this.state.piece.notifications.enabled}
+                                title={'Notifications on'}/>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 17, }}>Remind to practice every</Text>
+                        <DaysInput value={this.state.piece.notifications.interval}
+                                   onChange={(val) => this.updatePiece({
+                                       ...this.state.piece,
+                                       notifications: {
+                                           interval: val,
+                                           enabled: this.state.piece.notifications.enabled
+                                       }
+                                   })}
+                                   minVal={1} maxVal={100}/>
+                        <Text
+                            style={{ fontSize: 17 }}>day{this.state.piece.notifications.interval > 1 ? 's' : undefined}
+                        </Text>
                     </View>
 
-                    <Button onPress={async () => await this.validateAndSave()}
-                            style={{ marginTop: 'auto', marginBottom: 15, ...PrimaryButtonStyle }}>Save</Button>
-                    <Button onPress={() => this.props.navigation.goBack()}>Cancel</Button>
+                    <PrimaryButton style={{ marginTop: 'auto' }}
+                                   onPress={async () => await this.validateAndSave()}>Save</PrimaryButton>
+                    <MinorButton style={{ marginTop: 10, alignSelf: 'center' }}
+                                 onPress={() => this.props.navigation.goBack()}>Cancel</MinorButton>
                 </View>
             </ScreenWrapper>
         );
