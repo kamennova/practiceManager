@@ -8,8 +8,8 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
     const newPiece = new PieceEntity();
     newPiece.name = piece.name;
     newPiece.addedOn = Date.now();
-    newPiece.notificationsInterval = piece.notificationsInterval;
-    newPiece.notificationsOn = piece.notificationsOn;
+    newPiece.notificationsInterval = piece.notifications.interval;
+    newPiece.notificationsOn = piece.notifications.enabled;
 
     newPiece.tags = piece.tags.map(tag => {
         const ent = new Tag();
@@ -28,7 +28,7 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
     const pieceRepository = getRepository(PieceEntity);
     await pieceRepository.save(newPiece);
 
-    return Promise.resolve({...piece, id: newPiece.id});
+    return Promise.resolve({ ...piece, id: newPiece.id });
 };
 
 export const getPieces = async (): Promise<Piece[]> =>
@@ -38,8 +38,10 @@ export const pieceFromEntity = (ent: PieceEntity): Piece => ({
     id: ent.id,
     name: ent.name,
     timeSpent: 0,
-    notificationsInterval: ent.notificationsInterval,
-    notificationsOn: ent.notificationsOn,
+    notifications: {
+        interval: ent.notificationsInterval,
+        enabled: ent.notificationsOn,
+    },
     tags: ent.tags.map(tag => tag.name),
     authors: ent.authors.map(author => author.name),
 });

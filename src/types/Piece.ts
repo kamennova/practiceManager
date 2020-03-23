@@ -3,8 +3,10 @@ export type Piece = {
     name: string,
     timeSpent: number,
 
-    notificationsOn: boolean,
-    notificationsInterval: number,
+    notifications: {
+        enabled: boolean,
+        interval: number,
+    },
 
     lastPracticedOn?: Date,
     addedOn?: Date,

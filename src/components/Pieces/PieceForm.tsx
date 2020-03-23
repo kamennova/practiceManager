@@ -19,8 +19,10 @@ const EmptyPiece: Piece = {
     id: 0,
     name: '',
     timeSpent: 0,
-    notificationsInterval: 1,
-    notificationsOn: true,
+    notifications: {
+        interval: 3,
+        enabled: true,
+    },
     authors: [],
     tags: [],
 };
@@ -46,7 +48,7 @@ class PieceFormComponent extends Component<FormProps> {
     updatePiece(pieceUpd: Piece) {
         this.setState({
             errors: this.state.errors,
-            piece: pieceUpd
+            piece: pieceUpd,
         });
     };
 
@@ -101,19 +103,25 @@ class PieceFormComponent extends Component<FormProps> {
 
                             <MyCheckbox onValueChange={() => this.updatePiece({
                                 ...this.state.piece,
-                                notificationsOn: !this.state.piece.notificationsOn
-                            })} value={this.state.piece.notificationsOn}
+                                notifications: {
+                                    interval: this.state.piece.notifications.interval,
+                                    enabled: !this.state.piece.notifications.enabled
+                                }
+                            })} value={this.state.piece.notifications.enabled}
                                         title={'Notifications on'}/>
 
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={{ fontSize: 16, }}>Remind to practice every</Text>
-                                <DaysInput value={this.state.piece.notificationsInterval}
+                                <DaysInput value={this.state.piece.notifications.interval}
                                            onChange={(val) => this.updatePiece({
                                                ...this.state.piece,
-                                               notificationsInterval: val
+                                               notifications: {
+                                                   interval: val,
+                                                   enabled: this.state.piece.notifications.enabled
+                                               }
                                            })}
                                            minVal={1} maxVal={100}/>
-                                <Text>day{this.state.piece.notificationsInterval > 1 ? 's' : undefined} </Text>
+                                <Text>day{this.state.piece.notifications.interval > 1 ? 's' : undefined} </Text>
                             </View>
                         </View>
                     </View>
