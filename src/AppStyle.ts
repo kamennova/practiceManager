@@ -144,6 +144,18 @@ export const TextInputStyle = {
     fontSize: 18,
 };
 
+export const TagInputTagStyle: ViewStyle = {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    borderWidth: 1,
+    marginRight: 10,
+    marginBottom: 10,
+    paddingBottom: 3,
+    paddingTop: 2,
+    paddingLeft: 7,
+    paddingRight: 7,
+};
+
 export const CheckboxWrapperStyle: ViewStyle = {
     marginBottom: 20,
     flexDirection: 'row',

@@ -13,6 +13,7 @@ import { Button } from "../basic/Buttons/Button";
 import { ErrorAlert } from "../basic/ErrorAlert";
 import { MyCheckbox } from "../basic/Inputs/Checkbox";
 import { DaysInput } from "../basic/Inputs/DaysInput";
+import { TagInput } from "../basic/Inputs/TagInput";
 import { MyTextInput } from "../basic/Inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ScreenTitle } from "../basic/Titles/Titles";
@@ -91,17 +92,10 @@ class PieceFormComponent extends Component<FormProps> {
                         <View>
                             <MyTextInput onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
                                          placeholder={'Piece title'}/>
-                            <MyTextInput placeholder={'Authors'}
-                                         onChangeText={(val) => this.updatePiece({
-                                             ...this.state.piece,
-                                             authors: [val]
-                                         })}/>
+                            <TagInput placeholder={'Authors (separated by «,»)'}
+                                      onUpdateTags={authors => this.updatePiece({ ...this.state.piece, authors })}/>
 
-                            <MyTextInput placeholder={'Tags'}
-                                         onChangeText={(val) => this.updatePiece({
-                                             ...this.state.piece,
-                                             tags: [val]
-                                         })}/>
+                            <TagInput onUpdateTags={tags => this.updatePiece({ ...this.state.piece, tags })}/>
 
                             {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
 
