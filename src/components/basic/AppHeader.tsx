@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View } from 'react-native';
-import { AppSidePadding } from "../../../AppStyle";
-import { NavIcon } from "../../icons/NavIcon/NavIcon";
+import { AppSidePadding } from "../../AppStyle";
+import { NavIcon } from "../icons/NavIcon/NavIcon";
 
 export const AppHeader = () => {
     const nav = useNavigation();

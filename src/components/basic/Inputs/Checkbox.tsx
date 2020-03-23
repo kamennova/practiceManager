@@ -16,7 +16,7 @@ export const MyCheckbox = (props: CheckboxProps) => {
                     ...CheckboxWrapperStyle,
                 }}>
                 <CheckBox value={props.value} onValueChange={props.onValueChange} style={{ ...CheckboxStyle }}/>
-                <Text style={{ fontSize: 16 }}>{props.title}</Text>
+                <Text style={{ fontSize: 17 }}>{props.title}</Text>
             </View>
         </TouchableWithoutFeedback>
     );

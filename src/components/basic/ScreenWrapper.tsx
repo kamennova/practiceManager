@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View } from "react-native";
-import { AppHeader } from "../AppHeader";
+import { AppHeader } from "./AppHeader";
 
 export const ScreenWrapper = (props: { children: JSX.Element | Component, fullHeight?: boolean }) => (
     <View style={{
