@@ -9,7 +9,6 @@ import { SessionPlan } from "../../types/SessionPlan";
 import { AddButton } from "../basic/Buttons/AddButton";
 import { ListItemWrapper } from "../basic/Lists/ListItem";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
-import { ScreenTitle } from "../basic/Titles/Titles";
 
 const mapStateToProps = (state: StateShape) => ({
     plans: state.plans.items,
@@ -20,14 +19,13 @@ const SessionPlans = (props: { plans: SessionPlan[] }) => {
     const nav = useNavigation();
 
     return (
-        <ScreenWrapper>
+        <ScreenWrapper title='Session plans'>
             <View style={{
                 ...AppPaddingStyle,
             }}>
                 <View style={{
                     marginBottom: 20,
                 }}>
-                    <ScreenTitle>Session plans</ScreenTitle>
                     <AddButton style={{
                         position: 'absolute',
                         right: 0,

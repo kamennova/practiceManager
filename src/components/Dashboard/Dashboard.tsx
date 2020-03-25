@@ -2,17 +2,14 @@ import React from 'react';
 import { Text, View } from "react-native";
 import { AppPaddingStyle } from "../../AppStyle";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
-import { ScreenTitle } from "../basic/Titles/Titles";
 
 export const Dashboard = () => {
   return (
-      <ScreenWrapper>
+      <ScreenWrapper title='Dashboard'>
           <View style={{
-              ...AppPaddingStyle
+              ...AppPaddingStyle,
+              paddingTop: 15,
           }}>
-              <ScreenTitle>
-                  Dashboard
-              </ScreenTitle>
               <Text>
                   Some amazing stats...
               </Text>

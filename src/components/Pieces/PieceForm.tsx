@@ -22,7 +22,6 @@ import { DaysInput } from "../basic/Inputs/DaysInput";
 import { TagInput } from "../basic/Inputs/TagInput";
 import { MyTextInput } from "../basic/Inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
-import { ScreenTitle } from "../basic/Titles/Titles";
 
 const mapDispatchToProps = (dispatch: any) => ({
     onSavePiece: (piece: Piece) => dispatch(thunkAddPiece(piece)),
@@ -92,20 +91,19 @@ class PieceFormComponent extends Component<FormProps> {
 
     render() {
         return (
-            <ScreenWrapper fullHeight={true}>
+            <ScreenWrapper fullHeight={true} title={'Add piece'} isMain={false} >
                 <View style={{
                     ...AppPaddingStyle,
+                    paddingTop: 20,
                     paddingBottom: 30,
                     flexGrow: 1,
                 }}>
-                    <ScreenTitle style={{ marginBottom: 25 }}>Add piece</ScreenTitle>
-
                     <MyImagePicker src={this.state.piece.imageUri}
                                    onDelete={() => this.updatePiece({ ...this.state.piece, imageUri: undefined })}
                                    onChoose={this.pickImage}/>
 
                     <MyTextInput onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
-                                 placeholder={'Piece title'}/>
+                                 placeholder={'Title'}/>
 
                     <TagInput placeholder={'Authors (separated by «,»)'}
                               onUpdateTags={authors => this.updatePiece({ ...this.state.piece, authors })}/>

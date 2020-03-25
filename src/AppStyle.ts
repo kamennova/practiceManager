@@ -1,11 +1,35 @@
 import { Dimensions, TextStyle, ViewStyle } from "react-native";
 
-export const AppBg = '#f1f1f3';
-
-export const AppSidePadding = 17;
+export const AppSidePadding = 17,
+    TotalHeaderHeight = 86;
 
 export const Primary = '#6895ff',
-    Dark = '#2d60d8';
+    Dark = '#2d60d8',
+    AppBg = '#f1f1f3',
+    AppBgOpacity = 'rgba(241, 241, 243, 0.5)';
+
+export const AppHeaderStyle: ViewStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 10,
+    paddingTop: 40,
+    paddingLeft: AppSidePadding,
+    paddingRight: AppSidePadding,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgrey',
+    position: 'absolute',
+    width: '100%',
+};
+
+export const HeaderIconWrap: ViewStyle = {
+    width: 35,
+    height: 35,
+    backgroundColor: AppBgOpacity,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+};
 
 export const ListItemTitleStyle = {
     fontSize: 18,

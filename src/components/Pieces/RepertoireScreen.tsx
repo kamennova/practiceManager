@@ -9,7 +9,6 @@ import { ActionType } from "../../types/ActionType";
 import { Piece } from "../../types/Piece";
 import { AddButton } from "../basic/Buttons/AddButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
-import { ScreenTitle } from "../basic/Titles/Titles";
 import { PieceFilters } from "./PieceFilters";
 import { PiecesList } from "./PiecesList";
 
@@ -28,7 +27,7 @@ class Repertoire extends Component<{ pieces: Piece[], getPieces: () => void, nav
 
     render() {
         return (
-            <ScreenWrapper>
+            <ScreenWrapper title='Repertoire'>
                 <ScrollView style={{
                     ...AppPaddingStyle,
                     marginBottom: 100
@@ -36,7 +35,6 @@ class Repertoire extends Component<{ pieces: Piece[], getPieces: () => void, nav
                     <View style={{
                         marginBottom: 20,
                     }}>
-                        <ScreenTitle>Repertoire</ScreenTitle>
                         <AddButton
                             onPress={() => this.props.navigation.navigate(PIECE_FORM, { mode: ActionType.Create, })}/>
                         <PieceFilters/>
