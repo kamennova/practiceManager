@@ -1,5 +1,5 @@
 import { getRepository } from "typeorm";
-import { Piece } from "../types/Piece";
+import { Piece, PieceMeta, PieceStatus } from "../types/Piece";
 import { AuthorEntity } from "./entity/Author";
 import { PieceEntity } from "./entity/Piece";
 import { TagEntity } from "./entity/Tag";
@@ -43,8 +43,23 @@ export const getPieceById = async (id: number): Promise<Piece | undefined> => {
     return Promise.resolve(pieceFromEntity(ent));
 };
 
+export const getPiecesMeta = async (): Promise<PieceMeta[]> =>
+    (await getRepository(PieceEntity).find({ relations: ['authors', 'tags'] })).map(pieceMetaFromEntity);
+
 export const getPieces = async (): Promise<Piece[]> =>
     (await getRepository(PieceEntity).find({ relations: ['authors', 'tags', 'notes'] })).map(pieceFromEntity);
+
+export const pieceMetaFromEntity = (ent: PieceEntity): PieceMeta => ({
+    id: ent.id,
+    name: ent.name,
+    timeSpent: 0,
+    isFavourite: ent.isFavourite,
+    imageUri: ent.imageUri === '' ? undefined : ent.imageUri,
+    tags: ent.tags.map(tag => tag.name),
+    authors: ent.authors.map(author => author.name),
+    addedOn: new Date(ent.addedOn),
+    status: PieceStatus.JustStarted,
+});
 
 export const pieceFromEntity = (ent: PieceEntity): Piece => ({
     id: ent.id,
@@ -60,4 +75,5 @@ export const pieceFromEntity = (ent: PieceEntity): Piece => ({
     authors: ent.authors.map(author => author.name),
     notes: [],
     addedOn: new Date(ent.addedOn),
+    status: PieceStatus.JustStarted,
 });

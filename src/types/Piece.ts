@@ -1,26 +1,26 @@
 import { Note } from "./Note";
 
-export type Piece = {
+export type PieceMeta = {
     id: number,
     name: string,
     timeSpent: number,
     isFavourite: boolean,
     imageUri?: string,
+    lastPracticedOn?: Date,
+    addedOn: Date,
+    complexity?: PieceComplexity,
+    status: PieceStatus,
+    tags: string[],
+    // todo string
+    authors: string[],
+};
 
+export type Piece = PieceMeta & {
     notifications: {
         enabled: boolean,
         interval: number,
     },
-
-    lastPracticedOn?: Date,
-    addedOn: Date,
-
-    complexity?: PieceComplexity,
-    status: PieceStatus,
     notes: Note[],
-    tags: string[],
-    // todo string
-    authors: string[],
 }
 
 export enum PieceComplexity {

@@ -1,4 +1,4 @@
-import { Piece } from "./Piece";
+import { Piece, PieceStatus } from "./Piece";
 
 export const EmptyPiece: Piece = {
     id: 0,
@@ -13,4 +13,5 @@ export const EmptyPiece: Piece = {
     tags: [],
     notes: [],
     addedOn: new Date(),
+    status: PieceStatus.JustStarted,
 };
