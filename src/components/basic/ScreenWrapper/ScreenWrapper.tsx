@@ -1,15 +1,17 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { Dimensions, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { TotalHeaderHeight } from "../../../AppStyle";
+import { ItemMenu, MenuOption } from "../ItemMenu";
 import { AppHeader } from "./AppHeader";
 
 type WrapperProps = {
-    children: JSX.Element | Component,
+    children: JSX.Element | (JSX.Element | undefined)[],
     fullHeight?: boolean,
     title?: string,
     isMain?: boolean,
-    itemMenu?: JSX.Element,
-    headerStyle?: ViewStyle
+    itemMenu?: MenuOption[],
+    headerStyle?: ViewStyle,
+    transparent?: boolean,
 }
 
 // todo full height
@@ -19,7 +21,7 @@ export const ScreenWrapper = (props: WrapperProps) => {
     return (
         <View style={{
             minHeight: props.fullHeight !== undefined && props.fullHeight ? '100%' : 'auto',
-            paddingTop: TotalHeaderHeight,
+            paddingTop: props.transparent ? 0 : TotalHeaderHeight,
         }}>
             {props.children}
 
@@ -33,10 +35,14 @@ export const ScreenWrapper = (props: WrapperProps) => {
                     }}/>
                 </TouchableWithoutFeedback> : undefined}
 
-            <AppHeader title={props.title} style={props.headerStyle} isMain={props.isMain}
+            <AppHeader transparent={props.transparent}
+                       title={props.title}
+                       style={props.headerStyle}
+                       isMain={props.isMain}
                        updateShowMenu={props.itemMenu !== undefined ? () => updateShowMenu(true) : undefined}/>
 
-            {(props.itemMenu !== undefined && showMenu) ? props.itemMenu : undefined}
+            {(props.itemMenu !== undefined && showMenu) ?
+                <ItemMenu options={props.itemMenu} prevFunc={() => updateShowMenu(false)}/> : undefined}
         </View>
     )
 };

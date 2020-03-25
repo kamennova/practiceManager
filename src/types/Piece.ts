@@ -16,21 +16,22 @@ export type Piece = {
     addedOn: Date,
 
     complexity?: PieceComplexity,
-    status?: PieceStatus,
+    status: PieceStatus,
     notes: Note[],
     tags: string[],
+    // todo string
     authors: string[],
 }
 
 export enum PieceComplexity {
-    'Beginner',
-    'Intermediate',
-    'UpperIntermediate',
-    'Advanced',
+    Beginner = 'Beginner',
+    Intermediate = 'Intermediate',
+    UpperIntermediate = 'UpperIntermediate',
+    Advanced = 'Advanced',
 }
 
 export enum PieceStatus {
-    'Just started',
-    'In work',
-    'Fluent',
+    JustStarted = 'Just started',
+    InWork = 'In work',
+    Fluent = 'Fluent',
 }

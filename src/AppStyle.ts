@@ -8,7 +8,7 @@ export const Primary = '#6895ff',
     AppBg = '#f1f1f3',
     AppBgOpacity = 'rgba(241, 241, 243, 0.5)';
 
-export const AppHeaderStyle: ViewStyle = {
+export const AppHeaderStyle = (transparent: boolean = false): ViewStyle => ({
     display: 'flex',
     flexDirection: 'row',
     paddingBottom: 10,
@@ -16,11 +16,11 @@ export const AppHeaderStyle: ViewStyle = {
     paddingLeft: AppSidePadding,
     paddingRight: AppSidePadding,
     alignItems: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: transparent ? 0 : 1,
     borderBottomColor: 'lightgrey',
     position: 'absolute',
     width: '100%',
-};
+});
 
 export const HeaderIconWrap: ViewStyle = {
     width: 35,
@@ -60,9 +60,11 @@ export const ButtonStyle: ViewStyle = {
     borderColor: 'lightgrey',
 };
 
+const PrimaryBtnHeight = 46;
+
 export const PrimaryButtonStyle: ViewStyle = {
-    paddingTop: 12,
-    paddingBottom: 12,
+    height: PrimaryBtnHeight,
+    alignItems: 'center',
     borderColor: Dark,
     borderWidth: 0,
     backgroundColor: Primary,
@@ -87,6 +89,16 @@ export const MinorButtonStyle: TextStyle = {
     fontSize: 17,
     color: 'grey',
     padding: 6,
+};
+
+export const DirectionButtonStyle: ViewStyle = {
+    width: PrimaryBtnHeight,
+    height: PrimaryBtnHeight,
+    backgroundColor: AppBg,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'lightgrey',
 };
 
 // ---
@@ -256,4 +268,41 @@ export const ErrorAlertStyle: ViewStyle = {
 export const ErrorAlertTextStyle: TextStyle = {
     fontSize: 16,
     color: 'red',
+};
+
+export const TagStyle: ViewStyle = {
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginRight: 15,
+};
+
+export const TagTextStyle: TextStyle = {
+    fontSize: 15,
+    color: 'grey',
+};
+
+export const ItemMenuStyle: ViewStyle = {
+    position: 'absolute',
+    right: AppSidePadding,
+    top: 45,
+    width: 150,
+    padding: 16,
+    paddingTop: 14,
+    paddingBottom: 0,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+    backgroundColor: AppBg,
+};
+
+export const SmallModalStyle: ViewStyle = {
+    position: 'absolute',
+    top: '30%',
+    width: Dimensions.get('window').width * 0.8,
+    marginLeft: Dimensions.get('window').width * 0.1,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+    padding: 18,
+    paddingTop: 25,
+    backgroundColor: AppBg,
+    alignItems: 'center',
 };

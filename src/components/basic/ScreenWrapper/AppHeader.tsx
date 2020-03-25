@@ -7,6 +7,7 @@ import { BackIcon, DotsIcon, NavIcon } from "../../icons/Header";
 type HeaderProps = {
     title?: string,
     isMain?: boolean,
+    transparent?: boolean,
     updateShowMenu?: () => void,
     style?: ViewStyle,
 };
@@ -15,7 +16,7 @@ export const AppHeader = (props: HeaderProps) => {
     const nav = useNavigation();
 
     return (
-        <View style={{ ...AppHeaderStyle, ...props.style }}>
+        <View style={{ ...AppHeaderStyle(props.transparent), ...props.style }}>
 
             {(props.isMain !== undefined && !props.isMain) ?
                 <BackIcon navigation={nav}/> : <NavIcon navigation={nav}/>
