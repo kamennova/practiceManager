@@ -91,7 +91,7 @@ export const MinorButtonStyle: TextStyle = {
     padding: 6,
 };
 
-export const DirectionButtonStyle: ViewStyle = {
+export const DirectionButtonStyle = (isDisabled: boolean = false): ViewStyle => ({
     width: PrimaryBtnHeight,
     height: PrimaryBtnHeight,
     backgroundColor: AppBg,
@@ -99,7 +99,8 @@ export const DirectionButtonStyle: ViewStyle = {
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'lightgrey',
-};
+    opacity: isDisabled ? 0.4 : 1,
+});
 
 // ---
 

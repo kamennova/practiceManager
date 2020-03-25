@@ -8,7 +8,7 @@ type NavBtnProps = {
 
 export const PrevButton = (props: NavBtnProps) => (
     <TouchableWithoutFeedback onPress={props.onPress}>
-        <View style={DirectionButtonStyle}>
+        <View style={DirectionButtonStyle(props.onPress === undefined)}>
             <Image style={{ width: 20, height: 20 }} source={require('../../../../assets/left.png')}/>
         </View>
     </TouchableWithoutFeedback>
@@ -16,7 +16,7 @@ export const PrevButton = (props: NavBtnProps) => (
 
 export const NextButton = (props: NavBtnProps) => (
     <TouchableWithoutFeedback onPress={props.onPress}>
-        <View style={DirectionButtonStyle}>
+        <View style={DirectionButtonStyle(props.onPress === undefined)}>
             <Image style={{ transform: [{rotate: '180deg'}], width: 20, height: 20 }} source={require('../../../../assets/left.png')}/>
         </View>
     </TouchableWithoutFeedback>

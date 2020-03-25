@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, Route, ScrollView, Text, View } from "react-native";
+import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { getPieceById } from "../../db/db";
-import { PIECE_FORM } from "../../NavigationPath";
+import { PIECE, PIECE_FORM } from "../../NavigationPath";
+import { StateShape } from "../../store/StoreState";
 import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece } from "../../types/Piece";
@@ -17,13 +19,32 @@ import { Features } from "./PieceFeatures";
 import { PieceNotes } from "./PieceNotes";
 import { PieceTags } from "./PieceTags";
 
-export const PieceScreen = (props: { route: Route & { params: { pieceId: number } } }) => {
+type PieceScreenProps = {
+    route: Route & { params: { pieceId: number } },
+    nextId?: number,
+    prevId?: number,
+}
+
+const mapStateToProps = (state: StateShape, ownProps: PieceScreenProps) => ({
+        nextId: ((): number | undefined => {
+            const index: number = state.pieces.items.findIndex(i => i.id === ownProps.route.params.pieceId);
+
+            return (index === -1 || index === state.pieces.items.length - 1) ? undefined : state.pieces.items[index + 1].id;
+        })(),
+        prevId: (() => {
+
+            const index: number = state.pieces.items.findIndex(i => i.id === ownProps.route.params.pieceId);
+
+            return (index <= 0) ? undefined : state.pieces.items[index - 1].id;
+        })()
+    }
+);
+
+const PieceComponent = (props: PieceScreenProps) => {
     const [showDeleteModal, updateShowDeleteModal] = useState(false),
         [piece, setPiece] = useState<Piece>(EmptyPiece),
         nav = useNavigation(),
         showPic = piece.imageUri !== undefined && piece.imageUri !== '';
-
-    console.log(props.route.params.pieceId);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -32,8 +53,6 @@ export const PieceScreen = (props: { route: Route & { params: { pieceId: number 
         };
 
         fetchData();
-
-        return () => setPiece(EmptyPiece);
     }, [props.route.params.pieceId]);
 
     const menu = [
@@ -69,9 +88,11 @@ export const PieceScreen = (props: { route: Route & { params: { pieceId: number 
                                     onOk={() => updateShowDeleteModal(false)}/> : undefined}
 
             <ItemButtonsWrap>
-                <PrevButton/>
+                <PrevButton
+                    onPress={props.prevId !== undefined ? () => nav.navigate(PIECE, { pieceId: props.prevId }) : undefined}/>
                 <PrimaryButton style={{ marginRight: 15, marginLeft: 15 }}>Practice</PrimaryButton>
-                <NextButton/>
+                <NextButton
+                    onPress={props.nextId !== undefined ? () => nav.navigate(PIECE, { pieceId: props.nextId }) : undefined}/>
             </ItemButtonsWrap>
         </ScreenWrapper>
     );
@@ -86,3 +107,5 @@ const PieceAuthors = (props: { authors: string[] }) => (
 const PieceImage = (props: { uri: string }) => (
     <Image source={{ uri: props.uri }} style={{ width: '100%', height: 300 }}/>
 );
+
+export const PieceScreen = connect(mapStateToProps)(PieceComponent);
