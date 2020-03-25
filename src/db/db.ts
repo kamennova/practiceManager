@@ -10,6 +10,8 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
     newPiece.addedOn = Date.now();
     newPiece.notificationsInterval = piece.notifications.interval;
     newPiece.notificationsOn = piece.notifications.enabled;
+    newPiece.isFavourite = false;
+    newPiece.imageUri = piece.imageUri !== undefined ? piece.imageUri : '';
 
     newPiece.tags = piece.tags.map(tag => {
         const ent = new TagEntity();
@@ -32,7 +34,7 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
 };
 
 export const getPieceById = async (id: number): Promise<Piece | undefined> => {
-    const ent = await getRepository(PieceEntity).findOne(id, { relations: ['authors', 'tags'] });
+    const ent = await getRepository(PieceEntity).findOne(id, { relations: ['authors', 'tags', 'notes'] });
 
     if (ent === undefined) {
         return Promise.resolve(undefined);
@@ -42,14 +44,14 @@ export const getPieceById = async (id: number): Promise<Piece | undefined> => {
 };
 
 export const getPieces = async (): Promise<Piece[]> =>
-    (await getRepository(PieceEntity).find({ relations: ['authors', 'tags'] })).map(pieceFromEntity);
+    (await getRepository(PieceEntity).find({ relations: ['authors', 'tags', 'notes'] })).map(pieceFromEntity);
 
 export const pieceFromEntity = (ent: PieceEntity): Piece => ({
     id: ent.id,
     name: ent.name,
     timeSpent: 0,
     isFavourite: ent.isFavourite,
-    imageUri: ent.imageUri,
+    imageUri: ent.imageUri === '' ? undefined : ent.imageUri,
     notifications: {
         interval: ent.notificationsInterval,
         enabled: ent.notificationsOn,

@@ -1,3 +1,6 @@
+import Constants from 'expo-constants';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 import React, { Component } from 'react';
 import { Route, Text, View } from "react-native";
 import { connect } from "react-redux";
@@ -13,6 +16,7 @@ import { Piece } from "../../types/Piece";
 import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
 import { Divider } from "../basic/Divider";
 import { ErrorAlert } from "../basic/ErrorAlert";
+import { MyImagePicker } from "../basic/ImagePicker";
 import { MyCheckbox } from "../basic/Inputs/Checkbox";
 import { DaysInput } from "../basic/Inputs/DaysInput";
 import { TagInput } from "../basic/Inputs/TagInput";
@@ -67,6 +71,25 @@ class PieceFormComponent extends Component<FormProps> {
         }
     };
 
+    getPermission = async () => {
+        if (Constants.platform !== undefined && Constants.platform.ios) {
+            await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        }
+    };
+
+    pickImage = async () => {
+        await this.getPermission();
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1,
+        });
+
+        if (!result.cancelled) {
+            this.updatePiece({ ...this.state.piece, imageUri: result.uri });
+        }
+    };
+
     render() {
         return (
             <ScreenWrapper fullHeight={true}>
@@ -76,6 +99,10 @@ class PieceFormComponent extends Component<FormProps> {
                     flexGrow: 1,
                 }}>
                     <ScreenTitle style={{ marginBottom: 25 }}>Add piece</ScreenTitle>
+
+                    <MyImagePicker src={this.state.piece.imageUri}
+                                   onDelete={() => this.updatePiece({ ...this.state.piece, imageUri: undefined })}
+                                   onChoose={this.pickImage}/>
 
                     <MyTextInput onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
                                  placeholder={'Piece title'}/>
