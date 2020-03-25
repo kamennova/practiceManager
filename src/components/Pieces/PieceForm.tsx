@@ -8,6 +8,7 @@ import { PIECE } from "../../NavigationPath";
 import { StateShape } from "../../StoreState";
 import { thunkAddPiece } from "../../thunks";
 import { ActionType } from "../../types/ActionType";
+import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece } from "../../types/Piece";
 import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
 import { Divider } from "../basic/Divider";
@@ -18,18 +19,6 @@ import { TagInput } from "../basic/Inputs/TagInput";
 import { MyTextInput } from "../basic/Inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ScreenTitle } from "../basic/Titles/Titles";
-
-const EmptyPiece: Piece = {
-    id: 0,
-    name: '',
-    timeSpent: 0,
-    notifications: {
-        interval: 3,
-        enabled: true,
-    },
-    authors: [],
-    tags: [],
-};
 
 const mapDispatchToProps = (dispatch: any) => ({
     onSavePiece: (piece: Piece) => dispatch(thunkAddPiece(piece)),

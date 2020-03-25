@@ -1,8 +1,8 @@
 import { getRepository } from "typeorm";
 import { Piece } from "../types/Piece";
-import { Author } from "./entity/Author";
+import { AuthorEntity } from "./entity/Author";
 import { PieceEntity } from "./entity/Piece";
-import { Tag } from "./entity/Tag";
+import { TagEntity } from "./entity/Tag";
 
 export const addPiece = async (piece: Piece): Promise<Piece> => {
     const newPiece = new PieceEntity();
@@ -12,14 +12,14 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
     newPiece.notificationsOn = piece.notifications.enabled;
 
     newPiece.tags = piece.tags.map(tag => {
-        const ent = new Tag();
+        const ent = new TagEntity();
         ent.name = tag;
 
         return ent;
     });
 
     newPiece.authors = piece.authors.map(author => {
-        const ent = new Author();
+        const ent = new AuthorEntity();
         ent.name = author;
 
         return ent;
@@ -48,10 +48,14 @@ export const pieceFromEntity = (ent: PieceEntity): Piece => ({
     id: ent.id,
     name: ent.name,
     timeSpent: 0,
+    isFavourite: ent.isFavourite,
+    imageUri: ent.imageUri,
     notifications: {
         interval: ent.notificationsInterval,
         enabled: ent.notificationsOn,
     },
     tags: ent.tags.map(tag => tag.name),
     authors: ent.authors.map(author => author.name),
+    notes: [],
+    addedOn: new Date(ent.addedOn),
 });

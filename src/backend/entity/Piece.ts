@@ -1,7 +1,8 @@
-import { JoinTable, ManyToMany } from "typeorm";
+import { JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
-import { Author } from "./Author";
-import { Tag } from "./Tag";
+import { AuthorEntity } from "./Author";
+import { NoteEntity } from "./Note";
+import { TagEntity } from "./Tag";
 
 @Entity('piece')
 export class PieceEntity {
@@ -11,6 +12,12 @@ export class PieceEntity {
 
     @Column("varchar")
     name!: string;
+
+    @Column('boolean')
+    isFavourite!: boolean;
+
+    @Column('varchar', { length: 255, nullable: true })
+    imageUri!: string;
 
     @Column("datetime")
     addedOn!: number;
@@ -24,11 +31,15 @@ export class PieceEntity {
     @Column("smallint")
     notificationsInterval!: number;
 
-    @ManyToMany(_type => Author, { cascade: ['insert'] })
+    @ManyToMany(_type => AuthorEntity, { cascade: ['insert'] })
     @JoinTable()
-    authors!: Author[];
+    authors!: AuthorEntity[];
 
-    @ManyToMany(_type => Tag, { cascade: ['insert'] })
+    @ManyToMany(_type => TagEntity, { cascade: ['insert'] })
     @JoinTable()
-    tags!: Tag[];
+    tags!: TagEntity[];
+
+    @ManyToOne(_type => NoteEntity, { cascade: ['insert'] })
+    @JoinTable()
+    notes!: NoteEntity[];
 }

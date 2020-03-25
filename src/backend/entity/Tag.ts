@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm/browser";
 
 @Entity('tag')
-export class Tag {
+export class TagEntity {
     @PrimaryGeneratedColumn()
     id!: number;
 

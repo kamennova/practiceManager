@@ -116,3 +116,9 @@ export default () => {
 
     return { getAllPieces, addPiece, getPiecesByName };
 };
+
+export const dropDb = async () => {
+    const db = SQLite.openDatabase("practiceManagerDB");
+    db.transaction(tx => {tx.executeSql('select \'drop table \' || name || \';\' from sqlite_master\n' +
+        '    where type = \'table\';')})
+};
