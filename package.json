@@ -31,7 +31,8 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.24"
+    "typeorm": "^0.2.24",
+    "expo-image-picker": "~8.0.1"
   },
   "devDependencies": {
     "@types/react": "~16.9.0",

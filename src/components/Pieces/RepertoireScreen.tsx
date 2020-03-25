@@ -3,13 +3,12 @@ import { ScrollView, View } from "react-native";
 import { connect } from 'react-redux'
 import { AppPaddingStyle } from "../../AppStyle";
 import { PIECE_FORM } from "../../NavigationPath";
-import { StateShape } from "../../StoreState";
-import { thunkGetPieces } from "../../thunks";
+import { StateShape } from "../../store/StoreState";
+import { thunkGetPiecesMeta } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
-import { Piece } from "../../types/Piece";
+import { PieceMeta } from "../../types/Piece";
 import { AddButton } from "../basic/Buttons/AddButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
-import { ScreenTitle } from "../basic/Titles/Titles";
 import { PieceFilters } from "./PieceFilters";
 import { PiecesList } from "./PiecesList";
 
@@ -18,17 +17,17 @@ const mapStateToProps = (state: StateShape) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getPieces: () => dispatch(thunkGetPieces()),
+    getPieces: () => dispatch(thunkGetPiecesMeta()),
 });
 
-class Repertoire extends Component<{ pieces: Piece[], getPieces: () => void, navigation: any }> {
+class Repertoire extends Component<{ pieces: PieceMeta[], getPieces: () => void, navigation: any }> {
     componentDidMount() {
         this.props.getPieces();
     }
 
     render() {
         return (
-            <ScreenWrapper>
+            <ScreenWrapper title='Repertoire'>
                 <ScrollView style={{
                     ...AppPaddingStyle,
                     marginBottom: 100
@@ -36,7 +35,6 @@ class Repertoire extends Component<{ pieces: Piece[], getPieces: () => void, nav
                     <View style={{
                         marginBottom: 20,
                     }}>
-                        <ScreenTitle>Repertoire</ScreenTitle>
                         <AddButton
                             onPress={() => this.props.navigation.navigate(PIECE_FORM, { mode: ActionType.Create, })}/>
                         <PieceFilters/>

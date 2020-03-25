@@ -1,35 +1,27 @@
+import Constants from 'expo-constants';
+import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 import React, { Component } from 'react';
 import { Route, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
-import { getPieceById } from "../../backend/db";
-import { validatePiece } from "../../backend/validation";
+import { getPieceById } from "../../db/db";
+import { validatePiece } from "../../db/validation";
 import { PIECE } from "../../NavigationPath";
-import { StateShape } from "../../StoreState";
-import { thunkAddPiece } from "../../thunks";
+import { StateShape } from "../../store/StoreState";
+import { thunkAddPiece } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
+import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece } from "../../types/Piece";
 import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
 import { Divider } from "../basic/Divider";
 import { ErrorAlert } from "../basic/ErrorAlert";
+import { MyImagePicker } from "../basic/ImagePicker";
 import { MyCheckbox } from "../basic/Inputs/Checkbox";
 import { DaysInput } from "../basic/Inputs/DaysInput";
 import { TagInput } from "../basic/Inputs/TagInput";
 import { MyTextInput } from "../basic/Inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
-import { ScreenTitle } from "../basic/Titles/Titles";
-
-const EmptyPiece: Piece = {
-    id: 0,
-    name: '',
-    timeSpent: 0,
-    notifications: {
-        interval: 3,
-        enabled: true,
-    },
-    authors: [],
-    tags: [],
-};
 
 const mapDispatchToProps = (dispatch: any) => ({
     onSavePiece: (piece: Piece) => dispatch(thunkAddPiece(piece)),
@@ -78,18 +70,40 @@ class PieceFormComponent extends Component<FormProps> {
         }
     };
 
+    getPermission = async () => {
+        if (Constants.platform !== undefined && Constants.platform.ios) {
+            await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        }
+    };
+
+    pickImage = async () => {
+        await this.getPermission();
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1,
+        });
+
+        if (!result.cancelled) {
+            this.updatePiece({ ...this.state.piece, imageUri: result.uri });
+        }
+    };
+
     render() {
         return (
-            <ScreenWrapper fullHeight={true}>
+            <ScreenWrapper fullHeight={true} title={'Add piece'} isMain={false} >
                 <View style={{
                     ...AppPaddingStyle,
+                    paddingTop: 20,
                     paddingBottom: 30,
                     flexGrow: 1,
                 }}>
-                    <ScreenTitle style={{ marginBottom: 25 }}>Add piece</ScreenTitle>
+                    <MyImagePicker src={this.state.piece.imageUri}
+                                   onDelete={() => this.updatePiece({ ...this.state.piece, imageUri: undefined })}
+                                   onChoose={this.pickImage}/>
 
                     <MyTextInput onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
-                                 placeholder={'Piece title'}/>
+                                 placeholder={'Title'}/>
 
                     <TagInput placeholder={'Authors (separated by «,»)'}
                               onUpdateTags={authors => this.updatePiece({ ...this.state.piece, authors })}/>

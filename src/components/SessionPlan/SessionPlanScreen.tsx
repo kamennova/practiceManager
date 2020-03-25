@@ -5,7 +5,6 @@ import { ActivityType, ComplexActivity, SimpleActivity, SubActivity } from "../.
 import { SessionPlan, SessionSchedule } from "../../types/SessionPlan";
 import { StartButton } from "../basic/Buttons/StartButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
-import { ScreenTitle } from "../basic/Titles/Titles";
 
 type SessionPlanProps = {
     plan: SessionPlan,
@@ -16,11 +15,10 @@ export const SessionPlanScreen = (props: SessionPlanProps) => {
     const plan: SessionPlan = props.route.params.plan;
 
     return (
-        <ScreenWrapper>
+        <ScreenWrapper title={plan.name}>
             <View style={{
                 ...AppPaddingStyle
             }}>
-                <ScreenTitle>{plan.name} </ScreenTitle>
                 <StartButton/>
                 <Text style={{
                     color: 'grey',

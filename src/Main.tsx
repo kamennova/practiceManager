@@ -8,14 +8,14 @@ import { Dashboard } from "./components/Dashboard";
 import { PieceForm } from "./components/Pieces/PieceForm";
 import { PieceScreen } from "./components/Pieces/PieceScreen";
 import RepertoireScreen from "./components/Pieces/RepertoireScreen";
-import { SessionPlanScreen, SessionPlansList } from "./components/SessionPlan";
+import { SessionPlanScreen } from "./components/SessionPlan";
 import { SessionPlanForm } from "./components/SessionPlan/SessionPlanForm";
+import SessionPlansList from "./components/SessionPlan/SessionPlansList";
 import { FreeSessionTimer, PlannedSessionTimer, SessionEndScreen } from "./components/SessionTimer";
 import { FreeSessionActivityChoice } from "./components/SessionTimer/FreeSessionActivityChoice";
 import { SessionStartScreen } from "./components/SessionTimer/SessionStartScreen";
 import { AppSettings } from "./components/Settings/Settings";
 import { StartScreen } from "./components/StartScreen";
-import { plans } from "./exampleData";
 import {
     DASHBOARD,
     FREE_SESSION_ACTIVITY_CHOICE,
@@ -52,7 +52,7 @@ export const Main = () => (
             <Drawer.Screen name={PIECE_FORM} component={PieceForm}/>
 
             <Drawer.Screen name={SESSION_PLAN_LIST}
-                           component={SessionPlansList.bind(undefined, { plans: plans })}/>
+                           component={SessionPlansList}/>
             <Drawer.Screen name={SESSION_PLAN} component={SessionPlanScreen}/>
             <Drawer.Screen name={SESSION_PLAN_FORM} component={SessionPlanForm}/>
 
