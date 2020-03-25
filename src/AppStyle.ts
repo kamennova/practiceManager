@@ -141,11 +141,15 @@ export const BreakViewStyle: ViewStyle = {
 };
 
 export const AddButtonStyle: ViewStyle = {
-    padding: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderWidth: 1,
-    borderColor: 'black'
+    width: 60,
+    height: 60,
+    borderColor: Dark,
+    backgroundColor: Primary,
+    position: 'absolute',
+    top: Dimensions.get('window').height - 50,
+    right: 30,
+    alignItems:'center',
+    justifyContent: 'center'
 };
 
 export const ModalStyle: ViewStyle = {
