@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Route, ScrollView, Text, View } from "react-native";
 import { AppPaddingStyle } from "../../AppStyle";
+import { getPieceById } from "../../db/db";
 import { PIECE_FORM } from "../../NavigationPath";
 import { ActionType } from "../../types/ActionType";
+import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece } from "../../types/Piece";
 import { PrimaryButton } from "../basic/Buttons/Button";
 import { NextButton, PrevButton } from "../basic/Buttons/Direction";
@@ -15,11 +17,24 @@ import { Features } from "./PieceFeatures";
 import { PieceNotes } from "./PieceNotes";
 import { PieceTags } from "./PieceTags";
 
-export const PieceScreen = (props: { route: Route & { params: { piece: Piece } } }) => {
-    const [showDeleteModal, updateShowDeleteModal] = useState(false);
-    const piece = props.route.params.piece,
+export const PieceScreen = (props: { route: Route & { params: { pieceId: number } } }) => {
+    const [showDeleteModal, updateShowDeleteModal] = useState(false),
+        [piece, setPiece] = useState<Piece>(EmptyPiece),
         nav = useNavigation(),
         showPic = piece.imageUri !== undefined && piece.imageUri !== '';
+
+    console.log(props.route.params.pieceId);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getPieceById(props.route.params.pieceId);
+            if (result !== undefined) setPiece(result);
+        };
+
+        fetchData();
+
+        return () => setPiece(EmptyPiece);
+    }, [props.route.params.pieceId]);
 
     const menu = [
         { label: 'Delete', func: () => updateShowDeleteModal(true) },

@@ -20,6 +20,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     getPieces: () => dispatch(thunkGetPieces()),
 });
 
+// todo use set pieces meta
 class Repertoire extends Component<{ pieces: Piece[], getPieces: () => void, navigation: any }> {
     componentDidMount() {
         this.props.getPieces();
