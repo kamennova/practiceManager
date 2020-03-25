@@ -1,17 +1,19 @@
-import { Piece } from "../types/Piece";
+import { EmptyPiece } from "../types/EmptyPiece";
+import { Piece, PieceMeta } from "../types/Piece";
 import { SessionPlan } from "../types/SessionPlan";
 
-export type ItemsShape<T> = {
-    items: T[],
+export type ItemsShape<T, META> = {
+    items: META[],
+    currentItem: T,
     lastAddedId?: number,
 };
 
 export type StateShape = {
-    pieces: ItemsShape<Piece>,
-    plans: ItemsShape<SessionPlan>,
+    pieces: ItemsShape<Piece, PieceMeta>,
+    plans: ItemsShape<SessionPlan, SessionPlan>,
 };
 
 export const initialState: StateShape = {
-    pieces: { items: [] },
-    plans: { items: [] },
+    pieces: { items: [], currentItem: EmptyPiece },
+    plans: { items: [], currentItem: new SessionPlan(0, '', []) },
 };

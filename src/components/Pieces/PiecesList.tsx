@@ -3,9 +3,9 @@ import React from 'react';
 import { Text, TouchableWithoutFeedback, View } from "react-native";
 import { ListItemStyle } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
-import { Piece } from "../../types/Piece";
+import { PieceMeta } from "../../types/Piece";
 
-export const PiecesList = (props: { pieces: Piece[] }) => {
+export const PiecesList = (props: { pieces: PieceMeta[] }) => {
     const navigation = useNavigation();
 
     return (
@@ -17,7 +17,7 @@ export const PiecesList = (props: { pieces: Piece[] }) => {
     );
 };
 
-const PieceItem = (props: Piece & { onPress: () => void }) => (
+const PieceItem = (props: PieceMeta & { onPress: () => void }) => (
     <TouchableWithoutFeedback onPress={props.onPress}>
         <View style={ListItemStyle}>
             <PieceName>

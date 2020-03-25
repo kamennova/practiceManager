@@ -11,45 +11,49 @@ import {
     PieceActionTypes,
     PlanActionTypes,
     RENAME_PLAN,
-    RenamePlanAction, SET_PIECES, UPDATE_LAST_ADDED_PIECE
+    RenamePlanAction, SET_PIECE, SET_PIECES, SET_PIECES_META, UPDATE_LAST_ADDED_PIECE
 } from "./actions";
 import { initialState, ItemsShape } from "./StoreState";
-import { Piece } from "../types/Piece";
+import { Piece, PieceMeta } from "../types/Piece";
 import { SessionPlan } from "../types/SessionPlan";
 
-const plans = (state: ItemsShape<SessionPlan> = initialState.plans, action: PlanActionTypes): ItemsShape<SessionPlan> => {
+const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState.plans, action: PlanActionTypes): ItemsShape<SessionPlan, SessionPlan> => {
     switch (action.type) {
         case ADD_PLAN:
-            return { lastAddedId: state.lastAddedId, items: [...state.items, action.plan] };
+            return { ...state, items: [...state.items, action.plan] };
         case EDIT_PLAN_SCHEDULE:
-            return { lastAddedId: state.lastAddedId, items: editPlanSchedule(state.items, action) };
+            return {...state, items: editPlanSchedule(state.items, action) };
         case RENAME_PLAN:
-            return { lastAddedId: state.lastAddedId, items: renamePlan(state.items, action) };
+            return { ...state, items: renamePlan(state.items, action) };
         case DELETE_PLAN:
-            return { lastAddedId: state.lastAddedId, items: state.items.filter(p => p.id !== action.id) };
+            return { ...state, items: state.items.filter(p => p.id !== action.id) };
         default:
             return state;
     }
 };
 
-const pieces = (state: ItemsShape<Piece> = initialState.pieces, action: PieceActionTypes): ItemsShape<Piece> => {
+const pieces = (state: ItemsShape<Piece, PieceMeta> = initialState.pieces, action: PieceActionTypes): ItemsShape<Piece, PieceMeta> => {
     switch (action.type) {
         case ADD_PIECE:
-            return { lastAddedId: state.lastAddedId, items: [...state.items, action.piece] };
+            return { ...state, items: [...state.items, action.piece] };
         case UPDATE_LAST_ADDED_PIECE:
-            return { lastAddedId: action.id, items: state.items };
+            return { ...state, lastAddedId: action.id };
         case DELETE_PIECE:
-            return { lastAddedId: state.lastAddedId, items: state.items.filter(p => p.id !== action.id) };
+            return { ...state, items: state.items.filter(p => p.id !== action.id) };
         case EDIT_PIECE:
-            return { lastAddedId: state.lastAddedId, items: replacePiece(state.items, action) };
+            return { ...state, items: replacePiece(state.items, action) };
+        case SET_PIECE:
+            return { ...state, currentItem: action.piece };
+        case SET_PIECES_META:
+            return { ...state, items: action.pieces };
         case SET_PIECES:
-            return { lastAddedId: state.lastAddedId, items: action.pieces };
+            return { ...state, items: action.pieces };
         default:
             return state;
     }
 };
 
-const replacePiece = (state: Piece[], action: EditPieceAction): Piece[] => {
+const replacePiece = (state: PieceMeta[], action: EditPieceAction): PieceMeta[] => {
     const pieces = state.filter(i => i.id !== action.piece.id);
     pieces.push(action.piece);
 

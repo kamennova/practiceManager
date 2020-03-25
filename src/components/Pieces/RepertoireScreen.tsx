@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import { AppPaddingStyle } from "../../AppStyle";
 import { PIECE_FORM } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
-import { thunkGetPieces } from "../../store/thunks";
+import { thunkGetPiecesMeta } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
-import { Piece } from "../../types/Piece";
+import { PieceMeta } from "../../types/Piece";
 import { AddButton } from "../basic/Buttons/AddButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceFilters } from "./PieceFilters";
@@ -17,11 +17,10 @@ const mapStateToProps = (state: StateShape) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    getPieces: () => dispatch(thunkGetPieces()),
+    getPieces: () => dispatch(thunkGetPiecesMeta()),
 });
 
-// todo use set pieces meta
-class Repertoire extends Component<{ pieces: Piece[], getPieces: () => void, navigation: any }> {
+class Repertoire extends Component<{ pieces: PieceMeta[], getPieces: () => void, navigation: any }> {
     componentDidMount() {
         this.props.getPieces();
     }

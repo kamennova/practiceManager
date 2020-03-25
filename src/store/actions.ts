@@ -1,7 +1,9 @@
-import { Piece } from "../types/Piece";
+import { Piece, PieceMeta } from "../types/Piece";
 import { SessionPlan } from "../types/SessionPlan";
 
 export const ADD_PIECE = 'Add_piece',
+    SET_PIECE = 'Set_piece',
+    SET_PIECES_META = 'Set_pieces_meta',
     UPDATE_LAST_ADDED_PIECE = 'Update_last_added_piece',
     EDIT_PIECE = 'Edit_piece',
     DELETE_PIECE = 'Delete_piece',
@@ -15,6 +17,16 @@ export type SetPiecesAction = {
     type: typeof SET_PIECES,
     pieces: Piece[],
 }
+
+export type SetPieceAction = {
+    type: typeof SET_PIECE,
+    piece: Piece,
+}
+
+export type SetPiecesMetaAction = {
+    type: typeof SET_PIECES_META,
+    pieces: PieceMeta[]
+};
 
 export type AddPieceAction = {
     type: typeof ADD_PIECE,
@@ -58,16 +70,20 @@ export type DeletePlanAction = {
 }
 
 export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, piece }),
+    setPiece = (piece: Piece): SetPieceAction => ({ type: SET_PIECE, piece }),
     updateLastAddedPiece = (id: number): UpdateLastAddedAction => ({ type: UPDATE_LAST_ADDED_PIECE, id }),
     editPiece = (piece: Piece): EditPieceAction => ({ type: EDIT_PIECE, piece }),
     deletePiece = (id: number): DeletePieceAction => ({ type: DELETE_PIECE, id }),
     setPieces = (pieces: Piece[]): SetPiecesAction => ({ type: SET_PIECES, pieces }),
+    setPiecesMeta = (pieces: PieceMeta[]): SetPiecesMetaAction => ({ type: SET_PIECES_META, pieces }),
     addPlan = (plan: SessionPlan): AddPlanAction => ({ type: ADD_PLAN, plan }),
     editPlanSchedule = (plan: SessionPlan): EditPlanScheduleAction => ({ type: EDIT_PLAN_SCHEDULE, plan }),
     renamePlan = (id: number, name: string): RenamePlanAction => ({ type: RENAME_PLAN, id, name }),
     deletePlan = (id: number): DeletePlanAction => ({ type: DELETE_PLAN, id });
 
 export type PieceActionTypes = AddPieceAction
+    | SetPiecesMetaAction
+    | SetPieceAction
     | EditPieceAction
     | DeletePieceAction
     | SetPiecesAction
