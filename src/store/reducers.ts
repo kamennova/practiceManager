@@ -14,8 +14,8 @@ import {
     RenamePlanAction, SET_PIECES, UPDATE_LAST_ADDED_PIECE
 } from "./actions";
 import { initialState, ItemsShape } from "./StoreState";
-import { Piece } from "./types/Piece";
-import { SessionPlan } from "./types/SessionPlan";
+import { Piece } from "../types/Piece";
+import { SessionPlan } from "../types/SessionPlan";
 
 const plans = (state: ItemsShape<SessionPlan> = initialState.plans, action: PlanActionTypes): ItemsShape<SessionPlan> => {
     switch (action.type) {

@@ -1,16 +1,22 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, TouchableWithoutFeedback, View } from "react-native";
+import { connect } from "react-redux";
 import { AppPaddingStyle, ListItemTitleStyle } from "../../AppStyle";
 import { SESSION_PLAN, SESSION_PLAN_FORM } from "../../NavigationPath";
+import { StateShape } from "../../store/StoreState";
 import { SessionPlan } from "../../types/SessionPlan";
 import { AddButton } from "../basic/Buttons/AddButton";
 import { ListItemWrapper } from "../basic/Lists/ListItem";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ScreenTitle } from "../basic/Titles/Titles";
 
+const mapStateToProps = (state: StateShape) => ({
+    plans: state.plans.items,
+});
+
 // todo: bind in app blocks props.nav
-export const SessionPlansList = (props: { plans: SessionPlan[] }) => {
+const SessionPlans = (props: { plans: SessionPlan[] }) => {
     const nav = useNavigation();
 
     return (
@@ -66,3 +72,5 @@ const SessionPlanItem = (props: { plan: SessionPlan, onPress: () => void }) => {
     );
 };
 
+const SessionPlansList = connect(mapStateToProps)(SessionPlans);
+export default SessionPlansList;

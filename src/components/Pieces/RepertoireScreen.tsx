@@ -3,8 +3,8 @@ import { ScrollView, View } from "react-native";
 import { connect } from 'react-redux'
 import { AppPaddingStyle } from "../../AppStyle";
 import { PIECE_FORM } from "../../NavigationPath";
-import { StateShape } from "../../StoreState";
-import { thunkGetPieces } from "../../thunks";
+import { StateShape } from "../../store/StoreState";
+import { thunkGetPieces } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { Piece } from "../../types/Piece";
 import { AddButton } from "../basic/Buttons/AddButton";

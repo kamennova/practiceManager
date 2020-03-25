@@ -1,5 +1,5 @@
-import { Piece } from "./types/Piece";
-import { SessionPlan } from "./types/SessionPlan";
+import { Piece } from "../types/Piece";
+import { SessionPlan } from "../types/SessionPlan";
 
 export type ItemsShape<T> = {
     items: T[],

@@ -1,5 +1,5 @@
-import { Piece } from "./types/Piece";
-import { SessionPlan } from "./types/SessionPlan";
+import { Piece } from "../types/Piece";
+import { SessionPlan } from "../types/SessionPlan";
 
 export const ADD_PIECE = 'Add_piece',
     UPDATE_LAST_ADDED_PIECE = 'Update_last_added_piece',
