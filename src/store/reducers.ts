@@ -14,7 +14,7 @@ import {
     RenamePlanAction, SET_PIECE, SET_PIECES, SET_PIECES_META, UPDATE_LAST_ADDED_PIECE
 } from "./actions";
 import { initialState, ItemsShape } from "./StoreState";
-import { Piece, PieceMeta } from "../types/Piece";
+import { Piece, PieceBase } from "../types/Piece";
 import { SessionPlan } from "../types/SessionPlan";
 
 const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState.plans, action: PlanActionTypes): ItemsShape<SessionPlan, SessionPlan> => {
@@ -32,7 +32,7 @@ const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState.plans,
     }
 };
 
-const pieces = (state: ItemsShape<Piece, PieceMeta> = initialState.pieces, action: PieceActionTypes): ItemsShape<Piece, PieceMeta> => {
+const pieces = (state: ItemsShape<Piece, PieceBase> = initialState.pieces, action: PieceActionTypes): ItemsShape<Piece, PieceBase> => {
     switch (action.type) {
         case ADD_PIECE:
             return { ...state, items: [...state.items, action.piece] };
@@ -53,7 +53,7 @@ const pieces = (state: ItemsShape<Piece, PieceMeta> = initialState.pieces, actio
     }
 };
 
-const replacePiece = (state: PieceMeta[], action: EditPieceAction): PieceMeta[] => {
+const replacePiece = (state: PieceBase[], action: EditPieceAction): PieceBase[] => {
     const pieces = state.filter(i => i.id !== action.piece.id);
     pieces.push(action.piece);
 
