@@ -8,23 +8,23 @@ A mobile app for musicians helping organize practice sessions, maintaining their
 
 - Repertoire (pieces list)
 
-![](./assets/screens/sc1.png)
+![](./assets/screens/sc1.png =250x)
 
 - Piece screen
 
-![](./assets/screens/sc2.png )
+![](./assets/screens/sc2.png =250x)
 
 - Piece form: title validation (checks for piece with same title and author) 
 
-![](./assets/screens/sc3.png )
+![](./assets/screens/sc3.png =250x)
 
 - Filled out piece form
 
-![](./assets/screens/sc4.png )
+![](./assets/screens/sc4.png =250x)
 
 - Result
 
-![](./assets/screens/sc5.png )
+![](./assets/screens/sc5.png =250x)
 
 
 ## Minimum plan:
