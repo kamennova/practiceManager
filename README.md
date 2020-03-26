@@ -4,11 +4,11 @@
 
 A mobile app for musicians helping organize practice sessions, maintaining their repertoire and  track time spent practicing.
 
-## Lab2
+## Lab2 report: repertoire functionality
 
 - Repertoire (pieces list)
 
-![](./assets/screens/sc1.png) {width="300px"}
+![](./assets/screens/sc1.png)
 
 - Piece screen
 
