@@ -20,20 +20,20 @@ import { PieceNotes } from "./PieceNotes";
 import { PieceTags } from "./PieceTags";
 
 type PieceScreenProps = {
-    route: Route & { params: { pieceId: number } },
+    route: Route & { params: { id: number } },
     nextId?: number,
     prevId?: number,
 }
 
 const mapStateToProps = (state: StateShape, ownProps: PieceScreenProps) => ({
         nextId: ((): number | undefined => {
-            const index: number = state.pieces.items.findIndex(i => i.id === ownProps.route.params.pieceId);
+            const index: number = state.pieces.items.findIndex(i => i.id === ownProps.route.params.id);
 
             return (index === -1 || index === state.pieces.items.length - 1) ? undefined : state.pieces.items[index + 1].id;
         })(),
         prevId: (() => {
 
-            const index: number = state.pieces.items.findIndex(i => i.id === ownProps.route.params.pieceId);
+            const index: number = state.pieces.items.findIndex(i => i.id === ownProps.route.params.id);
 
             return (index <= 0) ? undefined : state.pieces.items[index - 1].id;
         })()
@@ -48,12 +48,16 @@ const PieceComponent = (props: PieceScreenProps) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await getPieceById(props.route.params.pieceId);
-            if (result !== undefined) setPiece(result);
+            const result = await getPieceById(props.route.params.id);
+            if (result !== undefined) {
+                setPiece(result);
+            } else {
+                throw new Error('Piece not found');
+            }
         };
 
         fetchData();
-    }, [props.route.params.pieceId]);
+    }, [props.route.params.id]);
 
     const menu = [
         { label: 'Delete', func: () => updateShowDeleteModal(true) },

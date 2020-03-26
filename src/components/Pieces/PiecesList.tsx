@@ -11,7 +11,7 @@ export const PiecesList = (props: { pieces: PieceBase[] }) => {
     return (
         <View style={{}}>
             {props.pieces.map(piece => (
-                <PieceItem onPress={() => navigation.navigate(PIECE, { pieceId: piece.id })} {...piece} />
+                <PieceItem onPress={() => navigation.navigate(PIECE, { id: piece.id })} {...piece} />
             ))}
         </View>
     );
