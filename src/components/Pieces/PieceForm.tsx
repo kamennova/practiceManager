@@ -1,8 +1,6 @@
-import Constants from 'expo-constants';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
+import { ImagePickerResult } from "expo-image-picker";
 import React, { Component } from 'react';
-import { Route, Text, View } from "react-native";
+import { Route, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { getPieceById } from "../../db/db";
@@ -14,14 +12,13 @@ import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece } from "../../types/Piece";
 import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
-import { Divider } from "../basic/Divider";
 import { ErrorAlert } from "../basic/ErrorAlert";
 import { MyImagePicker } from "../basic/ImagePicker";
-import { MyCheckbox } from "../basic/Inputs/Checkbox";
-import { DaysInput } from "../basic/Inputs/DaysInput";
 import { TagInput } from "../basic/Inputs/TagInput";
 import { MyTextInput } from "../basic/Inputs/TextInput";
+import { ItemButtonsWrap } from "../basic/ItemButtons";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
+import { PieceNotifications } from "./PieceNotifications";
 
 const mapDispatchToProps = (dispatch: any) => ({
     onSavePiece: (piece: Piece) => dispatch(thunkAddPiece(piece)),
@@ -44,6 +41,8 @@ class PieceFormComponent extends Component<FormProps> {
         errors: '',
     };
 
+    resetState = () => this.setState({ piece: EmptyPiece, errors: '' });
+
     updatePiece(pieceUpd: Piece) {
         this.setState({
             errors: this.state.errors,
@@ -51,99 +50,95 @@ class PieceFormComponent extends Component<FormProps> {
         });
     };
 
+    toggleNotifs = () => this.updatePiece({
+        ...this.state.piece,
+        notifications: {
+            interval: this.state.piece.notifications.interval,
+            enabled: !this.state.piece.notifications.enabled
+        }
+    });
+
+    updateInterval = (val: number) => this.updatePiece({
+        ...this.state.piece,
+        notifications: {
+            interval: val,
+            enabled: this.state.piece.notifications.enabled,
+        }
+    });
+
     async validateAndSave() {
         const res = await validatePiece(this.state.piece);
 
         if (res.valid) {
             this.props.onSavePiece(this.state.piece)
                 .then(() => {
-                    this.setState({ piece: EmptyPiece, errors: '' });
+                    this.resetState();
                     if (this.props.addedPieceId === undefined) {
                         throw new Error('Added piece id should be already updated ');
                     }
 
                     return getPieceById(this.props.addedPieceId);
                 })
-                .then((piece: Piece) => this.props.navigation.navigate(PIECE, { piece }));
+                .then((piece: Piece) => this.props.navigation.navigate(PIECE, { id: piece.id }));
         } else {
             this.setState({ piece: this.state.piece, errors: res.errors });
         }
     };
 
-    getPermission = async () => {
-        if (Constants.platform !== undefined && Constants.platform.ios) {
-            await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        }
-    };
-
-    pickImage = async () => {
-        await this.getPermission();
-
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            quality: 1,
-        });
-
-        if (!result.cancelled) {
-            this.updatePiece({ ...this.state.piece, imageUri: result.uri });
+    pickImage = async (res: ImagePickerResult) => {
+        if (!res.cancelled) {
+            this.updatePiece({ ...this.state.piece, imageUri: res.uri });
         }
     };
 
     render() {
         return (
-            <ScreenWrapper fullHeight={true} title={'Add piece'} isMain={false} >
-                <View style={{
-                    ...AppPaddingStyle,
-                    paddingTop: 20,
-                    paddingBottom: 30,
-                    flexGrow: 1,
-                }}>
-                    <MyImagePicker src={this.state.piece.imageUri}
-                                   onDelete={() => this.updatePiece({ ...this.state.piece, imageUri: undefined })}
-                                   onChoose={this.pickImage}/>
+            <ScreenWrapper fullHeight={true} title={'Add piece'} isMain={false}
+                           transparent={true}
+                           headerStyle={{
+                               borderBottomColor: this.state.piece.imageUri !== undefined ?
+                                   'rgba(0, 0, 0, 0.1)' : 'lightgrey',
+                           }}>
 
-                    <MyTextInput onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
-                                 placeholder={'Title'}/>
+                <MyImagePicker src={this.state.piece.imageUri}
+                               onDelete={() => this.updatePiece({ ...this.state.piece, imageUri: undefined })}
+                               onChoose={this.pickImage}/>
 
-                    <TagInput placeholder={'Authors (separated by «,»)'}
-                              onUpdateTags={authors => this.updatePiece({ ...this.state.piece, authors })}/>
+                <View style={AppPaddingStyle}>
 
-                    <TagInput onUpdateTags={tags => this.updatePiece({ ...this.state.piece, tags })}/>
+                    <MyTextInput placeholder={'Title'}
+                                 value={this.state.piece.name}
+                                 autoFocus={true}
+                                 onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
+                                 style={{ borderColor: 'blue' }}/>
+
+                    <MyTextInput placeholder='Author'
+                                 value={this.state.piece.authors.toString(', ')}
+                                 onChangeText={authors => this.updatePiece({
+                                     ...this.state.piece,
+                                     authors: authors.split(',')
+                                 })}/>
+
+                    <TagInput value={this.state.piece.tags}
+                              onUpdateTags={tags => this.updatePiece({ ...this.state.piece, tags })}/>
 
                     {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
-
-                    <Divider style={{ marginBottom: 25, marginTop: 10 }}/>
-
-                    <MyCheckbox onValueChange={() => this.updatePiece({
-                        ...this.state.piece,
-                        notifications: {
-                            interval: this.state.piece.notifications.interval,
-                            enabled: !this.state.piece.notifications.enabled
-                        }
-                    })} value={this.state.piece.notifications.enabled}
-                                title={'Notifications on'}/>
-
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ fontSize: 17, }}>Remind to practice every</Text>
-                        <DaysInput value={this.state.piece.notifications.interval}
-                                   onChange={(val) => this.updatePiece({
-                                       ...this.state.piece,
-                                       notifications: {
-                                           interval: val,
-                                           enabled: this.state.piece.notifications.enabled
-                                       }
-                                   })}
-                                   minVal={1} maxVal={100}/>
-                        <Text
-                            style={{ fontSize: 17 }}>day{this.state.piece.notifications.interval > 1 ? 's' : undefined}
-                        </Text>
-                    </View>
-
-                    <PrimaryButton style={{ marginTop: 'auto' }}
-                                   onPress={async () => await this.validateAndSave()}>Save</PrimaryButton>
-                    <MinorButton style={{ marginTop: 10, alignSelf: 'center' }}
-                                 onPress={() => this.props.navigation.goBack()}>Cancel</MinorButton>
                 </View>
+
+                <PieceNotifications interval={this.state.piece.notifications.interval}
+                                    enabled={this.state.piece.notifications.enabled}
+                                    updateInterval={(val) => this.updateInterval.bind(this, val)}
+                                    updateEnabled={this.toggleNotifs.bind(this)}/>
+
+                <ItemButtonsWrap>
+                    <MinorButton style={{ marginTop: 10, alignSelf: 'center' }}
+                                 onPress={() => {
+                                     this.resetState();
+                                     this.props.navigation.goBack()
+                                 }}>Cancel</MinorButton>
+                    <PrimaryButton style={{ marginLeft: 'auto' }}
+                                   onPress={async () => await this.validateAndSave()}>Save</PrimaryButton>
+                </ItemButtonsWrap>
             </ScreenWrapper>
         );
     }
