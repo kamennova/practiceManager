@@ -8,7 +8,7 @@ A mobile app for musicians helping organize practice sessions, maintaining their
 
 - Repertoire (pieces list)
 
-![](./assets/screens/sc1.png)
+![](./assets/screens/sc1.png) {width="300px"}
 
 - Piece screen
 
