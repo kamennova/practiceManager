@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, TextInput, TouchableNativeFeedback, View, ViewStyle } from "react-native";
-import { CheckIcon } from "../icons/Check";
-import { PenIcon } from "../icons/Pen";
+import { CheckIcon } from "./icons/Check";
+import { PenIcon } from "./icons/Pen";
 
 const padding = 12;
 

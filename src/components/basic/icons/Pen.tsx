@@ -6,5 +6,5 @@ type IconProps = {
 }
 
 export const PenIcon = (props: IconProps) => (
-    <Image style={props.style} source={require('../../../assets/pen.png')}/>
+    <Image style={props.style} source={require('../../../../assets/pen.png')}/>
 );

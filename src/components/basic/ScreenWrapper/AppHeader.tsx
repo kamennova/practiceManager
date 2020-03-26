@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View, ViewStyle } from 'react-native';
 import { AppHeaderStyle } from "../../../AppStyle";
-import { BackIcon, DotsIcon, NavIcon } from "../../icons/Header";
+import { BackIcon, DotsIcon, NavIcon } from "../icons/Header";
 
 type HeaderProps = {
     title?: string,

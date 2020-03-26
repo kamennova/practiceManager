@@ -6,7 +6,7 @@ import { PIECE_FORM } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkGetPiecesMeta } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
-import { PieceMeta } from "../../types/Piece";
+import { PieceBase } from "../../types/Piece";
 import { AddButton } from "../basic/Buttons/AddButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceFilters } from "./PieceFilters";
@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     getPieces: () => dispatch(thunkGetPiecesMeta()),
 });
 
-class Repertoire extends Component<{ pieces: PieceMeta[], getPieces: () => void, navigation: any }> {
+class Repertoire extends Component<{ pieces: PieceBase[], getPieces: () => void, navigation: any }> {
     componentDidMount() {
         this.props.getPieces();
     }

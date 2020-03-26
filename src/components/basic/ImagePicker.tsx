@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
-import { PenIcon } from "../icons/Pen";
-import { TrashIcon } from "../icons/Trash";
+import { PenIcon } from "./icons/Pen";
+import { TrashIcon } from "./icons/Trash";
 
 type PickerProps = {
     onChoose: () => void,
