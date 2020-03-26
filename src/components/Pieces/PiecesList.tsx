@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Text, TouchableWithoutFeedback, View } from "react-native";
+import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
 import { ListItemStyle } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
 import { PieceMeta } from "../../types/Piece";
@@ -20,10 +20,19 @@ export const PiecesList = (props: { pieces: PieceMeta[] }) => {
 const PieceItem = (props: PieceMeta & { onPress: () => void }) => (
     <TouchableWithoutFeedback onPress={props.onPress}>
         <View style={ListItemStyle}>
-            <PieceName>
-                {props.name}
-            </PieceName>
-            {props.authors.length > 0 ? <PieceAuthor authors={props.authors}/> : undefined}
+            <View style={{ padding: 10 }}>
+                <PieceName>
+                    {props.name}
+                </PieceName>
+                {props.authors.length > 0 ? <PieceAuthor authors={props.authors}/> : undefined}
+            </View>
+            {props.imageUri !== undefined && props.imageUri !== '' ? [
+                <Image style={{ width: 70, height: '100%', marginLeft: 'auto' }} source={{ uri: props.imageUri }}/>,
+                <Image source={require('../../../assets/layer.png')}
+                       style={{ height: '100%', width: 70, position: 'absolute', right: 2 }}/>
+            ] : undefined
+            }
+
         </View>
     </TouchableWithoutFeedback>
 );

@@ -36,12 +36,13 @@ export const ListItemTitleStyle = {
     marginBottom: 3,
 };
 
-export const ListItemStyle = {
+export const ListItemStyle: ViewStyle = {
     borderWidth: 0.5,
     borderColor: 'darkgrey',
-    // borderRadius: 7,
-    padding: 10,
     marginBottom: 12,
+    flexDirection: 'row',
+    height: 71,
+    alignItems: 'center'
 };
 
 export const ButtonStyle: ViewStyle = {
@@ -141,11 +142,15 @@ export const BreakViewStyle: ViewStyle = {
 };
 
 export const AddButtonStyle: ViewStyle = {
-    padding: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderWidth: 1,
-    borderColor: 'black'
+    width: 60,
+    height: 60,
+    borderColor: Dark,
+    backgroundColor: Primary,
+    position: 'absolute',
+    top: Dimensions.get('window').height - 50,
+    right: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
 };
 
 export const ModalStyle: ViewStyle = {

@@ -35,12 +35,12 @@ class Repertoire extends Component<{ pieces: PieceMeta[], getPieces: () => void,
                     <View style={{
                         marginBottom: 20,
                     }}>
-                        <AddButton
-                            onPress={() => this.props.navigation.navigate(PIECE_FORM, { mode: ActionType.Create, })}/>
                         <PieceFilters/>
                     </View>
                     <PiecesList pieces={this.props.pieces}/>
                 </ScrollView>
+                <AddButton
+                    onPress={() => this.props.navigation.navigate(PIECE_FORM, { mode: ActionType.Create, })}/>
             </ScreenWrapper>
         );
     }
