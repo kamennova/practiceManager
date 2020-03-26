@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { PieceStatus } from "../../types/Piece";
-import { minutesToHumanlyFormat } from "../../types/Time";
+import { minutesToHumanlyFormat } from "../../utils/time";
 
 export const Features = (props: { status: PieceStatus, timeSpent: number, lastPracticed?: Date }) => (
     <View style={{
