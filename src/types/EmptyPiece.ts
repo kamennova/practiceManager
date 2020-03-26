@@ -13,5 +13,5 @@ export const EmptyPiece: Piece = {
     tags: [],
     notes: [],
     addedOn: new Date(),
-    status: PieceStatus.JustStarted,
+    status: PieceStatus.NotStarted,
 };

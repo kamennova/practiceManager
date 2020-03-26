@@ -1,4 +1,4 @@
-import { Piece, PieceMeta } from "../types/Piece";
+import { Piece, PieceBase } from "../types/Piece";
 import { SessionPlan } from "../types/SessionPlan";
 
 export const ADD_PIECE = 'Add_piece',
@@ -25,7 +25,7 @@ export type SetPieceAction = {
 
 export type SetPiecesMetaAction = {
     type: typeof SET_PIECES_META,
-    pieces: PieceMeta[]
+    pieces: PieceBase[]
 };
 
 export type AddPieceAction = {
@@ -75,7 +75,7 @@ export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, pi
     editPiece = (piece: Piece): EditPieceAction => ({ type: EDIT_PIECE, piece }),
     deletePiece = (id: number): DeletePieceAction => ({ type: DELETE_PIECE, id }),
     setPieces = (pieces: Piece[]): SetPiecesAction => ({ type: SET_PIECES, pieces }),
-    setPiecesMeta = (pieces: PieceMeta[]): SetPiecesMetaAction => ({ type: SET_PIECES_META, pieces }),
+    setPiecesMeta = (pieces: PieceBase[]): SetPiecesMetaAction => ({ type: SET_PIECES_META, pieces }),
     addPlan = (plan: SessionPlan): AddPlanAction => ({ type: ADD_PLAN, plan }),
     editPlanSchedule = (plan: SessionPlan): EditPlanScheduleAction => ({ type: EDIT_PLAN_SCHEDULE, plan }),
     renamePlan = (id: number, name: string): RenamePlanAction => ({ type: RENAME_PLAN, id, name }),

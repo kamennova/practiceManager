@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 import { TimeTrackerTextStyle } from "../../../AppStyle";
-import { formatSeconds } from "../../../types/Time";
+import { formatSeconds } from "../../../utils/time";
 
 type TimeTrackerProps = {
     seconds: number,

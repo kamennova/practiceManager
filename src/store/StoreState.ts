@@ -1,5 +1,5 @@
 import { EmptyPiece } from "../types/EmptyPiece";
-import { Piece, PieceMeta } from "../types/Piece";
+import { Piece, PieceBase } from "../types/Piece";
 import { SessionPlan } from "../types/SessionPlan";
 
 export type ItemsShape<T, META> = {
@@ -9,7 +9,7 @@ export type ItemsShape<T, META> = {
 };
 
 export type StateShape = {
-    pieces: ItemsShape<Piece, PieceMeta>,
+    pieces: ItemsShape<Piece, PieceBase>,
     plans: ItemsShape<SessionPlan, SessionPlan>,
 };
 

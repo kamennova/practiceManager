@@ -6,7 +6,7 @@ import { DASHBOARD, FREE_SESSION_ACTIVITY_CHOICE, PLANNED_SESSION_TIMER } from "
 import { Button } from "../basic/Buttons/Button";
 import { MyPicker } from "../basic/Inputs/Picker";
 import { ModalTitle } from "../basic/Titles/ModalTitle";
-import { TimerIcon, TimerOffIcon } from "../icons";
+import { TimerIcon, TimerOffIcon } from "../basic/icons";
 
 export const SessionStartScreen = (props: { navigation: any }) => {
     const [usePlan, updateUsePlan] = useState(false);

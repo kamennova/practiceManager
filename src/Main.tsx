@@ -15,7 +15,6 @@ import { FreeSessionTimer, PlannedSessionTimer, SessionEndScreen } from "./compo
 import { FreeSessionActivityChoice } from "./components/SessionTimer/FreeSessionActivityChoice";
 import { SessionStartScreen } from "./components/SessionTimer/SessionStartScreen";
 import { AppSettings } from "./components/Settings/Settings";
-import { StartScreen } from "./components/StartScreen";
 import {
     DASHBOARD,
     FREE_SESSION_ACTIVITY_CHOICE,
@@ -31,7 +30,6 @@ import {
     SESSION_PLAN_LIST,
     SESSION_START,
     SETTINGS,
-    START_SCREEN
 } from "./NavigationPath";
 
 const Drawer = createDrawerNavigator();
@@ -44,8 +42,6 @@ export const Main = () => (
                           backBehavior={'history'}
                           drawerStyle={DrawerStyle}
                           drawerContent={props => (<CustomDrawerContent {...props} />)}>
-            <Drawer.Screen name={START_SCREEN} component={StartScreen}/>
-
             <Drawer.Screen name={REPERTOIRE}
                            component={RepertoireScreen}/>
             <Drawer.Screen name={PIECE} component={PieceScreen}/>

@@ -1,6 +1,6 @@
 import { Note } from "./Note";
 
-export type PieceMeta = {
+export type PieceBase = {
     id: number,
     name: string,
     timeSpent: number,
@@ -11,11 +11,10 @@ export type PieceMeta = {
     complexity?: PieceComplexity,
     status: PieceStatus,
     tags: string[],
-    // todo string
     authors: string[],
 };
 
-export type Piece = PieceMeta & {
+export type Piece = PieceBase & {
     notifications: {
         enabled: boolean,
         interval: number,
@@ -24,14 +23,14 @@ export type Piece = PieceMeta & {
 }
 
 export enum PieceComplexity {
-    Beginner = 'Beginner',
+    Easy = 'Easy',
     Intermediate = 'Intermediate',
     UpperIntermediate = 'UpperIntermediate',
     Advanced = 'Advanced',
 }
 
 export enum PieceStatus {
-    JustStarted = 'Just started',
+    NotStarted = 'Not started',
     InWork = 'In work',
     Fluent = 'Fluent',
 }

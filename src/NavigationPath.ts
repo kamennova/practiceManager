@@ -1,5 +1,4 @@
 export const DASHBOARD = 'Dashboard',
-    START_SCREEN = 'StartScreen',
     REPERTOIRE = 'Repertoire',
     PIECE = 'Piece',
     PIECE_FORM = 'PieceForm',

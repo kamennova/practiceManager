@@ -5,7 +5,7 @@ export enum TimeFormat {
 
 export const minutesToHumanlyFormat = (minutes: number, _format?: TimeFormat): string => {
     if (minutes < 60) {
-        return minutes + 'min';
+        return minutes + ' min';
     }
 
     return Math.floor(minutes / 60).toString() + ' hours' +

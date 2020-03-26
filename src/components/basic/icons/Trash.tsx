@@ -6,5 +6,5 @@ type IconProps = {
 }
 
 export const TrashIcon = (props: IconProps) => (
-    <Image style={props.style} source={require('../../../assets/trash.png')}/>
+    <Image style={props.style} source={require('../../../../assets/trash.png')}/>
 );
