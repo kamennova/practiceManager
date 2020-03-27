@@ -30,7 +30,7 @@ export const thunkAddPiece: ThunkResult = (piece: Piece) => async (dispatch: Dis
     const added = await addPieceToDb(piece);
 
     dispatch(updateLastAddedPiece(added.id));
-    return dispatch(addPiece(piece));
+    return dispatch(addPiece(added));
 };
 
 export const thunkEditPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {

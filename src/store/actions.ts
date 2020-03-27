@@ -79,7 +79,7 @@ export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, pi
     setPiece = (piece: Piece): SetPieceAction => ({ type: SET_PIECE, piece }),
     updateLastAddedPiece = (id: number): UpdateLastAddedAction => ({ type: UPDATE_LAST_ADDED_PIECE, id }),
     editPiece = (piece: Piece): EditPieceAction => ({ type: EDIT_PIECE, piece }),
-    togglePieceNotifs = (id: number): TogglePieceNotifsAction => ({type: TOGGLE_PIECE_NOTIFS, id}),
+    togglePieceNotifs = (id: number): TogglePieceNotifsAction => ({ type: TOGGLE_PIECE_NOTIFS, id }),
     deletePiece = (id: number): DeletePieceAction => ({ type: DELETE_PIECE, id }),
     setPieces = (pieces: Piece[]): SetPiecesAction => ({ type: SET_PIECES, pieces }),
     setPiecesMeta = (pieces: PieceBase[]): SetPiecesMetaAction => ({ type: SET_PIECES_META, pieces }),
