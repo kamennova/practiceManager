@@ -7,7 +7,7 @@ import { getPieceById } from "../../db/db";
 import { validatePiece } from "../../db/validation";
 import { PIECE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
-import { thunkAddPiece } from "../../store/thunks";
+import { thunkAddPiece, thunkEditPiece } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece } from "../../types/Piece";
@@ -20,8 +20,9 @@ import { ItemButtonsWrap } from "../basic/ItemButtons";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceNotifications } from "./PieceNotifications";
 
-const mapDispatchToProps = (dispatch: any) => ({
-    onSavePiece: (piece: Piece) => dispatch(thunkAddPiece(piece)),
+const mapDispatchToProps = (dispatch: any, ownProps: FormProps) => ({
+    onHandlePiece: ownProps.route.params.mode === ActionType.Create ? (piece: Piece) => dispatch(thunkAddPiece(piece)) :
+        (piece: Piece) => dispatch(thunkEditPiece(piece)),
 });
 
 const mapStateToProps = (state: StateShape) => ({
@@ -29,15 +30,23 @@ const mapStateToProps = (state: StateShape) => ({
 });
 
 type FormProps = {
-    route: Route,
-    onSavePiece: (piece: Piece) => any,
-    addedPieceId?: number,
+    route: Route & { params: { mode: ActionType.Create | ActionType.Edit, piece?: Piece } },
     navigation: any,
+    onHandlePiece: (piece: Piece) => any,
+    addedPieceId?: number,
 };
 
-class PieceFormComponent extends Component<FormProps> {
+type FormState = {
+    piece: Piece,
+    errors?: string
+};
+
+class PieceFormComponent extends Component<FormProps, FormState> {
+    mode = this.props.route.params.mode;
+
     state = {
-        piece: this.props.route.params.mode === ActionType.Create ? EmptyPiece : this.props.route.params.piece,
+        piece: this.mode === ActionType.Create ? EmptyPiece :
+            (this.props.route.params.piece !== undefined ? this.props.route.params.piece : EmptyPiece),
         errors: '',
     };
 
@@ -70,7 +79,7 @@ class PieceFormComponent extends Component<FormProps> {
         const res = await validatePiece(this.state.piece);
 
         if (res.valid) {
-            this.props.onSavePiece(this.state.piece)
+            this.props.onHandlePiece(this.state.piece)
                 .then(() => {
                     this.resetState();
                     if (this.props.addedPieceId === undefined) {
@@ -93,7 +102,9 @@ class PieceFormComponent extends Component<FormProps> {
 
     render() {
         return (
-            <ScreenWrapper fullHeight={true} title={'Add piece'} isMain={false}
+            <ScreenWrapper fullHeight={true}
+                           title={this.mode === ActionType.Create ? 'Add piece' : 'Edit piece'}
+                           isMain={false}
                            transparent={true}
                            headerStyle={{
                                borderBottomColor: this.state.piece.imageUri !== undefined ?
@@ -108,12 +119,12 @@ class PieceFormComponent extends Component<FormProps> {
 
                     <MyTextInput placeholder={'Title'}
                                  value={this.state.piece.name}
-                                 autoFocus={true}
+                                 autoFocus={this.mode === ActionType.Create}
                                  onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
                                  style={{ borderColor: 'blue' }}/>
 
                     <MyTextInput placeholder='Author'
-                                 value={this.state.piece.authors.toString(', ')}
+                                 value={this.state.piece.authors.toString()}
                                  onChangeText={authors => this.updatePiece({
                                      ...this.state.piece,
                                      authors: authors.split(',')
@@ -125,10 +136,12 @@ class PieceFormComponent extends Component<FormProps> {
                     {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
                 </View>
 
-                <PieceNotifications interval={this.state.piece.notifications.interval}
-                                    enabled={this.state.piece.notifications.enabled}
-                                    updateInterval={(val) => this.updateInterval.bind(this, val)}
-                                    updateEnabled={this.toggleNotifs.bind(this)}/>
+                {this.mode === ActionType.Create ?
+                    <PieceNotifications interval={this.state.piece.notifications.interval}
+                                        enabled={this.state.piece.notifications.enabled}
+                                        updateInterval={(val) => this.updateInterval.bind(this, val)}
+                                        updateEnabled={this.toggleNotifs.bind(this)}/>
+                    : undefined}
 
                 <ItemButtonsWrap>
                     <MinorButton style={{ marginTop: 10, alignSelf: 'center' }}

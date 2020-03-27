@@ -5,6 +5,7 @@ import { SessionPlan } from "../types/SessionPlan";
 export type ItemsShape<T, META> = {
     items: META[],
     currentItem: T,
+    // todo rename
     lastAddedId?: number,
 };
 

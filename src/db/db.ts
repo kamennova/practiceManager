@@ -1,8 +1,22 @@
 import { getRepository } from "typeorm";
-import { Piece, PieceMeta, PieceStatus } from "../types/Piece";
+import { Piece, PieceBase, PieceComplexity, PieceGenre, PieceStatus } from "../types/Piece";
 import { AuthorEntity } from "./entity/Author";
 import { PieceEntity } from "./entity/Piece";
 import { TagEntity } from "./entity/Tag";
+
+const createTags = (tags: string[]): TagEntity[] => tags.map(tag => {
+    const ent = new TagEntity();
+    ent.name = tag;
+
+    return ent;
+});
+
+const createAuthors = (authors: string[]): AuthorEntity[] => authors.map(author => {
+    const ent = new AuthorEntity();
+    ent.name = author;
+
+    return ent;
+});
 
 export const addPiece = async (piece: Piece): Promise<Piece> => {
     const newPiece = new PieceEntity();
@@ -12,20 +26,8 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
     newPiece.notificationsOn = piece.notifications.enabled;
     newPiece.isFavourite = false;
     newPiece.imageUri = piece.imageUri !== undefined ? piece.imageUri : '';
-
-    newPiece.tags = piece.tags.map(tag => {
-        const ent = new TagEntity();
-        ent.name = tag;
-
-        return ent;
-    });
-
-    newPiece.authors = piece.authors.map(author => {
-        const ent = new AuthorEntity();
-        ent.name = author;
-
-        return ent;
-    });
+    newPiece.tags = createTags(piece.tags);
+    newPiece.authors = createAuthors(piece.authors);
 
     const pieceRepository = getRepository(PieceEntity);
     await pieceRepository.save(newPiece);
@@ -43,13 +45,64 @@ export const getPieceById = async (id: number): Promise<Piece | undefined> => {
     return Promise.resolve(pieceFromEntity(ent));
 };
 
-export const getPiecesMeta = async (): Promise<PieceMeta[]> =>
-    (await getRepository(PieceEntity).find({ relations: ['authors', 'tags'] })).map(pieceMetaFromEntity);
+export const updatePiece = async (piece: Piece): Promise<void> => {
+    const repo = await getRepository(PieceEntity);
+    const pieceUpd = await repo.findOne(piece.id, { relations: ['authors', 'tags'] });
+
+    if (pieceUpd === undefined) {
+        return await Promise.reject('piece not found');
+    }
+
+    pieceUpd.name = piece.name;
+    pieceUpd.imageUri = piece.imageUri !== undefined ? piece.imageUri : '';
+    pieceUpd.tags = createTags(piece.tags);
+    pieceUpd.authors = createAuthors(piece.authors);
+};
+
+export const togglePieceNotifs = async (id: number): Promise<void> => {
+    const repo = getRepository(PieceEntity);
+    const pieceUpd = await repo.findOne(id);
+
+    if (pieceUpd === undefined) {
+        throw new Error('piece not found');
+    }
+
+    pieceUpd.notificationsOn = !pieceUpd.notificationsOn;
+    await repo.save(pieceUpd);
+};
+
+export const updatePieceNotifsInterval = async (id: number, interval: number): Promise<void> => {
+    const repo = getRepository(PieceEntity);
+    const pieceUpd = await repo.findOne(id);
+
+    if (pieceUpd === undefined) {
+        throw new Error('piece not found');
+    }
+
+    pieceUpd.notificationsInterval = interval;
+    await repo.save(pieceUpd);
+};
+
+export const togglePieceIsFavourite = async (id: number): Promise<void> => {
+    // todo optimize
+    const repo = getRepository(PieceEntity);
+    const pieceUpd = await repo.findOne(id);
+
+    if (pieceUpd === undefined) {
+       return await Promise.reject('piece not found, id: ' + id);
+    }
+
+    pieceUpd.isFavourite = !pieceUpd.isFavourite;
+    await repo.save(pieceUpd);
+};
+
+export const getPiecesMeta = async (): Promise<PieceBase[]> =>
+    (await getRepository(PieceEntity).find({ relations: ['authors', 'tags'] })).map(pieceBaseFromEntity);
 
 export const getPieces = async (): Promise<Piece[]> =>
     (await getRepository(PieceEntity).find({ relations: ['authors', 'tags', 'notes'] })).map(pieceFromEntity);
 
-export const pieceMetaFromEntity = (ent: PieceEntity): PieceMeta => ({
+const pieceBaseFromEntity = (ent: PieceEntity): PieceBase => ({
     id: ent.id,
     name: ent.name,
     timeSpent: 0,
@@ -58,22 +111,18 @@ export const pieceMetaFromEntity = (ent: PieceEntity): PieceMeta => ({
     tags: ent.tags.map(tag => tag.name),
     authors: ent.authors.map(author => author.name),
     addedOn: new Date(ent.addedOn),
-    status: PieceStatus.JustStarted,
+    status: PieceStatus.NotStarted,
+    complexity: PieceComplexity.Easy,
+    genre: PieceGenre.Classical,
 });
 
-export const pieceFromEntity = (ent: PieceEntity): Piece => ({
-    id: ent.id,
-    name: ent.name,
-    timeSpent: 0,
-    isFavourite: ent.isFavourite,
-    imageUri: ent.imageUri === '' ? undefined : ent.imageUri,
+const pieceFromEntity = (ent: PieceEntity): Piece => ({
+    ...pieceBaseFromEntity(ent),
     notifications: {
         interval: ent.notificationsInterval,
         enabled: ent.notificationsOn,
     },
-    tags: ent.tags.map(tag => tag.name),
-    authors: ent.authors.map(author => author.name),
     notes: [],
-    addedOn: new Date(ent.addedOn),
-    status: PieceStatus.JustStarted,
+    recordings: [],
+    originalUri: ent.originalUri,
 });

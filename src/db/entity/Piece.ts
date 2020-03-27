@@ -2,6 +2,7 @@ import { JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { AuthorEntity } from "./Author";
 import { NoteEntity } from "./Note";
+import { RecordingEntity } from "./Recording";
 import { TagEntity } from "./Tag";
 
 @Entity('piece')
@@ -16,13 +17,17 @@ export class PieceEntity {
     @Column('boolean')
     isFavourite!: boolean;
 
-    @Column('varchar', { length: 255, nullable: true })
+    @Column({ type: 'varchar', length: 255, nullable: true })
     imageUri!: string;
 
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    originalUri!: string;
+
+    // todo: createDateCol
     @Column("datetime")
     addedOn!: number;
 
-    @Column("datetime", { nullable: true })
+    @Column({type: "datetime", nullable: true })
     lastPracticedOn!: string;
 
     @Column("boolean")
@@ -30,6 +35,12 @@ export class PieceEntity {
 
     @Column("smallint")
     notificationsInterval!: number;
+
+    @Column({ type: 'varchar', nullable: true })
+    genre!: string;
+
+    @Column({ type: 'varchar', nullable: true})
+    complexity!: string;
 
     @ManyToMany(_type => AuthorEntity, { cascade: ['insert'] })
     @JoinTable()
@@ -42,4 +53,8 @@ export class PieceEntity {
     @ManyToOne(_type => NoteEntity, { cascade: ['insert'] })
     @JoinTable()
     notes!: NoteEntity[];
+
+    @ManyToOne(_type => RecordingEntity, { cascade: ['insert'] })
+    @JoinTable()
+    recordings!: RecordingEntity[];
 }
