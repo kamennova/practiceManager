@@ -11,7 +11,7 @@ import {
     PieceActionTypes,
     PlanActionTypes,
     RENAME_PLAN,
-    RenamePlanAction, SET_PIECE, SET_PIECES, SET_PIECES_META, UPDATE_LAST_ADDED_PIECE
+    RenamePlanAction, SET_PIECE, SET_PIECES, SET_PIECES_META, TOGGLE_PIECE_NOTIFS, UPDATE_LAST_ADDED_PIECE
 } from "./actions";
 import { initialState, ItemsShape } from "./StoreState";
 import { Piece, PieceBase } from "../types/Piece";
@@ -41,7 +41,9 @@ const pieces = (state: ItemsShape<Piece, PieceBase> = initialState.pieces, actio
         case DELETE_PIECE:
             return { ...state, items: state.items.filter(p => p.id !== action.id) };
         case EDIT_PIECE:
-            return { ...state, items: replacePiece(state.items, action) };
+            return { ...state, items: replacePiece(state.items, action), lastAddedId: action.piece.id };
+        case TOGGLE_PIECE_NOTIFS:
+            return state;
         case SET_PIECE:
             return { ...state, currentItem: action.piece };
         case SET_PIECES_META:

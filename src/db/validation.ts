@@ -13,7 +13,8 @@ export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
     }
 
     const pieceRepo = getRepository(PieceEntity);
-    const piecesWithSameName = await pieceRepo.find({ where: { name: piece.name }, relations: ['authors'] });
+    const piecesWithSameName = (await pieceRepo.find({ where: { name: piece.name }, relations: ['authors'] }))
+        .filter(item => item.id !== piece.id);
 
     if (piecesWithSameName.length > 0) {
         if (piecesWithSameName.find(item => areAuthorsSame(item, piece) !== undefined)) {

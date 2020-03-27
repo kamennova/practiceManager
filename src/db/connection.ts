@@ -3,6 +3,7 @@ import { createConnection } from "typeorm";
 import { AuthorEntity } from "./entity/Author";
 import { NoteEntity } from "./entity/Note";
 import { PieceEntity } from "./entity/Piece";
+import { RecordingEntity } from "./entity/Recording";
 import { TagEntity } from "./entity/Tag";
 
 export const connectToDb = async () => createConnection({
@@ -13,7 +14,8 @@ export const connectToDb = async () => createConnection({
         PieceEntity,
         AuthorEntity,
         TagEntity,
-        NoteEntity
+        NoteEntity,
+        RecordingEntity,
     ],
     synchronize: true,
     logging: true

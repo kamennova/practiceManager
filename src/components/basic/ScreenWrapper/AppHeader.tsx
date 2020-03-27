@@ -6,6 +6,7 @@ import { BackIcon, DotsIcon, NavIcon } from "../icons/Header";
 
 type HeaderProps = {
     title?: string,
+    onGoBack?: () => void,
     isMain?: boolean,
     transparent?: boolean,
     updateShowMenu?: () => void,
@@ -19,7 +20,12 @@ export const AppHeader = (props: HeaderProps) => {
         <View style={{ ...AppHeaderStyle(props.transparent), ...props.style }}>
 
             {(props.isMain !== undefined && !props.isMain) ?
-                <BackIcon navigation={nav}/> : <NavIcon navigation={nav}/>
+                <BackIcon onPress={() => {
+                    if (props.onGoBack !== undefined) props.onGoBack();
+                    nav.goBack();
+                }}/> :
+                // @ts-ignore
+                <NavIcon onPress={nav.toggleDrawer}/>
             }
 
             <Text style={{

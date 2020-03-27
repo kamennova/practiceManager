@@ -4,6 +4,7 @@ export const AppSidePadding = 17,
     TotalHeaderHeight = 86;
 
 export const Primary = '#6895ff',
+    Secondary = 'orange',
     Dark = '#2d60d8',
     AppBg = '#f1f1f3',
     AppBgOpacity = 'rgba(241, 241, 243, 0.5)';
@@ -200,8 +201,8 @@ export const PickerStyle = {
 
 export const TextInputStyle = {
     width: '100%',
-    borderWidth: 0.4,
-    borderColor: 'grey',
+    borderWidth: 1,
+    borderColor: 'lightgrey',
     padding: 8,
     paddingLeft: 12,
     paddingRight: 12,
@@ -213,12 +214,13 @@ export const TagInputTagStyle: ViewStyle = {
     flexDirection: 'row',
     alignItems: 'baseline',
     borderWidth: 1,
+    borderColor: Primary,
     marginRight: 10,
     marginBottom: 10,
+    padding: 10,
     paddingBottom: 3,
-    paddingTop: 2,
-    paddingLeft: 7,
-    paddingRight: 7,
+    paddingTop: 4,
+    paddingRight: 3,
 };
 
 export const CheckboxWrapperStyle: ViewStyle = {

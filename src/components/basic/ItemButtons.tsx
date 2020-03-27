@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, View } from "react-native";
-import { AppBgOpacity } from "../../AppStyle";
+import { AppBgOpacity, AppSidePadding } from "../../AppStyle";
 
 export const ItemButtonsWrap = (props: { children: JSX.Element[] }) => (
     <View style={{
@@ -10,7 +10,9 @@ export const ItemButtonsWrap = (props: { children: JSX.Element[] }) => (
         width: '100%',
         justifyContent: 'center',
         backgroundColor: AppBgOpacity,
+        padding: AppSidePadding,
         paddingTop: 15,
+        paddingBottom: 0,
     }}>
         {props.children}
     </View>

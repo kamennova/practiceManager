@@ -1,61 +1,92 @@
+import Constants from 'expo-constants';
+import * as ImagePicker from "expo-image-picker";
+import { ImagePickerResult } from "expo-image-picker";
+import * as Permissions from 'expo-permissions';
 import React from 'react';
 import { Image, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
-import { PenIcon } from "./icons/Pen";
+import { AppSidePadding, HeaderIconWrap, TotalHeaderHeight } from "../../AppStyle";
 import { TrashIcon } from "./icons/Trash";
 
 type PickerProps = {
-    onChoose: () => void,
+    onChoose: (_: ImagePickerResult) => void,
     onDelete: () => void,
     src?: string,
     style?: ViewStyle,
 };
 
-const SIZE = 100;
-const PAD = 7;
+const SIZE = 240;
 
 export const MyImagePicker = (props: PickerProps) => {
+
+    const getPermission = async () => {
+        if (Constants.platform !== undefined && Constants.platform.ios) {
+            await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        }
+    };
+
+    const pick = async (): Promise<ImagePickerResult> => {
+        await getPermission();
+
+        return await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1,
+        });
+    };
+
     return (
-        <TouchableWithoutFeedback onPress={props.onChoose}>
+        <TouchableWithoutFeedback onPress={async () => {
+            props.onChoose(await pick())
+        }}>
             <View style={{
-                width: SIZE + 2,
-                height: SIZE + 2,
-                backgroundColor: 'lightgrey',
+                width: '100%',
+                height: SIZE + 1,
+                backgroundColor: 'rgba(0, 0, 0, 0.05)',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 20,
-                alignSelf: 'center',
-                borderWidth: props.src !== undefined ? 2 : 0,
-                borderColor: 'darkgrey',
+                borderBottomWidth: 1,
+                borderColor: 'lightgrey',
                 ...props.style,
             }}>
-                {props.src === undefined ? <PickImageButton/> :
-                    <EditImageButton onDelete={props.onDelete} src={props.src}/>}
+                {props.src !== undefined ? [
+                    <Image style={{ width: '100%', height: SIZE }} source={{ uri: props.src }}/>,
+                    Layer(),
+                    <DeleteIcon onDelete={props.onDelete}/>
+                ] : undefined}
+                <PickImageButton/>
             </View>
         </TouchableWithoutFeedback>
     );
 };
 
-const PickImageButton = () => (
-    <Image source={require('../../../assets/photo.png')}/>
+const Layer = () => (
+    <View style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    }}/>
 );
 
-const EditImageButton = (props: { src: string, onDelete: () => void, }) => (
-    <View>
-        <Image style={{ width: SIZE, height: SIZE }} source={{ uri: props.src }}/>
-        <PenIcon style={{ width: 20, height: 20, position: 'absolute', right: PAD, top: PAD }}/>
+const PickImageButton = () => (
+    <Image style={{
+        width: 30,
+        height: 30,
+        position: 'absolute',
+        bottom: (SIZE - TotalHeaderHeight) / 2
+    }}
+           source={require('../../../assets/photo.png')}/>
+);
 
-        <TouchableWithoutFeedback onPress={props.onDelete}>
-            <View style={{
-                position: 'absolute',
-                width: 30,
-                height: 30,
-                bottom: 0,
-                right: 0,
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}>
-                <TrashIcon style={{ width: 20, height: 20 }}/>
-            </View>
-        </TouchableWithoutFeedback>
-    </View>
+const DeleteIcon = (props: { onDelete: () => void }) => (
+    <TouchableWithoutFeedback onPress={props.onDelete}>
+        <View style={{
+            ...HeaderIconWrap,
+            position: 'absolute',
+            bottom: 10,
+            right: AppSidePadding,
+        }}>
+            <TrashIcon style={{ width: 21, height: 21 }}/>
+        </View>
+    </TouchableWithoutFeedback>
 );

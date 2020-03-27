@@ -1,17 +1,19 @@
 import { Note } from "./Note";
+import { Recording } from "./Recording";
 
 export type PieceBase = {
     id: number,
     name: string,
-    timeSpent: number,
-    isFavourite: boolean,
-    imageUri?: string,
-    lastPracticedOn?: Date,
-    addedOn: Date,
-    complexity?: PieceComplexity,
-    status: PieceStatus,
     tags: string[],
     authors: string[],
+    complexity?: PieceComplexity,
+    genre?: PieceGenre,
+    imageUri?: string,
+    timeSpent: number,
+    lastPracticedOn?: Date,
+    addedOn: Date,
+    status: PieceStatus,
+    isFavourite: boolean,
 };
 
 export type Piece = PieceBase & {
@@ -20,6 +22,8 @@ export type Piece = PieceBase & {
         interval: number,
     },
     notes: Note[],
+    recordings: Recording[],
+    originalUri?: string,
 }
 
 export enum PieceComplexity {
@@ -33,4 +37,14 @@ export enum PieceStatus {
     NotStarted = 'Not started',
     InWork = 'In work',
     Fluent = 'Fluent',
+}
+
+export enum PieceGenre {
+    Classical = 'Classical',
+    Rock = 'Rock',
+    Pop = 'Pop',
+    Jazz = 'Jazz',
+    Country = 'Country',
+    RAndB = 'R&B',
+    Other = 'Other',
 }
