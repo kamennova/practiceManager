@@ -93,10 +93,10 @@ const PieceComponent = (props: PieceScreenProps) => {
 
             <ItemButtonsWrap>
                 <PrevButton
-                    onPress={props.prevId !== undefined ? () => nav.navigate(PIECE, { pieceId: props.prevId }) : undefined}/>
+                    onPress={props.prevId !== undefined ? () => nav.navigate(PIECE, { id: props.prevId }) : undefined}/>
                 <PrimaryButton style={{ marginRight: 15, marginLeft: 15 }}>Practice</PrimaryButton>
                 <NextButton
-                    onPress={props.nextId !== undefined ? () => nav.navigate(PIECE, { pieceId: props.nextId }) : undefined}/>
+                    onPress={props.nextId !== undefined ? () => nav.navigate(PIECE, { id: props.nextId }) : undefined}/>
             </ItemButtonsWrap>
         </ScreenWrapper>
     );
