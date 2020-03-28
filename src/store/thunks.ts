@@ -44,17 +44,15 @@ export const thunkGetPiecesMeta: ThunkResult = () => async (dispatch: Dispatch) 
 };
 
 export const thunkAddPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
-    const added = await addPieceToDb(piece);
-
-    dispatch(updateLastAddedPiece(added.id));
-    return dispatch(addPiece(added));
+    return await addPieceToDb(piece)
+        .then((id) => dispatch(updateLastAddedPiece(id)))
+        .then(() => dispatch(addPiece(piece)));
 };
 
 export const thunkEditPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
-    await updatePiece(piece);
-
-    dispatch(updateLastAddedPiece(piece.id));
-    return dispatch(editPiece(piece));
+    return updatePiece(piece)
+        .then(() => dispatch(updateLastAddedPiece(piece.id)))
+        .then(() => dispatch(editPiece(piece)));
 };
 
 export const thunkTogglePieceFav: ThunkResult = (id: number) => async (dispatch: Dispatch) => {

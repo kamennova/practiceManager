@@ -21,7 +21,7 @@ import { PieceNotes } from "./PieceNotes";
 import { PieceTags } from "./PieceTags";
 
 type PieceScreenProps = {
-    route: Route & { params: { id: number } },
+    route: Route & { params: { id: number, lastUpdated?: number } },
     sideIds: {
         next?: number,
         prev?: number,
@@ -67,7 +67,7 @@ const PieceComponent = (props: PieceScreenProps) => {
         };
 
         fetchData();
-    }, [props.route.params.id]);
+    }, [props.route.params.id, props.route.params.lastUpdated]);
 
     const onDelete = async () => {
         updateShowDeleteModal(false);

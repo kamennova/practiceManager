@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Route, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
-import { getPieceById } from "../../db/db";
 import { validatePiece } from "../../db/validation";
 import { PIECE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
@@ -79,16 +78,15 @@ class PieceFormComponent extends Component<FormProps, FormState> {
         const res = await validatePiece(this.state.piece);
 
         if (res.valid) {
-            this.props.onHandlePiece(this.state.piece)
-                .then(() => {
-                    this.resetState();
-                    if (this.props.addedPieceId === undefined) {
-                        throw new Error('Added piece id should be already updated ');
-                    }
+            await this.props.onHandlePiece(this.state.piece);
 
-                    return getPieceById(this.props.addedPieceId);
-                })
-                .then((piece: Piece) => this.props.navigation.navigate(PIECE, { id: piece.id }));
+            if (this.props.addedPieceId === undefined) {
+                throw new Error('Added piece id should be already updated ');
+            }
+
+            this.props.navigation.navigate(PIECE,
+                { id: this.props.addedPieceId, lastUpdated: this.mode === ActionType.Edit ? Date.now() : undefined });
+            this.resetState();
         } else {
             this.setState({ piece: this.state.piece, errors: res.errors });
         }

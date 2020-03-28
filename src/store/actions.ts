@@ -52,7 +52,7 @@ export type TogglePieceNotifsAction = {
 
 export type EditPieceAction = {
     type: typeof EDIT_PIECE,
-    piece: Piece,
+    piece: PieceBase,
 };
 
 export type DeletePieceAction = {
@@ -84,7 +84,7 @@ export type DeletePlanAction = {
 export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, piece }),
     setPiece = (piece: Piece): SetPieceAction => ({ type: SET_PIECE, piece }),
     updateLastAddedPiece = (id: number): UpdateLastAddedAction => ({ type: UPDATE_LAST_ADDED_PIECE, id }),
-    editPiece = (piece: Piece): EditPieceAction => ({ type: EDIT_PIECE, piece }),
+    editPiece = (piece: PieceBase): EditPieceAction => ({ type: EDIT_PIECE, piece }),
     togglePieceFav = (id: number): TogglePieceFavAction => ({ type: TOGGLE_PIECE_FAV, id }),
     togglePieceNotifs = (id: number): TogglePieceNotifsAction => ({ type: TOGGLE_PIECE_NOTIFS, id }),
     deletePiece = (id: number): DeletePieceAction => ({ type: DELETE_PIECE, id }),
