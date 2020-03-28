@@ -4,21 +4,41 @@ import { AuthorEntity } from "./entity/Author";
 import { PieceEntity } from "./entity/Piece";
 import { TagEntity } from "./entity/Tag";
 
-const createTags = (tags: string[]): TagEntity[] => tags.map(tag => {
-    const ent = new TagEntity();
-    ent.name = tag;
+const createTags = async (tags: string[]): Promise<TagEntity[]> => {
+    const ents: TagEntity[] = [];
+    const repo = await getRepository(TagEntity);
 
-    return ent;
-});
+    await Promise.all(tags.map(async tag => {
+        const sameTag = await repo.findOne({ name: tag });
 
-const createAuthors = (authors: string[]): AuthorEntity[] => authors.map(author => {
-    const ent = new AuthorEntity();
-    ent.name = author;
+        if (sameTag === undefined) {
+            const ent = new TagEntity();
+            ent.name = tag;
+            ents.push(ent);
+        } else {
+            ents.push(sameTag)
+        }
+    }));
 
-    return ent;
-});
+    return Promise.resolve(ents);
+};
 
-export const addPiece = async (piece: Piece): Promise<Piece> => {
+const createAuthors = async (authors: string[]): Promise<AuthorEntity[]> => {
+    const ents: AuthorEntity[] = [];
+    const repo = await getRepository(AuthorEntity);
+
+    authors.forEach(author => {
+        if (repo.findOne({ name: author }) === undefined) {
+            const ent = new AuthorEntity();
+            ent.name = author;
+            ents.push(ent);
+        }
+    });
+
+    return Promise.resolve(ents);
+};
+
+export const addPiece = async (piece: Piece): Promise<number> => {
     const newPiece = new PieceEntity();
     newPiece.name = piece.name;
     newPiece.addedOn = Date.now();
@@ -26,13 +46,13 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
     newPiece.notificationsOn = piece.notifications.enabled;
     newPiece.isFavourite = piece.isFavourite;
     newPiece.imageUri = piece.imageUri !== undefined ? piece.imageUri : '';
-    newPiece.tags = createTags(piece.tags);
-    newPiece.authors = createAuthors(piece.authors);
+    newPiece.tags = await createTags(piece.tags);
+    newPiece.authors = await createAuthors(piece.authors);
 
     const pieceRepository = getRepository(PieceEntity);
     await pieceRepository.save(newPiece);
 
-    return Promise.resolve({ ...piece, id: newPiece.id });
+    return Promise.resolve(newPiece.id);
 };
 
 export const getPieceById = async (id: number): Promise<Piece | undefined> => {
@@ -48,7 +68,7 @@ export const getPieceById = async (id: number): Promise<Piece | undefined> => {
 
 export const updatePiece = async (piece: Piece): Promise<void> => {
     const repo = await getRepository(PieceEntity);
-    const pieceUpd = await repo.findOne(piece.id, { relations: ['authors', 'tags'] });
+    const pieceUpd = await repo.findOne(piece.id);
 
     if (pieceUpd === undefined) {
         return await Promise.reject('piece not found');
@@ -56,8 +76,10 @@ export const updatePiece = async (piece: Piece): Promise<void> => {
 
     pieceUpd.name = piece.name;
     pieceUpd.imageUri = piece.imageUri !== undefined ? piece.imageUri : '';
-    pieceUpd.tags = createTags(piece.tags);
-    pieceUpd.authors = createAuthors(piece.authors);
+    pieceUpd.tags = await createTags(piece.tags);
+    pieceUpd.authors = await createAuthors(piece.authors);
+
+    await repo.save(pieceUpd);
 };
 
 export const togglePieceNotifs = async (id: number): Promise<void> => {
