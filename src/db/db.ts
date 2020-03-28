@@ -36,7 +36,8 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
 };
 
 export const getPieceById = async (id: number): Promise<Piece | undefined> => {
-    const ent = await getRepository(PieceEntity).findOne(id, { relations: ['authors', 'tags', 'notes'] });
+    const repos = await getRepository(PieceEntity);
+    const ent = await repos.findOne(id, { relations: ['authors', 'tags', 'notes'] });
 
     if (ent === undefined) {
         return Promise.resolve(undefined);
@@ -96,11 +97,16 @@ export const togglePieceIsFavourite = async (id: number): Promise<void> => {
     await repo.save(pieceUpd);
 };
 
-export const getPiecesMeta = async (): Promise<PieceBase[]> =>
-    (await getRepository(PieceEntity).find({ relations: ['authors', 'tags'] })).map(pieceBaseFromEntity);
+export const getPiecesMeta = async (): Promise<PieceBase[]> => {
+    const repo = await getRepository(PieceEntity);
+    return (await repo.find({ relations: ['authors', 'tags'] })).map(pieceBaseFromEntity);
+};
 
-export const getPieces = async (): Promise<Piece[]> =>
-    (await getRepository(PieceEntity).find({ relations: ['authors', 'tags', 'notes'] })).map(pieceFromEntity);
+export const getPieces = async (): Promise<Piece[]> => {
+    const repo = await getRepository(PieceEntity);
+
+    return (await repo.find({ relations: ['authors', 'tags', 'notes'] })).map(pieceFromEntity);
+};
 
 const pieceBaseFromEntity = (ent: PieceEntity): PieceBase => ({
     id: ent.id,
