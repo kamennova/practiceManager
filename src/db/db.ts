@@ -90,11 +90,22 @@ export const togglePieceIsFavourite = async (id: number): Promise<void> => {
     const pieceUpd = await repo.findOne(id);
 
     if (pieceUpd === undefined) {
-       return await Promise.reject('piece not found, id: ' + id);
+        return await Promise.reject('piece not found, id: ' + id);
     }
 
     pieceUpd.isFavourite = !pieceUpd.isFavourite;
     await repo.save(pieceUpd);
+};
+
+export const deletePiece = async (id: number): Promise<void> => {
+    const repo = getRepository(PieceEntity);
+    const piece = await repo.findOne({ id });
+
+    if (piece === undefined) {
+        return await Promise.reject('piece not found, id: ' + id);
+    }
+
+    await repo.remove(piece);
 };
 
 export const getPiecesMeta = async (): Promise<PieceBase[]> => {

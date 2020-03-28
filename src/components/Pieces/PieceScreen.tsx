@@ -4,8 +4,9 @@ import { Image, Route, ScrollView, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { getPieceById } from "../../db/db";
-import { PIECE, PIECE_FORM } from "../../NavigationPath";
+import { PIECE, PIECE_FORM, REPERTOIRE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
+import { thunkDeletePiece } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece, PieceBase } from "../../types/Piece";
@@ -26,12 +27,17 @@ type PieceScreenProps = {
         prev?: number,
     },
     navigation: any,
+    deletePiece: () => void,
 }
 
 const mapStateToProps = (state: StateShape, ownProps: PieceScreenProps) => ({
         sideIds: getSideIds(state.pieces.items, ownProps.route.params.id),
     }
 );
+
+const mapDispatchToProps = (dispatch: any, ownProps: PieceScreenProps) => ({
+    deletePiece: () => dispatch(thunkDeletePiece(ownProps.route.params.id)),
+});
 
 const getSideIds = (items: PieceBase[], id: number): { prev?: number, next?: number } => {
     const index: number = items.findIndex(i => i.id === id);
@@ -61,9 +67,15 @@ const PieceComponent = (props: PieceScreenProps) => {
         fetchData();
     }, [props.route.params.id]);
 
+    const onDelete = async () => {
+        updateShowDeleteModal(false);
+        await props.deletePiece();
+        nav.navigate(REPERTOIRE);
+    };
+
     const menu = [
         { label: 'Edit', func: () => nav.navigate(PIECE_FORM, { piece: piece, mode: ActionType.Edit }) },
-        { label: 'Delete', func: () => updateShowDeleteModal(true) },
+        { label: 'Delete', func: onDelete },
     ];
 
     // @ts-ignore
@@ -120,5 +132,5 @@ const PieceImage = (props: { uri: string }) => (
     <Image source={{ uri: props.uri }} style={{ width: '100%', height: 300 }}/>
 );
 
-const PieceScreen = connect(mapStateToProps)(PieceComponent);
+const PieceScreen = connect(mapStateToProps, mapDispatchToProps)(PieceComponent);
 export default PieceScreen;

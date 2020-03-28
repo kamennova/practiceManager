@@ -1,7 +1,7 @@
 import { Action, ActionCreator, Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { addPiece, editPiece, setPiece, setPieces, setPiecesMeta, updateLastAddedPiece } from "./actions";
-import { addPiece as addPieceToDb, getPieceById, getPieces, getPiecesMeta, updatePiece } from "../db/db";
+import { addPiece, deletePiece, editPiece, setPiece, setPieces, setPiecesMeta, updateLastAddedPiece } from "./actions";
+import { addPiece as addPieceToDb, deletePiece as deletePieceFromDb, getPieceById, getPieces, getPiecesMeta, updatePiece } from "../db/db";
 import { StateShape } from "./StoreState";
 import { Piece } from "../types/Piece";
 
@@ -38,4 +38,10 @@ export const thunkEditPiece: ThunkResult = (piece: Piece) => async (dispatch: Di
 
     dispatch(updateLastAddedPiece(piece.id));
     return dispatch(editPiece(piece));
+};
+
+export const thunkDeletePiece: ThunkResult = (id: number) => async (dispatch: Dispatch) => {
+  await deletePieceFromDb(id);
+
+  return dispatch(deletePiece(id));
 };
