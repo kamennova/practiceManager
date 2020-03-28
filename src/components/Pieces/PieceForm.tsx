@@ -1,5 +1,5 @@
 import { ImagePickerResult } from "expo-image-picker";
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Route, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
@@ -20,7 +20,8 @@ import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceNotifications } from "./PieceNotifications";
 
 const mapDispatchToProps = (dispatch: any, ownProps: FormProps) => ({
-    onHandlePiece: ownProps.route.params.mode === ActionType.Create ? (piece: Piece) => dispatch(thunkAddPiece(piece)) :
+    onHandlePiece: (ownProps.route.params.mode === undefined || ownProps.route.params.mode === ActionType.Create) ?
+        (piece: Piece) => dispatch(thunkAddPiece(piece)) :
         (piece: Piece) => dispatch(thunkEditPiece(piece)),
 });
 
@@ -35,122 +36,113 @@ type FormProps = {
     addedPieceId?: number,
 };
 
-type FormState = {
-    piece: Piece,
-    errors?: string
-};
+const PieceFormComponent = (props: FormProps) => {
+    const mode = props.route.params.mode === undefined ? ActionType.Create : props.route.params.mode;
+    const [piece, updatePiece] = useState(ActionType.Create ? EmptyPiece :
+        (props.route.params.piece !== undefined ? props.route.params.piece : EmptyPiece));
+    const [errors, updateErrors] = useState('');
 
-class PieceFormComponent extends Component<FormProps, FormState> {
-    mode = this.props.route.params.mode === undefined ? ActionType.Create : this.props.route.params.mode;
-
-    state = {
-        piece: this.mode === ActionType.Create ? EmptyPiece :
-            (this.props.route.params.piece !== undefined ? this.props.route.params.piece : EmptyPiece),
-        errors: '',
+    const resetState = () => {
+        updatePiece(EmptyPiece);
+        updateErrors('');
     };
 
-    resetState = () => this.setState({ piece: EmptyPiece, errors: '' });
-
-    updatePiece = (pieceUpd: Piece) => {
-        this.setState({
-            errors: this.state.errors,
-            piece: pieceUpd,
-        });
-    };
-
-    toggleNotifs = () => this.updatePiece({
-        ...this.state.piece,
+    const toggleNotifs = () => updatePiece({
+        ...piece,
         notifications: {
-            interval: this.state.piece.notifications.interval,
-            enabled: !this.state.piece.notifications.enabled
+            interval: piece.notifications.interval,
+            enabled: !piece.notifications.enabled
         }
     });
 
-    updateInterval = (val: number) => this.updatePiece({
-        ...this.state.piece,
+    const updateInterval = (val: number) => updatePiece({
+        ...piece,
         notifications: {
             interval: val,
-            enabled: this.state.piece.notifications.enabled,
+            enabled: piece.notifications.enabled,
         }
     });
 
-    async validateAndSave() {
-        const res = await validatePiece(this.state.piece);
+    console.log('form piece id, ', piece.id);
+
+    const validateAndSave = async () => {
+        const res = await validatePiece(piece);
 
         if (res.valid) {
-            await this.props.onHandlePiece(this.state.piece);
+            await props.onHandlePiece(piece);
 
-            if (this.props.addedPieceId === undefined) {
+            if (props.addedPieceId === undefined) {
                 throw new Error('Added piece id should be already updated ');
             }
 
-            this.props.navigation.navigate(PIECE,
-                { id: this.props.addedPieceId, lastUpdated: this.mode === ActionType.Edit ? Date.now() : undefined });
-            this.resetState();
+            console.log(props.addedPieceId);
+
+            props.navigation.navigate(PIECE,
+                { id: props.addedPieceId, lastUpdated: mode === ActionType.Edit ? Date.now() : undefined });
+            resetState();
         } else {
-            this.setState({ piece: this.state.piece, errors: res.errors });
+            updateErrors(res.errors);
         }
     };
 
-    pickImage = async (res: ImagePickerResult) => {
+    const pickImage = (res: ImagePickerResult) => {
         if (!res.cancelled) {
-            this.updatePiece({ ...this.state.piece, imageUri: res.uri });
+            updatePiece({ ...piece, imageUri: res.uri });
         }
     };
 
-    fav = () => this.mode === ActionType.Create ? {
-        val: this.state.piece.isFavourite,
-        update: () => this.updatePiece({ ...this.state.piece, isFavourite: !this.state.piece.isFavourite }),
+    const fav = () => mode === ActionType.Create ? {
+        val: piece.isFavourite,
+        update: () => updatePiece({ ...piece, isFavourite: !piece.isFavourite }),
     } : undefined;
 
-    render() {
-        return (
-            <ScreenWrapper fav={this.fav()}>
 
-                <MyImagePicker src={this.state.piece.imageUri}
-                               onDelete={() => this.updatePiece({ ...this.state.piece, imageUri: undefined })}
-                               onChoose={this.pickImage}/>
+    return (
+        <ScreenWrapper fav={fav()}>
 
-                <View style={AppPaddingStyle}>
+            <MyImagePicker src={piece.imageUri}
+                           onDelete={() => updatePiece({ ...piece, imageUri: undefined })}
+                           onChoose={pickImage}/>
 
-                    <MyTextInput placeholder={'Title'}
-                                 value={this.state.piece.name}
-                                 autoFocus={this.mode === ActionType.Create}
-                                 onChangeText={(val) => this.updatePiece({ ...this.state.piece, name: val })}
-                                 style={{ borderColor: 'blue' }}/>
+            <View style={AppPaddingStyle}>
 
-                    <MyTextInput placeholder='Author'
-                                 value={this.state.piece.authors.toString()}
-                                 onChangeText={authors => this.updatePiece({
-                                     ...this.state.piece,
-                                     authors: authors.split(',')
-                                 })}/>
+                <MyTextInput placeholder={'Title'}
+                             value={piece.name}
+                             autoFocus={mode === ActionType.Create}
+                             onChangeText={(val) => updatePiece({ ...piece, name: val })}
+                             style={{ borderColor: 'blue' }}/>
 
-                    <TagInput value={this.state.piece.tags}
-                              onUpdateTags={tags => this.updatePiece({ ...this.state.piece, tags })}/>
+                <MyTextInput placeholder='Author'
+                             value={piece.authors.toString()}
+                             onChangeText={authors => updatePiece({
+                                 ...piece,
+                                 authors: authors.split(',')
+                             })}/>
 
-                    {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
-                </View>
+                <TagInput list={piece.tags}
+                          onUpdateTags={tags => updatePiece({ ...piece, tags })}/>
 
-                {this.mode === ActionType.Create ?
-                    <PieceNotifications interval={this.state.piece.notifications.interval}
-                                        enabled={this.state.piece.notifications.enabled}
-                                        updateInterval={(val) => this.updateInterval.bind(this, val)}
-                                        updateEnabled={this.toggleNotifs.bind(this)}/>
-                    : undefined}
+                {errors.length !== 0 ? <ErrorAlert message={errors}/> : undefined}
+            </View>
 
-                <ItemButtonsWrap>
-                    <MinorButton style={{ marginTop: 10, alignSelf: 'center' }}
-                                 onPress={() => {
-                                     this.resetState();
-                                     this.props.navigation.goBack()
-                                 }}>Cancel</MinorButton>
-                    <PrimaryButton style={{ marginLeft: 'auto' }}
-                                   onPress={async () => await this.validateAndSave()}>Save</PrimaryButton>
-                </ItemButtonsWrap>
-            </ScreenWrapper>
-        );
-    }
-}
+            {mode === ActionType.Create ?
+                <PieceNotifications interval={piece.notifications.interval}
+                                    enabled={piece.notifications.enabled}
+                                    updateInterval={updateInterval}
+                                    updateEnabled={toggleNotifs}/>
+                : undefined}
+
+            <ItemButtonsWrap>
+                <MinorButton style={{ marginTop: 10, alignSelf: 'center' }}
+                             onPress={() => {
+                                 props.navigation.goBack();
+                                 resetState();
+                             }}>Cancel</MinorButton>
+                <PrimaryButton style={{ marginLeft: 'auto' }}
+                               onPress={async () => await validateAndSave()}>Save</PrimaryButton>
+            </ItemButtonsWrap>
+        </ScreenWrapper>
+    );
+};
 
 export const PieceForm = connect(mapStateToProps, mapDispatchToProps)(PieceFormComponent);
