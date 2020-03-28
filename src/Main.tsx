@@ -37,7 +37,7 @@ import { ActionType } from "./types/ActionType";
 
 const options = {
     headerStyle: AppHeaderStyle(),
-    titleStyle: { fontWeight: 'normal', color: 'pink' },
+    headerTitleStyle: { fontWeight: '500', fontFamily: 'Roboto' },
     headerLeftContainerStyle: { paddingLeft: AppSidePadding },
     headerRightContainerStyle: { paddingRight: AppSidePadding },
 };
@@ -67,9 +67,7 @@ const Root = () => (
         initialRouteName={INITIAL_SCREEN}>
 
         <Stack.Screen
-            options={({ navigation }) => ({
-                headerLeft: () => <NavIcon onPress={() => navigation.toggleDrawer()}/>,
-            })}
+            options={({ navigation }) => ({ headerLeft: () => <NavIcon onPress={() => navigation.toggleDrawer()}/>, })}
             name={REPERTOIRE}
             component={RepertoireScreen}/>
 
@@ -78,27 +76,41 @@ const Root = () => (
                           title: '',
                           headerLeft: () => <HeaderBackButton onPress={() => navigation.navigate(REPERTOIRE)}/>,
                           headerTransparent: true,
-                      })}
-        />
+                      })}/>
         <Stack.Screen name={PIECE_FORM} component={PieceForm}
                       options={({ route }) => ({
                           headerTransparent: true,
                           title: route.params?.mode === ActionType.Edit ? 'Edit piece' : 'Add piece',
                       })}/>
 
-        <Stack.Screen name={SESSION_PLAN_LIST}
-                      component={SessionPlansList}/>
+        <Stack.Screen name={SESSION_PLAN_LIST} component={SessionPlansList}
+                      options={({ navigation }) => ({
+                          title: 'Practice plans',
+                          headerLeft: () => <NavIcon onPress={() => navigation.toggleDrawer()}/>,
+                      })}/>
         <Stack.Screen name={SESSION_PLAN} component={SessionPlanScreen}/>
-        <Stack.Screen name={SESSION_PLAN_FORM} component={SessionPlanForm}/>
+        <Stack.Screen name={SESSION_PLAN_FORM} component={SessionPlanForm} options={({ route }) =>
+            ({ title: route.params?.mode === ActionType.Edit ? 'Edit plan' : 'Add plan', })}/>
 
-        <Stack.Screen name={SESSION_START} component={SessionStartScreen}/>
+        <Stack.Screen name={SESSION_START} component={SessionStartScreen}
+                      options={{ title: '', headerTransparent: true }}/>
 
-        <Stack.Screen name={PLANNED_SESSION_TIMER} component={PlannedSessionTimer}/>
-        <Stack.Screen name={FREE_SESSION_TIMER} component={FreeSessionTimer}/>
-        <Stack.Screen name={FREE_SESSION_ACTIVITY_CHOICE} component={FreeSessionActivityChoice}/>
-        <Stack.Screen name={SESSION_END} component={SessionEndScreen}/>
+        <Stack.Screen name={PLANNED_SESSION_TIMER} component={PlannedSessionTimer}
+                      options={{ title: '', headerTransparent: true }}/>
+        <Stack.Screen name={FREE_SESSION_TIMER} component={FreeSessionTimer}
+                      options={{ title: '', headerTransparent: true }}/>
+        <Stack.Screen name={FREE_SESSION_ACTIVITY_CHOICE} component={FreeSessionActivityChoice}
+                      options={{ title: '', headerTransparent: true }}/>
+        <Stack.Screen name={SESSION_END} component={SessionEndScreen}
+                      options={{ title: '', headerTransparent: true }}/>
 
-        <Stack.Screen name={DASHBOARD} component={Dashboard}/>
-        <Stack.Screen name={SETTINGS} component={AppSettings}/>
+        <Stack.Screen name={DASHBOARD} component={Dashboard}
+                      options={({ navigation }) => ({
+                          headerLeft: () => <NavIcon onPress={() => navigation.toggleDrawer()}/>,
+                      })}/>
+        <Stack.Screen name={SETTINGS} component={AppSettings}
+                      options={({ navigation }) => ({
+                          headerLeft: () => <NavIcon onPress={() => navigation.toggleDrawer()}/>,
+                      })}/>
     </Stack.Navigator>
 );
