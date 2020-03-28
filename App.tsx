@@ -5,8 +5,10 @@ import thunk from "redux-thunk";
 import { connectToDb } from "./src/db/connection";
 import { Main } from "./src/Main";
 import { practiceManagerApp } from "./src/store/reducers";
+import { enableScreens } from 'react-native-screens';
 
 const store = createStore(practiceManagerApp, applyMiddleware(thunk));
+enableScreens();
 
 class App extends Component {
     async componentDidMount() {

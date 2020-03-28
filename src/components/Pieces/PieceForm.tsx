@@ -102,14 +102,7 @@ class PieceFormComponent extends Component<FormProps, FormState> {
 
     render() {
         return (
-            <ScreenWrapper fullHeight={true}
-                           title={this.mode === ActionType.Create ? 'Add piece' : 'Edit piece'}
-                           isMain={false}
-                           transparent={true}
-                           headerStyle={{
-                               borderBottomColor: this.state.piece.imageUri !== undefined ?
-                                   'rgba(0, 0, 0, 0.1)' : 'lightgrey',
-                           }}>
+            <ScreenWrapper>
 
                 <MyImagePicker src={this.state.piece.imageUri}
                                onDelete={() => this.updatePiece({ ...this.state.piece, imageUri: undefined })}

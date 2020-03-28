@@ -10,17 +10,11 @@ export const Primary = '#6895ff',
     AppBgOpacity = 'rgba(241, 241, 243, 0.5)';
 
 export const AppHeaderStyle = (transparent: boolean = false): ViewStyle => ({
-    display: 'flex',
-    flexDirection: 'row',
-    paddingBottom: 10,
-    paddingTop: 40,
-    paddingLeft: AppSidePadding,
-    paddingRight: AppSidePadding,
-    alignItems: 'center',
     borderBottomWidth: transparent ? 0 : 1,
     borderBottomColor: 'lightgrey',
-    position: 'absolute',
-    width: '100%',
+    backgroundColor: AppBg,
+    shadowOpacity: 0,
+    elevation: 0
 });
 
 export const HeaderIconWrap: ViewStyle = {
@@ -148,8 +142,8 @@ export const AddButtonStyle: ViewStyle = {
     borderColor: Dark,
     backgroundColor: Primary,
     position: 'absolute',
-    top: Dimensions.get('window').height - 50,
-    right: 30,
+    top: Dimensions.get('window').height - 130,
+    right: AppSidePadding,
     alignItems: 'center',
     justifyContent: 'center'
 };
@@ -292,11 +286,11 @@ export const TagTextStyle: TextStyle = {
 export const ItemMenuStyle: ViewStyle = {
     position: 'absolute',
     right: AppSidePadding,
-    top: 45,
+    top: 40,
     width: 150,
-    padding: 16,
-    paddingTop: 14,
-    paddingBottom: 0,
+    padding: 0,
+    paddingTop: 5,
+    paddingBottom: 5,
     borderWidth: 1,
     borderColor: 'lightgrey',
     backgroundColor: AppBg,

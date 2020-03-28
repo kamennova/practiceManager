@@ -1,26 +1,18 @@
 import React from 'react';
-import { Image, TouchableWithoutFeedback, View } from "react-native";
+import { Image, TouchableNativeFeedback, TouchableWithoutFeedback, View } from "react-native";
 import { HeaderIconWrap } from "../../../AppStyle";
 
 type IconProps = { onPress: () => void };
 
-export const BackIcon = (props: IconProps) => (
-    <TouchableWithoutFeedback onPress={props.onPress}>
-        <View style={HeaderIconWrap}>
-            <Image style={{ width: 20, height: 20 }} source={require('../../../../assets/arrow.png')}/>
-        </View>
-    </TouchableWithoutFeedback>
-);
-
 export const DotsIcon = (props: IconProps) => (
-    <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableNativeFeedback onPress={props.onPress}>
         <View style={{
             ...HeaderIconWrap,
             marginLeft: 'auto'
         }}>
             <Image style={{ width: 25, height: 25 }} source={require('../../../../assets/dots.png')}/>
         </View>
-    </TouchableWithoutFeedback>
+    </TouchableNativeFeedback>
 );
 
 export const NavIcon = (props: IconProps) => (
@@ -30,4 +22,3 @@ export const NavIcon = (props: IconProps) => (
         </View>
     </TouchableWithoutFeedback>
 );
-

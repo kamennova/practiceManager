@@ -27,10 +27,10 @@ class Repertoire extends Component<{ pieces: PieceBase[], getPieces: () => void,
 
     render() {
         return (
-            <ScreenWrapper title='Repertoire'>
-                <ScrollView style={{
+            <ScreenWrapper>
+                <ScrollView contentContainerStyle={{
                     ...AppPaddingStyle,
-                    marginBottom: 100
+                    paddingBottom: 90
                 }}>
                     <View style={{
                         marginBottom: 20,

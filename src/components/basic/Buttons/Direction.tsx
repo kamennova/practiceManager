@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, TouchableWithoutFeedback, View } from "react-native";
+import { Image, TouchableHighlight, View } from "react-native";
 import { DirectionButtonStyle } from "../../../AppStyle";
 
 type NavBtnProps = {
@@ -7,17 +7,17 @@ type NavBtnProps = {
 };
 
 export const PrevButton = (props: NavBtnProps) => (
-    <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableHighlight onPress={props.onPress}>
         <View style={DirectionButtonStyle(props.onPress === undefined)}>
             <Image style={{ width: 20, height: 20 }} source={require('../../../../assets/left.png')}/>
         </View>
-    </TouchableWithoutFeedback>
+    </TouchableHighlight>
 );
 
 export const NextButton = (props: NavBtnProps) => (
-    <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableHighlight onPress={props.onPress}>
         <View style={DirectionButtonStyle(props.onPress === undefined)}>
             <Image style={{ transform: [{rotate: '180deg'}], width: 20, height: 20 }} source={require('../../../../assets/left.png')}/>
         </View>
-    </TouchableWithoutFeedback>
+    </TouchableHighlight>
 );

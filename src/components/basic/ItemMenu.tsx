@@ -22,8 +22,10 @@ export const ItemMenu = (props: { options: MenuOption[], prevFunc?: () => void }
 
 export const OptionItem = (props: { label: string, onPress: (_: any) => any }) => (
     <TouchableNativeFeedback onPress={props.onPress}>
-        <Text style={{ fontSize: 17, marginBottom: 15 }}>
-            {props.label}
-        </Text>
+        <View style={{ padding: 10, paddingLeft: 16, paddingRight: 16 }}>
+            <Text style={{ fontSize: 17 }}>
+                {props.label}
+            </Text>
+        </View>
     </TouchableNativeFeedback>
 );
