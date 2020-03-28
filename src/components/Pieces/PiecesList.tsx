@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
+import { FlatList, Image, Text, TouchableNativeFeedback, View } from "react-native";
 import { ListItemStyle } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
 import { PieceBase } from "../../types/Piece";
@@ -10,15 +10,16 @@ export const PiecesList = (props: { pieces: PieceBase[] }) => {
 
     return (
         <View style={{}}>
-            {props.pieces.map(piece => (
-                <PieceItem onPress={() => navigation.navigate(PIECE, { id: piece.id })} {...piece} />
-            ))}
+            <FlatList data={props.pieces}
+                      renderItem={({ item }) => <PieceItem
+                          onPress={() => navigation.navigate(PIECE, { id: item.id })} {...item} />}
+                      keyExtractor={(item) => item.id.toString()}/>
         </View>
     );
 };
 
 const PieceItem = (props: PieceBase & { onPress: () => void }) => (
-    <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableNativeFeedback onPress={props.onPress}>
         <View style={ListItemStyle}>
             <View style={{ padding: 10 }}>
                 <PieceName>
@@ -34,7 +35,7 @@ const PieceItem = (props: PieceBase & { onPress: () => void }) => (
             }
 
         </View>
-    </TouchableWithoutFeedback>
+    </TouchableNativeFeedback>
 );
 
 const PieceName = (props: { children: string }) => (
