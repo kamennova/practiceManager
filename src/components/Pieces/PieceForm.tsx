@@ -42,7 +42,7 @@ type FormState = {
 };
 
 class PieceFormComponent extends Component<FormProps, FormState> {
-    mode = this.props.route.params.mode;
+    mode = this.props.route.params.mode === undefined ? ActionType.Create : this.props.route.params.mode;
 
     state = {
         piece: this.mode === ActionType.Create ? EmptyPiece :
@@ -52,7 +52,7 @@ class PieceFormComponent extends Component<FormProps, FormState> {
 
     resetState = () => this.setState({ piece: EmptyPiece, errors: '' });
 
-    updatePiece(pieceUpd: Piece) {
+    updatePiece = (pieceUpd: Piece) => {
         this.setState({
             errors: this.state.errors,
             piece: pieceUpd,
@@ -100,9 +100,14 @@ class PieceFormComponent extends Component<FormProps, FormState> {
         }
     };
 
+    fav = () => this.mode === ActionType.Create ? {
+        val: this.state.piece.isFavourite,
+        update: () => this.updatePiece({ ...this.state.piece, isFavourite: !this.state.piece.isFavourite }),
+    } : undefined;
+
     render() {
         return (
-            <ScreenWrapper>
+            <ScreenWrapper fav={this.fav()}>
 
                 <MyImagePicker src={this.state.piece.imageUri}
                                onDelete={() => this.updatePiece({ ...this.state.piece, imageUri: undefined })}

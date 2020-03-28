@@ -6,7 +6,7 @@ import { AppPaddingStyle } from "../../AppStyle";
 import { getPieceById } from "../../db/db";
 import { PIECE, PIECE_FORM, REPERTOIRE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
-import { thunkDeletePiece } from "../../store/thunks";
+import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece, PieceBase } from "../../types/Piece";
@@ -28,6 +28,7 @@ type PieceScreenProps = {
     },
     navigation: any,
     deletePiece: () => void,
+    togglePieceFav: () => void,
 }
 
 const mapStateToProps = (state: StateShape, ownProps: PieceScreenProps) => ({
@@ -37,6 +38,7 @@ const mapStateToProps = (state: StateShape, ownProps: PieceScreenProps) => ({
 
 const mapDispatchToProps = (dispatch: any, ownProps: PieceScreenProps) => ({
     deletePiece: () => dispatch(thunkDeletePiece(ownProps.route.params.id)),
+    togglePieceFav: () => dispatch(thunkTogglePieceFav(ownProps.route.params.id)),
 });
 
 const getSideIds = (items: PieceBase[], id: number): { prev?: number, next?: number } => {
@@ -73,6 +75,11 @@ const PieceComponent = (props: PieceScreenProps) => {
         nav.navigate(REPERTOIRE);
     };
 
+    const updatePieceFav = () => {
+        props.togglePieceFav();
+        setPiece({ ...piece, isFavourite: !piece.isFavourite });
+    };
+
     const menu = [
         { label: 'Edit', func: () => nav.navigate(PIECE_FORM, { piece: piece, mode: ActionType.Edit }) },
         { label: 'Delete', func: onDelete },
@@ -84,7 +91,7 @@ const PieceComponent = (props: PieceScreenProps) => {
     const prev = props.sideIds.prev !== undefined ? () => nav.dispatch(push(props.sideIds.prev)) : undefined;
 
     return (
-        <ScreenWrapper itemMenu={menu}>
+        <ScreenWrapper itemMenu={menu} fav={{ val: piece.isFavourite, update: updatePieceFav }}>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 65 }}>
                 {showPic && piece.imageUri !== undefined ? <PieceImage uri={piece.imageUri}/> : undefined}
@@ -94,7 +101,6 @@ const PieceComponent = (props: PieceScreenProps) => {
                     paddingTop: showPic ? 10 : 100,
                     paddingBottom: 22,
                 }}>
-
                     <PieceTags tags={piece.tags}/>
                     <ScreenTitle>{piece.name}</ScreenTitle>
                     {piece.authors.length > 0 ? <PieceAuthors authors={piece.authors}/> : undefined}

@@ -1,4 +1,6 @@
 import { combineReducers } from "redux";
+import { Piece, PieceBase } from "../types/Piece";
+import { SessionPlan } from "../types/SessionPlan";
 import {
     ADD_PIECE,
     ADD_PLAN,
@@ -11,18 +13,22 @@ import {
     PieceActionTypes,
     PlanActionTypes,
     RENAME_PLAN,
-    RenamePlanAction, SET_PIECE, SET_PIECES, SET_PIECES_META, TOGGLE_PIECE_NOTIFS, UPDATE_LAST_ADDED_PIECE
+    RenamePlanAction,
+    SET_PIECE,
+    SET_PIECES,
+    SET_PIECES_META,
+    TOGGLE_PIECE_FAV,
+    TOGGLE_PIECE_NOTIFS,
+    UPDATE_LAST_ADDED_PIECE
 } from "./actions";
 import { initialState, ItemsShape } from "./StoreState";
-import { Piece, PieceBase } from "../types/Piece";
-import { SessionPlan } from "../types/SessionPlan";
 
 const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState.plans, action: PlanActionTypes): ItemsShape<SessionPlan, SessionPlan> => {
     switch (action.type) {
         case ADD_PLAN:
             return { ...state, items: [...state.items, action.plan] };
         case EDIT_PLAN_SCHEDULE:
-            return {...state, items: editPlanSchedule(state.items, action) };
+            return { ...state, items: editPlanSchedule(state.items, action) };
         case RENAME_PLAN:
             return { ...state, items: renamePlan(state.items, action) };
         case DELETE_PLAN:
@@ -44,6 +50,8 @@ const pieces = (state: ItemsShape<Piece, PieceBase> = initialState.pieces, actio
             return { ...state, items: replacePiece(state.items, action), lastAddedId: action.piece.id };
         case TOGGLE_PIECE_NOTIFS:
             return state;
+        case TOGGLE_PIECE_FAV:
+            return { ...state, items: findAndTogglePieceFav(state.items, action.id) };
         case SET_PIECE:
             return { ...state, currentItem: action.piece };
         case SET_PIECES_META:
@@ -59,6 +67,16 @@ const replacePiece = (state: PieceBase[], action: EditPieceAction): PieceBase[] 
     const pieces = state.filter(i => i.id !== action.piece.id);
     pieces.push(action.piece);
 
+    return pieces;
+};
+
+const findAndTogglePieceFav = (items: PieceBase[], id: number) => {
+    const pieces = items.filter(i => i.id !== id);
+    const item = items.find(i => i.id === id);
+
+    if (item === undefined) throw new Error('piece not found');
+
+    pieces.push({ ...item, isFavourite: !item.isFavourite });
     return pieces;
 };
 

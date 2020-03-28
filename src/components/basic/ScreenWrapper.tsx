@@ -1,26 +1,32 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback, View } from "react-native";
 import { DotsIcon } from "./icons/Header";
+import { ItemFav } from "./ItemFav";
 import { ItemMenu, MenuOption } from "./ItemMenu";
-import { useNavigation } from "@react-navigation/native";
 
 type WrapperProps = {
     children: JSX.Element | (JSX.Element | undefined)[],
     itemMenu?: MenuOption[],
+    fav?: {
+        update: () => void,
+        val: boolean,
+    },
 }
 
 export const ScreenWrapper = (props: WrapperProps) => {
     const [showMenu, updateShowMenu] = useState(false);
 
-    if (props.itemMenu !== undefined) {
-        useNavigation().setOptions({
-            headerRight: () => (
-                <View>
-                    {showMenu ? undefined : <DotsIcon onPress={() => updateShowMenu(true)}/>}
-                </View>
-            ),
-        });
-    }
+    useNavigation().setOptions({
+        headerRight: () => (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                {props.fav !== undefined && !showMenu ?
+                    <ItemFav isFav={props.fav.val} onPress={props.fav.update}/> : undefined}
+                {(props.itemMenu !== undefined && !showMenu) ?
+                    <DotsIcon onPress={() => updateShowMenu(true)}/> : undefined}
+            </View>
+        ),
+    });
 
     return (
         <View style={{ minHeight: '100%' }}>

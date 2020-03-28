@@ -24,7 +24,7 @@ export const addPiece = async (piece: Piece): Promise<Piece> => {
     newPiece.addedOn = Date.now();
     newPiece.notificationsInterval = piece.notifications.interval;
     newPiece.notificationsOn = piece.notifications.enabled;
-    newPiece.isFavourite = false;
+    newPiece.isFavourite = piece.isFavourite;
     newPiece.imageUri = piece.imageUri !== undefined ? piece.imageUri : '';
     newPiece.tags = createTags(piece.tags);
     newPiece.authors = createAuthors(piece.authors);

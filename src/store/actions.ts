@@ -5,6 +5,7 @@ export const ADD_PIECE = 'Add_piece',
     SET_PIECE = 'Set_piece',
     SET_PIECES_META = 'Set_pieces_meta',
     TOGGLE_PIECE_NOTIFS = 'Toggle_piece_notifs',
+    TOGGLE_PIECE_FAV = 'Toggle_piece_fav',
     UPDATE_LAST_ADDED_PIECE = 'Update_last_added_piece',
     EDIT_PIECE = 'Edit_piece',
     DELETE_PIECE = 'Delete_piece',
@@ -38,6 +39,11 @@ export type UpdateLastAddedAction = {
     type: typeof UPDATE_LAST_ADDED_PIECE,
     id: number,
 }
+
+export type TogglePieceFavAction = {
+    id: number,
+    type: typeof TOGGLE_PIECE_FAV,
+} ;
 
 export type TogglePieceNotifsAction = {
     type: typeof TOGGLE_PIECE_NOTIFS,
@@ -79,6 +85,7 @@ export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, pi
     setPiece = (piece: Piece): SetPieceAction => ({ type: SET_PIECE, piece }),
     updateLastAddedPiece = (id: number): UpdateLastAddedAction => ({ type: UPDATE_LAST_ADDED_PIECE, id }),
     editPiece = (piece: Piece): EditPieceAction => ({ type: EDIT_PIECE, piece }),
+    togglePieceFav = (id: number): TogglePieceFavAction => ({ type: TOGGLE_PIECE_FAV, id }),
     togglePieceNotifs = (id: number): TogglePieceNotifsAction => ({ type: TOGGLE_PIECE_NOTIFS, id }),
     deletePiece = (id: number): DeletePieceAction => ({ type: DELETE_PIECE, id }),
     setPieces = (pieces: Piece[]): SetPiecesAction => ({ type: SET_PIECES, pieces }),
@@ -93,6 +100,7 @@ export type PieceActionTypes = AddPieceAction
     | SetPieceAction
     | EditPieceAction
     | TogglePieceNotifsAction
+    | TogglePieceFavAction
     | DeletePieceAction
     | SetPiecesAction
     | UpdateLastAddedAction;
