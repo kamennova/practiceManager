@@ -82,7 +82,7 @@ const PieceComponent = (props: PieceScreenProps) => {
 
     const menu = [
         { label: 'Edit', func: () => nav.navigate(PIECE_FORM, { piece: piece, mode: ActionType.Edit }) },
-        { label: 'Delete', func: onDelete },
+        { label: 'Delete', func: () => updateShowDeleteModal(true) },
     ];
 
     // @ts-ignore
@@ -112,8 +112,7 @@ const PieceComponent = (props: PieceScreenProps) => {
             </ScrollView>
 
             {showDeleteModal ?
-                <ConfirmDeleteModal onCancel={() => updateShowDeleteModal(false)}
-                                    onOk={() => updateShowDeleteModal(false)}/> : undefined}
+                <ConfirmDeleteModal onCancel={() => updateShowDeleteModal(false)} onOk={onDelete}/> : undefined}
 
             <ItemButtonsWrap>
                 <PrevButton

@@ -1,11 +1,10 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { TagStyle, TagTextStyle } from "../../AppStyle";
 
 export const PieceTags = (props: { tags: string[] }) => (
-    <View style={{ flexDirection: 'row' }}>
-        {props.tags.map(tag => <Tag tag={tag}/>)}
-    </View>
+    <FlatList contentContainerStyle={{ flexDirection: 'row' }} data={props.tags}
+              renderItem={({ item }) => <Tag tag={item}/>}/>
 );
 
 const Tag = (props: { tag: string }) => (

@@ -10,6 +10,7 @@ import { thunkAddPiece, thunkEditPiece } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece } from "../../types/Piece";
+import { trimStrArr } from "../../utils/strings";
 import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
 import { ErrorAlert } from "../basic/ErrorAlert";
 import { MyImagePicker } from "../basic/ImagePicker";
@@ -20,8 +21,9 @@ import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceNotifications } from "./PieceNotifications";
 
 const mapDispatchToProps = (dispatch: any, ownProps: FormProps) => ({
-    onHandlePiece: ownProps.route.params.mode === ActionType.Create ? (piece: Piece) => dispatch(thunkAddPiece(piece)) :
-        (piece: Piece) => dispatch(thunkEditPiece(piece)),
+    onHandlePiece: (ownProps.route.params.mode === ActionType.Edit) ?
+        (piece: Piece) => dispatch(thunkEditPiece(piece)) :
+        (piece: Piece) => dispatch(thunkAddPiece(piece)),
 });
 
 const mapStateToProps = (state: StateShape) => ({
@@ -29,7 +31,7 @@ const mapStateToProps = (state: StateShape) => ({
 });
 
 type FormProps = {
-    route: Route & { params: { mode: ActionType.Create | ActionType.Edit, piece?: Piece } },
+    route: Route & { params: { mode?: ActionType.Create } | { mode: ActionType.Edit, piece: Piece } },
     navigation: any,
     onHandlePiece: (piece: Piece) => any,
     addedPieceId?: number,
@@ -44,8 +46,7 @@ class PieceFormComponent extends Component<FormProps, FormState> {
     mode = this.props.route.params.mode === undefined ? ActionType.Create : this.props.route.params.mode;
 
     state = {
-        piece: this.mode === ActionType.Create ? EmptyPiece :
-            (this.props.route.params.piece !== undefined ? this.props.route.params.piece : EmptyPiece),
+        piece: this.props.route.params.mode === ActionType.Edit ? this.props.route.params.piece : EmptyPiece,
         errors: '',
     };
 
@@ -75,6 +76,7 @@ class PieceFormComponent extends Component<FormProps, FormState> {
     });
 
     async validateAndSave() {
+        this.updatePiece({ ...this.state.piece, authors: trimStrArr(this.state.piece.authors) });
         const res = await validatePiece(this.state.piece);
 
         if (res.valid) {
@@ -92,7 +94,7 @@ class PieceFormComponent extends Component<FormProps, FormState> {
         }
     };
 
-    pickImage = async (res: ImagePickerResult) => {
+    pickImage = (res: ImagePickerResult) => {
         if (!res.cancelled) {
             this.updatePiece({ ...this.state.piece, imageUri: res.uri });
         }
@@ -126,7 +128,7 @@ class PieceFormComponent extends Component<FormProps, FormState> {
                                      authors: authors.split(',')
                                  })}/>
 
-                    <TagInput value={this.state.piece.tags}
+                    <TagInput list={this.state.piece.tags}
                               onUpdateTags={tags => this.updatePiece({ ...this.state.piece, tags })}/>
 
                     {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
