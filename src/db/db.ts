@@ -4,9 +4,9 @@ import { AuthorEntity } from "./entity/Author";
 import { PieceEntity } from "./entity/Piece";
 import { TagEntity } from "./entity/Tag";
 
-const createTags = async (tags: string[]): Promise<TagEntity[]> => {
-    const ents: TagEntity[] = [];
-    const repo = await getRepository(TagEntity);
+export const createTags = async (tags: string[]): Promise<TagEntity[]> => {
+    const ents: TagEntity[] = [],
+        repo = getRepository(TagEntity);
 
     await Promise.all(tags.map(async tag => {
         const sameTag = await repo.findOne({ name: tag });
@@ -24,16 +24,19 @@ const createTags = async (tags: string[]): Promise<TagEntity[]> => {
 };
 
 const createAuthors = async (authors: string[]): Promise<AuthorEntity[]> => {
-    const ents: AuthorEntity[] = [];
-    const repo = await getRepository(AuthorEntity);
+    const ents: AuthorEntity[] = [],
+        repo = getRepository(AuthorEntity);
 
-    authors.forEach(author => {
-        if (repo.findOne({ name: author }) === undefined) {
+    await Promise.all(authors.map(async (author) => {
+        const same = await repo.findOne({ name: author });
+        if (same === undefined) {
             const ent = new AuthorEntity();
             ent.name = author;
             ents.push(ent);
+        } else {
+            ents.push(same);
         }
-    });
+    }));
 
     return Promise.resolve(ents);
 };
@@ -56,7 +59,7 @@ export const addPiece = async (piece: Piece): Promise<number> => {
 };
 
 export const getPieceById = async (id: number): Promise<Piece | undefined> => {
-    const repos = await getRepository(PieceEntity);
+    const repos = getRepository(PieceEntity);
     const ent = await repos.findOne(id, { relations: ['authors', 'tags', 'notes'] });
 
     if (ent === undefined) {
@@ -68,7 +71,9 @@ export const getPieceById = async (id: number): Promise<Piece | undefined> => {
 
 export const updatePiece = async (piece: Piece): Promise<void> => {
     const repo = await getRepository(PieceEntity);
-    const pieceUpd = await repo.findOne(piece.id);
+    const pieceUpd = await repo.createQueryBuilder("piece")
+        .where("piece.id = :id", { id: piece.id })
+        .getOne();
 
     if (pieceUpd === undefined) {
         return await Promise.reject('piece not found');
@@ -107,7 +112,6 @@ export const updatePieceNotifsInterval = async (id: number, interval: number): P
 };
 
 export const togglePieceIsFavourite = async (id: number): Promise<void> => {
-    // todo optimize
     const repo = getRepository(PieceEntity);
     const pieceUpd = await repo.findOne(id);
 
