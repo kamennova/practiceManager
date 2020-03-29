@@ -4,8 +4,9 @@ import { Image, Route, ScrollView, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { getPieceById } from "../../db/db";
-import { PIECE, PIECE_FORM } from "../../NavigationPath";
+import { PIECE, PIECE_FORM, REPERTOIRE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
+import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece, PieceBase } from "../../types/Piece";
@@ -20,18 +21,25 @@ import { PieceNotes } from "./PieceNotes";
 import { PieceTags } from "./PieceTags";
 
 type PieceScreenProps = {
-    route: Route & { params: { id: number } },
+    route: Route & { params: { id: number, lastUpdated?: number } },
     sideIds: {
         next?: number,
         prev?: number,
     },
     navigation: any,
+    deletePiece: () => void,
+    togglePieceFav: () => void,
 }
 
 const mapStateToProps = (state: StateShape, ownProps: PieceScreenProps) => ({
         sideIds: getSideIds(state.pieces.items, ownProps.route.params.id),
     }
 );
+
+const mapDispatchToProps = (dispatch: any, ownProps: PieceScreenProps) => ({
+    deletePiece: () => dispatch(thunkDeletePiece(ownProps.route.params.id)),
+    togglePieceFav: () => dispatch(thunkTogglePieceFav(ownProps.route.params.id)),
+});
 
 const getSideIds = (items: PieceBase[], id: number): { prev?: number, next?: number } => {
     const index: number = items.findIndex(i => i.id === id);
@@ -59,7 +67,18 @@ const PieceComponent = (props: PieceScreenProps) => {
         };
 
         fetchData();
-    }, [props.route.params.id]);
+    }, [props.route.params.id, props.route.params.lastUpdated]);
+
+    const onDelete = async () => {
+        updateShowDeleteModal(false);
+        await props.deletePiece();
+        nav.navigate(REPERTOIRE);
+    };
+
+    const updatePieceFav = () => {
+        props.togglePieceFav();
+        setPiece({ ...piece, isFavourite: !piece.isFavourite });
+    };
 
     const menu = [
         { label: 'Edit', func: () => nav.navigate(PIECE_FORM, { piece: piece, mode: ActionType.Edit }) },
@@ -72,7 +91,7 @@ const PieceComponent = (props: PieceScreenProps) => {
     const prev = props.sideIds.prev !== undefined ? () => nav.dispatch(push(props.sideIds.prev)) : undefined;
 
     return (
-        <ScreenWrapper itemMenu={menu}>
+        <ScreenWrapper itemMenu={menu} fav={{ val: piece.isFavourite, update: updatePieceFav }}>
 
             <ScrollView contentContainerStyle={{ paddingBottom: 65 }}>
                 {showPic && piece.imageUri !== undefined ? <PieceImage uri={piece.imageUri}/> : undefined}
@@ -82,7 +101,6 @@ const PieceComponent = (props: PieceScreenProps) => {
                     paddingTop: showPic ? 10 : 100,
                     paddingBottom: 22,
                 }}>
-
                     <PieceTags tags={piece.tags}/>
                     <ScreenTitle>{piece.name}</ScreenTitle>
                     {piece.authors.length > 0 ? <PieceAuthors authors={piece.authors}/> : undefined}
@@ -94,8 +112,7 @@ const PieceComponent = (props: PieceScreenProps) => {
             </ScrollView>
 
             {showDeleteModal ?
-                <ConfirmDeleteModal onCancel={() => updateShowDeleteModal(false)}
-                                    onOk={() => updateShowDeleteModal(false)}/> : undefined}
+                <ConfirmDeleteModal onCancel={() => updateShowDeleteModal(false)} onOk={onDelete}/> : undefined}
 
             <ItemButtonsWrap>
                 <PrevButton
@@ -120,5 +137,5 @@ const PieceImage = (props: { uri: string }) => (
     <Image source={{ uri: props.uri }} style={{ width: '100%', height: 300 }}/>
 );
 
-const PieceScreen = connect(mapStateToProps)(PieceComponent);
+const PieceScreen = connect(mapStateToProps, mapDispatchToProps)(PieceComponent);
 export default PieceScreen;

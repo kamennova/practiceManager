@@ -14,4 +14,5 @@ export const EmptyPiece: Piece = {
     notes: [],
     addedOn: new Date(),
     status: PieceStatus.NotStarted,
+    recordings: [],
 };

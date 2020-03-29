@@ -1,7 +1,23 @@
 import { Action, ActionCreator, Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { addPiece, editPiece, setPiece, setPieces, setPiecesMeta, updateLastAddedPiece } from "./actions";
-import { addPiece as addPieceToDb, getPieceById, getPieces, getPiecesMeta, updatePiece } from "../db/db";
+import {
+    addPiece,
+    deletePiece,
+    editPiece,
+    setPiece,
+    setPieces,
+    setPiecesMeta,
+    togglePieceFav,
+} from "./actions";
+import {
+    addPiece as addPieceToDb,
+    deletePiece as deletePieceFromDb,
+    getPieceById,
+    getPieces,
+    getPiecesMeta,
+    togglePieceIsFavourite,
+    updatePiece
+} from "../db/db";
 import { StateShape } from "./StoreState";
 import { Piece } from "../types/Piece";
 
@@ -27,15 +43,23 @@ export const thunkGetPiecesMeta: ThunkResult = () => async (dispatch: Dispatch) 
 };
 
 export const thunkAddPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
-    const added = await addPieceToDb(piece);
-
-    dispatch(updateLastAddedPiece(added.id));
-    return dispatch(addPiece(added));
+    return await addPieceToDb(piece)
+        .then((id) => dispatch(addPiece({...piece, id})));
 };
 
 export const thunkEditPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
-    await updatePiece(piece);
+    return await updatePiece(piece)
+        .then(() =>  dispatch(editPiece(piece)));
+};
 
-    dispatch(updateLastAddedPiece(piece.id));
-    return dispatch(editPiece(piece));
+export const thunkTogglePieceFav: ThunkResult = (id: number) => async (dispatch: Dispatch) => {
+    await togglePieceIsFavourite(id);
+
+    return dispatch(togglePieceFav(id));
+};
+
+export const thunkDeletePiece: ThunkResult = (id: number) => async (dispatch: Dispatch) => {
+    await deletePieceFromDb(id);
+
+    return dispatch(deletePiece(id));
 };
