@@ -6,7 +6,7 @@ const DEFAULT_SEPARATOR = ',';
 
 type InputProps = {
     onUpdateTags: (tags: string[]) => void,
-    list: string[],
+    list?: string[],
     placeholder?: string,
     style?: ViewStyle,
     tagStyle?: ViewStyle,
@@ -17,6 +17,7 @@ type InputProps = {
 };
 
 export const TagInput = (props: InputProps) => {
+    const [list, updateList] = useState<string[]>(props.list !== undefined ? props.list : []);
     const [val, updateVal] = useState('');
 
     const separator = props.separator !== undefined ? props.separator : DEFAULT_SEPARATOR;
@@ -26,13 +27,16 @@ export const TagInput = (props: InputProps) => {
         const input = (val[last] === separator ? val.slice(0, last) : val).trim();
         updateVal('');
 
-        if (input !== '' && props.list.find(v => v === input) === undefined) {
-            props.onUpdateTags([...props.list, input]);
+        if (input !== '' && list.find(v => v === input) === undefined) {
+            props.onUpdateTags([...list, input]);
+            updateList([...list, input]);
         }
     };
 
-    const deleteTag = (tag: string) => props.onUpdateTags(props.list.filter(t => t !== tag));
-
+    const deleteTag = (tag: string) => {
+        updateList(list.filter(t => t !== tag));
+        props.onUpdateTags(list);
+    };
 
     return (
         <View>
@@ -49,7 +53,7 @@ export const TagInput = (props: InputProps) => {
                 keyboardType={'default'}
             />
             <TagWrapper>
-                {props.list.map(tag => <Tag style={props.tagStyle} tag={tag} onDelete={deleteTag}/>)}
+                {list.map(tag => <Tag style={props.tagStyle} tag={tag} onDelete={deleteTag}/>)}
             </TagWrapper>
         </View>
     );

@@ -2,9 +2,9 @@ import { getRepository } from "typeorm";
 import { Piece } from "../types/Piece";
 import { PieceEntity } from "./entity/Piece";
 
-export type CheckResult = { valid: true } | {
-    valid: false,
-    errors: string,
+export type CheckResult = {
+    valid: boolean,
+    errors?: string,
 }
 
 export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
