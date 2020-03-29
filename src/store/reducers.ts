@@ -19,7 +19,6 @@ import {
     SET_PIECES_META,
     TOGGLE_PIECE_FAV,
     TOGGLE_PIECE_NOTIFS,
-    UPDATE_LAST_ADDED_PIECE
 } from "./actions";
 import { initialState, ItemsShape } from "./StoreState";
 
@@ -42,8 +41,6 @@ const pieces = (state: ItemsShape<Piece, PieceBase> = initialState.pieces, actio
     switch (action.type) {
         case ADD_PIECE:
             return { ...state, items: [...state.items, action.piece] };
-        case UPDATE_LAST_ADDED_PIECE:
-            return { ...state, lastAddedId: action.id };
         case DELETE_PIECE:
             return { ...state, items: state.items.filter(p => p.id !== action.id) };
         case EDIT_PIECE:

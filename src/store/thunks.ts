@@ -8,7 +8,6 @@ import {
     setPieces,
     setPiecesMeta,
     togglePieceFav,
-    updateLastAddedPiece
 } from "./actions";
 import {
     addPiece as addPieceToDb,
@@ -45,14 +44,12 @@ export const thunkGetPiecesMeta: ThunkResult = () => async (dispatch: Dispatch) 
 
 export const thunkAddPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
     return await addPieceToDb(piece)
-        .then((id) => dispatch(updateLastAddedPiece(id)))
-        .then(() => dispatch(addPiece(piece)));
+        .then((id) => dispatch(addPiece({...piece, id})));
 };
 
 export const thunkEditPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
-    return updatePiece(piece)
-        .then(() => dispatch(updateLastAddedPiece(piece.id)))
-        .then(() => dispatch(editPiece(piece)));
+    return await updatePiece(piece)
+        .then(() =>  dispatch(editPiece(piece)));
 };
 
 export const thunkTogglePieceFav: ThunkResult = (id: number) => async (dispatch: Dispatch) => {
