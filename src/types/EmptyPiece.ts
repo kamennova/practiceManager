@@ -5,10 +5,8 @@ export const EmptyPiece: Piece = {
     name: '',
     isFavourite: false,
     timeSpent: 0,
-    notifications: {
-        interval: 3,
-        enabled: true,
-    },
+    notifsOn: false,
+    notifsInterval: 3,
     authors: [],
     tags: [],
     notes: [],

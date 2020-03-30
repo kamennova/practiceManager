@@ -111,14 +111,7 @@ export const FeatureWrap: ViewStyle = {
     borderColor: 'lightgrey',
 };
 
-export const NoteWrap: ViewStyle = {
-        ...AppPaddingStyle,
-        paddingBottom: 15,
-        paddingTop: 20,
-        borderTopWidth: 1,
-        borderColor: 'lightgrey',
-    },
-    NoteText = { fontSize: 17, color: 'rgba(0, 0, 0, 0.8)' };
+export const NoteText = { fontSize: 17, color: 'rgba(0, 0, 0, 0.8)' };
 
 // ---
 

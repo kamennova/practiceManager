@@ -57,21 +57,8 @@ class PieceFormComponent extends Component<FormProps, FormState> {
     setName = (name: string) => this.setPiece({ ...this.state.piece, name });
     setTags = (tags: string[]) => this.setPiece({ ...this.state.piece, tags });
 
-    toggleNotifs = () => this.setPiece({
-        ...this.state.piece,
-        notifications: {
-            interval: this.state.piece.notifications.interval,
-            enabled: !this.state.piece.notifications.enabled
-        }
-    });
-
-    updateInterval = (val: number) => this.setPiece({
-        ...this.state.piece,
-        notifications: {
-            interval: val,
-            enabled: this.state.piece.notifications.enabled,
-        }
-    });
+    toggleNotifs = () => this.setPiece({ ...this.state.piece, notifsOn: !this.state.piece.notifsOn });
+    updateInterval = (val: number) => this.setPiece({ ...this.state.piece, notifsInterval: val });
 
     async validateAndSave() {
         this.setPiece({ ...this.state.piece, authors: trimStrArr(this.state.piece.authors) });
@@ -133,8 +120,8 @@ class PieceFormComponent extends Component<FormProps, FormState> {
                 </View>
 
                 {this.props.route.params.mode === ActionType.Create ?
-                    <PieceNotifications interval={this.state.piece.notifications.interval}
-                                        enabled={this.state.piece.notifications.enabled}
+                    <PieceNotifications interval={this.state.piece.notifsInterval}
+                                        enabled={this.state.piece.notifsOn}
                                         updateInterval={this.updateInterval}
                                         updateEnabled={this.toggleNotifs.bind(this)}/>
                     : undefined}
@@ -142,7 +129,8 @@ class PieceFormComponent extends Component<FormProps, FormState> {
                 <ItemButtonsWrap>
                     <MinorButton style={styles.minor}
                                  onPress={this.cancel}>Cancel</MinorButton>
-                    <PrimaryButton style={styles.primary} onPress={async () => await this.validateAndSave()}>Save</PrimaryButton>
+                    <PrimaryButton style={styles.primary}
+                                   onPress={async () => await this.validateAndSave()}>Save</PrimaryButton>
                 </ItemButtonsWrap>
             </ScreenWrapper>
         );

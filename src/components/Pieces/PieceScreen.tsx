@@ -18,6 +18,7 @@ import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ScreenTitle } from "../basic/Titles/Titles";
 import { Features } from "./PieceFeatures";
 import { PieceNotes } from "./PieceNotes";
+import { PieceNotifications } from "./PieceNotifications";
 import { PieceTags } from "./PieceTags";
 
 type PieceScreenProps = {
@@ -83,6 +84,14 @@ const PieceComponent = (props: PieceScreenProps) => {
         setPiece({ ...piece, isFavourite: !piece.isFavourite });
     };
 
+    const toggleNotifs = () => {
+        setPiece({ ...piece, notifsOn: !piece.notifsOn });
+    };
+
+    const setInterval = (i: number) => {
+        setPiece({ ...piece, notifsInterval: i });
+    };
+
     const menu = [
         { label: 'Edit', func: () => nav.dispatch(StackActions.push(PIECE_FORM, { mode: ActionType.Edit, piece })) },
         { label: 'Delete', func: () => updateShowDeleteModal(true) },
@@ -112,6 +121,9 @@ const PieceComponent = (props: PieceScreenProps) => {
                 </View>
 
                 <PieceNotes notes={piece.notes}/>
+
+                <PieceNotifications interval={piece.notifsInterval} enabled={piece.notifsOn}
+                                    updateInterval={setInterval} updateEnabled={toggleNotifs}/>
             </ScrollView>
 
             {showDeleteModal ?
