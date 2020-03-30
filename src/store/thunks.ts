@@ -49,7 +49,7 @@ export const thunkAddPiece: ThunkResult = (piece: Piece) => async (dispatch: Dis
 
 export const thunkEditPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
     return await updatePiece(piece)
-        .then(() =>  dispatch(editPiece(piece)));
+        .then(() => dispatch(editPiece(piece)));
 };
 
 export const thunkTogglePieceFav: ThunkResult = (id: number) => async (dispatch: Dispatch) => {

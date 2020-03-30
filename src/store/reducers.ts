@@ -40,11 +40,11 @@ const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState.plans,
 const pieces = (state: ItemsShape<Piece, PieceBase> = initialState.pieces, action: PieceActionTypes): ItemsShape<Piece, PieceBase> => {
     switch (action.type) {
         case ADD_PIECE:
-            return { ...state, items: [...state.items, action.piece] };
+            return { ...state, items: [...state.items, action.piece], lastAddedId: action.piece.id };
         case DELETE_PIECE:
             return { ...state, items: state.items.filter(p => p.id !== action.id) };
         case EDIT_PIECE:
-            return { ...state, items: replacePiece(state.items, action), lastAddedId: action.piece.id };
+            return { ...state, items: replacePiece(state.items, action) };
         case TOGGLE_PIECE_NOTIFS:
             return state;
         case TOGGLE_PIECE_FAV:
