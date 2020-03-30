@@ -1,4 +1,4 @@
-import { Dimensions, TextStyle, ViewStyle } from "react-native";
+import { Dimensions, TextStyle, ViewStyle, StyleSheet } from "react-native";
 
 export const AppSidePadding = 17,
     TotalHeaderHeight = 86;
@@ -8,6 +8,11 @@ export const Primary = '#6895ff',
     Dark = '#2d60d8',
     AppBg = '#f1f1f3',
     AppBgOpacity = 'rgba(241, 241, 243, 0.5)';
+
+export const AppPaddingStyle = {
+    paddingLeft: AppSidePadding,
+    paddingRight: AppSidePadding
+};
 
 export const AppHeaderStyle = (transparent: boolean = false): ViewStyle => ({
     borderBottomWidth: transparent ? 0 : 1,
@@ -98,6 +103,23 @@ export const DirectionButtonStyle = (isDisabled: boolean = false): ViewStyle => 
     opacity: isDisabled ? 0.4 : 1,
 });
 
+export const FeatureWrap: ViewStyle = {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    marginTop: 14,
+    borderColor: 'lightgrey',
+};
+
+export const NoteWrap: ViewStyle = {
+        ...AppPaddingStyle,
+        paddingBottom: 15,
+        paddingTop: 20,
+        borderTopWidth: 1,
+        borderColor: 'lightgrey',
+    },
+    NoteText = { fontSize: 17, color: 'rgba(0, 0, 0, 0.8)' };
+
 // ---
 
 export const DrawerStyle: ViewStyle = {
@@ -110,11 +132,6 @@ export const DrawerContentStyle = {
     marginBottom: 'auto',
     paddingTop: 0,
     paddingLeft: 20,
-};
-
-export const AppPaddingStyle = {
-    paddingLeft: AppSidePadding,
-    paddingRight: AppSidePadding
 };
 
 export const ActivityViewStyle: ViewStyle = {
@@ -136,16 +153,71 @@ export const BreakViewStyle: ViewStyle = {
     borderWidth: 0,
 };
 
-export const AddButtonStyle: ViewStyle = {
-    width: 60,
-    height: 60,
-    borderColor: Dark,
-    backgroundColor: Primary,
+export const AddButtonStyle = StyleSheet.create({
+    wrap: {
+        height: 50,
+        paddingLeft: 19,
+        paddingRight: 25,
+        borderColor: Primary,
+        borderWidth: 2,
+        backgroundColor: AppBg,
+        flexDirection: 'row',
+        position: 'absolute',
+        top: Dimensions.get('window').height - 130,
+        right: AppSidePadding,
+        elevation: 2,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    plus: { color: Dark, fontSize: 25, lineHeight: 32, marginRight: 8 },
+    text: { color: Dark, fontSize: 17, fontWeight: '700' }
+});
+
+const SIZE = 240;
+
+export const ImagePickerStyle = StyleSheet.create({
+    picker: {
+        width: '100%',
+        height: SIZE + 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
+        borderBottomWidth: 1,
+        borderColor: 'lightgrey',
+    },
+    pic: { width: '100%', height: SIZE },
+    btnPic: {
+        width: 30,
+        height: 30,
+        position: 'absolute',
+        bottom: (SIZE - TotalHeaderHeight) / 2
+    },
+    trash: { width: 21, height: 21 },
+    trashWrap: {
+        ...HeaderIconWrap,
+        position: 'absolute',
+        bottom: 10,
+        right: AppSidePadding,
+    },
+    layer: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    }
+});
+
+export const ItemBtnsStyle: ViewStyle = {
     position: 'absolute',
-    top: Dimensions.get('window').height - 130,
-    right: AppSidePadding,
-    alignItems: 'center',
-    justifyContent: 'center'
+    top: Dimensions.get('window').height - 50,
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
+    backgroundColor: AppBgOpacity,
+    padding: AppSidePadding,
+    paddingTop: 15,
+    paddingBottom: 0,
 };
 
 export const ModalStyle: ViewStyle = {

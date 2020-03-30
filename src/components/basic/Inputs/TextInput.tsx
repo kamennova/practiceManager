@@ -5,6 +5,7 @@ import { TextInputStyle } from "../../../AppStyle";
 type InputProps = {
     autoFocus?: boolean,
     onChangeText: (text: string) => void,
+    isRequired?: boolean,
     value?: string,
     placeholder?: string,
     style?: ViewStyle,
@@ -12,7 +13,7 @@ type InputProps = {
 };
 
 export const MyTextInput = (props: InputProps) => (
-    <TextInput style={{ ...TextInputStyle, ...props.style }}
+    <TextInput style={{ ...TextInputStyle, borderColor: props.isRequired ? 'blue' : 'lightgrey', ...props.style }}
                value={props.value}
                autoFocus={props.autoFocus}
                onChangeText={props.onChangeText}

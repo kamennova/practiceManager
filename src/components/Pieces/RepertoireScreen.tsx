@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from "react-native";
+import { ScrollView } from "react-native";
 import { connect } from 'react-redux'
 import { AppPaddingStyle } from "../../AppStyle";
 import { PIECE_FORM } from "../../NavigationPath";
@@ -28,15 +28,8 @@ class Repertoire extends Component<{ pieces: PieceBase[], getPieces: () => void,
     render() {
         return (
             <ScreenWrapper>
-                <ScrollView contentContainerStyle={{
-                    ...AppPaddingStyle,
-                    paddingBottom: 90
-                }}>
-                    <View style={{
-                        marginBottom: 20,
-                    }}>
-                        <PieceFilters/>
-                    </View>
+                <ScrollView contentContainerStyle={scrollStyle}>
+                    <PieceFilters/>
                     <PiecesList pieces={this.props.pieces}/>
                 </ScrollView>
                 <AddButton
@@ -48,3 +41,8 @@ class Repertoire extends Component<{ pieces: PieceBase[], getPieces: () => void,
 
 const RepertoireScreen = connect(mapStateToProps, mapDispatchToProps)(Repertoire);
 export default RepertoireScreen;
+
+const scrollStyle = {
+    ...AppPaddingStyle,
+    paddingBottom: 90
+};

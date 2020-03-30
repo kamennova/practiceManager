@@ -1,12 +1,13 @@
 import * as React from "react";
-import { View, TouchableWithoutFeedback, Text } from "react-native";
-import { AddButtonStyle, Dark } from "../../../AppStyle";
+import { Text, TouchableWithoutFeedback, View } from "react-native";
+import { AddButtonStyle } from "../../../AppStyle";
 
 export const AddButton = (props: { onPress: () => void }) => {
     return (
         <TouchableWithoutFeedback onPress={props.onPress}>
-            <View style={AddButtonStyle}>
-                <Text style={{color: Dark, fontSize: 50, lineHeight: 58}}>+</Text>
+            <View style={AddButtonStyle.wrap}>
+                <Text style={AddButtonStyle.plus}>+</Text>
+                <Text style={AddButtonStyle.text}>Add</Text>
             </View>
         </TouchableWithoutFeedback>
     );

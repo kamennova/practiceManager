@@ -1,20 +1,15 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
+import { FeatureWrap } from "../../AppStyle";
 import { PieceStatus } from "../../types/Piece";
 import { minutesToHumanlyFormat } from "../../utils/time";
 
 export const Features = (props: { status: PieceStatus, timeSpent: number, lastPracticed?: Date }) => (
-    <View style={{
-        flexDirection: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
-        marginTop: 14,
-        borderColor: 'lightgrey',
-    }}>
+    <View style={FeatureWrap}>
         <Feature isFirst={true}
-            label='Status'>{props.status !== undefined ? props.status : 'In work'}</Feature>
+                 label='Status'>{props.status !== undefined ? props.status : 'In work'}</Feature>
         <Feature label='Time spent'>{minutesToHumanlyFormat(props.timeSpent)}</Feature>
-        <Feature label='Last practiced' >
+        <Feature label='Last practiced'>
             {props.lastPracticed !== undefined ? props.lastPracticed.toDateString() : 'Never'}</Feature>
     </View>
 );
@@ -32,7 +27,12 @@ export const Feature = (props: FeatureProps) => (
         paddingLeft: props.isFirst ? 0 : 15,
         width: props.isFirst ? '30%' : '35%',
     }}>
-        <Text style={{ fontSize: 17, marginBottom: 4 }}>{props.children}</Text>
-        <Text style={{ fontSize: 14, color: 'darkgrey', }}>{props.label}</Text>
+        <Text style={styles.val}>{props.children}</Text>
+        <Text style={styles.label}>{props.label}</Text>
     </View>
 );
+
+const styles = StyleSheet.create({
+    label: { fontSize: 14, color: 'darkgrey', },
+    val: { fontSize: 17, marginBottom: 4 },
+});
