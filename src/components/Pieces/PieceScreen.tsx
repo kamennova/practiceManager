@@ -4,7 +4,7 @@ import { Image, Route, ScrollView, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { getPieceById } from "../../db/db";
-import { PIECE_FORM, REPERTOIRE } from "../../NavigationPath";
+import { PIECE, PIECE_FORM, REPERTOIRE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
@@ -98,9 +98,9 @@ const PieceComponent = (props: PieceScreenProps) => {
     ];
 
     // @ts-ignore
-    const next = props.sideIds.next !== undefined ? () => nav.dispatch(push(props.sideIds.next)) : undefined;
+    const next = props.sideIds.next !== undefined ? () => nav.dispatch(replace(props.sideIds.next)) : undefined;
     // @ts-ignore
-    const prev = props.sideIds.prev !== undefined ? () => nav.dispatch(push(props.sideIds.prev)) : undefined;
+    const prev = props.sideIds.prev !== undefined ? () => nav.dispatch(replace(props.sideIds.prev)) : undefined;
 
     return (
         <ScreenWrapper itemMenu={menu} fav={{ val: piece.isFavourite, update: updatePieceFav }}>
@@ -140,9 +140,11 @@ const PieceComponent = (props: PieceScreenProps) => {
     );
 };
 
+const replace = (id: number) => StackActions.replace(PIECE, { id });
+
 const PieceAuthors = (props: { authors: string[] }) => (
     <Text style={styles.authors}>
-        {props.authors.reduce((a, b) => a + ', ' + b)}
+        {props.authors.join(', ')}
     </Text>
 );
 
@@ -155,7 +157,7 @@ export default PieceScreen;
 
 const styles = StyleSheet.create({
     pic: { width: '100%', height: 300 },
-    authors: { fontSize: 17, marginBottom: 15, color: 'grey' },
+    authors: { fontSize: 15, marginBottom: 15, color: 'grey' },
     primary: { marginRight: 15, marginLeft: 15 },
     scroll: { paddingBottom: 65 }
 });

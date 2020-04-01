@@ -1,24 +1,27 @@
 import React from 'react';
-import { Text, TextStyle } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 
 export type TitleProps = {
     children: string | string[],
-    style?: TextStyle,
 }
 
 export const ScreenTitle = (props: TitleProps) => (
-    <Text style={{
-        marginBottom: 5,
-        color: 'black',
-        fontSize: 25,
-        ...props.style
-    }}>
+    <Text style={styles.screen}>
         {props.children}
     </Text>
 );
 
 export const SmallTitle = (props: { children: string }) => (
-    <Text style={{ marginBottom: 7, color: 'grey' }}>
+    <Text style={styles.small}>
         {props.children}
     </Text>
 );
+
+const styles = StyleSheet.create({
+    screen: {
+        marginBottom: 5,
+        color: 'black',
+        fontSize: 22,
+    },
+    small: { marginBottom: 7, color: 'grey' },
+});

@@ -1,11 +1,11 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { FeatureWrap } from "../../AppStyle";
+import { Text, View } from "react-native";
+import { FeaturesStyle as styles } from "../../AppStyle";
 import { PieceStatus } from "../../types/Piece";
 import { minutesToHumanlyFormat } from "../../utils/time";
 
 export const Features = (props: { status: PieceStatus, timeSpent: number, lastPracticed?: Date }) => (
-    <View style={FeatureWrap}>
+    <View style={styles.wrap}>
         <Feature isFirst={true}
                  label='Status'>{props.status !== undefined ? props.status : 'In work'}</Feature>
         <Feature label='Time spent'>{minutesToHumanlyFormat(props.timeSpent)}</Feature>
@@ -31,8 +31,3 @@ export const Feature = (props: FeatureProps) => (
         <Text style={styles.label}>{props.label}</Text>
     </View>
 );
-
-const styles = StyleSheet.create({
-    label: { fontSize: 14, color: 'darkgrey', },
-    val: { fontSize: 17, marginBottom: 4 },
-});

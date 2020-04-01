@@ -10,4 +10,8 @@ export const ItemSection = (props: {children: JSX.Element | JSX.Element[], title
     </View>
 );
 
-const style = { ...AppPaddingStyle, borderTopWidth: 1, borderColor: 'lightgrey', paddingTop: 20, paddingBottom: 20 };
+const style = {
+    ...AppPaddingStyle,
+    paddingTop: 18,
+    paddingBottom: 18,
+};

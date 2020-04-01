@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableNativeFeedback, View } from "react-native";
-import { ListItemStyle } from "../../AppStyle";
+import { FlatList, Image, Text, TouchableNativeFeedback, View } from "react-native";
+import { ListItemStyle, PieceListStyle as styles } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
 import { PieceBase } from "../../types/Piece";
 
@@ -49,25 +49,3 @@ const PieceAuthor = (props: { authors: string[] }) => (
         {props.authors.reduce((a, b) => a + ', ' + b)}
     </Text>
 );
-
-const styles = StyleSheet.create({
-    author: {
-        fontSize: 14,
-        color: 'grey',
-    },
-    pieceName: {
-        fontSize: 18,
-        marginBottom: 3,
-    },
-    image: {
-        width: 70,
-        height: 70,
-        marginLeft: 'auto'
-    },
-    imageTop: {
-        width: 70,
-        height: 70,
-        position: 'absolute', right: 2
-    },
-    itemWrap: { padding: 10 },
-});

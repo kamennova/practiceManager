@@ -1,5 +1,7 @@
 import { Dimensions, TextStyle, ViewStyle, StyleSheet } from "react-native";
 
+const FONT_SIZE = 16;
+
 export const AppSidePadding = 17,
     TotalHeaderHeight = 86;
 
@@ -31,18 +33,47 @@ export const HeaderIconWrap: ViewStyle = {
     justifyContent: 'center',
 };
 
+const ItemHeight = 66,
+    ImagePadding = 0,
+    ImageSize = ItemHeight - 2 - ImagePadding * 2;
+
+export const PieceListStyle = StyleSheet.create({
+    author: {
+        fontSize: 13,
+        color: 'grey',
+    },
+    pieceName: {
+        fontSize: 17,
+        marginBottom: 3,
+    },
+    image: {
+        width: ImageSize,
+        height: ImageSize,
+        marginLeft: 'auto',
+        marginRight: ImagePadding,
+    },
+    imageTop: {
+        width: ImageSize,
+        height: ImageSize,
+        position: 'absolute',
+        right: 2 + ImagePadding
+    },
+    itemWrap: { padding: 10, paddingLeft: 12 },
+});
+
 export const ListItemTitleStyle = {
-    fontSize: 18,
+    fontSize: 17,
     marginBottom: 3,
 };
 
 export const ListItemStyle: ViewStyle = {
-    borderWidth: 0.5,
-    borderColor: 'darkgrey',
-    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.08)',
+    backgroundColor: AppBg,
+    marginBottom: 10,
     flexDirection: 'row',
-    height: 71,
-    alignItems: 'center'
+    height: ItemHeight,
+    alignItems: 'center',
 };
 
 export const ButtonStyle: ViewStyle = {
@@ -103,15 +134,41 @@ export const DirectionButtonStyle = (isDisabled: boolean = false): ViewStyle => 
     opacity: isDisabled ? 0.4 : 1,
 });
 
-export const FeatureWrap: ViewStyle = {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    marginTop: 14,
-    borderColor: 'lightgrey',
+export const FeaturesStyle = StyleSheet.create({
+    label: { fontSize: 13, color: 'darkgrey', },
+    val: { fontSize: 15, marginBottom: 4 },
+    wrap: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        marginTop: 14,
+        borderColor: 'lightgrey',
+    }
+});
+
+export const NoteText = {
+    fontSize: FONT_SIZE,
+    color: 'rgba(0, 0, 0, 0.8)',
 };
 
-export const NoteText = { fontSize: 17, color: 'rgba(0, 0, 0, 0.8)' };
+// ---
+
+export const NotifStyle = StyleSheet.create({
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+
+        borderBottomWidth: 1,
+        borderColor: 'rgba(0, 0, 0, 0.08)',
+        paddingBottom: 12,
+        paddingTop: 12,
+        paddingRight: 5,
+    },
+    label: { fontSize: FONT_SIZE },
+    inputWrap: { flexDirection: 'row' }
+});
+
 
 // ---
 
@@ -146,24 +203,26 @@ export const BreakViewStyle: ViewStyle = {
     borderWidth: 0,
 };
 
-export const AddButtonStyle = StyleSheet.create({
+export const ActionBtnStyle = StyleSheet.create({
     wrap: {
+        position: 'absolute',
+        right: AppSidePadding,
+        flexDirection: 'row',
         height: 50,
         paddingLeft: 19,
         paddingRight: 25,
+        alignItems: 'center',
+        justifyContent: 'space-between',
         borderColor: Primary,
         borderWidth: 2,
         backgroundColor: AppBg,
-        flexDirection: 'row',
-        position: 'absolute',
-        top: Dimensions.get('window').height - 130,
-        right: AppSidePadding,
         elevation: 2,
-        alignItems: 'center',
-        justifyContent: 'space-between',
     },
+    text: { color: Dark, fontSize: 17, fontWeight: '700' },
+    save: { top: Dimensions.get('window').height - 40 },
+    check: { width: 19, height: 19, marginRight: 5 },
+    add: { top: Dimensions.get('window').height - 130, },
     plus: { color: Dark, fontSize: 25, lineHeight: 32, marginRight: 8 },
-    text: { color: Dark, fontSize: 17, fontWeight: '700' }
 });
 
 const SIZE = 240;
@@ -207,7 +266,7 @@ export const ItemBtnsStyle: ViewStyle = {
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'center',
-    backgroundColor: AppBgOpacity,
+    backgroundColor: AppBg,
     padding: AppSidePadding,
     paddingTop: 15,
     paddingBottom: 0,

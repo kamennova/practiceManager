@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Switch, Text, View } from "react-native";
+import { Switch, Text, View } from "react-native";
+import { NotifStyle as styles } from "../../AppStyle";
 import { DaysInput } from "../basic/Inputs/DaysInput";
 import { ItemSection } from "../basic/ItemSection";
 
@@ -33,19 +34,3 @@ const NotifOption = (props: { label: string, children: JSX.Element }) => (
         {props.children}
     </View>
 );
-
-const styles = StyleSheet.create({
-    row: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-
-        borderBottomWidth: 1,
-        borderColor: 'rgba(0, 0, 0, 0.08)',
-        paddingBottom: 12,
-        paddingTop: 12,
-        paddingRight: 5,
-    },
-    label: { fontSize: 17 },
-    inputWrap: { flexDirection: 'row' }
-});

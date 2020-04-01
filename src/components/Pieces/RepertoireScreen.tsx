@@ -1,3 +1,4 @@
+import { StackActions } from '@react-navigation/native';
 import React, { Component } from 'react';
 import { ScrollView } from "react-native";
 import { connect } from 'react-redux'
@@ -7,7 +8,7 @@ import { StateShape } from "../../store/StoreState";
 import { thunkGetPiecesMeta } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { PieceBase } from "../../types/Piece";
-import { AddButton } from "../basic/Buttons/AddButton";
+import { AddButton } from "../basic/Buttons/ActionButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceFilters } from "./PieceFilters";
 import { PiecesList } from "./PiecesList";
@@ -32,12 +33,13 @@ class Repertoire extends Component<{ pieces: PieceBase[], getPieces: () => void,
                     <PieceFilters/>
                     <PiecesList pieces={this.props.pieces}/>
                 </ScrollView>
-                <AddButton
-                    onPress={() => this.props.navigation.navigate(PIECE_FORM, { mode: ActionType.Create, })}/>
+                <AddButton onPress={() => this.props.navigation.dispatch(pushForm)}/>
             </ScreenWrapper>
         );
     }
 }
+
+const pushForm = StackActions.push(PIECE_FORM, { mode: ActionType.Create, });
 
 const RepertoireScreen = connect(mapStateToProps, mapDispatchToProps)(Repertoire);
 export default RepertoireScreen;

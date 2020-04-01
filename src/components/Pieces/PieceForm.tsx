@@ -1,6 +1,6 @@
 import { ImagePickerResult } from "expo-image-picker";
 import React, { Component } from 'react';
-import { Route, StyleSheet, View } from "react-native";
+import { Route, ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { validatePiece } from "../../db/validation";
@@ -11,12 +11,11 @@ import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece } from "../../types/Piece";
 import { trimStrArr } from "../../utils/strings";
-import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
+import { SaveButton } from "../basic/Buttons/ActionButton";
 import { ErrorAlert } from "../basic/ErrorAlert";
 import { MyImagePicker } from "../basic/ImagePicker";
 import { TagInput } from "../basic/Inputs/TagInput";
 import { MyTextInput } from "../basic/Inputs/TextInput";
-import { ItemButtonsWrap } from "../basic/ItemButtons";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceNotifications } from "./PieceNotifications";
 
@@ -41,10 +40,6 @@ class PieceFormComponent extends Component<FormProps, FormState> {
     };
 
     resetState = () => this.setState({ piece: EmptyPiece, errors: '' });
-    cancel = () => {
-        this.resetState();
-        this.props.navigation.goBack()
-    };
 
     setPiece = (pieceUpd: Piece) => {
         this.setState({
@@ -94,44 +89,39 @@ class PieceFormComponent extends Component<FormProps, FormState> {
     } : undefined;
 
     render() {
-        console.log('render');
         return (
             <ScreenWrapper fav={this.fav()}>
+                <ScrollView contentContainerStyle={styles.wrap}>
+                    <MyImagePicker src={this.state.piece.imageUri}
+                                   onDelete={() => this.setPiece({ ...this.state.piece, imageUri: undefined })}
+                                   onChoose={this.pickImage}/>
 
-                <MyImagePicker src={this.state.piece.imageUri}
-                               onDelete={() => this.setPiece({ ...this.state.piece, imageUri: undefined })}
-                               onChoose={this.pickImage}/>
+                    <View style={AppPaddingStyle}>
+                        <MyTextInput placeholder={'Title'}
+                                     isRequired={true}
+                                     value={this.state.piece.name}
+                                     autoFocus={this.props.route.params.mode === ActionType.Create}
+                                     onChangeText={this.setName}/>
 
-                <View style={AppPaddingStyle}>
-                    <MyTextInput placeholder={'Title'}
-                                 isRequired={true}
-                                 value={this.state.piece.name}
-                                 autoFocus={this.props.route.params.mode === ActionType.Create}
-                                 onChangeText={this.setName}/>
+                        <MyTextInput placeholder='Author'
+                                     value={this.state.piece.authors.toString()}
+                                     onChangeText={this.setAuthors}/>
 
-                    <MyTextInput placeholder='Author'
-                                 value={this.state.piece.authors.toString()}
-                                 onChangeText={this.setAuthors}/>
+                        <TagInput list={this.state.piece.tags}
+                                  onUpdateTags={this.setTags}/>
 
-                    <TagInput list={this.state.piece.tags}
-                              onUpdateTags={this.setTags}/>
+                        {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
+                    </View>
 
-                    {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
-                </View>
+                    {this.props.route.params.mode === ActionType.Create ?
+                        <PieceNotifications interval={this.state.piece.notifsInterval}
+                                            enabled={this.state.piece.notifsOn}
+                                            updateInterval={this.updateInterval}
+                                            updateEnabled={this.toggleNotifs.bind(this)}/>
+                        : undefined}
+                </ScrollView>
 
-                {this.props.route.params.mode === ActionType.Create ?
-                    <PieceNotifications interval={this.state.piece.notifsInterval}
-                                        enabled={this.state.piece.notifsOn}
-                                        updateInterval={this.updateInterval}
-                                        updateEnabled={this.toggleNotifs.bind(this)}/>
-                    : undefined}
-
-                <ItemButtonsWrap>
-                    <MinorButton style={styles.minor}
-                                 onPress={this.cancel}>Cancel</MinorButton>
-                    <PrimaryButton style={styles.primary}
-                                   onPress={async () => await this.validateAndSave()}>Save</PrimaryButton>
-                </ItemButtonsWrap>
+                <SaveButton onPress={async () => await this.validateAndSave()}/>
             </ScreenWrapper>
         );
     }
@@ -143,13 +133,10 @@ const mapDispatchToProps = (dispatch: any, ownProps: FormProps) => ({
         (piece: Piece) => dispatch(thunkAddPiece(piece)),
 });
 
-const mapStateToProps = (state: StateShape) => ({
-    addedPieceId: state.pieces.lastAddedId,
-});
+const mapStateToProps = (state: StateShape) => ({ addedPieceId: state.pieces.lastAddedId, });
 
 export const PieceForm = connect(mapStateToProps, mapDispatchToProps)(PieceFormComponent);
 
 const styles = StyleSheet.create({
-    minor: { marginTop: 10, alignSelf: 'center' },
-    primary: { marginLeft: 'auto' },
+    wrap: { paddingBottom: 60 },
 });
