@@ -1,6 +1,6 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Image, Route, ScrollView, Text, View } from "react-native";
+import { Image, Route, ScrollView, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { getPieceById } from "../../db/db";
@@ -18,6 +18,7 @@ import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ScreenTitle } from "../basic/Titles/Titles";
 import { Features } from "./PieceFeatures";
 import { PieceNotes } from "./PieceNotes";
+import { PieceNotifications } from "./PieceNotifications";
 import { PieceTags } from "./PieceTags";
 
 type PieceScreenProps = {
@@ -26,6 +27,7 @@ type PieceScreenProps = {
         next?: number,
         prev?: number,
     },
+    preview?: PieceBase,
     navigation: any,
     deletePiece: () => void,
     togglePieceFav: () => void,
@@ -33,6 +35,7 @@ type PieceScreenProps = {
 
 const mapStateToProps = (state: StateShape, ownProps: PieceScreenProps) => ({
         sideIds: getSideIds(state.pieces.items, ownProps.route.params.id),
+        preview: state.pieces.items.find(i => i.id === ownProps.route.params.id),
     }
 );
 
@@ -51,8 +54,9 @@ const getSideIds = (items: PieceBase[], id: number): { prev?: number, next?: num
 };
 
 const PieceComponent = (props: PieceScreenProps) => {
+    const pieceInit = { ...EmptyPiece, ...props.preview };
     const [showDeleteModal, updateShowDeleteModal] = useState(false),
-        [piece, setPiece] = useState<Piece>(EmptyPiece),
+        [piece, setPiece] = useState<Piece>(pieceInit),
         nav = useNavigation(),
         showPic = piece.imageUri !== undefined && piece.imageUri !== '';
 
@@ -80,20 +84,28 @@ const PieceComponent = (props: PieceScreenProps) => {
         setPiece({ ...piece, isFavourite: !piece.isFavourite });
     };
 
+    const toggleNotifs = () => {
+        setPiece({ ...piece, notifsOn: !piece.notifsOn });
+    };
+
+    const setInterval = (i: number) => {
+        setPiece({ ...piece, notifsInterval: i });
+    };
+
     const menu = [
-        { label: 'Edit', func: () => nav.navigate(PIECE_FORM, { piece: piece, mode: ActionType.Edit }) },
+        { label: 'Edit', func: () => nav.dispatch(StackActions.push(PIECE_FORM, { mode: ActionType.Edit, piece })) },
         { label: 'Delete', func: () => updateShowDeleteModal(true) },
     ];
 
     // @ts-ignore
-    const next = props.sideIds.next !== undefined ? () => nav.dispatch(push(props.sideIds.next)) : undefined;
+    const next = props.sideIds.next !== undefined ? () => nav.dispatch(replace(props.sideIds.next)) : undefined;
     // @ts-ignore
-    const prev = props.sideIds.prev !== undefined ? () => nav.dispatch(push(props.sideIds.prev)) : undefined;
+    const prev = props.sideIds.prev !== undefined ? () => nav.dispatch(replace(props.sideIds.prev)) : undefined;
 
     return (
         <ScreenWrapper itemMenu={menu} fav={{ val: piece.isFavourite, update: updatePieceFav }}>
 
-            <ScrollView contentContainerStyle={{ paddingBottom: 65 }}>
+            <ScrollView contentContainerStyle={styles.scroll}>
                 {showPic && piece.imageUri !== undefined ? <PieceImage uri={piece.imageUri}/> : undefined}
 
                 <View style={{
@@ -109,6 +121,9 @@ const PieceComponent = (props: PieceScreenProps) => {
                 </View>
 
                 <PieceNotes notes={piece.notes}/>
+
+                <PieceNotifications interval={piece.notifsInterval} enabled={piece.notifsOn}
+                                    updateInterval={setInterval} updateEnabled={toggleNotifs}/>
             </ScrollView>
 
             {showDeleteModal ?
@@ -117,7 +132,7 @@ const PieceComponent = (props: PieceScreenProps) => {
             <ItemButtonsWrap>
                 <PrevButton
                     onPress={prev}/>
-                <PrimaryButton style={{ marginRight: 15, marginLeft: 15 }}>Practice</PrimaryButton>
+                <PrimaryButton style={styles.primary}>Practice</PrimaryButton>
                 <NextButton
                     onPress={next}/>
             </ItemButtonsWrap>
@@ -125,17 +140,24 @@ const PieceComponent = (props: PieceScreenProps) => {
     );
 };
 
-const push = (id: number) => StackActions.push(PIECE, { id });
+const replace = (id: number) => StackActions.replace(PIECE, { id });
 
 const PieceAuthors = (props: { authors: string[] }) => (
-    <Text style={{ fontSize: 17, marginBottom: 15, color: 'grey' }}>
-        {props.authors.reduce((a, b) => a + ', ' + b)}
+    <Text style={styles.authors}>
+        {props.authors.join(', ')}
     </Text>
 );
 
 const PieceImage = (props: { uri: string }) => (
-    <Image source={{ uri: props.uri }} style={{ width: '100%', height: 300 }}/>
+    <Image source={{ uri: props.uri }} style={styles.pic}/>
 );
 
 const PieceScreen = connect(mapStateToProps, mapDispatchToProps)(PieceComponent);
 export default PieceScreen;
+
+const styles = StyleSheet.create({
+    pic: { width: '100%', height: 300 },
+    authors: { fontSize: 15, marginBottom: 15, color: 'grey' },
+    primary: { marginRight: 15, marginLeft: 15 },
+    scroll: { paddingBottom: 65 }
+});

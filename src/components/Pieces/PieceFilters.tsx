@@ -1,14 +1,13 @@
 import React from 'react';
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 export const PieceFilters = () => {
     return (
-        <View style={{
-            display: 'flex',
-            flexDirection: 'row',
-        }}>
-            <FilterLabel isActive={false} name='Archived' onPress={() => {}} />
-            <FilterLabel isActive={true} name='Concert' onPress={() => {}} />
+        <View style={styles.wrap}>
+            <FilterLabel isActive={false} name='Archived' onPress={() => {
+            }}/>
+            <FilterLabel isActive={true} name='Concert' onPress={() => {
+            }}/>
         </View>
     );
 };
@@ -39,3 +38,12 @@ export const FilterLabel = (props: FilterLabelProps) => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    wrap: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: 20,
+        marginBottom: 20,
+    },
+});

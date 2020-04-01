@@ -1,7 +1,8 @@
 import React from "react";
 import { Switch, Text, View } from "react-native";
-import { AppPaddingStyle } from "../../AppStyle";
+import { NotifStyle as styles } from "../../AppStyle";
 import { DaysInput } from "../basic/Inputs/DaysInput";
+import { ItemSection } from "../basic/ItemSection";
 
 type NotifProps = {
     interval: number,
@@ -11,27 +12,25 @@ type NotifProps = {
 }
 
 export const PieceNotifications = (props: NotifProps) => (
+    <ItemSection title='Reminders'>
+        <NotifOption label={props.enabled ? 'Enabled' : 'Disabled'}>
+            <Switch onValueChange={props.updateEnabled}
+                    value={props.enabled}/>
+        </NotifOption>
 
-    <View style={{ ...AppPaddingStyle, borderTopWidth: 1, borderColor: 'lightgrey', paddingTop: 30 }}>
+        <NotifOption label='Practice interval'>
+            <View style={styles.inputWrap}>
+                <DaysInput value={props.interval} onChange={props.updateInterval} minVal={1} maxVal={100}/>
+                <Text style={styles.label}>day{props.interval > 1 ? 's' : undefined}</Text>
+            </View>
+        </NotifOption>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 25 }}>
-            <Text style={{ fontSize: 17 }}>Practice reminders</Text>
-            <Switch
-                trackColor={{ false: "#767577", true: "#81b0ff" }}
-                thumbColor={props.enabled ? "#f5dd4b" : "#f4f3f4"}
-                ios_backgroundColor="#3e3e3e"
-                onValueChange={props.updateEnabled}
-                value={props.enabled}/>
-        </View>
+    </ItemSection>
+);
 
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontSize: 17, }}>Practice interval: </Text>
-            <DaysInput value={props.interval}
-                       onChange={props.updateInterval}
-                       minVal={1} maxVal={100}/>
-            <Text
-                style={{ fontSize: 17 }}>day{props.interval > 1 ? 's' : undefined}
-            </Text>
-        </View>
+const NotifOption = (props: { label: string, children: JSX.Element }) => (
+    <View style={styles.row}>
+        <Text style={styles.label}>{props.label}</Text>
+        {props.children}
     </View>
 );

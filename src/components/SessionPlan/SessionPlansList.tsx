@@ -6,9 +6,10 @@ import { AppPaddingStyle, ListItemTitleStyle } from "../../AppStyle";
 import { SESSION_PLAN, SESSION_PLAN_FORM } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { SessionPlan } from "../../types/SessionPlan";
-import { AddButton } from "../basic/Buttons/AddButton";
+import { AddButton } from "../basic/Buttons/ActionButton";
 import { ListItemWrapper } from "../basic/Lists/ListItem";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
+import { StackActions } from '@react-navigation/native';
 
 const mapStateToProps = (state: StateShape) => ({
     plans: state.plans.items,
@@ -19,19 +20,9 @@ const SessionPlans = (props: { plans: SessionPlan[] }) => {
     const nav = useNavigation();
 
     return (
-        <ScreenWrapper title='Session plans'>
-            <View style={{
-                ...AppPaddingStyle,
-            }}>
-                <View style={{
-                    marginBottom: 20,
-                }}>
-                    <AddButton style={{
-                        position: 'absolute',
-                        right: 0,
-                        top: 0,
-                    }} onPress={() => nav.navigate(SESSION_PLAN_FORM)}/>
-                </View>
+        <ScreenWrapper>
+            <View style={AppPaddingStyle}>
+                <AddButton onPress={() => nav.dispatch(StackActions.push(SESSION_PLAN_FORM))}/>
                 {props.plans.map(plan => (
                     <SessionPlanItem plan={plan} onPress={() => nav.navigate(SESSION_PLAN, { plan: plan })}/>
                 ))}

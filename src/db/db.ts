@@ -45,8 +45,8 @@ export const addPiece = async (piece: Piece): Promise<number> => {
     const newPiece = new PieceEntity();
     newPiece.name = piece.name;
     newPiece.addedOn = Date.now();
-    newPiece.notificationsInterval = piece.notifications.interval;
-    newPiece.notificationsOn = piece.notifications.enabled;
+    newPiece.notificationsInterval = piece.notifsInterval;
+    newPiece.notificationsOn = piece.notifsOn;
     newPiece.isFavourite = piece.isFavourite;
     newPiece.imageUri = piece.imageUri !== undefined ? piece.imageUri : '';
     newPiece.tags = await createTags(piece.tags);
@@ -161,10 +161,8 @@ const pieceBaseFromEntity = (ent: PieceEntity): PieceBase => ({
 
 const pieceFromEntity = (ent: PieceEntity): Piece => ({
     ...pieceBaseFromEntity(ent),
-    notifications: {
-        interval: ent.notificationsInterval,
-        enabled: ent.notificationsOn,
-    },
+    notifsOn: ent.notificationsOn,
+    notifsInterval: ent.notificationsInterval,
     notes: [],
     recordings: [],
     originalUri: ent.originalUri,

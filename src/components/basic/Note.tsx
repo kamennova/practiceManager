@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TextInput, TouchableNativeFeedback, View, ViewStyle } from "react-native";
+import { Text, TextInput, TouchableNativeFeedback, View, StyleSheet } from "react-native";
 import { CheckIcon } from "./icons/Check";
 import { PenIcon } from "./icons/Pen";
 
@@ -18,38 +18,28 @@ export const Note = (props: { addedOn: Date, content: string, onUpdate?: () => v
     };
 
     return (
-        <View style={{ marginBottom: 15 }}>
-            <View style={{ borderWidth: 1, borderColor: 'lightgrey', padding: padding, paddingRight: 40 }}>
+        <View>
+            <View style={styles.note}>
 
                 <TextInput multiline={true}
                            autoFocus={true}
                            editable={isEditing}
                            onChangeText={text => updateContent(text)}
-                           style={{ fontSize: 16, lineHeight: 22 }} value={content}/>
+                           style={styles.noteText} value={content}/>
 
                 {isEditing ? <SubmitIcon onSubmit={onSubmit}/> : <EditIcon onEdit={onEdit}/>}
 
             </View>
-            <Text style={{ color: 'grey', marginTop: 3 }}>
+            <Text style={styles.date}>
                 {props.addedOn.toDateString()}
             </Text>
         </View>
     );
 };
 
-const styles: ViewStyle = {
-    position: 'absolute',
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    right: padding,
-    top: padding
-};
-
 const EditIcon = (props: { onEdit: () => void }) => (
     <TouchableNativeFeedback onPress={props.onEdit}>
-        <View style={styles}>
+        <View style={styles.edit}>
             <PenIcon style={{ width: 20, height: 20 }}/>
         </View>
     </TouchableNativeFeedback>
@@ -57,8 +47,23 @@ const EditIcon = (props: { onEdit: () => void }) => (
 
 const SubmitIcon = (props: { onSubmit: () => void }) => (
     <TouchableNativeFeedback onPress={props.onSubmit}>
-        <View style={styles}>
+        <View style={styles.edit}>
             <CheckIcon style={{ width: 20, height: 20 }}/>
         </View>
     </TouchableNativeFeedback>
 );
+
+const styles = StyleSheet.create({
+    note: { borderWidth: 1, borderColor: 'lightgrey', padding: padding, paddingRight: 40 },
+    date: { color: 'grey', marginTop: 3 },
+    edit: {
+        position: 'absolute',
+        width: 30,
+        height: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: padding,
+        top: padding
+    },
+    noteText: { fontSize: 16, lineHeight: 22 },
+});

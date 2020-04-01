@@ -1,3 +1,4 @@
+import { DrawerActions, StackActions } from '@react-navigation/native';
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import React from "react";
 import { DASHBOARD, REPERTOIRE, SESSION_PLAN_LIST, SESSION_START, SETTINGS } from "../../NavigationPath";
@@ -10,23 +11,27 @@ type ItemProps = {
 export const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     const nav = props.navigation;
 
+    const jumpTo = (path: string) => () => {
+        nav.dispatch(DrawerActions.closeDrawer());
+        nav.dispatch(StackActions.replace(path));
+    };
+
     return (
         <DrawerContentScrollView {...props}>
-            <CustomDrawerItem label={'Dashboard'} onPress={() => nav.navigate(DASHBOARD)}/>
-            <CustomDrawerItem label={'Repertoire'} onPress={() => nav.navigate(REPERTOIRE)}/>
-            <CustomDrawerItem label={'Practice plans'} onPress={() => nav.navigate(SESSION_PLAN_LIST)}/>
-            <CustomDrawerItem label={'Settings'} onPress={() => nav.navigate(SETTINGS)}/>
-            <CustomDrawerItem label={'Start session'} onPress={() => nav.navigate(SESSION_START)}/>
+            <CustomDrawerItem label={'Dashboard'} onPress={jumpTo(DASHBOARD)}/>
+            <CustomDrawerItem label={'Repertoire'} onPress={jumpTo(REPERTOIRE)}/>
+            <CustomDrawerItem label={'Practice plans'} onPress={jumpTo(SESSION_PLAN_LIST)}/>
+            <CustomDrawerItem label={'Settings'} onPress={jumpTo(SETTINGS)}/>
+            <CustomDrawerItem label={'Start session'} onPress={jumpTo(SESSION_START)}/>
         </DrawerContentScrollView>
     );
 };
 
 const CustomDrawerItem = (props: ItemProps) => (
-    <DrawerItem
-        labelStyle={{
-            color: 'black',
-            fontSize: 22,
-        }}
-        label={props.label}
-        onPress={props.onPress}/>
+    <DrawerItem labelStyle={labelStyle} label={props.label} onPress={props.onPress}/>
 );
+
+const labelStyle = {
+    color: 'black',
+    fontSize: 22,
+};

@@ -17,10 +17,8 @@ export type PieceBase = {
 };
 
 export type Piece = PieceBase & {
-    notifications: {
-        enabled: boolean,
-        interval: number,
-    },
+    notifsOn: boolean,
+    notifsInterval: number,
     notes: Note[],
     recordings: Recording[],
     originalUri?: string,
