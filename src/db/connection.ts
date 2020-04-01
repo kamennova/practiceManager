@@ -17,6 +17,7 @@ export const connectToDb = async () => createConnection({
         NoteEntity,
         RecordingEntity,
     ],
-    synchronize: true,
-    logging: true
+    synchronize: false,
+    migrationsRun: true,
+    logging: false,
 }).catch(error => Promise.reject(error));
