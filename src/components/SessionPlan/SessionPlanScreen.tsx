@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Text, View } from "react-native";
 import { ActivityViewStyle, AppPaddingStyle, BreakViewStyle, SubActivityViewStyle } from "../../AppStyle";
 import { ActivityType, ComplexActivity, SimpleActivity, SubActivity } from "../../types/Activity";
-import { SessionPlan, SessionSchedule } from "../../types/SessionPlan";
+import { SessionPlan, SessionSchedule, totalDurationInMinutes } from "../../types/SessionPlan";
 import { StartButton } from "../basic/Buttons/StartButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 
@@ -15,7 +15,7 @@ export const SessionPlanScreen = (props: SessionPlanProps) => {
     const plan: SessionPlan = props.route.params.plan;
 
     return (
-        <ScreenWrapper title={plan.name}>
+        <ScreenWrapper>
             <View style={{
                 ...AppPaddingStyle
             }}>
@@ -24,7 +24,7 @@ export const SessionPlanScreen = (props: SessionPlanProps) => {
                     color: 'grey',
                     fontSize: 16,
                 }}>
-                    Total duration: {plan.totalDurationInMinutes()} minutes
+                    Total duration: {totalDurationInMinutes(plan)} minutes
                 </Text>
                 <SessionScheduleView schedule={plan.schedule}/>
             </View>

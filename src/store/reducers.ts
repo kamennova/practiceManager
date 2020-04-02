@@ -92,7 +92,7 @@ const renamePlan = (state: SessionPlan[], action: RenamePlanAction): SessionPlan
         throw new Error('plan with such id doesn\'t exist');
     }
 
-    const renamed = new SessionPlan(action.id, action.name, planToRename.schedule);
+    const renamed = { name: action.name, id: action.id, schedule: [] };
     plans.push(renamed);
 
     return plans;

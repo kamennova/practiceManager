@@ -11,19 +11,32 @@ export enum ActivityType {
     'SightReading' = 'Sight reading'
 }
 
+export type TechniqueTypes = 'Scales' | 'Arpeggio' | 'Chords';
+export type Tonality = 'C#/D♭' | 'C' | 'D'; // todo
+
 export type SimpleActivity = Activity & {
-    type: ActivityType.SightReading | ActivityType.WarmUp | ActivityType.Break,
+    type: ActivityType.WarmUp | ActivityType.Break,
 };
 
-export type ComplexActivity = Activity & {
-    type: ComplexActivityType,
-    schedule?: SubActivity[],
-};
+export type ComplexActivity = Activity & (
+    {
+        type: ActivityType.Technique,
+        schedule?: TechniqueSubActivity[],
+    } |
+    {
+        type: ActivityType.Pieces | ActivityType.SightReading,
+        schedule: PieceSubActivity[]
+    });
 
 export type SubActivity = {
-    name: string,
     duration: number,
-    sideNote?: string
 }
 
-export type ComplexActivityType = ActivityType.Technique | ActivityType.Pieces;
+export type TechniqueSubActivity = SubActivity & {
+    name: TechniqueTypes,
+    tonality: Tonality,
+}
+
+export type PieceSubActivity = SubActivity & {
+    pieceId: number,
+}

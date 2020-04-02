@@ -1,7 +1,8 @@
 import React from "react";
 import { Switch, Text, View } from "react-native";
 import { NotifStyle as styles } from "../../AppStyle";
-import { DaysInput } from "../basic/Inputs/DaysInput";
+import { NumberInput } from "../basic/Inputs/NumberInput";
+
 import { ItemSection } from "../basic/ItemSection";
 
 type NotifProps = {
@@ -20,8 +21,10 @@ export const PieceNotifications = (props: NotifProps) => (
 
         <NotifOption label='Practice interval'>
             <View style={styles.inputWrap}>
-                <DaysInput value={props.interval} onChange={props.updateInterval} minVal={1} maxVal={100}/>
-                <Text style={styles.label}>day{props.interval > 1 ? 's' : undefined}</Text>
+                <NumberInput value={props.interval}
+                             onChange={props.updateInterval}
+                             minVal={1} maxVal={100}
+                             measure='day'/>
             </View>
         </NotifOption>
 

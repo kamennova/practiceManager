@@ -4,12 +4,14 @@ import { FlatList, Image, Text, TouchableNativeFeedback, View } from "react-nati
 import { ListItemStyle, PieceListStyle as styles } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
 import { PieceBase } from "../../types/Piece";
+import { NothingAlert } from "../basic/Alerts/NothingAlert";
 
 export const PiecesList = (props: { pieces: PieceBase[] }) => {
     const navigation = useNavigation();
 
     return (
         <View>
+            {props.pieces.length === 0 ? <NothingAlert/> : undefined}
             <FlatList data={props.pieces}
                       renderItem={({ item }) => (
                           <PieceItem key={item.id.toString()}

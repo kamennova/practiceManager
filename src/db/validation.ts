@@ -7,6 +7,15 @@ export type CheckResult = { valid: true } | {
     errors: string,
 };
 
+export const validatePlan = async (planName: string): Promise<CheckResult> => {
+    if (planName.length === 0) {
+        return Promise.resolve({ valid: false, errors: 'You forgot to enter plan title ✍' });
+    }
+
+    // todo
+    return Promise.resolve({ valid: true });
+};
+
 export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
     if (piece.name.length === 0) {
         return Promise.resolve({ valid: false, errors: 'You forgot to enter piece title ✍' });
@@ -17,7 +26,7 @@ export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
         .filter(item => item.id !== piece.id);
 
     if (piecesWithSameName.length > 0) {
-        if(piece.authors.length === 0 || piecesWithSameName.find(item => areAuthorsSame(item, piece) !== undefined)) {
+        if (piece.authors.length === 0 || piecesWithSameName.find(item => areAuthorsSame(item, piece) !== undefined)) {
             return Promise.resolve({
                 valid: false,
                 errors: 'A piece with the same name and author(s) already exists 🤷‍'

@@ -23,7 +23,7 @@ export const AddButton = (props: { onPress: () => void }) => (
     <ActionButton style={style.add} onPress={props.onPress} label='Add' icon={<Text style={style.plus}>+</Text>}/>
 );
 
-export const SaveButton = (props: { onPress: () => void }) => (
-    <ActionButton style={style.save} onPress={props.onPress} label='Save' icon={<CheckIcon style={style.check}/>}/>
+export const SaveButton = (props: { onPress: () => void, style?: ViewStyle }) => (
+    <ActionButton style={{...style.save, ...props.style}} onPress={props.onPress} label='Save' icon={<CheckIcon style={style.check}/>}/>
 );
 

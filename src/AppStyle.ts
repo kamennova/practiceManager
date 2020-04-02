@@ -432,3 +432,56 @@ export const SmallModalStyle: ViewStyle = {
     backgroundColor: AppBg,
     alignItems: 'center',
 };
+
+export const PlanBuilderStyle = StyleSheet.create({
+    add: {
+        width: '100%',
+        padding: 12,
+        borderWidth: 1,
+        borderColor: 'darkgrey',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    plus: {
+        fontSize: 23,
+        marginRight: 10,
+        color: Dark,
+        lineHeight: 27,
+    },
+    text: {
+        fontSize: 16,
+        color: Dark,
+        fontWeight: 'bold'
+    }
+});
+
+export const ActivityBlockHeight = 52;
+
+export const ActivityBlockStyle = StyleSheet.create({
+    wrap: {
+        height: ActivityBlockHeight,
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        paddingTop: 14,
+        paddingBottom: 14,
+        paddingRight: 7,
+        marginBottom: -1,
+    },
+    duration: {
+        color: 'grey',
+        marginLeft: 'auto',
+    },
+    name: {
+        fontSize: 17,
+    },
+    dots: {
+        width: 23,
+        height: 23,
+        opacity: 0.6,
+        marginLeft: 15,
+    }
+});
