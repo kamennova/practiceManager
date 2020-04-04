@@ -432,3 +432,113 @@ export const SmallModalStyle: ViewStyle = {
     backgroundColor: AppBg,
     alignItems: 'center',
 };
+
+export const PlanBuilderStyle = StyleSheet.create({
+    add: {
+        width: '100%',
+        padding: 12,
+        borderWidth: 1,
+        borderColor: 'darkgrey',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    plus: {
+        fontSize: 23,
+        marginRight: 10,
+        color: Dark,
+        lineHeight: 27,
+    },
+    text: {
+        fontSize: 16,
+        color: Dark,
+        fontWeight: 'bold'
+    }
+});
+
+export const ActivityBlockHeight = 52;
+
+export const ActivityBlockStyle = StyleSheet.create({
+    wrap: {
+        height: ActivityBlockHeight,
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        paddingTop: 14,
+        paddingBottom: 14,
+        paddingRight: 7,
+        marginBottom: -1,
+    },
+    duration: {
+        color: 'grey',
+        marginLeft: 'auto',
+    },
+    name: {
+        fontSize: 17,
+    },
+    dots: {
+        width: 23,
+        height: 23,
+        opacity: 0.6,
+        marginLeft: 15,
+    }
+});
+
+export const ActivityForm = StyleSheet.create({
+    wrap: {
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        backgroundColor: '#f3f3f3',
+    },
+    formWrap: {
+        // flexDirection: 'row',
+        alignItems: 'center',
+        padding: 8,
+    },
+    add: {
+        width: '100%',
+        padding: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    plus: {
+        fontSize: 23,
+        marginRight: 10,
+        color: Dark,
+        lineHeight: 27,
+    },
+    text: {
+        fontSize: 17,
+        color: Dark,
+        fontWeight: 'bold'
+    },
+    activityBtn: {
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        backgroundColor: 'white',
+        width: '50%',
+        marginRight: -1,
+        marginBottom: -1,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    activityBtnText: {
+        fontSize: 11,
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+        fontWeight: 'bold',
+        color: Dark
+    },
+    btnWrap: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        alignItems: 'stretch',
+        marginBottom: 15,
+    },
+    choosePrompt: { fontSize: 15, color: 'darkgrey', fontWeight: 'bold' },
+});

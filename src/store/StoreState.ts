@@ -1,4 +1,5 @@
 import { EmptyPiece } from "../types/EmptyPiece";
+import { EmptyPlan } from "../types/EmptyPlan";
 import { Piece, PieceBase } from "../types/Piece";
 import { SessionPlan } from "../types/SessionPlan";
 
@@ -15,5 +16,5 @@ export type StateShape = {
 
 export const initialState: StateShape = {
     pieces: { items: [], currentItem: EmptyPiece },
-    plans: { items: [], currentItem: new SessionPlan(0, '', []) },
+    plans: { items: [], currentItem: EmptyPlan },
 };

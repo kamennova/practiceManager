@@ -1,29 +1,37 @@
-export type Activity = {
+export type BaseActivity = {
     type: ActivityType,
     duration: number, // in minutes
 }
 
+export type TechniqueActivity = BaseActivity & {
+    type: ActivityType.Technique,
+    exercise?: Exercise,
+    tonality?: Tonality,
+};
+
+export type PieceActivity = BaseActivity & {
+    type: ActivityType.SightReading | ActivityType.Piece,
+    pieceId?: number,
+}
+
+export type BreakActivity = BaseActivity & { type: ActivityType.Break };
+
+export type Activity = BreakActivity | TechniqueActivity | PieceActivity;
+
 export enum ActivityType {
-    'WarmUp' = "Warm-up",
-    'Pieces' = 'Pieces',
-    'Technique' = 'Technique',
-    'Break' = 'Break',
-    'SightReading' = 'Sight reading'
+    Piece = 'Piece',
+    Technique = 'Technique',
+    Break = 'Break',
+    SightReading = 'Sight reading'
 }
 
-export type SimpleActivity = Activity & {
-    type: ActivityType.SightReading | ActivityType.WarmUp | ActivityType.Break,
-};
+export type ComplexActivityType = ActivityType.Technique | ActivityType.Piece | ActivityType.SightReading;
 
-export type ComplexActivity = Activity & {
-    type: ComplexActivityType,
-    schedule?: SubActivity[],
-};
-
-export type SubActivity = {
-    name: string,
-    duration: number,
-    sideNote?: string
+export enum Exercise {
+    'Scales',
+    'Arpeggio',
+    'Chords',
+    'Other',
 }
 
-export type ComplexActivityType = ActivityType.Technique | ActivityType.Pieces;
+export type Tonality = 'C#/D♭' | 'C' | 'D'; // todo

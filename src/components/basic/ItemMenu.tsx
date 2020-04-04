@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, TouchableNativeFeedback, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableNativeFeedback, View, ViewStyle } from "react-native";
 import { ItemMenuStyle } from "../../AppStyle";
 
 export type MenuOption = {
@@ -7,12 +7,12 @@ export type MenuOption = {
     func: () => void,
 };
 
-export const ItemMenu = (props: { options: MenuOption[], prevFunc?: () => void }) => {
+export const ItemMenu = (props: { options: MenuOption[], prevFunc?: () => void, style?: ViewStyle }) => {
     return (
-        <View style={ItemMenuStyle}>
+        <View style={{...ItemMenuStyle, ...props.style}}>
             <FlatList data={props.options} renderItem={({ item }) => (<OptionItem label={item.label} onPress={() => {
-                if (props.prevFunc !== undefined) props.prevFunc();
                 item.func();
+                if (props.prevFunc !== undefined) props.prevFunc();
             }}/>)}/>
         </View>
     );

@@ -1,6 +1,6 @@
 import { ImagePickerResult } from "expo-image-picker";
 import React, { Component } from 'react';
-import { Route, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { validatePiece } from "../../db/validation";
@@ -9,29 +9,18 @@ import { StateShape } from "../../store/StoreState";
 import { thunkAddPiece, thunkEditPiece } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
+import { FormProps, FormState } from "../../types/ItemForm";
 import { Piece } from "../../types/Piece";
 import { trimStrArr } from "../../utils/strings";
 import { SaveButton } from "../basic/Buttons/ActionButton";
-import { ErrorAlert } from "../basic/ErrorAlert";
+import { ErrorAlert } from "../basic/Alerts";
 import { MyImagePicker } from "../basic/ImagePicker";
 import { TagInput } from "../basic/Inputs/TagInput";
 import { MyTextInput } from "../basic/Inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceNotifications } from "./PieceNotifications";
 
-type FormProps = {
-    route: Route & { params: { mode?: ActionType.Create } | { mode: ActionType.Edit, piece: Piece } },
-    navigation: any,
-    onHandlePiece: (piece: Piece) => any,
-    addedPieceId?: number,
-};
-
-type FormState = {
-    piece: Piece,
-    errors?: string
-};
-
-class PieceFormComponent extends Component<FormProps, FormState> {
+class PieceFormComponent extends Component<FormProps<Piece, {piece: Piece}>, FormState<{piece: Piece}>> {
     mode = this.props.route.params.mode === undefined ? ActionType.Create : this.props.route.params.mode;
 
     state = {
@@ -60,15 +49,15 @@ class PieceFormComponent extends Component<FormProps, FormState> {
         const res = await validatePiece(this.state.piece);
 
         if (res.valid) {
-            await this.props.onHandlePiece(this.state.piece);
+            await this.props.onHandleSave(this.state.piece);
 
-            if (this.mode === ActionType.Create && this.props.addedPieceId === undefined) {
+            if (this.mode === ActionType.Create && this.props.addedItemId === undefined) {
                 await Promise.reject('Added piece id should be already updated ');
             }
 
             this.props.navigation.navigate(PIECE, {
                 id: this.props.route.params.mode === ActionType.Edit ?
-                    this.props.route.params.piece.id : this.props.addedPieceId,
+                    this.props.route.params.piece.id : this.props.addedItemId,
                 lastUpdated: this.mode === ActionType.Edit ? Date.now() : undefined
             });
             this.resetState();
@@ -127,13 +116,13 @@ class PieceFormComponent extends Component<FormProps, FormState> {
     }
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: FormProps) => ({
-    onHandlePiece: (ownProps.route.params.mode === ActionType.Edit) ?
+const mapDispatchToProps = (dispatch: any, ownProps: FormProps<Piece, {piece: Piece}>) => ({
+    onHandleSave: (ownProps.route.params.mode === ActionType.Edit) ?
         (piece: Piece) => dispatch(thunkEditPiece(piece)) :
         (piece: Piece) => dispatch(thunkAddPiece(piece)),
 });
 
-const mapStateToProps = (state: StateShape) => ({ addedPieceId: state.pieces.lastAddedId, });
+const mapStateToProps = (state: StateShape) => ({ addedItemId: state.pieces.lastAddedId, });
 
 export const PieceForm = connect(mapStateToProps, mapDispatchToProps)(PieceFormComponent);
 
