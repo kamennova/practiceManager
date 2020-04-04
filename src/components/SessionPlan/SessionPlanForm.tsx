@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { ActivityBlockHeight, AppPaddingStyle, AppSidePadding } from "../../AppStyle";
 import { validatePlan } from "../../db/validation";
-import { Activity, ActivityType } from "../../types/Activity";
+import { Activity } from "../../types/Activity";
 import { EmptyPlan } from "../../types/EmptyPlan";
 import { FormProps, FormState } from "../../types/ItemForm";
 import { SessionPlan } from "../../types/SessionPlan";
@@ -16,11 +16,10 @@ import { ActivityBlock } from "./ActivityBlock";
 import { ActivityForm } from "./ActivityForm";
 
 export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: SessionPlan }>,
-    FormState<{ plan: SessionPlan }> & { showMenu: number, showSubForm: number}> {
+    FormState<{ plan: SessionPlan }> & { showMenu: number }> {
     state = {
         plan: EmptyPlan,
         showMenu: -1,
-        showSubForm: -1,
         errors: '',
     };
 
@@ -28,27 +27,16 @@ export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: Se
         this.setState({ errors: this.state.errors, plan });
     }
 
-    deleteActivity = () => {
-        this.setPlan({
-            ...this.state.plan,
-            schedule: this.state.plan.schedule.splice(this.state.showMenu, 1)
-        });
-        // todo merge if same
-    };
+    deleteActivity = () => this.setPlan({
+        ...this.state.plan,
+        schedule: this.state.plan.schedule.splice(this.state.showMenu),
+    });
 
-    setShowSubForm = (index: number) => this.setState({ ...this.state, showSubForm: index });
     setShowMenu = (index: number) => this.setState({ ...this.state, showMenu: index });
 
-    basicMenu = [
+    menu = [
         { label: 'Delete', func: this.deleteActivity, },
     ];
-
-    menu = (item: Activity) => (item.type === ActivityType.Technique ||
-        item.type === ActivityType.Pieces ||
-        item.type === ActivityType.SightReading) ? [...this.basicMenu, {
-        label: 'Add child', func: () => {
-        }
-    }] : this.basicMenu;
 
     addActivity = (act: Activity) => {
         this.setPlan({ ...this.state.plan, schedule: [...this.state.plan.schedule, act] });
@@ -84,16 +72,12 @@ export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: Se
                             <View style={styles.blocksWrap}>
                                 {this.state.plan.schedule.length === 0 ?
                                     <Text>No activities here yet</Text> : undefined}
+
                                 {this.state.plan.schedule.map((act, i) => (
-                                    <ActivityBlock showSubForm={this.state.showSubForm === i}
-                                                   showMenu={() => this.setShowMenu(i)}
-                                                   {...act} />))}
+                                    <ActivityBlock onShowMenu={() => this.setShowMenu(i)} {...act} />))}
                             </View>
 
-                            <ActivityForm onSave={this.addActivity}
-                                          lastActivityType={this.state.plan.schedule.length > 0 ?
-                                              this.state.plan.schedule[this.state.plan.schedule.length - 1].type :
-                                              undefined}/>
+                            <ActivityForm onSave={this.addActivity}/>
                         </View>
                     </ItemSection>
 
@@ -102,7 +86,7 @@ export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: Se
                             <Layer onPress={() => this.setState({ ...this.state, showMenu: -1 })}/>,
                             <ItemMenu style={getMenuStyle(this.state.showMenu)}
                                       prevFunc={() => this.setState({ ...this.state, showMenu: -1 })}
-                                      options={this.menu(this.state.plan.schedule[this.state.showMenu])}/>
+                                      options={this.menu}/>
                         ] : undefined}
                 </ScrollView>
                 <SaveButton style={styles.save} onPress={async () => await this.validateAndSave()}/>

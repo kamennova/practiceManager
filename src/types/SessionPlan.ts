@@ -1,6 +1,6 @@
-import { Activity, ActivityType, ComplexActivity, SimpleActivity } from "./Activity";
+import { Activity, ActivityType } from "./Activity";
 
-export type SessionSchedule = (SimpleActivity | ComplexActivity)[];
+export type SessionSchedule = Activity[];
 
 export type SessionPlan = {
     id: number;
@@ -19,7 +19,7 @@ const sumActivitiesDuration = (activities: Activity[]): number => {
 export const totalDurationInMinutes = (plan: SessionPlan): number => sumActivitiesDuration(plan.schedule);
 
 export const piecesDuration = (plan: SessionPlan): number =>
-    sumActivitiesDuration(plan.schedule.filter(act => act.type === ActivityType.Pieces));
+    sumActivitiesDuration(plan.schedule.filter(act => act.type === ActivityType.Piece));
 
 export const techniqueDuration = (plan: SessionPlan): number =>
     sumActivitiesDuration(plan.schedule.filter(act => act.type === ActivityType.Technique));

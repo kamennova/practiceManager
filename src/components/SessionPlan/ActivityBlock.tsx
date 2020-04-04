@@ -1,32 +1,20 @@
 import React from "react";
 import { Image, Text, TouchableNativeFeedback, View } from "react-native";
 import { ActivityBlockStyle as styles } from "../../AppStyle";
-import { ActivityType, ComplexActivity, SimpleActivity } from "../../types/Activity";
-import { SubActivityForm } from "./SubActivityForm";
+import { Activity } from "../../types/Activity";
 
-type BlockProps = (SimpleActivity | ComplexActivity) & {
-    showMenu: () => void,
+type BlockProps = Activity & {
+    onShowMenu: () => void,
     setDuration?: (val: number) => void, // todo ?
-    showSubForm: boolean,
 }
 
-export const ActivityBlock = (props: BlockProps) => {
-    return (
-        <View>
-            <View style={styles.wrap}>
-                <Text style={styles.name}>{props.type}</Text>
-                <Text style={styles.duration}>{props.duration} min</Text>
-                <DotsIcon onPress={props.showMenu}/>
-            </View>
-            {(props.type === ActivityType.Technique ||
-            props.type === ActivityType.Pieces ||
-            props.type === ActivityType.SightReading) && props.showSubForm ?
-                <SubActivityForm onSave={() => {}} items={[]} />
-
-                : undefined }
-        </View>
-    );
-};
+export const ActivityBlock = (props: BlockProps) => (
+    <View style={styles.wrap}>
+        <Text style={styles.name}>{props.type}</Text>
+        <Text style={styles.duration}>{props.duration} min</Text>
+        <DotsIcon onPress={props.onShowMenu}/>
+    </View>
+);
 
 const DotsIcon = (props: { onPress: () => void }) => (
     <TouchableNativeFeedback onPress={props.onPress}>

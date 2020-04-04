@@ -1,42 +1,37 @@
-export type Activity = {
+export type BaseActivity = {
     type: ActivityType,
     duration: number, // in minutes
 }
 
-export enum ActivityType {
-    'WarmUp' = "Warm-up",
-    'Pieces' = 'Pieces',
-    'Technique' = 'Technique',
-    'Break' = 'Break',
-    'SightReading' = 'Sight reading'
-}
-
-export type TechniqueTypes = 'Scales' | 'Arpeggio' | 'Chords';
-export type Tonality = 'C#/D♭' | 'C' | 'D'; // todo
-
-export type SimpleActivity = Activity & {
-    type: ActivityType.WarmUp | ActivityType.Break,
+export type TechniqueActivity = BaseActivity & {
+    type: ActivityType.Technique,
+    exercise?: Exercise,
+    tonality?: Tonality,
 };
 
-export type ComplexActivity = Activity & (
-    {
-        type: ActivityType.Technique,
-        schedule?: TechniqueSubActivity[],
-    } |
-    {
-        type: ActivityType.Pieces | ActivityType.SightReading,
-        schedule: PieceSubActivity[]
-    });
-
-export type SubActivity = {
-    duration: number,
+export type PieceActivity = BaseActivity & {
+    type: ActivityType.SightReading | ActivityType.Piece,
+    pieceId?: number,
 }
 
-export type TechniqueSubActivity = SubActivity & {
-    name: TechniqueTypes,
-    tonality: Tonality,
+export type BreakActivity = BaseActivity & { type: ActivityType.Break };
+
+export type Activity = BreakActivity | TechniqueActivity | PieceActivity;
+
+export enum ActivityType {
+    Piece = 'Piece',
+    Technique = 'Technique',
+    Break = 'Break',
+    SightReading = 'Sight reading'
 }
 
-export type PieceSubActivity = SubActivity & {
-    pieceId: number,
+export type ComplexActivityType = ActivityType.Technique | ActivityType.Piece | ActivityType.SightReading;
+
+export enum Exercise {
+    'Scales',
+    'Arpeggio',
+    'Chords',
+    'Other',
 }
+
+export type Tonality = 'C#/D♭' | 'C' | 'D'; // todo

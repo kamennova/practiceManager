@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Text, View } from "react-native";
-import { ActivityViewStyle, AppPaddingStyle, BreakViewStyle, SubActivityViewStyle } from "../../AppStyle";
-import { ActivityType, ComplexActivity, SimpleActivity, SubActivity } from "../../types/Activity";
+import { ActivityViewStyle, AppPaddingStyle, BreakViewStyle} from "../../AppStyle";
+import { Activity, ActivityType } from "../../types/Activity";
 import { SessionPlan, SessionSchedule, totalDurationInMinutes } from "../../types/SessionPlan";
 import { StartButton } from "../basic/Buttons/StartButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
@@ -42,7 +42,7 @@ const SessionScheduleView = (props: { schedule: SessionSchedule }) => {
     );
 };
 
-const ActivityView = (props: { activity: SimpleActivity | ComplexActivity }) => {
+const ActivityView = (props: { activity: Activity }) => {
     const bg = getActivityColor(props.activity.type);
     const otherStyles = props.activity.type === ActivityType.Break ? BreakViewStyle : {};
 
@@ -69,49 +69,15 @@ const ActivityView = (props: { activity: SimpleActivity | ComplexActivity }) => 
                     {props.activity.duration} min
                 </Text>
             </View>
-
-            {((props.activity.type === ActivityType.Pieces || props.activity.type === ActivityType.Technique)
-                && props.activity.schedule !== undefined && props.activity.schedule.length > 0) ?
-                <SubActivities schedule={props.activity.schedule}/> : undefined}
         </View>
     );
 };
-
-const SubActivities = (props: { schedule: SubActivity[] }) => {
-    return (
-        <View style={{
-            paddingTop: 10,
-        }}>
-            {props.schedule.map(sub => <SubActivityView {...sub}/>)}
-        </View>
-    );
-};
-
-const SubActivityView = (props: SubActivity) => (
-    <View style={{
-        ...SubActivityViewStyle,
-        flexDirection: 'row',
-        alignItems: 'center'
-    }}>
-        <Text>
-            {props.name}
-        </Text>
-        <Text style={{
-            fontSize: 14,
-            marginLeft: 'auto'
-        }}>
-            {props.duration} min
-        </Text>
-    </View>
-);
 
 const getActivityColor = (activity: ActivityType): string => {
     switch (activity) {
         case ActivityType.Break:
             return 'transparent';
-        case ActivityType.WarmUp:
-            return '#ffac8c';
-        case ActivityType.Pieces:
+        case ActivityType.Piece:
             return '#d0dbff';
         case ActivityType.Technique:
             return '#b3d4d6';
