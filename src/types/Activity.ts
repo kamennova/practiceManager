@@ -1,6 +1,5 @@
 export type BaseActivity = {
     type: ActivityType,
-    duration: number, // in minutes
 }
 
 export type TechniqueActivity = BaseActivity & {

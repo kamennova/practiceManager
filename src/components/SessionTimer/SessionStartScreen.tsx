@@ -1,20 +1,37 @@
 import React, { useState } from 'react';
-import { Text, TouchableWithoutFeedback, View } from "react-native";
-import { FullScreenModalStyle, PlanOptionStyle, PrimaryButtonStyle } from "../../AppStyle";
-import { plans } from "../../exampleData";
-import { DASHBOARD, FREE_SESSION_ACTIVITY_CHOICE, PLANNED_SESSION_TIMER } from "../../NavigationPath";
-import { Button } from "../basic/Buttons/Button";
+import { Text, View } from "react-native";
+import { connect } from "react-redux";
+import { FullScreenModalStyle, SessionStartStyle as styles } from "../../AppStyle";
+import { FREE_SESSION_ACTIVITY_CHOICE, PLANNED_SESSION_TIMER } from "../../NavigationPath";
+import { StateShape } from "../../store/StoreState";
+import { SessionPlan } from "../../types/SessionPlan";
+import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
+import { TimerIcon, TimerOffIcon } from "../basic/icons";
 import { MyPicker } from "../basic/Inputs/Picker";
 import { ModalTitle } from "../basic/Titles/ModalTitle";
-import { TimerIcon, TimerOffIcon } from "../basic/icons";
+import { SessionTypeOption } from "./SessionTypeOption";
 
-export const SessionStartScreen = (props: { navigation: any }) => {
+type StartProps = {
+    navigation: any,
+    plans: SessionPlan[],
+};
+
+const SessionStart = (props: StartProps) => {
     const [usePlan, updateUsePlan] = useState(false);
     const [planName, updatePlanName] = useState('daily');
 
+    const setUsePlan = () => {
+        if(props.plans.length > 0){
+            updateUsePlan(true);
+        }
+    };
+
     const navigateToTimer = () => usePlan ?
-        props.navigation.navigate(PLANNED_SESSION_TIMER, { plan: plans[0] }) :
-        props.navigation.navigate(FREE_SESSION_ACTIVITY_CHOICE, { history: [] });
+        props.navigation.navigate(PLANNED_SESSION_TIMER, { plan: props.plans[0] }) :
+        props.navigation.navigate(FREE_SESSION_ACTIVITY_CHOICE);
+
+    const planItems = (props.plans.length > 0 ? props.plans.map(pl => pl.name) : ['-'])
+        .map(name => ({val: name, label: name}));
 
     return (
         <View style={{
@@ -22,52 +39,40 @@ export const SessionStartScreen = (props: { navigation: any }) => {
         }}>
             <ModalTitle> New session </ModalTitle>
 
-            <View style={{ marginBottom: 30, marginTop: 20, paddingLeft: 20, paddingRight: 20 }}>
+            <View style={styles.wrap}>
                 <SessionTypeOption isSelected={!usePlan} updateSelected={() => updateUsePlan(false)}>
-                    <TimerOffIcon style={IconStyle}/>
-                    <Text style={{ fontSize: 18 }}>
-                        No plan
-                    </Text>
+                    <View style={styles.noPlanOption}>
+                        <TimerOffIcon style={styles.icon}/>
+                        <Text style={styles.noPlanText}>No plan</Text>
+                    </View>
                 </SessionTypeOption>
 
-                <SessionTypeOption isSelected={usePlan} updateSelected={() => updateUsePlan(true)}>
-                    <TimerIcon style={IconStyle}/>
-                    <MyPicker selected={planName} wrapperStyle={{ borderWidth: 0, marginBottom: 0 }}
-                              items={[{ val: 'daily', label: 'Daily session' }, {
-                                  val: 'preconcert',
-                                  label: 'Pre-concert'
-                              }]}
+                <SessionTypeOption isSelected={usePlan} updateSelected={setUsePlan}>
+                    <TimerIcon style={styles.icon}/>
+                    {props.plans.length === 0 ?
+                        <View style={{paddingTop: 15, paddingBottom: 15, marginLeft: 5}}><Text>You don't have any plans yet</Text></View> :
+                        <MyPicker selected={planName}
+                              enabled={usePlan && props.plans.length > 0}
+                              wrapperStyle={styles.pickerWrap}
+                              items={planItems}
                               onValueChange={(itemValue: string) => {
                                   updateUsePlan(true);
                                   updatePlanName(itemValue);
-                              }}/>
+                              }}/> }
                 </SessionTypeOption>
             </View>
 
-            <Button onPress={navigateToTimer} style={{ ...PrimaryButtonStyle, marginBottom: 15 }}> Start </Button>
-            <Button onPress={() => props.navigation.navigate(DASHBOARD)}>Cancel</Button>
+            <View style={{ marginTop: 'auto', marginBottom: 25 }}>
+                <PrimaryButton onPress={navigateToTimer} style={{ marginBottom: 15 }}> Start </PrimaryButton>
+                <MinorButton style={{ alignSelf: 'center' }}
+                             onPress={() => props.navigation.goBack()}>Cancel</MinorButton>
+            </View>
         </View>
     );
 };
 
-const IconStyle = {
-    marginRight: 15,
-    width: 30,
-    height: 30,
-};
+const mapStateToProps = (state: StateShape) => ({
+    plans: state.plans.items,
+});
 
-type TypeOptionProps = {
-    isSelected: boolean,
-    children: JSX.Element | JSX.Element[],
-    updateSelected: () => void,
-};
-
-const SessionTypeOption = (props: TypeOptionProps) => (
-    <TouchableWithoutFeedback onPress={props.updateSelected}>
-        <View style={{
-            ...PlanOptionStyle(props.isSelected)
-        }}>
-            {props.children}
-        </View>
-    </TouchableWithoutFeedback>
-);
+export const SessionStartScreen = connect(mapStateToProps)(SessionStart);

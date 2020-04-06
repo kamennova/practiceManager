@@ -8,7 +8,7 @@ import {
     setPieces,
     setPiecesMeta,
     togglePieceFav,
-} from "./actions";
+} from "../actions/piece";
 import {
     addPiece as addPieceToDb,
     deletePiece as deletePieceFromDb,
@@ -17,9 +17,9 @@ import {
     getPiecesMeta,
     togglePieceIsFavourite,
     updatePiece
-} from "../db/db";
-import { StateShape } from "./StoreState";
-import { Piece } from "../types/Piece";
+} from "../../db/db";
+import { StateShape } from "../StoreState";
+import { Piece } from "../../types/Piece";
 
 export type ThunkResult = ActionCreator<ThunkAction<Promise<Action>, StateShape, void, Action<void>>>;
 

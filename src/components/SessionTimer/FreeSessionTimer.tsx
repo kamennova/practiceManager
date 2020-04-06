@@ -1,103 +1,66 @@
-import { useNavigation } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { BackHandler, Route, View } from "react-native";
+import { Route, View } from "react-native";
+import { connect } from "react-redux";
 import { SessionScreenStyle } from "../../AppStyle";
-import { FREE_SESSION_ACTIVITY_CHOICE, FREE_SESSION_TIMER, SESSION_END } from "../../NavigationPath";
+import { FREE_BREAK_TIMER, FREE_SESSION_ACTIVITY_CHOICE, SESSION_END } from "../../NavigationPath";
+import { pushActivity } from "../../store/actions";
 import { Activity, ActivityType } from "../../types/Activity";
-import {
-    TimerBreakButton,
-    TimerButtonsWrapper,
-    TimerFinishButton,
-    TimerNextButton,
-    TimerResumeButton
-} from "../basic/Buttons/TimerButton";
+import { ActivityRecord } from "../../types/ActivityRecord";
+import { BreakButton, FinishButton, NextButton, TimerButtonsWrapper } from "../basic/Buttons/TimerButton";
 import { TimeTracker } from "../basic/TimeTrackers";
-
 import { getActivityColor, getScreenBgByActivity } from "./Colors";
 import { getFreeSessionActivityTitle, SessionActivityTitle } from "./SessionScreenElements";
-
+import { startTimer } from "./timer";
 
 type FreeSessionTimerProps = {
-    route: Route,
+    route: Route & { params: { activity: Activity, isResumed?: boolean } },
+    navigation: any,
+    pushActivity: (_: ActivityRecord) => void,
 };
 
-export const FreeSessionTimer = (props: FreeSessionTimerProps) => {
-    const history: Activity[] = props.route.params.history;
-    const currentActivity: Activity = history[history.length - 1];
-    const [seconds, updateSeconds] = useState(currentActivity.duration);
-    const nav = useNavigation(),
-        color = getActivityColor(currentActivity.type),
-        timer = startTimer(seconds, updateSeconds),
-        isBreak = currentActivity.type === ActivityType.Break;
+const FreeSession = (props: FreeSessionTimerProps) => {
+    const activity: Activity = props.route.params.activity;
+    const [seconds, updateSeconds] = useState(0);
+    const color = getActivityColor(activity.type),
+        timer = startTimer(seconds, updateSeconds);
 
     const takeABreak = () => {
         clearTimeout(timer);
-
-        let newHistory = history;
-        newHistory[newHistory.length - 1].duration = Math.floor(seconds / 60);
-
-        nav.navigate(FREE_SESSION_TIMER, {
-            history: [...history, {
-                type: ActivityType.Break,
-                duration: 0,
-            }]
-        })
+        props.pushActivity({ startedOn: Date.now(), type: ActivityType.Break });
+        props.navigation.dispatch(StackActions.push(FREE_BREAK_TIMER));
     };
 
     const changeActivity = () => {
         clearTimeout(timer);
-        nav.navigate(FREE_SESSION_ACTIVITY_CHOICE);
+        props.navigation.dispatch(StackActions.push(FREE_SESSION_ACTIVITY_CHOICE));
     };
 
-    const resumeActivity = () => {
-        const preBreakActivity = history[history.length - 2];
-        nav.navigate(FREE_SESSION_TIMER, { history: [...history, { ...preBreakActivity, duration: 0 }] });
-    };
-
-    const endSession = () => {
+    const endSession = (isTimeout: boolean = false) => {
         clearTimeout(timer);
-        nav.navigate(SESSION_END, { history: history });
+        props.navigation.navigate(SESSION_END, { timeout: isTimeout });
     };
 
     return (
         <View style={{
             ...SessionScreenStyle,
-            backgroundColor: getScreenBgByActivity(currentActivity.type)
+            backgroundColor: getScreenBgByActivity(activity.type)
         }}>
-            <SessionActivityTitle color={color} title={getFreeSessionActivityTitle(currentActivity.type)}/>
+            <SessionActivityTitle color={color} title={getFreeSessionActivityTitle(activity.type)}/>
             <TimeTracker seconds={seconds} style={{ marginTop: 50 }}
-                         textStyle={{ color: getActivityColor(currentActivity.type) }}/>
+                         textStyle={{ color: getActivityColor(activity.type) }}/>
+
             <TimerButtonsWrapper>
-
-                <TimerFinishButton onPress={endSession}> End session </TimerFinishButton>
-
-                {!isBreak ?
-                    [
-                        <TimerBreakButton textStyle={{ color: '#963107' }}
-                                          style={{ borderColor: 'transparent', backgroundColor: '#bf623c' }}
-                                          onPress={takeABreak}>Take a break</TimerBreakButton>,
-                        <TimerNextButton style={{ borderColor: color, }}
-                                         textStyle={{ color: color, fontWeight: 'bold' }}
-                                         onPress={changeActivity}>
-                            Change activity
-                        </TimerNextButton>,
-                    ] :
-                    <TimerResumeButton textStyle={{ color: color, fontWeight: 'bold' }}
-                                       style={{ borderColor: color, }}
-                                       onPress={resumeActivity}>Resume</TimerResumeButton>}
-
+                <FinishButton onPress={endSession}>Finish</FinishButton>
+                <BreakButton onPress={takeABreak}>Break</BreakButton>
+                <NextButton textStyle={{ color: color, fontWeight: 'bold' }} onPress={changeActivity}>Next</NextButton>
             </TimerButtonsWrapper>
         </View>
     );
 };
 
-const startTimer = (seconds: number, updateSeconds: (seconds: number) => void): any => {
-    const timer = setTimeout(() => updateSeconds(seconds + 1), 1000);
+const mapDispatchToProps = (dispatch: any) => ({
+    pushActivity: (act: ActivityRecord) => dispatch(pushActivity(act))
+});
 
-    BackHandler.addEventListener('hardwareBackPress', () => {
-        clearTimeout(timer);
-        return true;
-    });
-
-    return timer;
-};
+export const FreeSessionTimer = connect(undefined, mapDispatchToProps)(FreeSession);

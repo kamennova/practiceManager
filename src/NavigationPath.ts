@@ -8,6 +8,7 @@ export const DASHBOARD = 'Dashboard',
     SESSION_START = 'SessionStartScreen',
     PLANNED_SESSION_TIMER = 'PlannedSessionTimer',
     FREE_SESSION_TIMER = 'FreeSessionTimer',
+    FREE_BREAK_TIMER = 'FreeBreakTimer',
     FREE_SESSION_ACTIVITY_CHOICE = 'FreeSessionActivityChoice',
     SESSION_END = 'SessionEndScreen',
     SETTINGS = 'Settings';

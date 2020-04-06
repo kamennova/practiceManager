@@ -1,5 +1,4 @@
-import { Piece, PieceBase } from "../types/Piece";
-import { SessionPlan } from "../types/SessionPlan";
+import { Piece, PieceBase } from "../../types/Piece";
 
 export const ADD_PIECE = 'Add_piece',
     SET_PIECE = 'Set_piece',
@@ -8,11 +7,7 @@ export const ADD_PIECE = 'Add_piece',
     TOGGLE_PIECE_FAV = 'Toggle_piece_fav',
     EDIT_PIECE = 'Edit_piece',
     DELETE_PIECE = 'Delete_piece',
-    SET_PIECES = 'Get_pieces',
-    ADD_PLAN = 'Add_plan',
-    EDIT_PLAN_SCHEDULE = 'Edit_plan_schedule',
-    RENAME_PLAN = 'Rename_plan',
-    DELETE_PLAN = 'Delete_plan';
+    SET_PIECES = 'Get_pieces';
 
 export type SetPiecesAction = {
     type: typeof SET_PIECES,
@@ -54,27 +49,6 @@ export type DeletePieceAction = {
     id: number,
 };
 
-export type AddPlanAction = {
-    type: typeof ADD_PLAN,
-    plan: SessionPlan,
-};
-
-export type RenamePlanAction = {
-    type: typeof RENAME_PLAN,
-    id: number,
-    name: string,
-};
-
-export type EditPlanScheduleAction = {
-    type: typeof EDIT_PLAN_SCHEDULE,
-    plan: SessionPlan,
-}
-
-export type DeletePlanAction = {
-    type: typeof DELETE_PLAN,
-    id: number,
-}
-
 export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, piece }),
     setPiece = (piece: Piece): SetPieceAction => ({ type: SET_PIECE, piece }),
     editPiece = (piece: PieceBase): EditPieceAction => ({ type: EDIT_PIECE, piece }),
@@ -82,11 +56,7 @@ export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, pi
     togglePieceNotifs = (id: number): TogglePieceNotifsAction => ({ type: TOGGLE_PIECE_NOTIFS, id }),
     deletePiece = (id: number): DeletePieceAction => ({ type: DELETE_PIECE, id }),
     setPieces = (pieces: Piece[]): SetPiecesAction => ({ type: SET_PIECES, pieces }),
-    setPiecesMeta = (pieces: PieceBase[]): SetPiecesMetaAction => ({ type: SET_PIECES_META, pieces }),
-    addPlan = (plan: SessionPlan): AddPlanAction => ({ type: ADD_PLAN, plan }),
-    editPlanSchedule = (plan: SessionPlan): EditPlanScheduleAction => ({ type: EDIT_PLAN_SCHEDULE, plan }),
-    renamePlan = (id: number, name: string): RenamePlanAction => ({ type: RENAME_PLAN, id, name }),
-    deletePlan = (id: number): DeletePlanAction => ({ type: DELETE_PLAN, id });
+    setPiecesMeta = (pieces: PieceBase[]): SetPiecesMetaAction => ({ type: SET_PIECES_META, pieces });
 
 export type PieceActionTypes = AddPieceAction
     | SetPiecesMetaAction
@@ -96,6 +66,3 @@ export type PieceActionTypes = AddPieceAction
     | TogglePieceFavAction
     | DeletePieceAction
     | SetPiecesAction;
-export type PlanActionTypes = AddPlanAction | EditPlanScheduleAction | RenamePlanAction | DeletePlanAction;
-
-export type AppActionTypes = PieceActionTypes | PlanActionTypes;

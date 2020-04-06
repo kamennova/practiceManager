@@ -1,13 +1,11 @@
-import { ComplexActivity, SimpleActivity } from "../../types/Activity";
+import { ActivityRecord } from "../../types/ActivityRecord";
 
 type Report = {
-    totalDuration: number
+    totalDuration: number,
 };
 
-export const getSessionReport = (activities: (SimpleActivity | ComplexActivity)[]): Report => {
+export const getSessionReport = (activities: ActivityRecord[]): Report => {
     let dur: number = 0;
-
-    activities.forEach(act => dur += act.duration);
 
     return {
         totalDuration: dur,

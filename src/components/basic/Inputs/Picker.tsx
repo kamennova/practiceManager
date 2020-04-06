@@ -8,13 +8,15 @@ type PickerProps = {
     selected: any,
     style?: ViewStyle & { color?: string },
     wrapperStyle?: ViewStyle,
-    itemStyle?: ViewStyle & { color?: string },
+    itemStyle?: ViewStyle & { color?: string, fontSize?: number },
+    enabled?: boolean,
 }
 
 export const MyPicker = (props: PickerProps) => {
     return (
         <View style={{ ...PickerWrapperStyle, ...props.wrapperStyle }}>
             <Picker
+                enabled={props.enabled}
                 mode='dropdown'
                 onValueChange={props.onValueChange}
                 selectedValue={props.selected}

@@ -13,11 +13,12 @@ import { SessionPlanScreen } from "./components/SessionPlan";
 import { SessionPlanForm } from "./components/SessionPlan/SessionPlanForm";
 import SessionPlansList from "./components/SessionPlan/SessionPlansList";
 import { FreeSessionTimer, PlannedSessionTimer, SessionEndScreen } from "./components/SessionTimer";
+import { FreeBreakTimer } from "./components/SessionTimer/FreeBreakTimer";
 import { FreeSessionActivityChoice } from "./components/SessionTimer/FreeSessionActivityChoice";
 import { SessionStartScreen } from "./components/SessionTimer/SessionStartScreen";
 import { AppSettings } from "./components/Settings/Settings";
 import {
-    DASHBOARD,
+    DASHBOARD, FREE_BREAK_TIMER,
     FREE_SESSION_ACTIVITY_CHOICE,
     FREE_SESSION_TIMER,
     INITIAL_SCREEN,
@@ -56,6 +57,8 @@ export const Main = () => (
     </NavigationContainer>
 );
 
+const timerOptions =  {title: '', headerTransparent: true, headerLeft: () => ''};
+
 const Root = () => (
     <Stack.Navigator
         screenOptions={{
@@ -93,12 +96,14 @@ const Root = () => (
             ({ title: route.params?.mode === ActionType.Edit ? 'Edit plan' : 'Add plan', })}/>
 
         <Stack.Screen name={SESSION_START} component={SessionStartScreen}
-                      options={{ title: '', headerTransparent: true }}/>
+                      options={({ navigation }) => ({
+                          title: '', headerTransparent: true,
+                          headerLeft: () => <HeaderBackButton onPress={() => navigation.pop()}/>,
+                      })}/>
 
-        <Stack.Screen name={PLANNED_SESSION_TIMER} component={PlannedSessionTimer}
-                      options={{ title: '', headerTransparent: true }}/>
-        <Stack.Screen name={FREE_SESSION_TIMER} component={FreeSessionTimer}
-                      options={{ title: '', headerTransparent: true }}/>
+        <Stack.Screen name={PLANNED_SESSION_TIMER} component={PlannedSessionTimer} options={timerOptions}/>
+        <Stack.Screen name={FREE_SESSION_TIMER} component={FreeSessionTimer} options={timerOptions}/>
+        <Stack.Screen name={FREE_BREAK_TIMER} component={FreeBreakTimer} options={timerOptions}/>
         <Stack.Screen name={FREE_SESSION_ACTIVITY_CHOICE} component={FreeSessionActivityChoice}
                       options={{ title: '', headerTransparent: true }}/>
         <Stack.Screen name={SESSION_END} component={SessionEndScreen}

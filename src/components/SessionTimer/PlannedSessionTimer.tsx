@@ -1,40 +1,34 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { BackHandler, Route, View } from "react-native";
+import { Route, View } from "react-native";
 import { SessionScreenStyle } from "../../AppStyle";
-import { SESSION_END } from "../../NavigationPath";
-import { ActivityType, ComplexActivity, SimpleActivity } from "../../types/Activity";
-import {
-    TimerBreakButton,
-    TimerButtonsWrapper,
-    TimerFinishButton,
-    TimerNextButton,
-    TimerResumeButton
-} from "../basic/Buttons/TimerButton";
+import { PLANNED_SESSION_TIMER, SESSION_END } from "../../NavigationPath";
+import { ActivityType } from "../../types/Activity";
+import { PlanActivity } from "../../types/PlanActivity";
+import { SessionPlan } from "../../types/SessionPlan";
+import { BreakButton, FinishButton, NextButton, ResumeButton, TimerButtonsWrapper } from "../basic/Buttons/TimerButton";
 import { TimeTracker } from "../basic/TimeTrackers";
 import { getActivityColor, getScreenBgByActivity } from "./Colors";
 import { getPlannedSessionActivityTitle, SessionActivityTitle } from "./SessionScreenElements";
+import { startCountdown } from "./timer";
 
 type SessionScreenProps = {
-    route: Route,
+    route: Route & { params: { index: number } },
+    plan: SessionPlan,
+    navigation: any,
 };
 
 export const PlannedSessionTimer = (props: SessionScreenProps) => {
-    const [activityIndex, updateActivityIndex] = useState(0),
-        [isUnplannedBreak, updateIsUnplannedBreak] = useState(false),
-        plan = props.route.params.plan;
-    const currentActivity: SimpleActivity | ComplexActivity = plan.schedule[activityIndex];
-    const [seconds, updateSeconds] = useState(currentActivity.duration * 60);
-    const timer = createTimer(seconds, updateSeconds),
-        color = getActivityColor(currentActivity.type),
-        nav = useNavigation(),
-        isBreak = currentActivity.type === ActivityType.Break || isUnplannedBreak;
+    const activity: PlanActivity = props.plan.schedule[props.route.params.index];
+    const [seconds, updateSeconds] = useState(activity.duration * 60);
+    const timer = startCountdown(seconds, updateSeconds),
+        color = getActivityColor(activity.type),
+        isBreak = activity.type === ActivityType.Break;
 
     const changeScreen = () => {
-        if (activityIndex === plan.schedule.length - 1) { // this activity was the last one
-            nav.navigate(SESSION_END);
+        if (props.route.params.index === props.plan.schedule.length - 1) { // this activity was the last one
+            props.navigation.replace(SESSION_END);
         } else {
-            updateActivityIndex(activityIndex + 1);
+            props.navigation.replace(PLANNED_SESSION_TIMER, { index: props.route.params.index + 1 });
         }
     };
 
@@ -44,7 +38,7 @@ export const PlannedSessionTimer = (props: SessionScreenProps) => {
 
     const endSession = () => {
         clearTimeout(timer);
-        nav.navigate(SESSION_END, { history: history });
+        props.navigation.replace(SESSION_END);
     };
 
     const skip = () => {
@@ -56,41 +50,26 @@ export const PlannedSessionTimer = (props: SessionScreenProps) => {
     };
 
     const resume = () => {
-        if (isUnplannedBreak) {
-            updateIsUnplannedBreak(false);
-        }
+
     };
 
     return (
         <View style={{
             ...SessionScreenStyle,
-            backgroundColor: getScreenBgByActivity(currentActivity.type)
+            backgroundColor: getScreenBgByActivity(activity.type)
         }}>
-            <SessionActivityTitle title={getPlannedSessionActivityTitle(currentActivity.type)} color={color}/>
+            <SessionActivityTitle title={getPlannedSessionActivityTitle(activity.type)} color={color}/>
             <TimeTracker seconds={seconds} textStyle={{ color: color }}/>
 
             <TimerButtonsWrapper>
-                <TimerFinishButton onPress={endSession}>End session</TimerFinishButton>
+                <FinishButton onPress={endSession}>Finish</FinishButton>
 
-                {!isBreak ?
-                    [
-                        <TimerBreakButton style={{}} onPress={takeABreak}>Take a break</TimerBreakButton>,
-                        <TimerNextButton style={{}} onPress={skip}>Skip this :(</TimerNextButton>] :
-                    <TimerResumeButton onPress={resume}>Resume</TimerResumeButton>
-                }
+                {!isBreak ? [
+                    <BreakButton style={{}} onPress={takeABreak}>Break</BreakButton>,
+                    <NextButton style={{}} onPress={skip}>Skip(</NextButton>
+                ] : <ResumeButton onPress={resume}>Resume</ResumeButton>}
 
             </TimerButtonsWrapper>
         </View>
     );
-};
-
-const createTimer = (seconds: any, updateSeconds: (seconds: number) => void) => {
-    const timer = setTimeout(() => updateSeconds(seconds - 1), 1000);
-
-    BackHandler.addEventListener('hardwareBackPress', () => {
-        clearTimeout(timer);
-        return true;
-    });
-
-    return timer;
 };
