@@ -287,22 +287,11 @@ export const ModalStyle: ViewStyle = {
 };
 
 export const ModalTitleStyle: TextStyle = {
-    marginBottom: 40,
+    marginBottom: 50,
     textAlign: 'center',
     color: 'black',
     fontSize: 23,
 };
-
-export const PlanOptionStyle = (isSelected: boolean): ViewStyle => ({
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    paddingTop: 15,
-    paddingBottom: 15,
-    marginBottom: 10,
-    borderWidth: isSelected ? 0.4 : 0,
-    borderColor: 'lightgrey'
-});
 
 export const PickerWrapperStyle = {
     borderWidth: 1,
@@ -370,9 +359,11 @@ export const DaysInputStyle: ViewStyle & TextStyle = {
 
 export const FullScreenModalStyle: ViewStyle = {
     ...AppPaddingStyle,
-    alignContent: 'center',
     paddingTop: 220,
-    height: '100%',
+    paddingBottom: 30,
+    justifyContent: 'center',
+    alignContent: 'center',
+    minHeight: '100%',
 };
 
 export const SessionScreenStyle: ViewStyle = {
@@ -541,4 +532,56 @@ export const ActivityForm = StyleSheet.create({
         marginBottom: 15,
     },
     choosePrompt: { fontSize: 15, color: 'darkgrey', fontWeight: 'bold' },
+});
+
+export const SessionStartStyle = StyleSheet.create({
+    wrap: {
+        marginBottom: 30,
+        marginTop: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    pickerWrap: {
+        borderWidth: 0,
+        marginBottom: 0,
+    },
+    icon: {
+        marginRight: 1,
+        width: 19,
+        height: 19,
+    },
+    option: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 17,
+        marginBottom: 12,
+        borderWidth: 2,
+    },
+    noPlanOption: {
+        paddingTop: 15,
+        paddingBottom: 15,
+        flexDirection: 'row'
+    },
+    noPlanText: {
+        fontSize: 15,
+        paddingLeft: 8,
+    },
+    circle: {
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: 'lightgrey',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 20,
+    },
+    dot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: Dark
+    },
 });

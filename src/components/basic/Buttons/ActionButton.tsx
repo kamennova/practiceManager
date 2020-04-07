@@ -10,7 +10,7 @@ type BtnProps = {
     style?: ViewStyle,
 }
 
-const ActionButton = (props: BtnProps) => (
+export const ActionButton = (props: BtnProps) => (
     <TouchableWithoutFeedback onPress={props.onPress}>
         <View style={{ ...style.wrap, ...props.style }}>
             {props.icon}

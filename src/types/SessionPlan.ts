@@ -1,6 +1,7 @@
-import { Activity, ActivityType } from "./Activity";
+import { ActivityType } from "./Activity";
+import { PlanActivity } from "./PlanActivity";
 
-export type SessionSchedule = Activity[];
+export type SessionSchedule = PlanActivity[];
 
 export type SessionPlan = {
     id: number;
@@ -8,7 +9,7 @@ export type SessionPlan = {
     schedule: SessionSchedule; // order is important
 }
 
-const sumActivitiesDuration = (activities: Activity[]): number => {
+const sumActivitiesDuration = (activities: PlanActivity[]): number => {
     let sum: number = 0;
 
     activities.forEach(activity => sum += activity.duration);

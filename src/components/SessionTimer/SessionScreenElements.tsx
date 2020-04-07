@@ -17,7 +17,6 @@ export const SessionActivityTitle = (props: { title: { main: string, small?: str
         {props.title.small !== undefined ? <SmallTitle color={props.color}>{props.title.small}</SmallTitle> : undefined}
         <Text style={{
             fontSize: 35,
-            letterSpacing: 1.2,
             color: props.color !== undefined ? props.color : 'black',
             textAlign: 'center',
         }}>
@@ -41,21 +40,15 @@ const SmallTitle = (props: { children: string, color?: string }) => (
 );
 
 export const getPlannedSessionActivityTitle = (activityType: ActivityType): TimerActivityTitle => {
-    if (activityType === ActivityType.WarmUp) {
-        return {
-            main: 'Warm-up',
-        }
-    }
-
-    return {
-        small: 'polishing',
-        main: activityType,
-    };
-};
-
-export const getFreeSessionActivityTitle = (activityType: ActivityType): TimerActivityTitle => {
     return {
         small: 'time for',
         main: activityType
     }
+};
+
+export const getFreeSessionActivityTitle = (activityType: ActivityType): TimerActivityTitle => {
+    return {
+        small: activityType !== ActivityType.Break ? 'polishing' : 'time for',
+        main: activityType,
+    };
 };

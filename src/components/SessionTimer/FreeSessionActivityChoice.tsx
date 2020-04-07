@@ -1,52 +1,69 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Route, View } from "react-native";
 import { FullScreenModalStyle } from "../../AppStyle";
 import { FREE_SESSION_TIMER } from "../../NavigationPath";
-import { Activity, ActivityType } from "../../types/Activity";
-import { Button } from "../basic/Buttons/Button";
+import { Activity, ActivityType, Exercise, Tonality } from "../../types/Activity";
+import { NoBreakActivity, NoBreakActivityInput } from "../../types/ActivityInput";
+import { ActionButton } from "../basic/Buttons/ActionButton";
+import { MinorButton } from "../basic/Buttons/Button";
 import { ComplexActivityFields } from "../basic/ComplexActivityFields";
 import { MyPicker } from "../basic/Inputs/Picker";
 import { ModalSmallTitle, ModalTitle } from "../basic/Titles/ModalTitle";
 
-const BaseActivity = { type: ActivityType.Break, duration: 3 };
+type ChoiceProps = {
+    route: Route,
+    navigation: any,
+};
 
-export const FreeSessionActivityChoice = (props: { route: Route }) => {
-    const history: Activity[] = props.route.params.history;
-    const [activity, updateActivity] = useState<Activity>(BaseActivity);
+const BaseActivity: Activity = { type: ActivityType.Technique, tonality: 'C#' as Tonality, exercise: Exercise.Scales };
 
-    const nav = useNavigation();
+export const FreeSessionActivityChoice = (props: ChoiceProps) => {
+    const [activity, setActivity] = useState<NoBreakActivityInput>(BaseActivity);
+
+    const setType = (type: NoBreakActivity) => setActivity({ ...activity, type }),
+        setTonality = (tonality: Tonality) => setActivity({ ...activity, tonality }),
+        setExercise = (exercise: Exercise) => setActivity({ ...activity, exercise }),
+        setPieceId = (pieceId: number) => setActivity({ ...activity, pieceId });
 
     const goToTimer = () => {
-        const newHistory = [...history, activity];
-
-        nav.navigate(FREE_SESSION_TIMER, { history: newHistory });
+        props.navigation.navigate(FREE_SESSION_TIMER, { activity: getActivity(activity) });
     };
 
     return (
-        <View style={{
-            ...FullScreenModalStyle,
-            paddingBottom: 100,
-            paddingLeft: 50,
-            paddingRight: 50,
-        }}>
+        <View style={FullScreenModalStyle}>
             <ModalSmallTitle>Free session</ModalSmallTitle>
             <ModalTitle> What are you up for? </ModalTitle>
 
-            <MyPicker items={activityItems} onValueChange={(val) => updateActivity(val)} selected={activity}/>
+            <View style={{ paddingLeft: 50, paddingRight: 50, }}>
+                <MyPicker items={activityItems} onValueChange={setType} selected={activity.type}/>
 
-            {activity !== ActivityType.Break ?
                 <ComplexActivityFields type={activity.type}
-                                       setExercise={() => {}} setPieceId={()=>{}} setTonality={()=>{}}/>
-                : undefined
-            }
+                                       exercise={activity.exercise} setExercise={setExercise}
+                                       pieceId={activity.pieceId} setPieceId={setPieceId}
+                                       tonality={activity.tonality} setTonality={setTonality}/>
+            </View>
 
-            <Button textStyle={{ color: 'blue' }}
-                    style={{ marginBottom: 15, marginTop: 'auto', borderColor: 'blue' }}
-                    onPress={goToTimer}>Start</Button>
-            <Button style={{}} onPress={() => nav.goBack()}>Cancel</Button>
+            <View style={{
+                marginTop: 'auto',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }}>
+                <MinorButton onPress={() => props.navigation.goBack()}>Cancel</MinorButton>
+                <ActionButton style={{ position: 'relative' }} label={'Start'} onPress={goToTimer}/>
+            </View>
         </View>
     );
+};
+
+const getActivity = (act: NoBreakActivityInput): Activity => {
+    switch (act.type) {
+        case ActivityType.Piece:
+        case ActivityType.SightReading:
+            return { type: act.type, pieceId: act.pieceId };
+        case ActivityType.Technique:
+            return { type: act.type, exercise: act.exercise, tonality: act.tonality };
+    }
 };
 
 const activityItems = [ActivityType.Piece, ActivityType.Technique, ActivityType.SightReading].map(

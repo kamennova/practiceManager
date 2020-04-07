@@ -4,10 +4,7 @@ import { ModalTitleStyle } from "../../../AppStyle";
 import { TitleProps } from "./Titles";
 
 export const ModalTitle = (props: TitleProps) => (
-    <Text style={{
-        ...ModalTitleStyle,
-        ...props.style
-    }}>
+    <Text style={ModalTitleStyle}>
         {props.children}
     </Text>
 );

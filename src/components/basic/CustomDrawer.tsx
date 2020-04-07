@@ -16,13 +16,18 @@ export const CustomDrawerContent = (props: DrawerContentComponentProps) => {
         nav.dispatch(StackActions.replace(path));
     };
 
+    const push = (path :string) => () => {
+        nav.dispatch(DrawerActions.closeDrawer());
+        nav.dispatch(StackActions.push(path));
+    };
+
     return (
         <DrawerContentScrollView {...props}>
             <CustomDrawerItem label={'Dashboard'} onPress={jumpTo(DASHBOARD)}/>
             <CustomDrawerItem label={'Repertoire'} onPress={jumpTo(REPERTOIRE)}/>
             <CustomDrawerItem label={'Practice plans'} onPress={jumpTo(SESSION_PLAN_LIST)}/>
             <CustomDrawerItem label={'Settings'} onPress={jumpTo(SETTINGS)}/>
-            <CustomDrawerItem label={'Start session'} onPress={jumpTo(SESSION_START)}/>
+            <CustomDrawerItem label={'Start session'} onPress={push(SESSION_START)}/>
         </DrawerContentScrollView>
     );
 };

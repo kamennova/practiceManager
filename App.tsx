@@ -5,7 +5,7 @@ import { applyMiddleware, createStore } from "redux";
 import thunk from "redux-thunk";
 import { connectToDb } from "./src/db/connection";
 import { Main } from "./src/Main";
-import { practiceManagerApp } from "./src/store/reducers";
+import { practiceManagerApp } from "./src/store/appReducers";
 
 const store = createStore(practiceManagerApp, applyMiddleware(thunk));
 enableScreens();
