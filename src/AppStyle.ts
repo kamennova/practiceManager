@@ -322,9 +322,9 @@ export const TextInputStyle = (colors: ThemeColors) => ({
     width: '100%',
     borderWidth: 1,
     borderColor: colors.border,
-    padding: 8,
-    paddingLeft: 12,
-    paddingRight: 12,
+    padding: 7,
+    paddingLeft: 14,
+    paddingRight: 14,
     marginBottom: 15,
     fontSize: 18,
     color: colors.color,
@@ -356,17 +356,41 @@ export const CheckboxStyle = {
     marginTop: 0,
 };
 
-export const DaysInputStyle = (colors: ThemeColors): ViewStyle & TextStyle => ({
-    width: 'auto',
-    color: colors.color,
-    borderColor: colors.borderFaded,
-    textAlign: 'center',
-    borderWidth: 1,
-    paddingLeft: 3,
-    paddingRight: 3,
-    marginRight: 5,
-    marginLeft: 5,
-    fontSize: 17
+export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
+    wrap: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: 6,
+        paddingBottom: 6,
+    },
+    inputWrap: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 5,
+        paddingRight: 10,
+    },
+    numberBtn: {
+        width: 17,
+        height: 17,
+        backgroundColor: Primary,
+        alignItems: 'center',
+    },
+    btnText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        lineHeight: 19,
+        color: Dark,
+    },
+    input: {
+        width: 'auto',
+        borderWidth: 1,
+        textAlign: 'center',
+        paddingLeft: 3,
+        paddingRight: 3,
+        marginRight: 2,
+        marginLeft: 0,
+        fontSize: 17
+    },
 });
 
 // ---
@@ -492,21 +516,21 @@ export const ActivityBlockStyle = StyleSheet.create({
 });
 
 export const ActivityForm = StyleSheet.create({
-    wrap: {
-        borderWidth: 1,
-        borderColor: 'lightgrey',
-        backgroundColor: '#f3f3f3',
-    },
     formWrap: {
+        // borderWidth: 1,
+        // borderColor: 'lightgrey',
+        // backgroundColor: '#f3f3f3',
         alignItems: 'center',
+        alignContent: 'space-between',
+        justifyContent: 'space-between',
         padding: 8,
     },
     add: {
         width: '100%',
-        padding: 12,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginTop: 10,
     },
     plus: {
         fontSize: 23,
@@ -521,30 +545,42 @@ export const ActivityForm = StyleSheet.create({
     },
     activityBtn: {
         padding: 10,
+        paddingTop: 13,
+        paddingBottom: 13,
         borderWidth: 1,
+        borderRightWidth: 0,
         borderColor: 'lightgrey',
-        backgroundColor: 'white',
-        width: '50%',
-        marginRight: -1,
-        marginBottom: -1,
-        height: 50,
-        justifyContent: 'center',
+        flexBasis: '25%',
+        justifyContent: 'flex-start',
         alignItems: 'center'
     },
     activityBtnText: {
-        fontSize: 11,
-        textTransform: 'uppercase',
-        letterSpacing: 1,
-        fontWeight: 'bold',
-        color: Dark
+        letterSpacing: 0.1,
+        textAlign: 'center',
+        fontSize: 12,
+        fontFamily: 'Roboto',
+        fontWeight: '400',
+        marginTop: 5,
     },
     btnWrap: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        alignItems: 'stretch',
+        width: '100%',
+        alignContent: 'space-between',
+        justifyContent: 'space-between',
         marginBottom: 15,
     },
-    choosePrompt: { fontSize: 15, color: 'darkgrey', fontWeight: 'bold' },
+    choosePrompt: {
+        fontSize: 15,
+        color: 'darkgrey',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    breakText: {
+        fontSize: 17,
+        marginTop: 10,
+        marginBottom: 10,
+    },
 });
 
 export const SessionStartStyle = StyleSheet.create({

@@ -2,15 +2,18 @@ import React, { useState } from "react";
 import { Text, TouchableNativeFeedback, View } from "react-native";
 import { ActivityForm as styles } from "../../AppStyle";
 import { Activity, ActivityType, Exercise, Tonality } from "../../types/Activity";
+import { ActivityInput } from "../../types/ActivityInput";
+import { PlanActivity } from "../../types/PlanActivity";
+import { ActivityBtn } from "../basic/Buttons/ActivityButton";
 import { MinorButton } from "../basic/Buttons/Button";
 import { ComplexActivityFields } from "../basic/ComplexActivityFields";
 import { NumberInput } from "../basic/Inputs/NumberInput";
 
 type BlockFormProps = {
-    onSave: (_: Activity) => void,
+    onSave: (_: PlanActivity) => void,
 }
 
-const BaseActivity: Activity = { type: ActivityType.Break, duration: 3 };
+const BaseActivity: ActivityInput & { duration: number } = { type: ActivityType.Break, duration: 3 };
 
 export const ActivityForm = (props: BlockFormProps) => {
     const [showForm, setShowForm] = useState(false);
@@ -37,48 +40,39 @@ export const ActivityForm = (props: BlockFormProps) => {
     };
 
     return (
-        <View style={styles.wrap}>
-            <View style={styles.formWrap}>
-                {showForm ?
-                    [
-                        <View style={{ flexDirection: 'row' }}>
+        <View>
+            {showForm ?
+                <View style={styles.formWrap}>
+                    <View style={{alignItems: 'center' }}>
 
-                            {activity.type === ActivityType.Break ? <Text>Break</Text> :
-                                <ComplexActivityFields type={activity.type}
-                                                       exercise={activity.exercise} setExercise={setExercise}
-                                                       tonality={activity.tonality} setTonality={setTonality}
-                                                       pieceId={activity.pieceId} setPieceId={setPieceId}/>}
+                        {activity.type === ActivityType.Break ? <Text style={styles.breakText}>Break</Text> :
+                            <ComplexActivityFields type={activity.type} style={{marginBottom: 10}}
+                                                   exercise={activity.exercise} setExercise={setExercise}
+                                                   tonality={activity.tonality} setTonality={setTonality}
+                                                   pieceId={activity.pieceId} setPieceId={setPieceId}/>}
 
-                            <NumberInput onChange={setDuration} value={activity.duration} measure='m'
-                                         measurePlural='m'/>
-                        </View>,
-                        <FormButtons onCancel={() => reset()} onSave={onSave}/>
-                    ]
-                    : <ActivityChoice onChooseType={chooseType}/>
-                }
-            </View>
+                        <NumberInput onChange={setDuration} value={activity.duration} measure='m' measurePlural='m'/>
+                    </View>
+                    <FormButtons onCancel={reset} onSave={onSave}/>
+                </View> : undefined}
+
+            {!showForm ? <ActivityChoice onChooseType={chooseType}/> : undefined}
+
         </View>
     );
 };
 
 const ActivityChoice = (props: { onChooseType: (_: ActivityType) => void }) => (
-    <View style={styles.formWrap}>
+    <View>
         <View style={styles.btnWrap}>
-            {activities.map(act => <ActivityBtn label={act} onPress={() => props.onChooseType(act)}/>)}
+            {activities.map((act, i) =>
+                <ActivityBtn type={act} onPress={() => props.onChooseType(act)} isLast={i === activities.length-1}/>)}
         </View>
         <Text style={styles.choosePrompt}>Choose activity</Text>
     </View>
 );
 
 const activities = [ActivityType.Technique, ActivityType.Piece, ActivityType.SightReading, ActivityType.Break];
-
-const ActivityBtn = (props: { label: string, onPress: () => void }) => (
-    <TouchableNativeFeedback onPress={props.onPress}>
-        <View style={styles.activityBtn}>
-            <Text style={styles.activityBtnText}>{props.label}</Text>
-        </View>
-    </TouchableNativeFeedback>
-);
 
 const FormButtons = (props: { onSave: () => void, onCancel: () => void }) => (
     <View style={styles.add}>

@@ -1,10 +1,12 @@
 import React from "react";
-import { View } from "react-native";
+import { View, ViewStyle } from "react-native";
 import { ActivityType, ComplexActivityType, Exercise, Tonality } from "../../types/Activity";
 import { MyPicker } from "./Inputs/Picker";
+import { PiecePicker } from "./Inputs/PiecePicker";
 
 type FieldsProps = {
     type: ComplexActivityType,
+    style?: ViewStyle,
 
     exercise?: Exercise,
     setExercise: (_: Exercise) => void,
@@ -16,7 +18,7 @@ type FieldsProps = {
 };
 
 export const ComplexActivityFields = (props: FieldsProps) => (
-    <View style={{flexDirection: 'row'}}>
+    <View style={{ flexDirection: 'row', flexShrink: 1, ...props.style }}>
         {props.type === ActivityType.Technique ? [
                 <MyPicker selected={props.exercise}
                           items={exercises}
@@ -28,7 +30,7 @@ export const ComplexActivityFields = (props: FieldsProps) => (
                           onValueChange={props.setTonality}
                           wrapperStyle={{ marginBottom: 0 }}/>
             ] :
-            <MyPicker items={[]} selected={0} onValueChange={props.setPieceId}/>}
+            <PiecePicker onChoose={props.setPieceId}/>}
     </View>
 );
 

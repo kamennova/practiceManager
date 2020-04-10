@@ -9,6 +9,9 @@ export type NoBreakActivityInput = {
     pieceId?: number,
 };
 
-export type ActivityInput = NoBreakActivityInput & {
-    type: ActivityType.Break | ActivityType,
+export type ActivityInput = {
+    type: ActivityType,
+    exercise?: Exercise,
+    tonality?: Tonality,
+    pieceId?: number,
 };
