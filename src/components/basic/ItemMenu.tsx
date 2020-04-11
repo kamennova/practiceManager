@@ -1,6 +1,7 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, TouchableNativeFeedback, View, ViewStyle } from "react-native";
 import { ItemMenuStyle } from "../../AppStyle";
+import { ThemeColors, useTheme } from "../../theme";
 
 export type MenuOption = {
     label: string,
@@ -9,7 +10,7 @@ export type MenuOption = {
 
 export const ItemMenu = (props: { options: MenuOption[], prevFunc?: () => void, style?: ViewStyle }) => {
     return (
-        <View style={{...ItemMenuStyle, ...props.style}}>
+        <View style={{...ItemMenuStyle(useTheme().colors), ...props.style}}>
             <FlatList data={props.options} renderItem={({ item }) => (<OptionItem label={item.label} onPress={() => {
                 item.func();
                 if (props.prevFunc !== undefined) props.prevFunc();
@@ -18,7 +19,9 @@ export const ItemMenu = (props: { options: MenuOption[], prevFunc?: () => void, 
     );
 };
 
-export const OptionItem = (props: { label: string, onPress: (_: any) => any }) => (
+export const OptionItem = (props: { label: string, onPress: (_: any) => any }) => {
+    const styles = getStyles(useTheme().colors);
+    return (
     <TouchableNativeFeedback onPress={props.onPress}>
         <View style={styles.wrap}>
             <Text style={styles.text}>
@@ -26,9 +29,9 @@ export const OptionItem = (props: { label: string, onPress: (_: any) => any }) =
             </Text>
         </View>
     </TouchableNativeFeedback>
-);
+)};
 
-const styles = StyleSheet.create({
+const getStyles = (colors: ThemeColors) => StyleSheet.create({
     wrap: { padding: 10, paddingLeft: 16, paddingRight: 16 },
-    text: { fontSize: 17 }
+    text: { fontSize: 17, color: colors.color },
 });

@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { FlatList, Image, Text, TouchableNativeFeedback, View } from "react-native";
-import { ListItemStyle, PieceListStyle as styles } from "../../AppStyle";
+import { FlatList, Image, Text, TextStyle, TouchableNativeFeedback, View } from "react-native";
+import { ListItemStyle, PieceListStyle as stylesFunc } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
+import { Theme, useTheme } from "../../theme";
 import { PieceBase } from "../../types/Piece";
 import { NothingAlert } from "../basic/Alerts/NothingAlert";
 
@@ -20,34 +21,41 @@ export const PiecesList = (props: { pieces: PieceBase[] }) => {
     );
 };
 
-const PieceItem = (props: PieceBase & { onPress: () => void }) => (
-    <TouchableNativeFeedback onPress={props.onPress}>
-        <View style={ListItemStyle}>
-            <View style={styles.itemWrap}>
-                <PieceName>
-                    {props.name}
-                </PieceName>
-                {props.authors.length > 0 ? <PieceAuthor authors={props.authors}/> : undefined}
+const PieceItem = (props: PieceBase & { onPress: () => void }) => {
+    const theme = useTheme();
+    const styles = stylesFunc(theme.colors, theme.theme);
+
+    return (
+        <TouchableNativeFeedback onPress={props.onPress}>
+            <View style={ListItemStyle(theme.colors)}>
+                <View style={styles.itemWrap}>
+                    <PieceName style={styles.pieceName}>
+                        {props.name}
+                    </PieceName>
+                    {props.authors.length > 0 ?
+                        <PieceAuthor style={styles.author} authors={props.authors}/> : undefined}
+                </View>
+                {props.imageUri !== undefined && props.imageUri !== '' ? [
+                    <Image style={styles.image} source={{ uri: props.imageUri }}/>,
+                    <Image source={theme.theme !== Theme.Dark ? require('../../../assets/grad_white.png') :
+                        require('../../../assets/grad_dark.png')}
+                           style={{ ...styles.imageTop }}/>,
+
+
+                ] : undefined}
             </View>
-            {props.imageUri !== undefined && props.imageUri !== '' ? [
-                <Image style={styles.image} source={{ uri: props.imageUri }}/>,
-                <Image source={require('../../../assets/layer.png')}
-                       style={styles.imageTop}/>
-            ] : undefined
-            }
+        </TouchableNativeFeedback>
+    )
+};
 
-        </View>
-    </TouchableNativeFeedback>
-);
-
-const PieceName = (props: { children: string }) => (
-    <Text style={styles.pieceName}>
+const PieceName = (props: { children: string, style?: TextStyle }) => (
+    <Text style={props.style}>
         {props.children}
     </Text>
 );
 
-const PieceAuthor = (props: { authors: string[] }) => (
-    <Text style={styles.author}>
+const PieceAuthor = (props: { authors: string[], style?: TextStyle }) => (
+    <Text style={props.style}>
         {props.authors.reduce((a, b) => a + ', ' + b)}
     </Text>
 );

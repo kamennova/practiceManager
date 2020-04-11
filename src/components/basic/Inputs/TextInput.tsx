@@ -1,6 +1,7 @@
 import React from 'react';
 import { TextInput, ViewStyle } from "react-native";
-import { TextInputStyle } from "../../../AppStyle";
+import { Dark, TextInputStyle } from "../../../AppStyle";
+import { useTheme } from "../../../theme";
 
 type InputProps = {
     autoFocus?: boolean,
@@ -12,13 +13,15 @@ type InputProps = {
     keyboardType?: 'default' | 'numeric';
 };
 
-export const MyTextInput = (props: InputProps) => (
-    <TextInput style={{ ...TextInputStyle, borderColor: props.isRequired ? 'blue' : 'lightgrey', ...props.style }}
+export const MyTextInput = (props: InputProps) => {
+    const colors = useTheme().colors;
+
+    return (
+    <TextInput style={{ ...TextInputStyle(colors), borderColor: props.isRequired ? Dark : colors.borderFaded, ...props.style }}
                value={props.value}
                autoFocus={props.autoFocus}
                onChangeText={props.onChangeText}
                placeholder={props.placeholder}
-               placeholderTextColor={'grey'}
-               keyboardType={props.keyboardType}
-    />
-);
+               placeholderTextColor={colors.colorFaded}
+               keyboardType={props.keyboardType} />
+)};

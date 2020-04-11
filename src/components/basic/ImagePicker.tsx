@@ -4,8 +4,10 @@ import { ImagePickerResult } from "expo-image-picker";
 import * as Permissions from 'expo-permissions';
 import React from 'react';
 import { Image, TouchableWithoutFeedback, View } from "react-native";
-import { ImagePickerStyle as styles } from "../../AppStyle";
+import { ImagePickerStyle as getStyles } from "../../AppStyle";
+import { useTheme } from "../../theme";
 import { TrashIcon } from "./icons/Trash";
+import {Ionicons} from '@expo/vector-icons';
 
 type PickerProps = {
     onChoose: (_: ImagePickerResult) => void,
@@ -14,6 +16,9 @@ type PickerProps = {
 };
 
 export const MyImagePicker = (props: PickerProps) => {
+    const colors = useTheme().colors;
+    const styles = getStyles(colors);
+
     const getPermission = async () => {
         if (Constants.platform !== undefined && Constants.platform.ios) {
             await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -39,20 +44,24 @@ export const MyImagePicker = (props: PickerProps) => {
                     <Layer/>,
                     <DeleteIcon onDelete={props.onDelete}/>
                 ] : undefined}
-                <PickImageButton/>
+                <PickImageButton color={colors.color}/>
             </View>
         </TouchableWithoutFeedback>
     );
 };
 
-const Layer = () => (<View style={styles.layer}/>);
+const Layer = () => (
+    <View style={getStyles(useTheme().colors).layer}/>
+);
 
-const PickImageButton = () => (<Image style={styles.btnPic} source={require('../../../assets/photo.png')}/>);
+const PickImageButton = (props: {color: string}) => (<Ionicons size={30} color={props.color} style={getStyles().btnPic} name='md-image'/>);
 
-const DeleteIcon = (props: { onDelete: () => void }) => (
+const DeleteIcon = (props: { onDelete: () => void }) => {
+    const styles = getStyles(useTheme().colors);
+    return (
     <TouchableWithoutFeedback onPress={props.onDelete}>
         <View style={styles.trashWrap}>
             <TrashIcon style={styles.trash}/>
         </View>
     </TouchableWithoutFeedback>
-);
+)};

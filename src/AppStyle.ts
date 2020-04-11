@@ -1,4 +1,7 @@
-import { Dimensions, TextStyle, ViewStyle, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { DEFAULT_THEME, Theme, ThemeColors } from "./theme";
+
+const DefaultColors = ThemeColors[DEFAULT_THEME];
 
 const FONT_SIZE = 16;
 
@@ -6,57 +9,60 @@ export const AppSidePadding = 17,
     TotalHeaderHeight = 86;
 
 export const Primary = '#6895ff',
-    Secondary = 'orange',
-    Dark = '#2d60d8',
-    AppBg = '#f1f1f3',
-    AppBgOpacity = 'rgba(241, 241, 243, 0.5)';
+    Dark = '#2d60d8';
 
 export const AppPaddingStyle = {
     paddingLeft: AppSidePadding,
     paddingRight: AppSidePadding
 };
 
-export const AppHeaderStyle = (transparent: boolean = false): ViewStyle => ({
-    borderBottomWidth: transparent ? 0 : 1,
-    borderBottomColor: 'lightgrey',
-    backgroundColor: AppBg,
+export const AppHeaderStyle = (colors: ThemeColors, transparent: boolean = false): ViewStyle => ({
+    borderBottomWidth: transparent ? 0 : 0,
+    borderBottomColor: colors.border,
+    backgroundColor: colors.appBg,
     shadowOpacity: 0,
-    elevation: 0
+    elevation: 0,
 });
 
-export const HeaderIconWrap: ViewStyle = {
+export const HeaderIconWrap = (colors: ThemeColors): ViewStyle => ({
     width: 35,
     height: 35,
-    backgroundColor: AppBgOpacity,
+    backgroundColor: colors.appBgFaded,
     borderRadius: 17,
     alignItems: 'center',
     justifyContent: 'center',
-};
+});
 
-const ItemHeight = 66,
+const ItemHeight = 70,
+    ItemBorderRadius = 0,
     ImagePadding = 0,
-    ImageSize = ItemHeight - 2 - ImagePadding * 2;
+    ImageHeight = ItemHeight - 2 - ImagePadding * 2,
+    ImageWidth = 170 - ImagePadding;
 
-export const PieceListStyle = StyleSheet.create({
+export const PieceListStyle = (colors: ThemeColors, theme: Theme = DEFAULT_THEME) => StyleSheet.create({
     author: {
         fontSize: 13,
-        color: 'grey',
+        color: colors.colorFaded,
     },
     pieceName: {
         fontSize: 17,
         marginBottom: 3,
+        color: colors.color,
     },
     image: {
-        width: ImageSize,
-        height: ImageSize,
+        width: ImageWidth,
+        height: ImageHeight,
         marginLeft: 'auto',
         marginRight: ImagePadding,
+        opacity: theme === Theme.Dark ? 0.7 : 1,
+        borderTopRightRadius: ItemBorderRadius,
+        borderBottomRightRadius: ItemBorderRadius,
     },
     imageTop: {
-        width: ImageSize,
-        height: ImageSize,
+        width: 200,
+        height: ImageHeight,
         position: 'absolute',
-        right: 2 + ImagePadding
+        right: -200 + ImageWidth
     },
     itemWrap: { padding: 10, paddingLeft: 12 },
 });
@@ -66,19 +72,19 @@ export const ListItemTitleStyle = {
     marginBottom: 3,
 };
 
-export const ListItemStyle: ViewStyle = {
+export const ListItemStyle = (colors: ThemeColors): ViewStyle => ({
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.08)',
-    backgroundColor: AppBg,
+    borderColor: colors.borderFaded,
+    backgroundColor: colors.appBg,
     marginBottom: 10,
     flexDirection: 'row',
     height: ItemHeight,
     alignItems: 'center',
-};
+    borderRadius: ItemBorderRadius,
+});
 
 export const ButtonStyle: ViewStyle = {
     minWidth: 200,
-    // width: '100%',
     flexGrow: 0,
     alignSelf: 'center',
     alignItems: 'center',
@@ -87,7 +93,6 @@ export const ButtonStyle: ViewStyle = {
     paddingBottom: 10,
     paddingLeft: 25,
     paddingRight: 25,
-    // backgroundColor: 'lightgrey',
     borderWidth: 1,
     borderColor: 'lightgrey',
 };
@@ -123,59 +128,62 @@ export const MinorButtonStyle: TextStyle = {
     padding: 6,
 };
 
-export const DirectionButtonStyle = (isDisabled: boolean = false): ViewStyle => ({
+export const DirectionButtonStyle = (colors: ThemeColors = DefaultColors, isDisabled: boolean = false): ViewStyle => ({
     width: PrimaryBtnHeight,
     height: PrimaryBtnHeight,
-    backgroundColor: AppBg,
+    backgroundColor: colors.appBg,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: 'lightgrey',
+    borderColor: colors.borderFaded,
     opacity: isDisabled ? 0.4 : 1,
 });
 
-export const FeaturesStyle = StyleSheet.create({
-    label: { fontSize: 13, color: 'darkgrey', },
-    val: { fontSize: 15, marginBottom: 4 },
+export const FeaturesStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
+    label: { fontSize: 13, color: colors.colorFaded, },
+    val: { fontSize: 15, marginBottom: 4, color: colors.color },
     wrap: {
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         marginTop: 14,
-        borderColor: 'lightgrey',
+        borderColor: colors.border,
     }
 });
 
-export const NoteText = {
+export const NoteText = (colors: ThemeColors) => ({
     fontSize: FONT_SIZE,
-    color: 'rgba(0, 0, 0, 0.8)',
-};
+    color: colors.colorFaded,
+});
 
 // ---
 
-export const NotifStyle = StyleSheet.create({
+export const SectionRowStyle = (colors: ThemeColors) => StyleSheet.create({
     row: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-
         borderBottomWidth: 1,
-        borderColor: 'rgba(0, 0, 0, 0.08)',
+        borderColor: colors.borderFaded,
         paddingBottom: 12,
         paddingTop: 12,
         paddingRight: 5,
     },
-    label: { fontSize: FONT_SIZE },
-    inputWrap: { flexDirection: 'row' }
+    label: {
+        fontSize: FONT_SIZE,
+        color: colors.color,
+    },
+    inputWrap: {
+        flexDirection: 'row',
+    }
 });
-
 
 // ---
 
-export const DrawerStyle: ViewStyle = {
-    backgroundColor: 'lightgrey',
-    justifyContent: 'center'
-};
+export const DrawerStyle = (colors: ThemeColors): ViewStyle => ({
+    backgroundColor: colors.appBg,
+    justifyContent: 'center',
+});
 
 export const DrawerContentStyle = {
     marginTop: 'auto',
@@ -187,7 +195,6 @@ export const DrawerContentStyle = {
 export const ActivityViewStyle: ViewStyle = {
     borderWidth: 1,
     borderColor: 'black',
-    // borderRadius: 5,
     padding: 14,
     paddingLeft: 12,
     paddingRight: 12,
@@ -203,31 +210,38 @@ export const BreakViewStyle: ViewStyle = {
     borderWidth: 0,
 };
 
-export const ActionBtnStyle = StyleSheet.create({
-    wrap: {
-        position: 'absolute',
-        right: AppSidePadding,
-        flexDirection: 'row',
-        height: 50,
-        paddingLeft: 19,
-        paddingRight: 25,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderColor: Primary,
-        borderWidth: 2,
-        backgroundColor: AppBg,
-        elevation: 2,
-    },
-    text: { color: Dark, fontSize: 17, fontWeight: '700' },
-    save: { top: Dimensions.get('window').height - 40 },
-    check: { width: 19, height: 19, marginRight: 5 },
-    add: { top: Dimensions.get('window').height - 130, },
-    plus: { color: Dark, fontSize: 25, lineHeight: 32, marginRight: 8 },
-});
+export const ActionBtnStyle = (theme: Theme = DEFAULT_THEME) =>
+    StyleSheet.create({
+        wrap: {
+            flexDirection: 'row',
+            height: 50,
+            alignSelf: 'flex-start',
+            paddingLeft: 19,
+            paddingRight: 25,
+            alignItems: 'center',
+            borderColor: theme !== Theme.Dark ? Primary : Dark,
+            borderWidth: 2,
+            backgroundColor: ThemeColors[theme].appBgLight,
+            elevation: 2,
+        },
+        text: { color: Dark, fontSize: 17, fontWeight: '700' },
+        save: {
+            position: 'absolute',
+            right: AppSidePadding,
+            top: Dimensions.get('window').height - 40,
+        },
+        check: { width: 19, height: 19, marginRight: 5 },
+        add: {
+            position: 'absolute',
+            right: AppSidePadding,
+            top: Dimensions.get('window').height - 130,
+        },
+        plus: { color: Dark, fontSize: 25, lineHeight: 32, marginRight: 8 },
+    });
 
 const SIZE = 240;
 
-export const ImagePickerStyle = StyleSheet.create({
+export const ImagePickerStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     picker: {
         width: '100%',
         height: SIZE + 1,
@@ -236,12 +250,10 @@ export const ImagePickerStyle = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: 20,
         borderBottomWidth: 1,
-        borderColor: 'lightgrey',
+        borderColor: colors.borderFaded,
     },
     pic: { width: '100%', height: SIZE },
     btnPic: {
-        width: 30,
-        height: 30,
         position: 'absolute',
         bottom: (SIZE - TotalHeaderHeight) / 2
     },
@@ -256,21 +268,21 @@ export const ImagePickerStyle = StyleSheet.create({
         position: 'absolute',
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        backgroundColor: colors.appBgFaded,
     }
 });
 
-export const ItemBtnsStyle: ViewStyle = {
+export const ItemBtnsStyle = (colors: ThemeColors): ViewStyle => ({
     position: 'absolute',
     top: Dimensions.get('window').height - 50,
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'center',
-    backgroundColor: AppBg,
+    backgroundColor: colors.appBg,
     padding: AppSidePadding,
     paddingTop: 15,
     paddingBottom: 0,
-};
+});
 
 export const ModalStyle: ViewStyle = {
     padding: 25,
@@ -282,7 +294,6 @@ export const ModalStyle: ViewStyle = {
     alignSelf: 'center',
     justifyContent: 'center',
     margin: 'auto',
-    // marginTop: 270,
     minWidth: Dimensions.get('screen').width * 0.8,
 };
 
@@ -293,29 +304,31 @@ export const ModalTitleStyle: TextStyle = {
     fontSize: 23,
 };
 
-export const PickerWrapperStyle = {
+export const PickerWrapperStyle = (colors: ThemeColors = DefaultColors) => ({
     borderWidth: 1,
     width: '100%',
     flexShrink: 1,
-    borderColor: 'lightgrey',
+    borderColor: colors.borderFaded,
     marginBottom: 20,
-};
+});
 
-export const PickerStyle = {
+export const PickerStyle = (colors: ThemeColors = DefaultColors) => ({
     width: '100%',
     flexShrink: 1,
-};
+    backgroundColor: colors.appBg,
+});
 
-export const TextInputStyle = {
+export const TextInputStyle = (colors: ThemeColors) => ({
     width: '100%',
     borderWidth: 1,
-    borderColor: 'lightgrey',
+    borderColor: colors.border,
     padding: 8,
     paddingLeft: 12,
     paddingRight: 12,
     marginBottom: 15,
     fontSize: 18,
-};
+    color: colors.color,
+});
 
 export const TagInputTagStyle: ViewStyle = {
     flexDirection: 'row',
@@ -343,9 +356,10 @@ export const CheckboxStyle = {
     marginTop: 0,
 };
 
-export const DaysInputStyle: ViewStyle & TextStyle = {
+export const DaysInputStyle = (colors: ThemeColors): ViewStyle & TextStyle => ({
     width: 'auto',
-    borderColor: 'lightgrey',
+    color: colors.color,
+    borderColor: colors.borderFaded,
     textAlign: 'center',
     borderWidth: 1,
     paddingLeft: 3,
@@ -353,7 +367,7 @@ export const DaysInputStyle: ViewStyle & TextStyle = {
     marginRight: 5,
     marginLeft: 5,
     fontSize: 17
-};
+});
 
 // ---
 
@@ -398,7 +412,7 @@ export const TagTextStyle: TextStyle = {
     color: 'grey',
 };
 
-export const ItemMenuStyle: ViewStyle = {
+export const ItemMenuStyle = (colors: ThemeColors = DefaultColors): ViewStyle => ({
     position: 'absolute',
     right: AppSidePadding,
     top: 40,
@@ -407,22 +421,22 @@ export const ItemMenuStyle: ViewStyle = {
     paddingTop: 5,
     paddingBottom: 5,
     borderWidth: 1,
-    borderColor: 'lightgrey',
-    backgroundColor: AppBg,
-};
+    borderColor: colors.borderFaded,
+    backgroundColor: colors.appBg,
+});
 
-export const SmallModalStyle: ViewStyle = {
+export const SmallModalStyle = (colors: ThemeColors = DefaultColors): ViewStyle => ({
     position: 'absolute',
     top: '30%',
     width: Dimensions.get('window').width * 0.8,
     marginLeft: Dimensions.get('window').width * 0.1,
     borderWidth: 1,
-    borderColor: 'lightgrey',
+    borderColor: colors.borderFaded,
     padding: 18,
     paddingTop: 25,
-    backgroundColor: AppBg,
+    backgroundColor: colors.appBg,
     alignItems: 'center',
-};
+});
 
 export const PlanBuilderStyle = StyleSheet.create({
     add: {
@@ -484,7 +498,6 @@ export const ActivityForm = StyleSheet.create({
         backgroundColor: '#f3f3f3',
     },
     formWrap: {
-        // flexDirection: 'row',
         alignItems: 'center',
         padding: 8,
     },
@@ -584,4 +597,26 @@ export const SessionStartStyle = StyleSheet.create({
         borderRadius: 4,
         backgroundColor: Dark
     },
+});
+
+export const ThemeOptionStyle = (colors: ThemeColors, isActive: boolean) => StyleSheet.create({
+    option: {
+        backgroundColor: colors.appBg,
+        padding: 20,
+        paddingBottom: 10,
+        borderWidth: 1,
+        borderColor: colors.border,
+        flexGrow: 1,
+        alignItems: 'center',
+        width: 100,
+        marginRight: 20,
+    },
+    name: { color: colors.color },
+    radio: {
+        borderRadius: 10,
+        width: 10,
+        height: 10,
+        backgroundColor: isActive ? Primary : 'lightgrey',
+        marginTop: 15,
+    }
 });

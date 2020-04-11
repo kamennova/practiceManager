@@ -5,7 +5,7 @@ import { ScreenWrapper } from "../basic/ScreenWrapper";
 
 export const Dashboard = () => {
   return (
-      <ScreenWrapper title='Dashboard'>
+      <ScreenWrapper>
           <View style={{
               ...AppPaddingStyle,
               paddingTop: 15,
