@@ -7,6 +7,7 @@ import { getPieceById } from "../../db/db";
 import { PIECE, PIECE_FORM, REPERTOIRE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";
+import { ThemeColors, useTheme } from "../../theme";
 import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
 import { Piece, PieceBase } from "../../types/Piece";
@@ -102,6 +103,8 @@ const PieceComponent = (props: PieceScreenProps) => {
     // @ts-ignore
     const prev = props.sideIds.prev !== undefined ? () => nav.dispatch(replace(props.sideIds.prev)) : undefined;
 
+    const styles = getStyles(useTheme().colors);
+
     return (
         <ScreenWrapper itemMenu={menu} fav={{ val: piece.isFavourite, update: updatePieceFav }}>
 
@@ -142,22 +145,30 @@ const PieceComponent = (props: PieceScreenProps) => {
 
 const replace = (id: number) => StackActions.replace(PIECE, { id });
 
-const PieceAuthors = (props: { authors: string[] }) => (
-    <Text style={styles.authors}>
-        {props.authors.join(', ')}
-    </Text>
-);
+const PieceAuthors = (props: { authors: string[] }) => {
+    const colors = useTheme().colors;
+    return (
+        <Text style={getStyles(colors).authors}>
+            {props.authors.join(', ')}
+        </Text>
+    )
+};
 
-const PieceImage = (props: { uri: string }) => (
-    <Image source={{ uri: props.uri }} style={styles.pic}/>
-);
+const PieceImage = (props: { uri: string }) => {
+    const styles = getStyles(useTheme().colors);
+    return (
+        <Image source={{ uri: props.uri }} style={styles.pic}/>
+    )
+};
 
 const PieceScreen = connect(mapStateToProps, mapDispatchToProps)(PieceComponent);
 export default PieceScreen;
 
-const styles = StyleSheet.create({
-    pic: { width: '100%', height: 300 },
-    authors: { fontSize: 15, marginBottom: 15, color: 'grey' },
-    primary: { marginRight: 15, marginLeft: 15 },
-    scroll: { paddingBottom: 65 }
-});
+const getStyles = (colors: ThemeColors) => {
+    return StyleSheet.create({
+        pic: { width: '100%', height: 300 },
+        authors: { fontSize: 15, marginBottom: 15, color: colors.colorFaded },
+        primary: { marginRight: 15, marginLeft: 15 },
+        scroll: { paddingBottom: 65 }
+    })
+};

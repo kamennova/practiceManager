@@ -6,19 +6,44 @@ import thunk from "redux-thunk";
 import { connectToDb } from "./src/db/connection";
 import { Main } from "./src/Main";
 import { practiceManagerApp } from "./src/store/appReducers";
+import { DEFAULT_THEME, getThemeColors, readTheme, recordTheme, Theme, ThemeContext } from "./src/theme";
 
 const store = createStore(practiceManagerApp, applyMiddleware(thunk));
 enableScreens();
 
-class App extends Component {
+class App extends Component<{}, { theme: Theme }> {
+    state = {
+        theme: DEFAULT_THEME,
+    };
+
     async componentDidMount() {
+        const theme = await readTheme();
+
+        if (theme !== null) {
+            this.setState({ theme });
+        } else {
+            await this.setTheme(DEFAULT_THEME);
+        }
+
         await connectToDb();
     }
+
+    setTheme = async (theme: Theme) => {
+        this.setState({ theme });
+        await recordTheme(theme);
+    };
 
     render() {
         return (
             <Provider store={store}>
-                <Main/>
+                <ThemeContext.Provider
+                    value={{
+                        theme: this.state.theme,
+                        setTheme: this.setTheme,
+                        colors: getThemeColors(this.state.theme),
+                    }}>
+                    <Main/>
+                </ThemeContext.Provider>
             </Provider>
         );
     }
