@@ -1,7 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from 'react';
 import { TouchableWithoutFeedback, View } from "react-native";
-import { DotsIcon } from "./icons/Header";
+import { HeaderIconWrap } from "../../AppStyle";
+import { useTheme } from "../../theme";
+import { DotsIcon } from "./icons/DotsIcon";
 import { ItemFav } from "./ItemFav";
 import { ItemMenu, MenuOption } from "./ItemMenu";
 
@@ -23,7 +25,8 @@ export const ScreenWrapper = (props: WrapperProps) => {
                 {props.fav !== undefined && !showMenu ?
                     <ItemFav isFav={props.fav.val} onPress={props.fav.update}/> : undefined}
                 {(props.itemMenu !== undefined && !showMenu) ?
-                    <DotsIcon onPress={() => updateShowMenu(true)}/> : undefined}
+                    <DotsIcon wrapStyle={{ ...HeaderIconWrap(useTheme().colors), marginLeft: 'auto' }}
+                              onPress={() => updateShowMenu(true)}/> : undefined}
             </View>
         ),
     });
@@ -31,9 +34,9 @@ export const ScreenWrapper = (props: WrapperProps) => {
     return (
         <View style={{ minHeight: '100%' }}>
             {props.children}
-            {showMenu ?
+            {showMenu && props.itemMenu !== undefined ?
                 [<Layer onPress={() => updateShowMenu(false)}/>,
-                    <ItemMenu prevFunc={() => updateShowMenu(false)} options={props.itemMenu}/>]
+                    <ItemMenu postFunc={() => updateShowMenu(false)} options={props.itemMenu}/>]
                 : undefined}
         </View>
     )

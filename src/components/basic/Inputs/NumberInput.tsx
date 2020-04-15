@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableNativeFeedback, View } from "react-native";
 import { NumberInputStyle as getStyles } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
 
@@ -40,11 +40,21 @@ export const NumberInput = (props: NumberInputProps) => {
         setIsEditing(false);
     };
 
+    const inc = () => {
+        props.onChange(value + 1);
+        updateValue(value + 1);
+    };
+
+    const dec = () => {
+        props.onChange(value - 1);
+        updateValue(value - 1);
+    };
+
     return (
         <View style={styles.wrap}>
-            <PlusButton onPress={() => updateValue(value + 1)}/>
+            <PlusButton onPress={inc}/>
             <View style={styles.inputWrap}>
-                <TextInput style={{ ...styles.input, borderColor: isEditing ? 'lightgrey' : 'transparent', }}
+                <TextInput style={styles.input}
                            keyboardType='numeric'
                            onSubmitEditing={onSubmit}
                            onFocus={() => setIsEditing(true)}
@@ -52,10 +62,10 @@ export const NumberInput = (props: NumberInputProps) => {
                            onChangeText={(val) => updateValue(val === undefined ? val : Number(val))}
                            value={value !== undefined ? value.toString() : undefined}/>
                 {props.measure !== undefined ?
-                    <Text>{getMeasure(props.value, props.measure, props.measurePlural)}</Text>
+                    <Text style={styles.text}>{getMeasure(props.value, props.measure, props.measurePlural)}</Text>
                     : undefined}
             </View>
-            <MinusButton onPress={() => updateValue(value - 1)}/>
+            <MinusButton onPress={dec}/>
         </View>
     );
 };
@@ -67,11 +77,11 @@ const PlusButton = (props: { onPress: () => void }) => {
     const styles = getStyles(useTheme().colors);
 
     return (
-        <TouchableOpacity onPress={props.onPress}>
+        <TouchableNativeFeedback onPress={props.onPress}>
             <View style={styles.numberBtn}>
                 <Text style={styles.btnText}>+</Text>
             </View>
-        </TouchableOpacity>
+        </TouchableNativeFeedback>
     );
 };
 
@@ -79,10 +89,10 @@ const MinusButton = (props: { onPress: () => void }) => {
     const styles = getStyles(useTheme().colors);
 
     return (
-        <TouchableOpacity onPress={props.onPress}>
+        <TouchableNativeFeedback onPress={props.onPress}>
             <View style={styles.numberBtn}>
                 <Text style={styles.btnText}>-</Text>
             </View>
-        </TouchableOpacity>
+        </TouchableNativeFeedback>
     );
 };

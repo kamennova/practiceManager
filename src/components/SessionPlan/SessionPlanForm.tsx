@@ -1,46 +1,101 @@
 import React, { Component } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
-import { ActivityBlockHeight, AppPaddingStyle, AppSidePadding } from "../../AppStyle";
+import { ScrollView, Text, View, ViewStyle } from "react-native";
+import { ActivityBlockHeight, AppPaddingStyle, AppSidePadding, PlanFormStyle as getStyles } from "../../AppStyle";
 import { validatePlan } from "../../db/validation";
+import { DEFAULT_THEME, ThemeColors } from "../../theme";
 import { EmptyPlan } from "../../types/EmptyPlan";
 import { FormProps, FormState } from "../../types/ItemForm";
 import { PlanActivity } from "../../types/PlanActivity";
 import { SessionPlan } from "../../types/SessionPlan";
+import { swipe } from "../../utils/array";
 import { ErrorAlert } from "../basic/Alerts";
 import { SaveButton } from "../basic/Buttons/ActionButton";
+import { AddActivityBtn } from "../basic/Buttons/AddActivityBtn";
 import { MyTextInput } from "../basic/Inputs/TextInput";
 import { ItemMenu } from "../basic/ItemMenu";
 import { ItemSection } from "../basic/ItemSection";
+import { Layer } from "../basic/Layer";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { ActivityBlock } from "./ActivityBlock";
-import { ActivityForm } from "./ActivityForm";
+import { ActivityFormModal } from "./ActivityFormModal";
+
+type Coord = { x: number, y: number };
 
 export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: SessionPlan }>,
-    FormState<{ plan: SessionPlan }> & { showMenu: number }> {
-    state = {
-        plan: EmptyPlan,
-        showMenu: -1,
-        errors: '',
-    };
+    FormState<{ plan: SessionPlan }> & { showMenu: number, showModal: boolean, editing: number, dragging: number }> {
 
-    setPlan(plan: SessionPlan) {
-        this.setState({ errors: this.state.errors, plan });
+    val: Coord = { x: 0, y: 0 };
+
+    constructor(props: FormProps<SessionPlan, { plan: SessionPlan }>) {
+        super(props);
+
+        this.state = {
+            plan: EmptyPlan,
+            showMenu: -1,
+            showModal: true,
+            editing: -1,
+            dragging: -1,
+            errors: '',
+        };
     }
 
-    deleteActivity = () => this.setPlan({
-        ...this.state.plan,
-        schedule: this.state.plan.schedule.splice(this.state.showMenu),
+    setPlan = async (plan: SessionPlan) => await this.setState({ ...this.state, plan: plan });
+    showModal = () => this.setState({ ...this.state, showModal: true });
+    hideModal = () => this.setState({ ...this.state, showModal: false });
+
+    addActivity = (act: PlanActivity) => this.setState({
+        ...this.state,
+        plan: { ...this.state.plan, schedule: [...this.state.plan.schedule, act] },
+        showModal: false,
     });
+
+    replaceActivity = async (act: PlanActivity) => {
+        const schedule = [...this.state.plan.schedule];
+        schedule[this.state.editing] = act;
+        await this.setPlan({ ...this.state.plan, schedule });
+    };
+
+    editActivity = async () => {
+        await this.setState({
+            ...this.state,
+            editing: this.state.showMenu,
+        });
+
+        await this.setState({ ...this.state, showMenu: -1 });
+        this.showModal();
+    };
+
+    deleteActivity = async () => {
+        await this.setPlan({
+            ...this.state.plan,
+            schedule: this.state.plan.schedule.filter((_, i) => i !== this.state.showMenu),
+        });
+
+        this.setState({ ...this.state, showMenu: -1 })
+    };
+
+    onSaveActivity = async (act: PlanActivity) => {
+        if (this.state.editing > -1) {
+            await this.replaceActivity(act);
+        } else {
+            await this.addActivity(act);
+        }
+
+        this.setState({ ...this.state, showModal: false });
+    };
+
+    onMoveActivity = async (index: number, pos: -1 | 1) => {
+        const schedule = swipe(this.state.plan.schedule, index, index + pos);
+
+        await this.setPlan({ ...this.state.plan, schedule })
+    };
 
     setShowMenu = (index: number) => this.setState({ ...this.state, showMenu: index });
 
     menu = [
+        { label: 'Edit', func: this.editActivity, },
         { label: 'Delete', func: this.deleteActivity, },
     ];
-
-    addActivity = (act: PlanActivity) => {
-        this.setPlan({ ...this.state.plan, schedule: [...this.state.plan.schedule, act] });
-    };
 
     async validateAndSave() {
         const res = await validatePlan(this.state.plan.name);
@@ -53,43 +108,51 @@ export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: Se
         }
     }
 
+    styles = getStyles(ThemeColors[DEFAULT_THEME]);
+
     render() {
         return (
             <ScreenWrapper>
-                <ScrollView contentContainerStyle={styles.scroll}>
+                <ScrollView contentContainerStyle={this.styles.scroll}>
                     <View style={AppPaddingStyle}>
                         <MyTextInput onChangeText={(val) => this.setPlan({ ...this.state.plan, name: val })}
                                      value={this.state.plan.name}
                                      autoFocus={false}
                                      isRequired={true}
-                                     placeholder='Name'/>
-                        {this.state.errors !== '' ? <ErrorAlert message={this.state.errors}/> : undefined}
+                                     placeholder='Plan name'/>
+                        {this.state.errors !== '' && this.state.errors !== undefined ?
+                            <ErrorAlert message={this.state.errors}/> : undefined}
                     </View>
 
                     <ItemSection title='Schedule'>
-                        <View style={{ marginTop: 5 }}>
+                        <View style={this.styles.blocksWrap}>
+                            {this.state.plan.schedule.length === 0 ?
+                                <Text style={this.styles.emptyText}>...</Text> : undefined}
 
-                            <View style={styles.blocksWrap}>
-                                {this.state.plan.schedule.length === 0 ?
-                                    <Text style={styles.emptyText}>...</Text> : undefined}
+                            {this.state.plan.schedule.map((act, i) => (
+                                <ActivityBlock
+                                    isFirst={i === 0}
+                                    isLast={i === this.state.plan.schedule.length - 1}
+                                    onMove={(pos: -1 | 1) => this.onMoveActivity(i, pos)}
+                                    onShowMenu={() => this.setShowMenu(i)} activity={act}/>))}
 
-                                {this.state.plan.schedule.map((act, i) => (
-                                    <ActivityBlock onShowMenu={() => this.setShowMenu(i)} {...act} />))}
-                            </View>
-
-                            <ActivityForm onSave={this.addActivity}/>
+                            <AddActivityBtn onPress={this.showModal}/>
                         </View>
                     </ItemSection>
 
                     {this.state.showMenu > -1 ?
                         [
                             <Layer onPress={() => this.setState({ ...this.state, showMenu: -1 })}/>,
-                            <ItemMenu style={getMenuStyle(this.state.showMenu)}
-                                      prevFunc={() => this.setState({ ...this.state, showMenu: -1 })}
-                                      options={this.menu}/>
+                            <ItemMenu style={getMenuStyle(this.state.showMenu)} options={this.menu}/>
                         ] : undefined}
+
+                    <ActivityFormModal
+                        isVisible={this.state.showModal}
+                        hideModal={this.hideModal}
+                        onSave={this.onSaveActivity}
+                        activity={this.state.editing > -1 ? this.state.plan.schedule[this.state.editing] : undefined}/>
                 </ScrollView>
-                <SaveButton style={styles.save} onPress={async () => await this.validateAndSave()}/>
+                <SaveButton style={this.styles.save} onPress={async () => await this.validateAndSave()}/>
             </ScreenWrapper>
         );
     };
@@ -98,42 +161,4 @@ export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: Se
 const getMenuStyle = (index: number): ViewStyle => ({
     top: 150 + ActivityBlockHeight * index,
     right: AppSidePadding + 8,
-});
-
-const Layer = (props: { onPress: () => void }) => (
-    <TouchableWithoutFeedback onPress={props.onPress}>
-        <View style={{
-            position: 'absolute',
-            height: Dimensions.get("window").height,
-            width: '100%',
-            top: -40,
-            left: 0,
-        }}/>
-    </TouchableWithoutFeedback>
-);
-
-const styles = StyleSheet.create({
-    scroll: {
-        paddingBottom: 180,
-        paddingTop: 30,
-        minHeight: '100%',
-    },
-    save: {
-        top: Dimensions.get('window').height - 140,
-    },
-    blocksWrap: {
-        borderRadius: 1,
-        borderWidth: 2,
-        borderStyle: "dashed",
-        padding: 7,
-        borderColor: 'lightgrey',
-        marginBottom: 15,
-    },
-    emptyText: {
-        color: 'lightgrey',
-        fontSize: 21,
-        lineHeight: 12,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    }
 });

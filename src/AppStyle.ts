@@ -321,7 +321,7 @@ export const PickerStyle = (colors: ThemeColors = DefaultColors) => ({
 export const TextInputStyle = (colors: ThemeColors) => ({
     width: '100%',
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.borderFaded,
     padding: 7,
     paddingLeft: 14,
     paddingRight: 14,
@@ -356,6 +356,8 @@ export const CheckboxStyle = {
     marginTop: 0,
 };
 
+const NumInputHeight = 32;
+
 export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
     wrap: {
         flexDirection: 'row',
@@ -364,16 +366,24 @@ export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
         paddingBottom: 6,
     },
     inputWrap: {
+        height: NumInputHeight,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingLeft: 5,
-        paddingRight: 10,
+        paddingLeft: 2,
+        paddingRight: 2,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        borderColor: colors.borderFaded,
     },
     numberBtn: {
-        width: 17,
-        height: 17,
-        backgroundColor: Primary,
+        height: NumInputHeight,
+        backgroundColor: colors.appBgLight,
         alignItems: 'center',
+        justifyContent: 'center',
+        paddingLeft: 7,
+        paddingRight: 7,
+        borderWidth: 1,
+        borderColor: colors.border,
     },
     btnText: {
         fontSize: 18,
@@ -383,14 +393,17 @@ export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
     },
     input: {
         width: 'auto',
-        borderWidth: 1,
         textAlign: 'center',
         paddingLeft: 3,
         paddingRight: 3,
         marginRight: 2,
         marginLeft: 0,
-        fontSize: 17
+        fontSize: 17,
+        color: colors.color,
     },
+    text: {
+        color: colors.color,
+    }
 });
 
 // ---
@@ -487,11 +500,11 @@ export const PlanBuilderStyle = StyleSheet.create({
 
 export const ActivityBlockHeight = 52;
 
-export const ActivityBlockStyle = StyleSheet.create({
+export const ActivityBlockStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     wrap: {
         height: ActivityBlockHeight,
         borderWidth: 1,
-        borderColor: 'lightgrey',
+        borderColor: colors.borderFaded,
         flexDirection: 'row',
         alignItems: 'center',
         padding: 12,
@@ -503,34 +516,78 @@ export const ActivityBlockStyle = StyleSheet.create({
     duration: {
         color: 'grey',
         marginLeft: 'auto',
+        marginRight: 10,
     },
     name: {
         fontSize: 17,
+        color: colors.color,
     },
     dots: {
         width: 23,
         height: 23,
         opacity: 0.6,
         marginLeft: 15,
+    },
+    iconStyle: {
+        width: 25,
+        height: 25,
+        borderWidth: 1,
+        borderColor: colors.borderFaded,
+        marginRight: -1
     }
 });
 
-export const ActivityForm = StyleSheet.create({
-    formWrap: {
-        // borderWidth: 1,
-        // borderColor: 'lightgrey',
-        // backgroundColor: '#f3f3f3',
+export const PlanFormStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
+    scroll: {
+        paddingBottom: 180,
+        paddingTop: 15,
+        minHeight: '100%',
+    },
+    save: {
+        top: Dimensions.get('window').height - 140,
+    },
+    blocksWrap: {
+        borderRadius: 1,
+        borderWidth: 2,
+        borderStyle: "dashed",
+        padding: 7,
+        paddingBottom: 8,
+        borderColor: colors.borderFaded,
+        marginBottom: 15,
+        marginTop: 5,
+    },
+    emptyText: {
+        marginTop: 10,
+        color: colors.borderFaded,
+        fontSize: 21,
+        lineHeight: 12,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    }
+});
+
+export const ActivityForm = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
+    modalWrap: {
+        ...AppPaddingStyle,
+        paddingTop: 12,
+        paddingBottom: 17,
+        width: '100%',
+        backgroundColor: colors.appBg,
+        marginTop: 'auto',
         alignItems: 'center',
-        alignContent: 'space-between',
-        justifyContent: 'space-between',
-        padding: 8,
+        borderTopWidth: 1,
+        borderColor: colors.borderFaded,
     },
     add: {
-        width: '100%',
         flexDirection: 'row',
+        padding: 7,
+        borderWidth: 1,
+        borderColor: colors.border,
+        paddingLeft: 15,
+        paddingRight: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 10,
+        marginLeft: 'auto'
     },
     plus: {
         fontSize: 23,
@@ -541,34 +598,8 @@ export const ActivityForm = StyleSheet.create({
     text: {
         fontSize: 17,
         color: Dark,
-        fontWeight: 'bold'
-    },
-    activityBtn: {
-        padding: 10,
-        paddingTop: 13,
-        paddingBottom: 13,
-        borderWidth: 1,
-        borderRightWidth: 0,
-        borderColor: 'lightgrey',
-        flexBasis: '25%',
-        justifyContent: 'flex-start',
-        alignItems: 'center'
-    },
-    activityBtnText: {
-        letterSpacing: 0.1,
-        textAlign: 'center',
-        fontSize: 12,
-        fontFamily: 'Roboto',
-        fontWeight: '400',
-        marginTop: 5,
-    },
-    btnWrap: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        width: '100%',
-        alignContent: 'space-between',
-        justifyContent: 'space-between',
-        marginBottom: 15,
+        fontWeight: 'bold',
+        marginLeft: 6,
     },
     choosePrompt: {
         fontSize: 15,
@@ -576,10 +607,87 @@ export const ActivityForm = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
+    breakWrap: {
+        height: 92,
+        justifyContent: 'center'
+    },
     breakText: {
+        color: colors.color,
         fontSize: 17,
         marginTop: 10,
         marginBottom: 10,
+    },
+    bottomWrap: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+    },
+    fieldsPadding: {
+        paddingTop: 20,
+        paddingBottom: 20
+    },
+});
+
+export const ActivityChoiceStyle = (colors: ThemeColors = ThemeColors[DEFAULT_THEME]) => StyleSheet.create({
+    iconWrap: {
+        height: 24,
+        alignItems: 'center',
+    },
+    btnWrap: {
+        flexDirection: 'row',
+        width: '100%',
+        alignContent: 'space-between',
+        justifyContent: 'space-between',
+        borderColor: colors.borderFaded,
+    },
+    activityBtn: {
+        padding: 8,
+        paddingTop: 12,
+        paddingBottom: 10,
+        flexBasis: 79,
+        flexShrink: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        borderWidth: 1,
+        flexGrow: 0,
+        maxWidth: 80,
+    },
+    activityBtnText: {
+        letterSpacing: 0.1,
+        textAlign: 'center',
+        fontSize: 12,
+        fontFamily: 'Roboto',
+        fontWeight: 'bold',
+        marginTop: 6,
+        color: colors.colorFaded,
+    },
+});
+
+export const AddActivityBtnStyle = (colors: ThemeColors, theme: Theme) => StyleSheet.create({
+    activityBtn: {
+        flexDirection: 'row',
+        padding: 12,
+        backgroundColor: theme !== Theme.Dark ? colors.appBg : colors.appBgLight,
+        borderWidth: theme !== Theme.Dark ? 1 : 2,
+        borderColor: theme !== Theme.Dark ? colors.border : Dark,
+        width: '100%',
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 15,
+    },
+    activityBtnText: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: Dark,
+        paddingLeft: 2,
+    },
+    plus: {
+        fontSize: 19,
+        color: Dark,
+        fontWeight: 'bold',
+        lineHeight: 22,
+        marginRight: 5,
     },
 });
 

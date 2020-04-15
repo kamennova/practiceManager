@@ -1,6 +1,7 @@
 import React from "react";
-import { View, ViewStyle } from "react-native";
+import { View, ViewStyle, StyleSheet } from "react-native";
 import { ActivityType, ComplexActivityType, Exercise, Tonality } from "../../types/Activity";
+import { enumKeys } from "../../utils/array";
 import { MyPicker } from "./Inputs/Picker";
 import { PiecePicker } from "./Inputs/PiecePicker";
 
@@ -17,28 +18,39 @@ type FieldsProps = {
     setPieceId: (_: number) => void,
 };
 
-export const ComplexActivityFields = (props: FieldsProps) => (
-    <View style={{ flexDirection: 'row', flexShrink: 1, ...props.style }}>
-        {props.type === ActivityType.Technique ? [
-                <MyPicker selected={props.exercise}
-                          items={exercises}
-                          onValueChange={props.setExercise}
-                          wrapperStyle={{ marginBottom: 0, marginRight: -1 }}/>,
+export const ComplexActivityFields = (props: FieldsProps) => {
+    const wrapStyle = { ...styles.wrap, ...props.style };
 
-                <MyPicker selected={props.tonality}
-                          items={tonalities}
-                          onValueChange={props.setTonality}
-                          wrapperStyle={{ marginBottom: 0 }}/>
-            ] :
-            <PiecePicker onChoose={props.setPieceId}/>}
-    </View>
-);
+    return (
+        <View style={wrapStyle}>
+            {props.type === ActivityType.Technique ? [
+                    <MyPicker selected={props.exercise}
+                              items={exercises}
+                              onValueChange={props.setExercise}
+                              wrapperStyle={styles.exerciseWrap}/>,
+
+                    <MyPicker selected={props.tonality}
+                              items={tonalities}
+                              onValueChange={props.setTonality}
+                              wrapperStyle={styles.tonalityWrap}/>
+                ] :
+                <PiecePicker onChoose={props.setPieceId}/>}
+        </View>
+    );
+};
 
 const exercises = [
-    { val: 'Scales', label: 'Scales' },
-    { val: 'Arpeggio', label: 'Arpeggio' },
-    { val: 'Chords', label: 'Chords' },
-    { val: undefined, label: 'Other' },
+    { val: undefined, label: 'Exercise' },
+    ...enumKeys(Exercise).map((item) => ({ val: item, label: item })),
 ];
 
-const tonalities = [{ val: undefined, label: 'Tonality' }, { val: 'C#', label: 'C#' }];
+const tonalities = [
+    { val: undefined, label: 'Tonality' },
+    ...enumKeys(Tonality).map((item) => ({ val: item, label: item })),
+];
+
+const styles = StyleSheet.create({
+    wrap: { flexDirection: 'row', width: '100%', },
+    tonalityWrap: { marginBottom: 0, width: 180, },
+    exerciseWrap: { marginBottom: 0, marginRight: -1 },
+});

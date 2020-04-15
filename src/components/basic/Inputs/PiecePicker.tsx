@@ -3,6 +3,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-nativ
 import { connect } from "react-redux";
 import { TextInputStyle } from "../../../AppStyle";
 import { StateShape } from "../../../store/StoreState";
+import { useTheme } from "../../../theme";
 import { PieceBase } from "../../../types/Piece";
 
 const MAX_TIPS = 10;
@@ -42,8 +43,9 @@ const PiecePickerComponent = (props: InputProps) => {
 
     return (
         <View style={styles.wrap}>
-            <TextInput style={{ ...TextInputStyle, ...styles.input }}
-                       value={input?.toString()}
+            <TextInput style={{ ...TextInputStyle(useTheme().colors), ...styles.input }}
+                       placeholder='Search pieces'
+                       value={input !== undefined ? input.toString() : ''}
                        onChangeText={getTips} onBlur={hideTips} onSubmitEditing={hideTips}/>
             {showTips ? <TipDropdown onChoose={chooseVal} items={tips}/> : undefined}
         </View>
@@ -68,6 +70,7 @@ const Tip = (props: { label: string, onChoose: () => void }) => (
 const styles = StyleSheet.create({
     wrap: {
         width: '100%',
+        marginBottom: 8,
     },
     dropdown: {
         borderWidth: 1,
