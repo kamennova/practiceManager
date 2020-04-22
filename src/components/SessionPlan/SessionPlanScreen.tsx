@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route, Text, View } from "react-native";
-import { ActivityViewStyle, AppPaddingStyle, BreakViewStyle} from "../../AppStyle";
-import { Activity, ActivityType } from "../../types/Activity";
+import { ActivityViewStyle, AppPaddingStyle, BreakViewStyle } from "../../AppStyle";
+import { ActivityType } from "../../types/Activity";
+import { PlanActivity } from "../../types/PlanActivity";
 import { SessionPlan, SessionSchedule, totalDurationInMinutes } from "../../types/SessionPlan";
 import { StartButton } from "../basic/Buttons/StartButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
@@ -42,7 +43,7 @@ const SessionScheduleView = (props: { schedule: SessionSchedule }) => {
     );
 };
 
-const ActivityView = (props: { activity: Activity }) => {
+const ActivityView = (props: { activity: PlanActivity }) => {
     const bg = getActivityColor(props.activity.type);
     const otherStyles = props.activity.type === ActivityType.Break ? BreakViewStyle : {};
 

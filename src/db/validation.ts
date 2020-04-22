@@ -1,19 +1,30 @@
 import { getRepository } from "typeorm";
 import { Piece } from "../types/Piece";
-import { PieceEntity } from "./entity/Piece";
+import { SessionPlan } from "../types/SessionPlan";
+import { PieceEntity } from "./entity/piece";
+import { PlanEntity } from "./entity/plan";
 
 export type CheckResult = { valid: true } | {
     valid: false,
     errors: string,
 };
 
-export const validatePlan = async (planName: string): Promise<CheckResult> => {
-    if (planName.length === 0) {
+export const validatePlan = async (plan: SessionPlan): Promise<CheckResult> => {
+    if (plan.name.length === 0) {
         return Promise.resolve({ valid: false, errors: 'You forgot to enter plan title ✍' });
+    } else if (plan.schedule.length === 0) {
+        return Promise.resolve({ valid: false, errors: 'You forgot to add activities to schedule' });
+    } else if (!(await isPlanNameUnique(plan.name))) {
+        return Promise.resolve({ valid: false, errors: 'Plan with the same name already exists :/' });
     }
 
-    // todo
     return Promise.resolve({ valid: true });
+};
+
+const isPlanNameUnique = async (name: string): Promise<boolean> => {
+    const repo = getRepository(PlanEntity);
+
+    return (await repo.find({ where: { name } })).length === 0;
 };
 
 export const validatePiece = async (piece: Piece): Promise<CheckResult> => {

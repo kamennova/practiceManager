@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { ScrollView, Text, View, ViewStyle } from "react-native";
+import { connect } from "react-redux";
 import { ActivityBlockHeight, AppPaddingStyle, AppSidePadding, PlanFormStyle as getStyles } from "../../AppStyle";
 import { validatePlan } from "../../db/validation";
+import { StateShape } from "../../store/StoreState";
+import { thunkAddPlan } from "../../store/thunks/plan";
 import { DEFAULT_THEME, ThemeColors } from "../../theme";
 import { EmptyPlan } from "../../types/EmptyPlan";
 import { FormProps, FormState } from "../../types/ItemForm";
@@ -21,7 +24,7 @@ import { ActivityFormModal } from "./ActivityFormModal";
 
 type Coord = { x: number, y: number };
 
-export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: SessionPlan }>,
+class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: SessionPlan }>,
     FormState<{ plan: SessionPlan }> & { showMenu: number, showModal: boolean, editing: number, dragging: number }> {
 
     val: Coord = { x: 0, y: 0 };
@@ -32,7 +35,7 @@ export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: Se
         this.state = {
             plan: EmptyPlan,
             showMenu: -1,
-            showModal: true,
+            showModal: false,
             editing: -1,
             dragging: -1,
             errors: '',
@@ -98,11 +101,11 @@ export class SessionPlanForm extends Component<FormProps<SessionPlan, { plan: Se
     ];
 
     async validateAndSave() {
-        const res = await validatePlan(this.state.plan.name);
+        const res = await validatePlan(this.state.plan);
 
         if (res.valid) {
             this.setState({ plan: this.state.plan, errors: '' });
-            console.log('valid');
+            await this.props.onHandleSave(this.state.plan);
         } else {
             this.setState({ plan: this.state.plan, errors: res.errors });
         }
@@ -162,3 +165,13 @@ const getMenuStyle = (index: number): ViewStyle => ({
     top: 150 + ActivityBlockHeight * index,
     right: AppSidePadding + 8,
 });
+
+const mapStateToProps = (state: StateShape) => ({
+    addedItemId: state.plans.lastAddedId,
+});
+
+const mapDispatchToProps = (dispatch: any) => ({
+   onHandleSave: (plan: SessionPlan) => dispatch(thunkAddPlan(plan)),
+});
+
+export const SessionPlanForm = connect(mapStateToProps, mapDispatchToProps)(SessionPlanFormClass);
