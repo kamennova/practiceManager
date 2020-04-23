@@ -5,20 +5,22 @@ import {
     EDIT_PLAN_SCHEDULE,
     EditPlanScheduleAction,
     PlanActionTypes,
-    RENAME_PLAN, RenamePlanAction
+    RENAME_PLAN, RenamePlanAction, SET_PLANS
 } from "../actions";
 import { initialState, ItemsShape } from "../StoreState";
 
 export const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState.plans, action: PlanActionTypes): ItemsShape<SessionPlan, SessionPlan> => {
     switch (action.type) {
         case ADD_PLAN:
-            return { ...state, items: [...state.items, action.plan] };
+            return { ...state, items: [...state.items, action.plan], lastAddedId: action.plan.id };
         case EDIT_PLAN_SCHEDULE:
             return { ...state, items: editPlanSchedule(state.items, action) };
         case RENAME_PLAN:
             return { ...state, items: renamePlan(state.items, action) };
         case DELETE_PLAN:
             return { ...state, items: state.items.filter(p => p.id !== action.id) };
+        case SET_PLANS:
+            return { ...state, items: action.plans };
         default:
             return state;
     }
@@ -39,7 +41,7 @@ const renamePlan = (state: SessionPlan[], action: RenamePlanAction): SessionPlan
         throw new Error('plan with such id doesn\'t exist');
     }
 
-    const renamed = { name: action.name, id: action.id, schedule: [] };
+    const renamed = { ...planToRename, name: action.name };
     plans.push(renamed);
 
     return plans;

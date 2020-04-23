@@ -7,6 +7,8 @@ export type SessionPlan = {
     id: number;
     name: string;
     schedule: SessionSchedule; // order is important
+    isFavourite: boolean;
+    createdOn: number,
 }
 
 const sumActivitiesDuration = (activities: PlanActivity[]): number => {

@@ -1,8 +1,6 @@
 import { getRepository } from "typeorm";
 import { Piece, PieceBase, PieceComplexity, PieceGenre, PieceStatus } from "../types/Piece";
-import { AuthorEntity } from "./entity/Author";
-import { PieceEntity } from "./entity/Piece";
-import { TagEntity } from "./entity/Tag";
+import { AuthorEntity, PieceEntity, TagEntity } from "./entity/piece";
 
 export const createTags = async (tags: string[]): Promise<TagEntity[]> => {
     const ents: TagEntity[] = [],

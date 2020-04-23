@@ -27,7 +27,7 @@ export const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             <CustomDrawerItem label={'Repertoire'} onPress={jumpTo(REPERTOIRE)} icon={<RepertoireIcon/>}/>
             <CustomDrawerItem label={'Practice plans'} onPress={jumpTo(SESSION_PLAN_LIST)} icon={<PlansIcon/>}/>
             <CustomDrawerItem label={'Settings'} onPress={jumpTo(SETTINGS)} icon={<SettingsIcon/>}/>
-            <DrawerItem label={() => <StartButton/>}
+            <DrawerItem label={() => <StartButton onPress={push(SESSION_START)}/>}
                         onPress={push(SESSION_START)}
                         style={{ alignSelf: 'center', position: 'absolute', bottom: 20 }}/>
         </DrawerContentScrollView>

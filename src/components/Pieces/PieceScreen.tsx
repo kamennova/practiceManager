@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, Route, ScrollView, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
-import { getPieceById } from "../../db/db";
+import { getPieceById } from "../../db/piece";
 import { PIECE, PIECE_FORM, REPERTOIRE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";

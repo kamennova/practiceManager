@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { Text, TextInput, View } from "react-native";
-import { DaysInputStyle } from "../../../AppStyle";
+import { Text, TextInput, TouchableNativeFeedback, View } from "react-native";
+import { NumberInputStyle as getStyles } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
 
-type DaysInputProps = {
+type NumberInputProps = {
     onChange: (val: number) => void,
     value: number,
     minVal?: number,
     maxVal?: number,
     measure?: string,
     measurePlural?: string,
-}
+};
 
-export const NumberInput = (props: DaysInputProps) => {
+export const NumberInput = (props: NumberInputProps) => {
     const [value, updateValue] = useState(props.value);
+    const [isEditing, setIsEditing] = useState(false);
 
     const colors = useTheme().colors;
+    const styles = getStyles(colors);
 
     const validateVal = (val: string | undefined): number => {
         const numVal = Number(val);
@@ -31,25 +33,66 @@ export const NumberInput = (props: DaysInputProps) => {
         return numVal;
     };
 
+    const onSubmit = (a: { nativeEvent: { text: string } }) => {
+        const val = validateVal(a.nativeEvent.text);
+        props.onChange(val);
+        updateValue(val);
+        setIsEditing(false);
+    };
+
+    const inc = () => {
+        props.onChange(value + 1);
+        updateValue(value + 1);
+    };
+
+    const dec = () => {
+        props.onChange(value - 1);
+        updateValue(value - 1);
+    };
 
     return (
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TextInput style={{ ...DaysInputStyle(colors) }}
-                       keyboardType={'numeric'}
-                       onSubmitEditing={({ nativeEvent: { text } }) => {
-                           props.onChange(validateVal(text));
-                           updateValue(validateVal(text));
-                       }}
-                       onChangeText={(val) => {
-                           updateValue(val === undefined ? val : Number(val));
-                       }}
-                       value={value !== undefined ? value.toString() : undefined}/>
-            {props.measure !== undefined ?
-                <Text style={{color: colors.colorFaded}}>{getMeasure(props.value, props.measure, props.measurePlural)}</Text>
-                : undefined}
+        <View style={styles.wrap}>
+            <PlusButton onPress={inc}/>
+            <View style={styles.inputWrap}>
+                <TextInput style={styles.input}
+                           keyboardType='numeric'
+                           onSubmitEditing={onSubmit}
+                           onFocus={() => setIsEditing(true)}
+                           onBlur={() => setIsEditing(false)}
+                           onChangeText={(val) => updateValue(val === undefined ? val : Number(val))}
+                           value={value !== undefined ? value.toString() : undefined}/>
+                {props.measure !== undefined ?
+                    <Text style={styles.text}>{getMeasure(props.value, props.measure, props.measurePlural)}</Text>
+                    : undefined}
+            </View>
+            <MinusButton onPress={dec}/>
         </View>
     );
 };
 
 const getMeasure = (val: number, one: string, plural?: string) =>
     val > 1 ? (plural !== undefined ? plural : one + 's') : one;
+
+const PlusButton = (props: { onPress: () => void }) => {
+    const styles = getStyles(useTheme().colors);
+
+    return (
+        <TouchableNativeFeedback onPress={props.onPress}>
+            <View style={styles.numberBtn}>
+                <Text style={styles.btnText}>+</Text>
+            </View>
+        </TouchableNativeFeedback>
+    );
+};
+
+const MinusButton = (props: { onPress: () => void }) => {
+    const styles = getStyles(useTheme().colors);
+
+    return (
+        <TouchableNativeFeedback onPress={props.onPress}>
+            <View style={styles.numberBtn}>
+                <Text style={styles.btnText}>-</Text>
+            </View>
+        </TouchableNativeFeedback>
+    );
+};

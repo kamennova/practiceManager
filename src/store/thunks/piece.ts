@@ -1,5 +1,14 @@
-import { Action, ActionCreator, Dispatch } from "redux";
-import { ThunkAction } from "redux-thunk";
+import { Dispatch } from "redux";
+import {
+    addPiece as addPieceToDb,
+    deletePiece as deletePieceFromDb,
+    getPieceById,
+    getPieces,
+    getPiecesMeta,
+    togglePieceIsFavourite,
+    updatePiece
+} from "../../db/piece";
+import { Piece } from "../../types/Piece";
 import {
     addPiece,
     deletePiece,
@@ -9,19 +18,7 @@ import {
     setPiecesMeta,
     togglePieceFav,
 } from "../actions/piece";
-import {
-    addPiece as addPieceToDb,
-    deletePiece as deletePieceFromDb,
-    getPieceById,
-    getPieces,
-    getPiecesMeta,
-    togglePieceIsFavourite,
-    updatePiece
-} from "../../db/db";
-import { StateShape } from "../StoreState";
-import { Piece } from "../../types/Piece";
-
-export type ThunkResult = ActionCreator<ThunkAction<Promise<Action>, StateShape, void, Action<void>>>;
+import { ThunkResult } from "./ThunkResult";
 
 export const thunkGetPieces: ThunkResult = () => async (dispatch: Dispatch) => {
     const pieces = await getPieces();

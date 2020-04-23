@@ -1,24 +1,28 @@
+import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Text, TouchableNativeFeedback, View } from "react-native";
-import { ActivityForm as styles } from "../../AppStyle";
-import { Activity, ActivityType, Exercise, Tonality } from "../../types/Activity";
-import { MinorButton } from "../basic/Buttons/Button";
+import { ActivityForm as getStyles, Dark } from "../../AppStyle";
+import { useTheme } from "../../theme";
+import { ActivityType, Exercise, Tonality } from "../../types/Activity";
+import { getPlanActivity, PlanActivityInput } from "../../types/ActivityInput";
+import { PlanActivity } from "../../types/PlanActivity";
 import { ComplexActivityFields } from "../basic/ComplexActivityFields";
-import { NumberInput } from "../basic/Inputs/NumberInput";
+import { ActivityTypeSelect } from "../basic/Inputs/ActivityTypeSelect";
+import { DurationInput } from "../basic/Inputs/DurationInput";
 
 type BlockFormProps = {
-    onSave: (_: Activity) => void,
-}
+    onSave: (_: PlanActivity) => void,
+    onClose: () => void,
+    activity?: PlanActivity,
+};
 
-const BaseActivity: Activity = { type: ActivityType.Break, duration: 3 };
+const BaseActivity = { type: ActivityType.Break, duration: 3 };
 
 export const ActivityForm = (props: BlockFormProps) => {
-    const [showForm, setShowForm] = useState(false);
-    const [activity, setActivity] = useState<Activity>(BaseActivity);
+    const [activity, setActivity] = useState<PlanActivityInput>(props.activity !== undefined ? props.activity : BaseActivity);
 
     const chooseType = (type: ActivityType) => {
         setActivity({ ...activity, type });
-        setShowForm(true);
     };
 
     const setDuration = (mins: number) => setActivity({ ...activity, duration: mins }),
@@ -28,65 +32,43 @@ export const ActivityForm = (props: BlockFormProps) => {
 
     const reset = () => {
         setActivity(BaseActivity);
-        setShowForm(false);
+        props.onClose();
     };
 
-    const onSave = () => {
-        props.onSave(activity);
-        reset();
-    };
+    const onSave = () => props.onSave(getPlanActivity(activity));
+
+    const styles = getStyles(useTheme().colors);
 
     return (
-        <View style={styles.wrap}>
-            <View style={styles.formWrap}>
-                {showForm ?
-                    [
-                        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.modalWrap}>
+            {props.activity === undefined ?
+                <ActivityTypeSelect onChooseType={chooseType} activeType={activity.type}/> : undefined}
 
-                            {activity.type === ActivityType.Break ? <Text>Break</Text> :
-                                <ComplexActivityFields type={activity.type}
-                                                       exercise={activity.exercise} setExercise={setExercise}
-                                                       tonality={activity.tonality} setTonality={setTonality}
-                                                       pieceId={activity.pieceId} setPieceId={setPieceId}/>}
+            {activity.type === ActivityType.Break ?
+                <View style={styles.breakWrap}><Text style={styles.breakText}>Break</Text></View> :
+                <ComplexActivityFields type={activity.type} style={styles.fieldsPadding}
+                                       exercise={activity.exercise} setExercise={setExercise}
+                                       tonality={activity.tonality} setTonality={setTonality}
+                                       pieceId={activity.pieceId} setPieceId={setPieceId}/>}
 
-                            <NumberInput onChange={setDuration} value={activity.duration} measure='m'
-                                         measurePlural='m'/>
-                        </View>,
-                        <FormButtons onCancel={() => reset()} onSave={onSave}/>
-                    ]
-                    : <ActivityChoice onChooseType={chooseType}/>
-                }
+            <View style={styles.bottomWrap}>
+                <DurationInput minutes={15} onChange={() => {
+                }}/>
+                <AddButton onCancel={reset} onSave={onSave}/>
             </View>
         </View>
     );
 };
 
-const ActivityChoice = (props: { onChooseType: (_: ActivityType) => void }) => (
-    <View style={styles.formWrap}>
-        <View style={styles.btnWrap}>
-            {activities.map(act => <ActivityBtn label={act} onPress={() => props.onChooseType(act)}/>)}
-        </View>
-        <Text style={styles.choosePrompt}>Choose activity</Text>
-    </View>
-);
+const AddButton = (props: { onSave: () => void, onCancel: () => void }) => {
+    const styles = getStyles(useTheme().colors);
 
-const activities = [ActivityType.Technique, ActivityType.Piece, ActivityType.SightReading, ActivityType.Break];
-
-const ActivityBtn = (props: { label: string, onPress: () => void }) => (
-    <TouchableNativeFeedback onPress={props.onPress}>
-        <View style={styles.activityBtn}>
-            <Text style={styles.activityBtnText}>{props.label}</Text>
-        </View>
-    </TouchableNativeFeedback>
-);
-
-const FormButtons = (props: { onSave: () => void, onCancel: () => void }) => (
-    <View style={styles.add}>
-        <MinorButton onPress={props.onCancel}>Cancel</MinorButton>
+    return (
         <TouchableNativeFeedback onPress={props.onSave}>
-            <View>
+            <View style={styles.add}>
+                <Ionicons name='md-send' size={20} color={Dark}/>
                 <Text style={styles.text}>Ok</Text>
             </View>
         </TouchableNativeFeedback>
-    </View>
-);
+    );
+};

@@ -1,23 +1,32 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import { AuthorEntity } from "./entity/Author";
-import { NoteEntity } from "./entity/Note";
-import { PieceEntity } from "./entity/Piece";
-import { RecordingEntity } from "./entity/Recording";
-import { TagEntity } from "./entity/Tag";
+import { AuthorEntity, NoteEntity, PieceEntity, RecordingEntity, TagEntity } from "./entity/piece";
+import {
+    PieceActivityDetailsEntity,
+    PlanActivityEntity,
+    PlanEntity,
+    TechniqueActivityDetailsEntity
+} from "./entity/plan";
 
 export const connectToDb = async () => createConnection({
     type: "expo",
     driver: require('expo-sqlite'),
-    database: "practiceManagerDB2",
+    database: "practiceManagerDB3",
     entities: [
         PieceEntity,
         AuthorEntity,
         TagEntity,
         NoteEntity,
         RecordingEntity,
+        PlanEntity,
+        PlanActivityEntity,
+        PieceActivityDetailsEntity,
+        TechniqueActivityDetailsEntity
     ],
     synchronize: false,
     migrationsRun: true,
     logging: false,
-}).catch(error => Promise.reject(error));
+}).catch(error => {
+    console.log(error);
+    return Promise.reject(error)
+});

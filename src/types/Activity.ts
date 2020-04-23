@@ -30,7 +30,6 @@ export enum Exercise {
     'Scales',
     'Arpeggio',
     'Chords',
-    'Other',
 }
 
-export type Tonality = 'C#/D♭' | 'C' | 'D'; // todo
+export enum Tonality { 'A', 'A#', 'C', 'C#/D♭', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'}

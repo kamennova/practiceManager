@@ -3,11 +3,11 @@ import { Route, View } from "react-native";
 import { FullScreenModalStyle } from "../../AppStyle";
 import { FREE_SESSION_TIMER } from "../../NavigationPath";
 import { Activity, ActivityType, Exercise, Tonality } from "../../types/Activity";
-import { NoBreakActivity, NoBreakActivityInput } from "../../types/ActivityInput";
+import { getActivity, NoBreakActivity, NoBreakActivityInput } from "../../types/ActivityInput";
 import { ActionButton } from "../basic/Buttons/ActionButton";
 import { MinorButton } from "../basic/Buttons/Button";
 import { ComplexActivityFields } from "../basic/ComplexActivityFields";
-import { MyPicker } from "../basic/Inputs/Picker";
+import { ActivityTypeSelect } from "../basic/Inputs/ActivityTypeSelect";
 import { ModalSmallTitle, ModalTitle } from "../basic/Titles/ModalTitle";
 
 type ChoiceProps = {
@@ -15,7 +15,7 @@ type ChoiceProps = {
     navigation: any,
 };
 
-const BaseActivity: Activity = { type: ActivityType.Technique, tonality: 'C#' as Tonality, exercise: Exercise.Scales };
+const BaseActivity: Activity = { type: ActivityType.Technique, tonality: Tonality.C, exercise: Exercise.Scales };
 
 export const FreeSessionActivityChoice = (props: ChoiceProps) => {
     const [activity, setActivity] = useState<NoBreakActivityInput>(BaseActivity);
@@ -35,7 +35,9 @@ export const FreeSessionActivityChoice = (props: ChoiceProps) => {
             <ModalTitle> What are you up for? </ModalTitle>
 
             <View style={{ paddingLeft: 50, paddingRight: 50, }}>
-                <MyPicker items={activityItems} onValueChange={setType} selected={activity.type}/>
+                <ActivityTypeSelect noBreak={true}
+                                    onChooseType={(type) => setType(type as NoBreakActivity)}
+                                    activeType={activity.type}/>
 
                 <ComplexActivityFields type={activity.type}
                                        exercise={activity.exercise} setExercise={setExercise}
@@ -55,17 +57,3 @@ export const FreeSessionActivityChoice = (props: ChoiceProps) => {
         </View>
     );
 };
-
-const getActivity = (act: NoBreakActivityInput): Activity => {
-    switch (act.type) {
-        case ActivityType.Piece:
-        case ActivityType.SightReading:
-            return { type: act.type, pieceId: act.pieceId };
-        case ActivityType.Technique:
-            return { type: act.type, exercise: act.exercise, tonality: act.tonality };
-    }
-};
-
-const activityItems = [ActivityType.Piece, ActivityType.Technique, ActivityType.SightReading].map(
-    (activity) => ({ val: activity, label: activity })
-);

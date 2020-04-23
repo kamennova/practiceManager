@@ -10,7 +10,6 @@ import { ActionType } from "../../types/ActionType";
 import { PieceBase } from "../../types/Piece";
 import { AddButton } from "../basic/Buttons/ActionButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
-import { PieceFilters } from "./PieceFilters";
 import { PiecesList } from "./PiecesList";
 
 const mapStateToProps = (state: StateShape) => ({
@@ -30,7 +29,6 @@ class Repertoire extends Component<{ pieces: PieceBase[], getPieces: () => void,
         return (
             <ScreenWrapper>
                 <ScrollView contentContainerStyle={scrollStyle}>
-                    <PieceFilters/>
                     <PiecesList pieces={this.props.pieces}/>
                 </ScrollView>
                 <AddButton onPress={() => this.props.navigation.dispatch(pushForm)}/>
@@ -46,5 +44,6 @@ export default RepertoireScreen;
 
 const scrollStyle = {
     ...AppPaddingStyle,
-    paddingBottom: 90
+    paddingBottom: 90,
+    paddingTop: 20,
 };
