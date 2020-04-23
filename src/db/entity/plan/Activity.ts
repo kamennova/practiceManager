@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from "typeorm";
 import { PieceActivityDetailsEntity } from "./PieceActivity";
+import { PlanEntity } from "./Plan";
 import { TechniqueActivityDetailsEntity } from "./TechniqueActivity";
 
 @Entity('planActivity')
@@ -16,11 +17,14 @@ export class PlanActivityEntity {
     @Column('integer')
     order!: number;
 
-    @OneToOne(_type => PieceActivityDetailsEntity || TechniqueActivityDetailsEntity || null, {
+    @OneToOne(_type => (PieceActivityDetailsEntity || TechniqueActivityDetailsEntity), {
         eager: true,
         nullable: true,
-        cascade: true,
+        cascade: ['insert', 'update'],
     })
     @JoinColumn()
     details!: PieceActivityDetailsEntity | TechniqueActivityDetailsEntity | null;
+
+    @ManyToOne(_type => PlanEntity, plan => plan.schedule)
+    plan!: PlanEntity;
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { PlanActivityEntity } from "./Activity";
 
 @Entity('plan')
@@ -15,6 +15,6 @@ export class PlanEntity {
     @Column("datetime")
     createdOn!: number;
 
-    @ManyToOne(_type => PlanActivityEntity, { eager: true, cascade: true })
+    @OneToMany(_type => PlanActivityEntity, activity => activity.plan, { eager: true, cascade: ['insert', 'update'] })
     schedule!: PlanActivityEntity[];
 }
