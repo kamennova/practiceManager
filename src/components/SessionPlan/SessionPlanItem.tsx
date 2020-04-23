@@ -14,7 +14,7 @@ export const SessionPlanItem = (props: { plan: SessionPlan, onPress: () => void 
                 <ListItemWrapper>
                     <Text style={{
                         ...ListItemTitleStyle,
-                        marginBottom: 13
+                        marginBottom: 10
                     }}>
                         {props.plan.name}
                     </Text>
@@ -25,7 +25,7 @@ export const SessionPlanItem = (props: { plan: SessionPlan, onPress: () => void 
                         <Text style={{
                             fontSize: 11,
                             lineHeight: 18,
-                        }}> ● </Text>
+                        }}>    ●    </Text>
                         {techniqueTime > 0 ? <Text>{piecesTime}m technique</Text> : undefined}
                     </Text>
                 </ListItemWrapper>
