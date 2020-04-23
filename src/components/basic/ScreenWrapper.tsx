@@ -18,6 +18,7 @@ type WrapperProps = {
 
 export const ScreenWrapper = (props: WrapperProps) => {
     const [showMenu, updateShowMenu] = useState(false);
+    const colors = useTheme().colors;
 
     useNavigation().setOptions({
         headerRight: () => (
@@ -25,7 +26,7 @@ export const ScreenWrapper = (props: WrapperProps) => {
                 {props.fav !== undefined && !showMenu ?
                     <ItemFav isFav={props.fav.val} onPress={props.fav.update}/> : undefined}
                 {(props.itemMenu !== undefined && !showMenu) ?
-                    <DotsIcon wrapStyle={{ ...HeaderIconWrap(useTheme().colors), marginLeft: 'auto' }}
+                    <DotsIcon wrapStyle={{ ...HeaderIconWrap(colors), marginLeft: 'auto' }}
                               onPress={() => updateShowMenu(true)}/> : undefined}
             </View>
         ),
