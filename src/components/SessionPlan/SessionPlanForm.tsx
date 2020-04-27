@@ -19,7 +19,7 @@ import { ItemMenu } from "../basic/ItemMenu";
 import { ItemSection } from "../basic/ItemSection";
 import { Layer } from "../basic/Layer";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
-import { ActivityBlock } from "./ActivityBlock";
+import { EditableActivityBlock } from "./EditableActivityBlock";
 import { ActivityFormModal } from "./ActivityFormModal";
 
 type Coord = { x: number, y: number };
@@ -133,7 +133,7 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
                                 <Text style={this.styles.emptyText}>...</Text> : undefined}
 
                             {this.state.plan.schedule.map((act, i) => (
-                                <ActivityBlock
+                                <EditableActivityBlock
                                     isFirst={i === 0}
                                     isLast={i === this.state.plan.schedule.length - 1}
                                     onMove={(pos: -1 | 1) => this.onMoveActivity(i, pos)}

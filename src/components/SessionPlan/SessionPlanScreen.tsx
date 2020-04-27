@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
-import { ActivityViewStyle, AppPaddingStyle, BreakViewStyle, TotalHeaderHeight } from "../../AppStyle";
+import { AppPaddingStyle, TotalHeaderHeight } from "../../AppStyle";
 import { getPlanById } from "../../db/plan";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePlan, thunkTogglePlanFav } from "../../store/thunks/plan";
 import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
-import { ActivityType } from "../../types/Activity";
 import { EmptyPlan } from "../../types/EmptyPlan";
 import { ItemScreenProps } from "../../types/item/ItemScreen";
-import { PlanActivity } from "../../types/PlanActivity";
 import { SessionPlan, SessionSchedule } from "../../types/SessionPlan";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
 import { ItemFeatures } from "../basic/ItemFeatures";
-import { SmallTitle } from "../basic/Titles/Titles";
+import { ScreenTitle, SmallTitle } from "../basic/Titles/Titles";
+import { ActivityBlock } from "./ActivityBlock";
 
 type PlanScreenProps = ItemScreenProps<{}>;
 
@@ -46,6 +45,7 @@ export const SessionPlanComponent = (props: PlanScreenProps) => {
                            itemName={'plan'}>
 
             <View style={{ ...AppPaddingStyle, marginTop: TotalHeaderHeight }}>
+                <ScreenTitle>{plan.name}</ScreenTitle>
                 <PlanFeatures report={report}/>
             </View>
 
@@ -78,53 +78,10 @@ const SessionScheduleView = (props: { schedule: SessionSchedule }) => {
             ...AppPaddingStyle
         }}>
             <SmallTitle>Schedule</SmallTitle>
-            {props.schedule.map(activity => <ActivityView activity={activity}/>)}
+            {props.schedule.map((act, i) => (
+                <ActivityBlock isFirst={i === 0} isLast={i === props.schedule.length - 1} activity={act}/>))}
         </View>
     );
-};
-
-const ActivityView = (props: { activity: PlanActivity }) => {
-    const bg = getActivityColor(props.activity.type);
-    const otherStyles = props.activity.type === ActivityType.Break ? BreakViewStyle : {};
-
-    return (
-        <View style={{
-            ...ActivityViewStyle,
-            ...otherStyles,
-            backgroundColor: bg,
-        }}>
-            <View style={{
-                flexDirection: 'row',
-                alignItems: 'center'
-            }}>
-                <Text style={{
-                    fontSize: 18,
-                }}>
-                    {props.activity.type}
-                </Text>
-                <Text style={{
-                    fontSize: 15,
-                    color: 'rgb(0, 0, 12)',
-                    marginLeft: 'auto',
-                }}>
-                    {props.activity.duration} min
-                </Text>
-            </View>
-        </View>
-    );
-};
-
-const getActivityColor = (activity: ActivityType): string => {
-    switch (activity) {
-        case ActivityType.Break:
-            return 'transparent';
-        case ActivityType.Piece:
-            return '#d0dbff';
-        case ActivityType.Technique:
-            return '#b3d4d6';
-        case ActivityType.SightReading:
-            return 'brown';
-    }
 };
 
 const mapStateToProps = (state: StateShape, ownProps: PlanScreenProps) => ({

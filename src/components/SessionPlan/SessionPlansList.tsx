@@ -30,9 +30,11 @@ class SessionPlans extends Component<ListProps> {
             <ScreenWrapper>
                 <ScrollView contentContainerStyle={style}>
                     {this.props.plans.length === 0 ? <NothingAlert/> : undefined}
-                    <FlatList data={this.props.plans}
-                              renderItem={({ item }) => (
-                                  <SessionPlanItem plan={item} onPress={this.push(SESSION_PLAN, { plan: item })}/>)}/>
+                    <FlatList
+                        data={this.props.plans}
+                        renderItem={({ item }) => (
+                            <SessionPlanItem plan={item}
+                                             onPress={this.push(SESSION_PLAN, { id: item.id, plan: item })}/>)}/>
                 </ScrollView>
                 <AddButton onPress={this.push(SESSION_PLAN_FORM)}/>
             </ScreenWrapper>
