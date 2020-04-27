@@ -1,13 +1,12 @@
 import { ActivityType } from "./Activity";
+import { Item } from "./item/Item";
 import { PlanActivity } from "./PlanActivity";
 
 export type SessionSchedule = PlanActivity[];
 
-export type SessionPlan = {
-    id: number;
+export type SessionPlan = Item & {
     name: string;
     schedule: SessionSchedule; // order is important
-    isFavourite: boolean;
     createdOn: number,
 }
 

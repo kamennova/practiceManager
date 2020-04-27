@@ -1,5 +1,6 @@
 import { getRepository } from "typeorm";
 import { ActivityType, Exercise, Tonality } from "../types/Activity";
+import { EmptyPlan } from "../types/EmptyPlan";
 import { PlanActivity } from "../types/PlanActivity";
 import { SessionPlan, SessionSchedule } from "../types/SessionPlan";
 import {
@@ -84,6 +85,10 @@ const activityFromEntity = (ent: PlanActivityEntity): PlanActivity => {
         case ActivityType.Technique:
             return { type, duration: ent.duration, exercise: details?.exercise, tonality: details?.tonality };
     }
+};
+
+export const getPlanById = async (_: number) => {
+  return Promise.resolve(EmptyPlan);
 };
 
 export const deletePlan = async (id: number): Promise<void> => {

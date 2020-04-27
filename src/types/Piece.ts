@@ -1,8 +1,8 @@
+import { Item } from "./item/Item";
 import { Note } from "./Note";
 import { Recording } from "./Recording";
 
-export type PieceBase = {
-    id: number,
+export type PieceBase = Item & {
     name: string,
     tags: string[],
     authors: string[],
@@ -13,7 +13,6 @@ export type PieceBase = {
     lastPracticedOn?: Date,
     addedOn: Date,
     status: PieceStatus,
-    isFavourite: boolean,
 };
 
 export type Piece = PieceBase & {
