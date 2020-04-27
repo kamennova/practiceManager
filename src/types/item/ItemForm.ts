@@ -1,5 +1,5 @@
 import { Route } from "react-native";
-import { ActionType } from "./ActionType";
+import { ActionType } from "../ActionType";
 
 export type FormProps<T, Item extends Object> = {
     route: Route & {

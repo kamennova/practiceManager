@@ -1,7 +1,7 @@
 import { SessionPlan } from "../../types/SessionPlan";
 import {
     ADD_PLAN,
-    DELETE_PLAN,
+    DELETE_PLAN, EDIT_PLAN,
     EDIT_PLAN_SCHEDULE,
     EditPlanScheduleAction,
     PlanActionTypes,
@@ -13,6 +13,8 @@ export const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState
     switch (action.type) {
         case ADD_PLAN:
             return { ...state, items: [...state.items, action.plan], lastAddedId: action.plan.id };
+        case EDIT_PLAN:
+            return { ...state, items: replacePlan(state.items, action.plan) };
         case EDIT_PLAN_SCHEDULE:
             return { ...state, items: editPlanSchedule(state.items, action) };
         case RENAME_PLAN:
@@ -24,6 +26,13 @@ export const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState
         default:
             return state;
     }
+};
+
+const replacePlan = (state: SessionPlan[], plan: SessionPlan): SessionPlan[] => {
+    const pieces = state.filter(i => i.id !== plan.id);
+    pieces.push(plan);
+
+    return pieces;
 };
 
 const editPlanSchedule = (state: SessionPlan[], action: EditPlanScheduleAction): SessionPlan[] => {

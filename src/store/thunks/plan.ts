@@ -1,7 +1,13 @@
 import { Dispatch } from "redux";
-import { addPlan as addPlanToDb, deletePlan as deletePlanFromDb, getPlans, togglePlanIsFavourite } from "../../db/plan";
+import {
+    addPlan as addPlanToDb,
+    deletePlan as deletePlanFromDb,
+    getPlans,
+    togglePlanIsFavourite,
+    updatePlan
+} from "../../db/plan";
 import { SessionPlan } from "../../types/SessionPlan";
-import { addPlan, deletePlan, setPlans, togglePlanFav } from "../actions";
+import { addPlan, deletePlan, editPlan, setPlans, togglePlanFav } from "../actions";
 import { ThunkResult } from "./ThunkResult";
 
 export const thunkGetPlans: ThunkResult = () => async (dispatch: Dispatch) =>
@@ -11,6 +17,10 @@ export const thunkGetPlans: ThunkResult = () => async (dispatch: Dispatch) =>
 export const thunkAddPlan: ThunkResult = (plan: SessionPlan) => async (dispatch: Dispatch) =>
     await addPlanToDb(plan)
         .then((id) => dispatch(addPlan({ ...plan, id })));
+
+export const thunkEditPlan: ThunkResult = (plan: SessionPlan) => async (dispatch: Dispatch) =>
+    await updatePlan(plan)
+        .then(() => dispatch(editPlan(plan)));
 
 export const thunkDeletePlan: ThunkResult = (id: number) => async (dispatch: Dispatch) =>
     await deletePlanFromDb(id)

@@ -14,17 +14,17 @@ export const validatePlan = async (plan: SessionPlan): Promise<CheckResult> => {
         return Promise.resolve({ valid: false, errors: 'You forgot to enter plan title ✍' });
     } else if (plan.schedule.length === 0) {
         return Promise.resolve({ valid: false, errors: 'You forgot to add activities to schedule' });
-    } else if (!(await isPlanNameUnique(plan.name))) {
+    } else if (!(await isPlanNameUnique(plan))) {
         return Promise.resolve({ valid: false, errors: 'Plan with the same name already exists :/' });
     }
 
     return Promise.resolve({ valid: true });
 };
 
-const isPlanNameUnique = async (name: string): Promise<boolean> => {
+const isPlanNameUnique = async (plan: SessionPlan): Promise<boolean> => {
     const repo = getRepository(PlanEntity);
 
-    return (await repo.find({ where: { name } })).length === 0;
+    return (await repo.find({ where: { name: plan.name } })).filter(p => p.id !== plan.id).length === 0;
 };
 
 export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
@@ -32,8 +32,8 @@ export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
         return Promise.resolve({ valid: false, errors: 'You forgot to enter piece title ✍' });
     }
 
-    const pieceRepo = getRepository(PieceEntity);
-    const piecesWithSameName = (await pieceRepo.find({ where: { name: piece.name }, relations: ['authors'] }))
+    const repo = getRepository(PieceEntity);
+    const piecesWithSameName = (await repo.find({ where: { name: piece.name }, relations: ['authors'] }))
         .filter(item => item.id !== piece.id);
 
     if (piecesWithSameName.length > 0) {

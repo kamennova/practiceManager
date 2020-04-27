@@ -112,6 +112,15 @@ export const getPlanEntity = async (id: number): Promise<PlanEntity> => {
 export const getPlanById = async (id: number): Promise<SessionPlan> =>
     Promise.resolve(planFromEntity(await getPlanEntity(id)));
 
+export const updatePlan = async (plan: SessionPlan): Promise<void> => {
+    const ent = await getPlanEntity(plan.id);
+    ent.name = plan.name;
+    ent.schedule = createSchedule(plan.schedule);
+
+    const repo = getRepository(PlanEntity);
+    await repo.save(ent);
+};
+
 export const deletePlan = async (id: number): Promise<void> => {
     const repo = getRepository(PlanEntity);
     const plan = await getPlanEntity(id);
