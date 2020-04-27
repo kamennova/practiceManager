@@ -7,7 +7,7 @@ import { StateShape } from "../../store/StoreState";
 import { thunkAddPlan } from "../../store/thunks/plan";
 import { DEFAULT_THEME, ThemeColors } from "../../theme";
 import { EmptyPlan } from "../../types/EmptyPlan";
-import { FormProps, FormState } from "../../types/ItemForm";
+import { FormProps, FormState } from "../../types/item/ItemForm";
 import { PlanActivity } from "../../types/PlanActivity";
 import { SessionPlan } from "../../types/SessionPlan";
 import { swipe } from "../../utils/array";

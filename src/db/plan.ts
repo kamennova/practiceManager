@@ -1,6 +1,5 @@
 import { getRepository } from "typeorm";
 import { ActivityType, Exercise, Tonality } from "../types/Activity";
-import { EmptyPlan } from "../types/EmptyPlan";
 import { PlanActivity } from "../types/PlanActivity";
 import { SessionPlan, SessionSchedule } from "../types/SessionPlan";
 import {
@@ -87,17 +86,35 @@ const activityFromEntity = (ent: PlanActivityEntity): PlanActivity => {
     }
 };
 
-export const getPlanById = async (_: number) => {
-  return Promise.resolve(EmptyPlan);
+export const togglePlanIsFavourite = async (id: number): Promise<void> => {
+    const repo = getRepository(PlanEntity);
+    const planUpd = await repo.findOne(id);
+
+    if (planUpd === undefined) {
+        return await Promise.reject('Item not found, id: ' + id);
+    }
+
+    planUpd.isFavourite = !planUpd.isFavourite;
+    await repo.save(planUpd);
 };
 
-export const deletePlan = async (id: number): Promise<void> => {
+export const getPlanEntity = async (id: number): Promise<PlanEntity> => {
     const repo = getRepository(PlanEntity);
     const plan = await repo.findOne({ id });
 
     if (plan === undefined) {
         return await Promise.reject('plan not found, id: ' + id);
     }
+
+    return Promise.resolve(plan);
+};
+
+export const getPlanById = async (id: number): Promise<SessionPlan> =>
+    Promise.resolve(planFromEntity(await getPlanEntity(id)));
+
+export const deletePlan = async (id: number): Promise<void> => {
+    const repo = getRepository(PlanEntity);
+    const plan = await getPlanEntity(id);
 
     await repo.remove(plan);
 };

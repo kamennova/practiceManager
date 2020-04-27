@@ -1,6 +1,6 @@
 import { StackActions, useNavigation } from '@react-navigation/native';
 import React, { useState } from "react";
-import { Route } from "react-native";
+import { Route, ScrollView } from "react-native";
 import { ItemPaths } from "../../../NavigationPath";
 import { ActionType } from "../../../types/ActionType";
 import { Item, ItemName } from "../../../types/item/Item";
@@ -21,7 +21,7 @@ export type ItemScreenWrapperProps<ItemT extends Item> = {
 
     item: ItemT,
     setItem: (i: ItemT) => void,
-    children: JSX.Element[] | JSX.Element,
+    children: (JSX.Element | undefined)[] | JSX.Element,
 
     itemName: ItemName,
 };
@@ -61,7 +61,9 @@ export const ItemScreenWrapper = <ItemType extends Item>(props: ItemScreenWrappe
 
     return (
         <ScreenWrapper itemMenu={menu} fav={{ val: props.item.isFavourite, update: updateItemFav }}>
+            <ScrollView contentContainerStyle={scrollStyle}>
             {props.children}
+            </ScrollView>
             {showDeleteModal ?
                 <ConfirmDeleteModal onCancel={() => updateShowDeleteModal(false)} onOk={onDelete}/> : undefined}
 
@@ -74,3 +76,5 @@ export const ItemScreenWrapper = <ItemType extends Item>(props: ItemScreenWrappe
             </ItemButtonsWrap>
         </ScreenWrapper>);
 };
+
+const scrollStyle = {paddingBottom: 65 };
