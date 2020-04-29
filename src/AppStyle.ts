@@ -533,25 +533,35 @@ export const ActivityBlockHeight = 52;
 
 export const ActivityBlockStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     wrap: {
-        height: ActivityBlockHeight,
+        minHeight: ActivityBlockHeight,
         borderWidth: 1,
         borderColor: colors.borderFaded,
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 12,
+        paddingLeft: 12,
+        paddingRight: 0,
+        marginBottom: -1,
+    },
+    textWrap: {
         paddingTop: 14,
         paddingBottom: 14,
-        paddingRight: 7,
-        marginBottom: -1,
+    },
+    rightWrap: {
+        flexDirection: 'row',
+        backgroundColor: colors.appBg,
+        marginLeft: 'auto',
+        alignItems: 'center',
+        paddingLeft: 8,
     },
     duration: {
         color: 'grey',
         marginLeft: 'auto',
-        marginRight: 10,
     },
     name: {
         fontSize: 17,
         color: colors.color,
+        overflow: 'hidden',
+        flexWrap: 'nowrap',
     },
     dots: {
         width: 23,
@@ -562,7 +572,6 @@ export const ActivityBlockStyle = (colors: ThemeColors = DefaultColors) => Style
     iconStyle: {
         width: 25,
         height: 25,
-        borderWidth: 1,
         borderColor: colors.borderFaded,
         marginRight: -1
     }
