@@ -9,7 +9,7 @@ import { StateShape } from "../../store/StoreState";
 import { thunkAddPiece, thunkEditPiece } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { EmptyPiece } from "../../types/EmptyPiece";
-import { FormProps, FormState } from "../../types/ItemForm";
+import { FormProps, FormState } from "../../types/item/ItemForm";
 import { Piece } from "../../types/Piece";
 import { trimStrArr } from "../../utils/strings";
 import { SaveButton } from "../basic/Buttons/ActionButton";

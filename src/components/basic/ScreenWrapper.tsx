@@ -8,7 +8,7 @@ import { ItemFav } from "./ItemFav";
 import { ItemMenu, MenuOption } from "./ItemMenu";
 
 type WrapperProps = {
-    children: JSX.Element | (JSX.Element | undefined)[],
+    children: JSX.Element | (JSX.Element | undefined | JSX.Element[])[],
     itemMenu?: MenuOption[],
     fav?: {
         update: () => void,

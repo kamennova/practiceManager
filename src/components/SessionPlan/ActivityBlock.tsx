@@ -3,18 +3,15 @@ import { Text, View, ViewStyle } from "react-native";
 import { ActivityBlockStyle as getStyles } from "../../AppStyle";
 import { useTheme } from "../../theme";
 import { ActivityType } from "../../types/Activity";
-import { Direction } from "../../types/Direction";
 import { PlanActivity } from "../../types/PlanActivity";
-import { ArrowIcon } from "../basic/icons/ArrowIcon";
-import { DotsIcon } from "../basic/icons/DotsIcon";
+import { formatMinutesShort } from "../../utils/time";
 
-type BlockProps = {
+export type BlockProps = {
     activity: PlanActivity,
-    onShowMenu: () => void,
-    onMove: (pos: -1 | 1) => void,
     style?: ViewStyle,
     isLast: boolean,
     isFirst: boolean,
+    children?: JSX.Element[],
 }
 
 export const ActivityBlock = (props: BlockProps) => {
@@ -22,17 +19,15 @@ export const ActivityBlock = (props: BlockProps) => {
 
     return (
         <View style={{ ...styles.wrap, ...props.style }}>
-            <Text style={styles.name}>{getTitle(props.activity)}</Text>
-            <Text style={styles.duration}>{props.activity.duration} min</Text>
-            <ArrowIcon size={15}
-                       wrapStyle={{ ...styles.iconStyle, opacity: props.isFirst ? 0.3 : 1 }}
-                       onPress={props.isFirst ? undefined : () => props.onMove(-1)}
-                       direction={Direction.Top}/>
-            <ArrowIcon size={15}
-                       wrapStyle={{ ...styles.iconStyle, opacity: props.isLast ? 0.3 : 1 }}
-                       onPress={props.isLast ? undefined : () => props.onMove(1)}
-                       direction={Direction.Bottom}/>
-            <DotsIcon wrapStyle={{ width: 25, marginLeft: 10 }} onPress={props.onShowMenu}/>
+            <View style={styles.textWrap}>
+                <Text numberOfLines={1} style={styles.name}>{getTitle(props.activity)}</Text>
+            </View>
+            <View style={styles.rightWrap}>
+                <View style={styles.textWrap}>
+                    <Text style={styles.duration}>{formatMinutesShort(props.activity.duration)}</Text>
+                </View>
+                {props.children}
+            </View>
         </View>
     );
 };

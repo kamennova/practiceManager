@@ -6,6 +6,7 @@ import { AppPaddingStyle } from "../../AppStyle";
 import { SESSION_PLAN, SESSION_PLAN_FORM } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkGetPlans } from "../../store/thunks/plan";
+import { ActionType } from "../../types/ActionType";
 import { SessionPlan } from "../../types/SessionPlan";
 import { NothingAlert } from "../basic/Alerts/NothingAlert";
 import { AddButton } from "../basic/Buttons/ActionButton";
@@ -30,11 +31,14 @@ class SessionPlans extends Component<ListProps> {
             <ScreenWrapper>
                 <ScrollView contentContainerStyle={style}>
                     {this.props.plans.length === 0 ? <NothingAlert/> : undefined}
-                    <FlatList data={this.props.plans}
-                              renderItem={({ item }) => (
-                                  <SessionPlanItem plan={item} onPress={this.push(SESSION_PLAN, { plan: item })}/>)}/>
+                    <FlatList
+                        contentContainerStyle={{flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-between'}}
+                        data={this.props.plans}
+                        renderItem={({ item }) => (
+                            <SessionPlanItem plan={item}
+                                             onPress={this.push(SESSION_PLAN, { id: item.id, plan: item })}/>)}/>
                 </ScrollView>
-                <AddButton onPress={this.push(SESSION_PLAN_FORM)}/>
+                <AddButton onPress={this.push(SESSION_PLAN_FORM, {mode: ActionType.Create})}/>
             </ScreenWrapper>
         );
     }

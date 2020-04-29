@@ -86,13 +86,44 @@ const activityFromEntity = (ent: PlanActivityEntity): PlanActivity => {
     }
 };
 
-export const deletePlan = async (id: number): Promise<void> => {
+export const togglePlanIsFavourite = async (id: number): Promise<void> => {
+    const repo = getRepository(PlanEntity);
+    const planUpd = await repo.findOne(id);
+
+    if (planUpd === undefined) {
+        return await Promise.reject('Item not found, id: ' + id);
+    }
+
+    planUpd.isFavourite = !planUpd.isFavourite;
+    await repo.save(planUpd);
+};
+
+export const getPlanEntity = async (id: number): Promise<PlanEntity> => {
     const repo = getRepository(PlanEntity);
     const plan = await repo.findOne({ id });
 
     if (plan === undefined) {
         return await Promise.reject('plan not found, id: ' + id);
     }
+
+    return Promise.resolve(plan);
+};
+
+export const getPlanById = async (id: number): Promise<SessionPlan> =>
+    Promise.resolve(planFromEntity(await getPlanEntity(id)));
+
+export const updatePlan = async (plan: SessionPlan): Promise<void> => {
+    const ent = await getPlanEntity(plan.id);
+    ent.name = plan.name;
+    ent.schedule = createSchedule(plan.schedule);
+
+    const repo = getRepository(PlanEntity);
+    await repo.save(ent);
+};
+
+export const deletePlan = async (id: number): Promise<void> => {
+    const repo = getRepository(PlanEntity);
+    const plan = await getPlanEntity(id);
 
     await repo.remove(plan);
 };

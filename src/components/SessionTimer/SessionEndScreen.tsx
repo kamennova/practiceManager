@@ -5,9 +5,9 @@ import { connect } from "react-redux";
 import { FullScreenModalStyle } from "../../AppStyle";
 import { DASHBOARD } from "../../NavigationPath";
 import { SessionState, StateShape } from "../../store/StoreState";
+import { getActivitiesReport } from "../../types/ActivitiesReport";
 import { Button } from "../basic/Buttons/Button";
 import { ModalTitle } from "../basic/Titles/ModalTitle";
-import { getSessionReport } from "./SessionReport";
 
 type SessionEndProps = {
     session: SessionState,
@@ -15,7 +15,7 @@ type SessionEndProps = {
 };
 
 const SessionEnd = (props: SessionEndProps) => {
-    const report = getSessionReport(props.session.history);
+    const report = getActivitiesReport([]);
 
     return (
         <View style={{ ...FullScreenModalStyle }}>

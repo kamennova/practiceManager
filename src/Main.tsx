@@ -41,7 +41,7 @@ import { ActionType } from "./types/ActionType";
 const options = (colors: ThemeColors) => ({
     cardStyle: { backgroundColor: colors.appBg },
     headerStyle: AppHeaderStyle(colors),
-    headerTitleStyle: { fontWeight: '500', fontFamily: 'Roboto', color: colors.color, marginLeft: -4},
+    headerTitleStyle: { fontWeight: '500', fontFamily: 'Roboto', color: colors.color, marginLeft: -4 },
     headerLeftContainerStyle: { paddingLeft: AppSidePadding },
     headerRightContainerStyle: { paddingRight: AppSidePadding },
 });
@@ -52,7 +52,7 @@ const Drawer = createDrawerNavigator();
 export const Main = () => (
     <NavigationContainer>
         <Drawer.Navigator
-            sceneContainerStyle={{height: '100%'}}
+            sceneContainerStyle={{ height: '100%' }}
             drawerStyle={DrawerStyle(useTheme().colors)}
             drawerContentOptions={{ contentContainerStyle: DrawerContentStyle }}
             drawerContent={props => (<CustomDrawerContent {...props} />)}>
@@ -76,7 +76,8 @@ const Root = () => (
         <Stack.Screen
             options={({ navigation }) => ({
                 title: 'Pieces',
-                headerLeft: () => <NavIcon onPress={() => navigation.toggleDrawer()}/>, })}
+                headerLeft: () => <NavIcon onPress={() => navigation.toggleDrawer()}/>,
+            })}
             name={REPERTOIRE}
             component={RepertoireScreen}/>
 
@@ -98,7 +99,12 @@ const Root = () => (
                           title: 'Practice plans',
                           headerLeft: () => <NavIcon onPress={() => navigation.toggleDrawer()}/>,
                       })}/>
-        <Stack.Screen name={SESSION_PLAN} component={SessionPlanScreen}/>
+        <Stack.Screen name={SESSION_PLAN} component={SessionPlanScreen}
+                      options={({ navigation }) => ({
+                          title: '',
+                          headerLeft: () => <BackIcon onPress={() => navigation.navigate(SESSION_PLAN_LIST)}/>,
+                          headerTransparent: true,
+                      })}/>
         <Stack.Screen name={SESSION_PLAN_FORM} component={SessionPlanForm}
                       options={({ route, navigation }) => ({
                           title: route.params?.mode === ActionType.Edit ? 'Edit plan' : 'Add plan',
