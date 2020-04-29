@@ -1,4 +1,5 @@
 import React from "react";
+import { View } from "react-native";
 import { ActivityBlockStyle as getStyles } from "../../AppStyle";
 import { useTheme } from "../../theme";
 import { Direction } from "../../types/Direction";
@@ -20,15 +21,17 @@ export const EditableActivityBlock = (props: EditableBlockProps) => {
         <ActivityBlock activity={props.activity}
                        isLast={props.isLast}
                        isFirst={props.isFirst}>
-            <ArrowIcon size={IconSize}
-                       wrapStyle={{ ...styles.iconStyle, opacity: props.isFirst ? 0.3 : 1 }}
-                       onPress={props.isFirst ? undefined : () => props.onMove(-1)}
-                       direction={Direction.Top}/>
-            <ArrowIcon size={IconSize}
-                       wrapStyle={{ ...styles.iconStyle, opacity: props.isLast ? 0.3 : 1 }}
-                       onPress={props.isLast ? undefined : () => props.onMove(1)}
-                       direction={Direction.Bottom}/>
-            <DotsIcon wrapStyle={{ width: 25, marginLeft: 10 }} onPress={props.onShowMenu}/>
+            <DotsIcon wrapStyle={{ width: 30, }} onPress={props.onShowMenu}/>
+            <View style={{borderLeftWidth: 1, borderColor: useTheme().colors.borderFaded}}>
+                <ArrowIcon size={IconSize}
+                           wrapStyle={{ ...styles.iconStyle, opacity: props.isFirst ? 0.3 : 1 }}
+                           onPress={props.isFirst ? undefined : () => props.onMove(-1)}
+                           direction={Direction.Top}/>
+                <ArrowIcon size={IconSize}
+                           wrapStyle={{ ...styles.iconStyle, opacity: props.isLast ? 0.3 : 1 }}
+                           onPress={props.isLast ? undefined : () => props.onMove(1)}
+                           direction={Direction.Bottom}/>
+            </View>
         </ActivityBlock>
     );
 };

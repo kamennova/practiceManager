@@ -2,19 +2,25 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet } from "react-native";
 import { useTheme } from "../../../theme";
 import { ThemeColors } from "../../../theme";
+import { getHours, getMinutes, Time, toMinutes } from "../../../utils/time";
 import { NumberInput } from "./NumberInput";
 
-export const DurationInput = (props: { minutes: number, onChange: (min: number) => void }) => {
-    const [dur, setDur] = useState({ m: props.minutes % 60, h: Math.floor(props.minutes / 60) });
+type InputProps = {
+    minutes: number,
+    onChange: (min: number) => void,
+};
+
+export const DurationInput = (props: InputProps) => {
+    const [dur, setDur] = useState<Time>({ m: getMinutes(props.minutes), h: getHours(props.minutes) });
 
     const setMin = (min: number) => {
-        setDur({ m: min % 60, h: dur.h + Math.floor(min / 60) });
-        props.onChange(dur.m + dur.h * 60)
+        setDur({ m: getMinutes(min), h: dur.h + getHours(min) });
+        props.onChange(toMinutes(dur))
     };
 
     const setHour = (h: number) => {
         setDur({ m: dur.m, h });
-        props.onChange(dur.m + dur.h * 60)
+        props.onChange(toMinutes(dur))
     };
 
     const styles = getStyles(useTheme().colors);

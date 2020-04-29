@@ -4,6 +4,7 @@ import { ActivityBlockStyle as getStyles } from "../../AppStyle";
 import { useTheme } from "../../theme";
 import { ActivityType } from "../../types/Activity";
 import { PlanActivity } from "../../types/PlanActivity";
+import { formatMinutesShort } from "../../utils/time";
 
 export type BlockProps = {
     activity: PlanActivity,
@@ -18,9 +19,15 @@ export const ActivityBlock = (props: BlockProps) => {
 
     return (
         <View style={{ ...styles.wrap, ...props.style }}>
-            <Text style={styles.name}>{getTitle(props.activity)}</Text>
-            <Text style={styles.duration}>{props.activity.duration} min</Text>
-            {props.children}
+            <View style={styles.textWrap}>
+                <Text numberOfLines={1} style={styles.name}>{getTitle(props.activity)}</Text>
+            </View>
+            <View style={styles.rightWrap}>
+                <View style={styles.textWrap}>
+                    <Text style={styles.duration}>{formatMinutesShort(props.activity.duration)}</Text>
+                </View>
+                {props.children}
+            </View>
         </View>
     );
 };

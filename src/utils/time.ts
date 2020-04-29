@@ -3,6 +3,11 @@ export enum TimeFormat {
     Long,
 }
 
+export type Time = {
+    m: number,
+    h: number,
+};
+
 export const minutesToHumanlyFormat = (minutes: number, _format?: TimeFormat): string => {
     if (minutes < 60) {
         return minutes + ' min';
@@ -21,4 +26,10 @@ export const formatMinutesShort = (minutes: number): string => {
         (minutes % 60 > 0 ? minutes % 60 + 'm' : '');
 };
 
-export const formatSeconds = (time: number): string => time.toString().length > 1 ? time.toString() : '0' + time.toString();
+export const formatSeconds = (time: number): string => time.toString().length > 1 ?
+    time.toString() : '0' + time.toString();
+
+export const getMinutes = (m: number) => m % 60,
+    getHours = (m: number) => Math.floor(m / 60);
+
+export const toMinutes = (t: Time) => t.m + t.h * 60;

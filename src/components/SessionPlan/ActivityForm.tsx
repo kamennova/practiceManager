@@ -19,13 +19,11 @@ type BlockFormProps = {
 const BaseActivity = { type: ActivityType.Break, duration: 3 };
 
 export const ActivityForm = (props: BlockFormProps) => {
-    const [activity, setActivity] = useState<PlanActivityInput>(props.activity !== undefined ? props.activity : BaseActivity);
+    const initAct = props.activity !== undefined ? props.activity : BaseActivity;
+    const [activity, setActivity] = useState<PlanActivityInput>(initAct);
 
-    const chooseType = (type: ActivityType) => {
-        setActivity({ ...activity, type });
-    };
-
-    const setDuration = (mins: number) => setActivity({ ...activity, duration: mins }),
+    const setType = (type: ActivityType) => setActivity({ ...activity, type }),
+        setDuration = (mins: number) => setActivity({ ...activity, duration: mins }),
         setTonality = (tonality: Tonality) => setActivity({ ...activity, tonality }),
         setExercise = (exercise: Exercise) => setActivity({ ...activity, exercise }),
         setPieceId = (pieceId: number) => setActivity({ ...activity, pieceId });
@@ -42,7 +40,7 @@ export const ActivityForm = (props: BlockFormProps) => {
     return (
         <View style={styles.modalWrap}>
             {props.activity === undefined ?
-                <ActivityTypeSelect onChooseType={chooseType} activeType={activity.type}/> : undefined}
+                <ActivityTypeSelect onChooseType={setType} activeType={activity.type}/> : undefined}
 
             {activity.type === ActivityType.Break ?
                 <View style={styles.breakWrap}><Text style={styles.breakText}>Break</Text></View> :
@@ -52,8 +50,7 @@ export const ActivityForm = (props: BlockFormProps) => {
                                        pieceId={activity.pieceId} setPieceId={setPieceId}/>}
 
             <View style={styles.bottomWrap}>
-                <DurationInput minutes={15} onChange={() => {
-                }}/>
+                <DurationInput minutes={activity.duration} onChange={setDuration}/>
                 <AddButton onCancel={reset} onSave={onSave}/>
             </View>
         </View>
