@@ -21,6 +21,9 @@ export const NavIcon = (props: IconProps) => {
 };
 
 export const BackIcon = (props: IconProps) => (
-    <ArrowIcon onPress={props.onPress} wrapStyle={HeaderIconWrap(useTheme().colors)} direction={Direction.Left}
+    <ArrowIcon onPress={props.onPress}
+               wrapStyle={HeaderIconWrap(useTheme().colors)}
+               color={useTheme().colors.color}
+               direction={Direction.Left}
                size={25}/>
 );

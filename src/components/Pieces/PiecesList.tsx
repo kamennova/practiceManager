@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, Image, Text, TextStyle, TouchableNativeFeedback, View } from "react-native";
-import { ListItemStyle, PieceListStyle as stylesFunc } from "../../AppStyle";
+import { ListItemStyle, ListItemTitleStyle, PieceListStyle as stylesFunc } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
 import { Theme, useTheme } from "../../theme";
 import { PieceBase } from "../../types/Piece";
@@ -29,7 +29,7 @@ const PieceItem = (props: PieceBase & { onPress: () => void }) => {
         <TouchableNativeFeedback onPress={props.onPress}>
             <View style={ListItemStyle(theme.colors)}>
                 <View style={styles.itemWrap}>
-                    <PieceName style={styles.pieceName}>
+                    <PieceName style={ListItemTitleStyle(theme.colors)}>
                         {props.name}
                     </PieceName>
                     {props.authors.length > 0 ?
@@ -40,8 +40,6 @@ const PieceItem = (props: PieceBase & { onPress: () => void }) => {
                     <Image source={theme.theme !== Theme.Dark ? require('../../../assets/grad_white.png') :
                         require('../../../assets/grad_dark.png')}
                            style={{ ...styles.imageTop }}/>,
-
-
                 ] : undefined}
             </View>
         </TouchableNativeFeedback>

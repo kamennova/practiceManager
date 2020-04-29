@@ -34,7 +34,7 @@ export const HeaderIconWrap = (colors: ThemeColors): ViewStyle => ({
 });
 
 const ItemHeight = 70,
-    ItemBorderRadius = 0,
+    ItemBorderRadius = 2,
     ImagePadding = 0,
     ImageHeight = ItemHeight - 2 - ImagePadding * 2,
     ImageWidth = 170 - ImagePadding;
@@ -43,11 +43,6 @@ export const PieceListStyle = (colors: ThemeColors, theme: Theme = DEFAULT_THEME
     author: {
         fontSize: 13,
         color: colors.colorFaded,
-    },
-    pieceName: {
-        fontSize: 17,
-        marginBottom: 3,
-        color: colors.color,
     },
     image: {
         width: ImageWidth,
@@ -67,20 +62,56 @@ export const PieceListStyle = (colors: ThemeColors, theme: Theme = DEFAULT_THEME
     itemWrap: { padding: 10, paddingLeft: 12 },
 });
 
-export const ListItemTitleStyle = {
+export const ListItemTitleStyle = (colors: ThemeColors = DefaultColors) => ({
     fontSize: 17,
+    lineHeight: 24,
     marginBottom: 3,
-};
+    color: colors.color,
+    marginTop: 0,
+});
 
 export const ListItemStyle = (colors: ThemeColors): ViewStyle => ({
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: colors.borderFaded,
     backgroundColor: colors.appBg,
     marginBottom: 10,
     flexDirection: 'row',
-    height: ItemHeight,
+    minHeight: ItemHeight,
     alignItems: 'center',
     borderRadius: ItemBorderRadius,
+});
+
+
+const PlanItemMargin = 10;
+const PlanItemWidth = (Dimensions.get('window').width - AppSidePadding * 2 - PlanItemMargin) / 2 - 1;
+
+export const PlanItemStyle = (colors: ThemeColors = DefaultColors) => (StyleSheet.create({
+    item: {
+        ...ListItemStyle(colors),
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        padding: 12,
+        paddingLeft: 15,
+        width: PlanItemWidth,
+    },
+    title: {
+        ...ListItemTitleStyle(colors),
+        marginBottom: 14,
+    },
+}));
+
+export const ActivityTimingStyle = StyleSheet.create({
+    timingWrap: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap'
+    },
+    timing: {
+        flexDirection: 'column',
+        marginBottom: 13, alignItems: 'center',
+        width: '50%',
+    },
 });
 
 export const ButtonStyle: ViewStyle = {

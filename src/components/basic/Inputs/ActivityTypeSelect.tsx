@@ -42,7 +42,7 @@ const ActivityBtn = (props: BtnProps) => {
                 backgroundColor: props.isActive ? colors.appBgLight : 'transparent',
                 borderColor: props.isActive ? Dark : 'transparent'
             }}>
-                <View style={styles.iconWrap}>{getActivityIcon(props.type)}</View>
+                <View style={styles.iconWrap}>{getActivityIcon(props.type)({size: undefined})}</View>
                 <Text style={{
                     ...styles.activityBtnText,
                     color: props.isActive ? Dark : colors.colorFaded
@@ -52,16 +52,16 @@ const ActivityBtn = (props: BtnProps) => {
     );
 };
 
-const getActivityIcon = (type: ActivityType) => {
+export const getActivityIcon = (type: ActivityType) => {
     switch (type) {
         case ActivityType.Break:
-            return <BreakIcon/>;
+            return BreakIcon;
         case ActivityType.Technique:
-            return <BoltIcon/>;
+            return BoltIcon;
         case ActivityType.Piece:
-            return <MusicIcon/>;
+            return MusicIcon;
         case ActivityType.SightReading:
-            return <EyeIcon/>;
+            return EyeIcon;
     }
 };
 
