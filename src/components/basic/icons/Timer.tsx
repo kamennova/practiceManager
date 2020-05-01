@@ -1,10 +1,15 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, ImageStyle } from "react-native";
+import { useTheme } from "../../../theme";
 
 type IconProps = {
-    style?: ImageStyle
+    size?: number,
 }
 
 export const TimerIcon = (props: IconProps) => (
-    <Image style={props.style} source={require('../../../../assets/timer.png')}/>
+    <MaterialIcons name='timer' size={props.size ? props.size : 24} color={useTheme().colors.color}/>
+);
+
+export const TimerOffIcon = (props: IconProps) => (
+    <MaterialIcons name='timer-off' size={props.size ? props.size : 24} color={useTheme().colors.color}/>
 );

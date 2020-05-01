@@ -328,12 +328,19 @@ export const ModalStyle: ViewStyle = {
     minWidth: Dimensions.get('screen').width * 0.8,
 };
 
-export const ModalTitleStyle: TextStyle = {
+export const SmallModalTitleStyle = (colors: ThemeColors = DefaultColors): TextStyle => ({
+    marginBottom: 10,
+    textAlign: 'center',
+    color: colors.color,
+    fontSize: 14,
+});
+
+export const ModalTitleStyle = (colors: ThemeColors = DefaultColors): TextStyle => ({
     marginBottom: 50,
     textAlign: 'center',
-    color: 'black',
+    color: colors.color,
     fontSize: 23,
-};
+});
 
 export const PickerWrapperStyle = (colors: ThemeColors = DefaultColors) => ({
     borderWidth: 1,
@@ -731,7 +738,7 @@ export const AddActivityBtnStyle = (colors: ThemeColors, theme: Theme) => StyleS
     },
 });
 
-export const SessionStartStyle = StyleSheet.create({
+export const SessionStartStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     wrap: {
         marginBottom: 30,
         marginTop: 20,
@@ -747,15 +754,6 @@ export const SessionStartStyle = StyleSheet.create({
         width: 19,
         height: 19,
     },
-    option: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingTop: 3,
-        paddingBottom: 3,
-        paddingLeft: 17,
-        marginBottom: 12,
-        borderWidth: 2,
-    },
     noPlanOption: {
         paddingTop: 15,
         paddingBottom: 15,
@@ -764,13 +762,17 @@ export const SessionStartStyle = StyleSheet.create({
     noPlanText: {
         fontSize: 15,
         paddingLeft: 8,
+        color: colors.color,
     },
+});
+
+export const SessionOptionStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     circle: {
         width: 20,
         height: 20,
         borderRadius: 10,
         borderWidth: 2,
-        borderColor: 'lightgrey',
+        borderColor: colors.borderFaded,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 20,
@@ -780,6 +782,15 @@ export const SessionStartStyle = StyleSheet.create({
         height: 8,
         borderRadius: 4,
         backgroundColor: Dark
+    },
+    option: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 17,
+        marginBottom: 12,
+        borderWidth: 2,
     },
 });
 
