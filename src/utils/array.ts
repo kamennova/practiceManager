@@ -1,3 +1,5 @@
+import { Item } from "../types/item/Item";
+
 export const swipe = <T>(arr: T[], index1: number, index2: number): T[] => {
     const newArr = [...arr];
     const temp = newArr[index1];
@@ -9,3 +11,10 @@ export const swipe = <T>(arr: T[], index1: number, index2: number): T[] => {
 };
 
 export const enumKeys = <E>(en: E): string[] => Object.keys(en).filter(key => isNaN(Number(key)));
+
+export const replaceItem = <T extends Item>(arr: T[], item: T): T[] => {
+    const items = arr.filter(i => i.id !== item.id);
+    items.push(item);
+
+    return items;
+};

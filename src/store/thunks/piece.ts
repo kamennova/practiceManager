@@ -8,6 +8,7 @@ import {
     togglePieceIsFavourite,
     updatePiece
 } from "../../db/piece";
+import { cancelPieceNotif, schedulePieceNotif } from "../../notifications";
 import { Piece } from "../../types/Piece";
 import {
     addPiece,
@@ -40,8 +41,14 @@ export const thunkGetPiecesMeta: ThunkResult = () => async (dispatch: Dispatch) 
 };
 
 export const thunkAddPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
-    return await addPieceToDb(piece)
-        .then((id) => dispatch(addPiece({...piece, id})));
+    const id = await addPieceToDb(piece);
+    const addedPiece = { ...piece, id };
+
+    if (piece.notifsOn) {
+        await schedulePieceNotif(addedPiece);
+    }
+
+    return dispatch(addPiece(addedPiece));
 };
 
 export const thunkEditPiece: ThunkResult = (piece: Piece) => async (dispatch: Dispatch) => {
@@ -56,7 +63,7 @@ export const thunkTogglePieceFav: ThunkResult = (id: number) => async (dispatch:
 };
 
 export const thunkDeletePiece: ThunkResult = (id: number) => async (dispatch: Dispatch) => {
-    await deletePieceFromDb(id);
+    await Promise.all([deletePieceFromDb(id), cancelPieceNotif(id)]);
 
     return dispatch(deletePiece(id));
 };

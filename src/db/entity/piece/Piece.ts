@@ -18,17 +18,17 @@ export class PieceEntity {
     isFavourite!: boolean;
 
     @Column({ type: 'varchar', length: 255, nullable: true })
-    imageUri!: string;
+    imageUri!: string | null;
 
     @Column({ type: 'varchar', length: 255, nullable: true })
-    originalUri!: string;
+    originalUri!: string | null;
 
     // todo: createDateCol
     @Column("datetime")
     addedOn!: number;
 
     @Column({type: "datetime", nullable: true })
-    lastPracticedOn!: string;
+    lastPracticedOn!: string | undefined;
 
     @Column("boolean")
     notificationsOn!: boolean;
@@ -36,11 +36,14 @@ export class PieceEntity {
     @Column("smallint")
     notificationsInterval!: number;
 
+    @Column("smallint", {nullable: true})
+    notificationId!: number | null;
+
     @Column({ type: 'varchar', nullable: true })
-    genre!: string;
+    genre!: string | null;
 
     @Column({ type: 'varchar', nullable: true})
-    complexity!: string;
+    complexity!: string | null;
 
     @ManyToMany(_type => AuthorEntity, { cascade: ['insert'] })
     @JoinTable()
