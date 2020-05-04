@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { AppPaddingStyle } from "../../AppStyle";
 import { PIECE_FORM } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
-import { thunkGetPiecesMeta } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { PieceBase } from "../../types/Piece";
 import { AddButton } from "../basic/Buttons/ActionButton";
@@ -16,15 +15,7 @@ const mapStateToProps = (state: StateShape) => ({
     pieces: state.pieces.items,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
-    getPieces: () => dispatch(thunkGetPiecesMeta()),
-});
-
 class Repertoire extends Component<{ pieces: PieceBase[], getPieces: () => void, navigation: any }> {
-    componentDidMount() {
-        this.props.getPieces();
-    }
-
     render() {
         return (
             <ScreenWrapper>
@@ -39,7 +30,7 @@ class Repertoire extends Component<{ pieces: PieceBase[], getPieces: () => void,
 
 const pushForm = StackActions.push(PIECE_FORM, { mode: ActionType.Create, });
 
-const RepertoireScreen = connect(mapStateToProps, mapDispatchToProps)(Repertoire);
+const RepertoireScreen = connect(mapStateToProps)(Repertoire);
 export default RepertoireScreen;
 
 const scrollStyle = {
