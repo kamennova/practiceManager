@@ -1,3 +1,4 @@
+import { StackActions } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
@@ -20,26 +21,30 @@ type StartProps = {
 const IconSize = 19;
 
 const SessionStart = (props: StartProps) => {
-    const [usePlan, updateUsePlan] = useState(false);
-    const [planName, updatePlanName] = useState('daily');
+    const defaultPlanId = props.plans.length > 0 ? props.plans[0].id : 0;
 
-    const setUsePlan = () => {
+    const [usePlan, setUsePlan] = useState(false);
+    const [planId, setPlanId] = useState<number>(defaultPlanId);
+
+    const doUsePlan = () => {
         if (props.plans.length > 0) {
-            updateUsePlan(true);
+            setUsePlan(true);
         }
     };
 
-    const setPlan = (itemValue: string) => {
-        updateUsePlan(true);
-        updatePlanName(itemValue);
+    const setPlan = (itemId: string) => {
+        setUsePlan(true);
+        setPlanId(Number(itemId));
     };
 
-    const navigateToTimer = () => usePlan ?
-        props.navigation.navigate(PLANNED_SESSION_TIMER, { plan: props.plans[0] }) :
-        props.navigation.navigate(FREE_SESSION_ACTIVITY_CHOICE);
+    const replace = (path: string, opt?: any) => props.navigation.dispatch(StackActions.replace(path, opt));
 
-    const planItems = (props.plans.length > 0 ? props.plans.map(pl => pl.name) : ['-'])
-        .map(name => ({ val: name, label: name }));
+    const navigateToTimer = () => usePlan ?
+        replace(PLANNED_SESSION_TIMER, { planId: Number(planId) }) :
+        replace(FREE_SESSION_ACTIVITY_CHOICE);
+
+    const planItems = props.plans.length > 0 ? props.plans.map(item => ({ val: item.id, label: item.name }))
+        : [{ val: '-', label: '-' }];
 
     const styles = getStyles(useTheme().colors);
 
@@ -48,17 +53,17 @@ const SessionStart = (props: StartProps) => {
             <ModalTitle> New session </ModalTitle>
 
             <View style={styles.wrap}>
-                <SessionTypeOption isSelected={!usePlan} updateSelected={() => updateUsePlan(false)}>
+                <SessionTypeOption isSelected={!usePlan} updateSelected={() => setUsePlan(false)}>
                     <View style={styles.noPlanOption}>
                         <TimerOffIcon size={IconSize}/>
                         <Text style={styles.noPlanText}>No plan</Text>
                     </View>
                 </SessionTypeOption>
 
-                <SessionTypeOption isSelected={usePlan} updateSelected={setUsePlan}>
+                <SessionTypeOption isSelected={usePlan} updateSelected={doUsePlan}>
                     <TimerIcon size={IconSize}/>
                     {props.plans.length === 0 ? <NoPlansText/> :
-                        <MyPicker selected={planName}
+                        <MyPicker selected={planId}
                                   enabled={usePlan && props.plans.length > 0}
                                   wrapperStyle={styles.pickerWrap}
                                   items={planItems}

@@ -1,31 +1,35 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { ActivityType } from "../../types/Activity";
+import { Activity, ActivityType } from "../../types/Activity";
+import { getActivityColor } from "./Colors";
 
 type TimerActivityTitle = {
     small?: string,
     main: string
 };
 
-export const SessionActivityTitle = (props: { title: { main: string, small?: string }, color?: string }) => (
-    <View style={{
-        marginBottom: 30,
-        marginTop: 150,
-        alignSelf: 'center',
-        alignItems: 'center'
-    }}>
-        {props.title.small !== undefined ? <SmallTitle color={props.color}>{props.title.small}</SmallTitle> : undefined}
-        <Text style={{
-            fontSize: 35,
-            color: props.color !== undefined ? props.color : 'black',
-            textAlign: 'center',
+export const SessionActivityTitle = (props: { activity: Activity }) => {
+    return (
+        <View style={{
+            marginBottom: 30,
+            marginTop: 150,
+            alignSelf: 'center',
+            alignItems: 'center'
         }}>
-            {props.title.main}
-        </Text>
-    </View>
-);
+            <Text style={{
+                fontSize: 35,
+                color: getActivityColor(props.activity.type),
+                textAlign: 'center',
+            }}>
+                {props.activity.type}
+            </Text>
+            {/*{props.title.small !== undefined ?*/}
+                {/*<SmallTitle color={props.color}>{props.title.small}</SmallTitle> : undefined}*/}
+        </View>
+    );
+};
 
-const SmallTitle = (props: { children: string, color?: string }) => (
+export const SmallTitle = (props: { children: string, color?: string }) => (
     <Text style={{
         width: '100%',
         marginBottom: 7,

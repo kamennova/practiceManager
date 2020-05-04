@@ -3,7 +3,6 @@ import React from 'react';
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import { FullScreenModalStyle } from "../../AppStyle";
-import { DASHBOARD } from "../../NavigationPath";
 import { SessionState, StateShape } from "../../store/StoreState";
 import { getActivitiesReport } from "../../types/ActivitiesReport";
 import { Button } from "../basic/Buttons/Button";
@@ -24,7 +23,7 @@ const SessionEnd = (props: SessionEndProps) => {
             <Text>
                 You've practiced for {report.totalDuration} minutes
             </Text>
-            <Button onPress={() => props.navigation.dispatch(StackActions.replace(DASHBOARD))}>Ok</Button>
+            <Button onPress={() => props.navigation.dispatch(StackActions.pop())}>Ok</Button>
         </View>
     );
 };

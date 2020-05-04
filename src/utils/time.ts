@@ -33,3 +33,5 @@ export const getMinutes = (m: number) => m % 60,
     getHours = (m: number) => Math.floor(m / 60);
 
 export const toMinutes = (t: Time) => t.m + t.h * 60;
+
+export const getSeconds = () => Math.floor(Date.now() / 1000);

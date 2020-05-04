@@ -9,22 +9,31 @@ import RepertoireScreen from "./components/Pieces/RepertoireScreen";
 import { SessionPlanScreen } from "./components/SessionPlan";
 import { SessionPlanForm } from "./components/SessionPlan/SessionPlanForm";
 import SessionPlansList from "./components/SessionPlan/SessionPlansList";
-import { FreeSessionTimer, PlannedSessionTimer, SessionEndScreen } from "./components/SessionTimer";
-import { FreeBreakTimer } from "./components/SessionTimer/FreeBreakTimer";
-import { FreeSessionActivityChoice } from "./components/SessionTimer/FreeSessionActivityChoice";
+import {
+    FreeBreakTimer,
+    FreeSessionActivityChoice,
+    FreeSessionTimer,
+    PlannedSessionTimer,
+    SessionEndScreen
+} from "./components/SessionTimer";
 import { SessionStartScreen } from "./components/SessionTimer/SessionStartScreen";
 import { AppSettings } from "./components/Settings/Settings";
 import {
     DASHBOARD,
-    FREE_BREAK_TIMER, FREE_SESSION_ACTIVITY_CHOICE,
+    FREE_BREAK_TIMER,
+    FREE_SESSION_ACTIVITY_CHOICE,
     FREE_SESSION_TIMER,
     INITIAL_SCREEN,
     PIECE,
-    PIECE_FORM, PLANNED_SESSION_TIMER,
-    REPERTOIRE, SESSION_END,
+    PIECE_FORM,
+    PLANNED_SESSION_TIMER,
+    REPERTOIRE,
+    SESSION_END,
     SESSION_PLAN,
     SESSION_PLAN_FORM,
-    SESSION_PLAN_LIST, SESSION_START, SETTINGS
+    SESSION_PLAN_LIST,
+    SESSION_START,
+    SETTINGS
 } from "./NavigationPath";
 import { ThemeColors, useTheme } from "./theme";
 import { MyTransition } from "./Transition";
@@ -103,7 +112,7 @@ export const Root = () => (
         <Stack.Screen name={FREE_SESSION_ACTIVITY_CHOICE} component={FreeSessionActivityChoice}
                       options={{ title: '', headerTransparent: true }}/>
         <Stack.Screen name={SESSION_END} component={SessionEndScreen}
-                      options={{ title: '', headerTransparent: true }}/>
+                      options={{ title: '', headerTransparent: true, headerLeft: '' }}/>
 
         <Stack.Screen name={DASHBOARD} component={Dashboard}
                       options={({ navigation }) => ({

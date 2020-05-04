@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Route, View } from "react-native";
-import { FullScreenModalStyle } from "../../AppStyle";
-import { FREE_SESSION_TIMER } from "../../NavigationPath";
-import { Activity, ActivityType, Exercise, Tonality } from "../../types/Activity";
-import { getActivity, NoBreakActivity, NoBreakActivityInput } from "../../types/ActivityInput";
-import { ActionButton } from "../basic/Buttons/ActionButton";
-import { MinorButton } from "../basic/Buttons/Button";
-import { ComplexActivityFields } from "../basic/ComplexActivityFields";
-import { ActivityTypeSelect } from "../basic/Inputs/ActivityTypeSelect";
-import { ModalSmallTitle, ModalTitle } from "../basic/Titles/ModalTitle";
+import { FullScreenModalStyle } from "../../../AppStyle";
+import { FREE_SESSION_TIMER } from "../../../NavigationPath";
+import { Activity, ActivityType, Exercise, Tonality } from "../../../types/Activity";
+import { getActivity, NoBreakActivity, NoBreakActivityInput } from "../../../types/ActivityInput";
+import { ActionButton } from "../../basic/Buttons/ActionButton";
+import { MinorButton } from "../../basic/Buttons/Button";
+import { ComplexActivityFields } from "../../basic/ComplexActivityFields";
+import { ActivityTypeSelect } from "../../basic/Inputs/ActivityTypeSelect";
+import { ModalSmallTitle, ModalTitle } from "../../basic/Titles/ModalTitle";
 
 type ChoiceProps = {
     route: Route,
@@ -37,6 +37,7 @@ export const FreeSessionActivityChoice = (props: ChoiceProps) => {
             <View style={{ paddingLeft: 50, paddingRight: 50, }}>
                 <ActivityTypeSelect noBreak={true}
                                     onChooseType={(type) => setType(type as NoBreakActivity)}
+                                    wrapStyle={{marginBottom: 20}}
                                     activeType={activity.type}/>
 
                 <ComplexActivityFields type={activity.type}

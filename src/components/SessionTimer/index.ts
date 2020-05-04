@@ -1,3 +1,3 @@
 export * from './SessionEndScreen';
-export * from './FreeSessionTimer';
-export * from './PlannedSessionTimer';
+export * from './FreeSession';
+export * from './PlanSession';
