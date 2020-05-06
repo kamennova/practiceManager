@@ -5,8 +5,7 @@ import { connect } from "react-redux";
 import { FREE_BREAK_TIMER, SESSION_END } from "../../../NavigationPath";
 import { pushActivity } from "../../../store/actions";
 import { thunkEndSession } from "../../../store/thunks/session";
-import { ActivityType } from "../../../types/Activity";
-import { ActivityRecord } from "../../../types/ActivityRecord";
+import { Activity, ActivityType } from "../../../types/Activity";
 import { SessionPlan } from "../../../types/SessionPlan";
 import { getSeconds } from "../../../utils/time";
 import { TimeTracker } from "../../basic/TimeTrackers";
@@ -15,7 +14,7 @@ import { SessionTimer } from "./../SessionTimer";
 type SessionScreenProps = {
     route: Route & { params: { plan: SessionPlan } },
     navigation: any,
-    pushActivity: (_: ActivityRecord) => void,
+    pushActivity: (_: Activity) => void,
     onEndSession: () => void,
 };
 
@@ -36,7 +35,6 @@ const TimerComponent = (props: SessionScreenProps) => {
             setActivityIndex(activityIndex + 1);
             setSeconds(activity().duration);
             setStart(getSeconds());
-            props.pushActivity({ startedOn: getSeconds(), ...activity() })
         }
     };
 
@@ -63,6 +61,10 @@ const TimerComponent = (props: SessionScreenProps) => {
         };
     }, [isPaused, seconds, activityIndex, activity]);
 
+    useEffect(() => {
+        props.pushActivity(activity());
+    }, [activityIndex]);
+
     const resumeTimer = () => {
         setStart(getSeconds() - seconds);
         setIsPaused(false);
@@ -70,11 +72,8 @@ const TimerComponent = (props: SessionScreenProps) => {
 
     const onBreak = () => {
         setIsPaused(true);
-
-        props.pushActivity({ startedOn: getSeconds(), type: ActivityType.Break });
-        props.navigation.navigate(FREE_BREAK_TIMER, {
-            onGoBack: resumeTimer
-        });
+        props.pushActivity({ type: ActivityType.Break });
+        props.navigation.navigate(FREE_BREAK_TIMER, { onGoBack: resumeTimer });
     };
 
     return (
@@ -85,7 +84,7 @@ const TimerComponent = (props: SessionScreenProps) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    pushActivity: (act: ActivityRecord) => dispatch(pushActivity(act)),
+    pushActivity: (act: Activity) => dispatch(pushActivity(act)),
     onEndSession: () => dispatch(thunkEndSession()),
 });
 

@@ -4,6 +4,7 @@ import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import { FullScreenModalStyle, SessionStartStyle as getStyles } from "../../AppStyle";
 import { FREE_SESSION_ACTIVITY_CHOICE, PLANNED_SESSION_TIMER } from "../../NavigationPath";
+import { startSession } from "../../store/actions";
 import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
 import { SessionPlan } from "../../types/SessionPlan";
@@ -17,6 +18,7 @@ import { SessionTypeOption } from "./SessionTypeOption";
 type StartProps = {
     navigation: any,
     plans: SessionPlan[],
+    onStartSession: () => void,
 };
 
 const IconSize = 19;
@@ -40,9 +42,12 @@ const SessionStart = (props: StartProps) => {
 
     const replace = (path: string, opt?: any) => props.navigation.dispatch(StackActions.replace(path, opt));
 
-    const navigateToTimer = () => usePlan ?
-        replace(PLANNED_SESSION_TIMER, { plan: findPlanOrThrowError(props.plans, planId) }) :
-        replace(FREE_SESSION_ACTIVITY_CHOICE, { isFirstActivity: true });
+    const startSession = () => {
+        props.onStartSession();
+        usePlan ?
+            replace(PLANNED_SESSION_TIMER, { plan: findPlanOrThrowError(props.plans, planId) }) :
+            replace(FREE_SESSION_ACTIVITY_CHOICE, { isFirstActivity: true });
+    };
 
     const planItems = props.plans.length > 0 ? props.plans.map(item => ({ val: item.id, label: item.name }))
         : [{ val: '-', label: '-' }];
@@ -73,7 +78,7 @@ const SessionStart = (props: StartProps) => {
             </View>
 
             <View style={{ marginTop: 'auto', marginBottom: 25 }}>
-                <PrimaryButton onPress={navigateToTimer} style={{ marginBottom: 15 }}> Start </PrimaryButton>
+                <PrimaryButton onPress={startSession} style={{ marginBottom: 15 }}> Start </PrimaryButton>
                 <MinorButton style={{ alignSelf: 'center' }}
                              onPress={props.navigation.goBack}>Cancel</MinorButton>
             </View>
@@ -88,4 +93,8 @@ const mapStateToProps = (state: StateShape) => ({
     plans: state.plans.items,
 });
 
-export const SessionStartScreen = connect(mapStateToProps)(SessionStart);
+const mapDispatchToProps = (dispatch: any) => ({
+    onStartSession: () => dispatch(startSession()),
+});
+
+export const SessionStartScreen = connect(mapStateToProps, mapDispatchToProps)(SessionStart);

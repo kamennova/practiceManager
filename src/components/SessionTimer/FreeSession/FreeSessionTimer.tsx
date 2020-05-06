@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { FREE_BREAK_TIMER, FREE_SESSION_ACTIVITY_CHOICE } from "../../../NavigationPath";
 import { pushActivity } from "../../../store/actions";
 import { Activity, ActivityType } from "../../../types/Activity";
-import { ActivityRecord } from "../../../types/ActivityRecord";
 import { getSeconds } from "../../../utils/time";
 import { TimeTracker } from "../../basic/TimeTrackers";
 import { SessionTimer } from "../SessionTimer";
@@ -13,7 +12,7 @@ import { SessionTimer } from "../SessionTimer";
 type FreeSessionTimerProps = {
     route: Route & { params: { activity: Activity } },
     navigation: any,
-    pushActivity: (_: ActivityRecord) => void,
+    pushActivity: (_: Activity) => void,
 };
 
 const FreeSession = (props: FreeSessionTimerProps) => {
@@ -41,7 +40,7 @@ const FreeSession = (props: FreeSessionTimerProps) => {
     }, [isPaused, seconds]);
 
     useEffect(() => {
-        props.pushActivity({ startedOn: Date.now(), ...props.route.params.activity });
+        props.pushActivity(props.route.params.activity);
         setStart(getSeconds());
     }, [props.route.params.activity]);
 
@@ -56,11 +55,8 @@ const FreeSession = (props: FreeSessionTimerProps) => {
 
     const onBreak = () => {
         setIsPaused(true);
-
-        props.pushActivity({ startedOn: Date.now(), type: ActivityType.Break });
-        props.navigation.navigate(FREE_BREAK_TIMER, {
-            onGoBack: resumeTimer,
-        });
+        props.pushActivity({ type: ActivityType.Break });
+        props.navigation.navigate(FREE_BREAK_TIMER, { onGoBack: resumeTimer, });
     };
 
     return (
@@ -74,7 +70,7 @@ const FreeSession = (props: FreeSessionTimerProps) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-    pushActivity: (act: ActivityRecord) => dispatch(pushActivity(act))
+    pushActivity: (act: Activity) => dispatch(pushActivity(act))
 });
 
 export const FreeSessionTimer = connect(undefined, mapDispatchToProps)(FreeSession);

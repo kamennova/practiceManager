@@ -11,7 +11,7 @@ import { ActivityTypeSelect } from "../../basic/Inputs/ActivityTypeSelect";
 import { ModalSmallTitle, ModalTitle } from "../../basic/Titles/ModalTitle";
 
 type ChoiceProps = {
-    route: Route & {params: {isFirstActivity?: boolean}},
+    route: Route & { params?: { isFirstActivity: boolean } },
     navigation: any,
 };
 
@@ -19,7 +19,7 @@ const BaseActivity: Activity = { type: ActivityType.Technique };
 
 export const SessionActivityChoice = (props: ChoiceProps) => {
     const [activity, setActivity] = useState<NoBreakActivityInput>(BaseActivity);
-    const isFirstActivity = props.route.params.isFirstActivity;
+    const isFirstActivity = props.route.params?.isFirstActivity !== undefined && props.route.params.isFirstActivity;
 
     const setType = (type: NoBreakActivity) => setActivity({ ...activity, type }),
         setTonality = (tonality: Tonality) => setActivity({ ...activity, tonality }),
