@@ -211,7 +211,7 @@ export const SectionRowStyle = (colors: ThemeColors) => StyleSheet.create({
 
 // ---
 
-export const DrawerStyle = (colors: ThemeColors): ViewStyle => ({
+export const DrawerStyle = (colors: ThemeColors = DefaultColors): ViewStyle => ({
     backgroundColor: colors.appBg,
     justifyContent: 'center',
 });
@@ -328,12 +328,19 @@ export const ModalStyle: ViewStyle = {
     minWidth: Dimensions.get('screen').width * 0.8,
 };
 
-export const ModalTitleStyle: TextStyle = {
+export const SmallModalTitleStyle = (colors: ThemeColors = DefaultColors): TextStyle => ({
+    marginBottom: 10,
+    textAlign: 'center',
+    color: colors.color,
+    fontSize: 14,
+});
+
+export const ModalTitleStyle = (colors: ThemeColors = DefaultColors): TextStyle => ({
     marginBottom: 50,
     textAlign: 'center',
-    color: 'black',
+    color: colors.color,
     fontSize: 23,
-};
+});
 
 export const PickerWrapperStyle = (colors: ThemeColors = DefaultColors) => ({
     borderWidth: 1,
@@ -450,8 +457,8 @@ export const FullScreenModalStyle: ViewStyle = {
 
 export const SessionScreenStyle: ViewStyle = {
     height: '100%',
-    paddingBottom: 40,
-    ...AppPaddingStyle,
+    paddingBottom: 20,
+    alignItems: 'center'
 };
 
 export const TimeTrackerTextStyle: TextStyle = {
@@ -556,6 +563,7 @@ export const ActivityBlockStyle = (colors: ThemeColors = DefaultColors) => Style
     duration: {
         color: 'grey',
         marginLeft: 'auto',
+        marginRight: 12,
     },
     name: {
         fontSize: 17,
@@ -731,7 +739,7 @@ export const AddActivityBtnStyle = (colors: ThemeColors, theme: Theme) => StyleS
     },
 });
 
-export const SessionStartStyle = StyleSheet.create({
+export const SessionStartStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     wrap: {
         marginBottom: 30,
         marginTop: 20,
@@ -747,15 +755,6 @@ export const SessionStartStyle = StyleSheet.create({
         width: 19,
         height: 19,
     },
-    option: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingTop: 3,
-        paddingBottom: 3,
-        paddingLeft: 17,
-        marginBottom: 12,
-        borderWidth: 2,
-    },
     noPlanOption: {
         paddingTop: 15,
         paddingBottom: 15,
@@ -764,13 +763,17 @@ export const SessionStartStyle = StyleSheet.create({
     noPlanText: {
         fontSize: 15,
         paddingLeft: 8,
+        color: colors.color,
     },
+});
+
+export const SessionOptionStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     circle: {
         width: 20,
         height: 20,
         borderRadius: 10,
         borderWidth: 2,
-        borderColor: 'lightgrey',
+        borderColor: colors.borderFaded,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 20,
@@ -780,6 +783,15 @@ export const SessionStartStyle = StyleSheet.create({
         height: 8,
         borderRadius: 4,
         backgroundColor: Dark
+    },
+    option: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 17,
+        marginBottom: 12,
+        borderWidth: 2,
     },
 });
 
@@ -802,5 +814,48 @@ export const ThemeOptionStyle = (colors: ThemeColors, isActive: boolean) => Styl
         height: 10,
         backgroundColor: isActive ? Primary : 'lightgrey',
         marginTop: 15,
+    }
+});
+
+export const TimerTitleStyle = (color: string) => StyleSheet.create({
+    wrap: {
+        marginBottom: 30,
+        marginTop: 150,
+        alignSelf: 'center',
+        alignItems: 'center'
+    },
+    mainTitle: {
+        fontSize: 35,
+        textAlign: 'center',
+        color,
+    },
+    smallTitle: {
+        width: '100%',
+        marginBottom: 7,
+        marginTop: 10,
+        textAlign: 'center',
+        fontSize: 12,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+        color,
+    }
+});
+
+export const TimerButtonStyle = (colors: ThemeColors) => StyleSheet.create({
+    wrap: {
+        padding: 10,
+        paddingLeft: 8,
+        paddingRight: 8,
+        marginRight: -2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 80,
+    },
+    label: {
+        fontSize: 16,
+        textAlign: 'center',
+        alignSelf: 'center',
+        color: colors.color,
+        marginTop: 13,
     }
 });

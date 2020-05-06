@@ -6,9 +6,9 @@ export const session = (state: SessionState = initialState.session, action: Sess
         case START_SESSION:
             return { history: [], isOn: true };
         case PUSH_ACTIVITY:
-            return { history: [...state.history, action.activity], isOn: true };
+            return { history: [...state.history, {...action.activity, startedOn: Date.now()}], isOn: true };
         case END_SESSION:
-            return { history: [], isOn: false };
+            return { ...state, isOn: false, finishedOn: Date.now() };
         default:
             return state;
     }

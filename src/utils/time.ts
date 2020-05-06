@@ -8,6 +8,18 @@ export type Time = {
     h: number,
 };
 
+export const secondsToHumanlyFormat = (seconds: number): string => {
+    if (seconds === 0) {
+        return '0';
+    }
+
+    if (seconds < 60) {
+        return seconds + 's';
+    }
+
+    return formatMinutesShort(Math.floor(seconds) / 60);
+};
+
 export const minutesToHumanlyFormat = (minutes: number, _format?: TimeFormat): string => {
     if (minutes < 60) {
         return minutes + ' min';
@@ -33,3 +45,5 @@ export const getMinutes = (m: number) => m % 60,
     getHours = (m: number) => Math.floor(m / 60);
 
 export const toMinutes = (t: Time) => t.m + t.h * 60;
+
+export const getSeconds = () => Math.floor(Date.now() / 1000);

@@ -68,7 +68,7 @@ export const getPieceById = async (id: number): Promise<Piece | undefined> => {
 };
 
 export const updatePiece = async (piece: Piece): Promise<void> => {
-    const repo = await getRepository(PieceEntity);
+    const repo = getRepository(PieceEntity);
     const pieceUpd = await repo.createQueryBuilder("piece")
         .where("piece.id = :id", { id: piece.id })
         .getOne();
@@ -133,12 +133,12 @@ export const deletePiece = async (id: number): Promise<void> => {
 };
 
 export const getPiecesMeta = async (): Promise<PieceBase[]> => {
-    const repo = await getRepository(PieceEntity);
+    const repo = getRepository(PieceEntity);
     return (await repo.find({ relations: ['authors', 'tags'] })).map(pieceBaseFromEntity);
 };
 
 export const getPieces = async (): Promise<Piece[]> => {
-    const repo = await getRepository(PieceEntity);
+    const repo = getRepository(PieceEntity);
 
     return (await repo.find({ relations: ['authors', 'tags', 'notes'] })).map(pieceFromEntity);
 };

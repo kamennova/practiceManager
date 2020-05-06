@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { SESSION_PLAN, SESSION_PLAN_FORM } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
-import { thunkGetPlans } from "../../store/thunks/plan";
 import { ActionType } from "../../types/ActionType";
 import { SessionPlan } from "../../types/SessionPlan";
 import { NothingAlert } from "../basic/Alerts/NothingAlert";
@@ -21,10 +20,6 @@ type ListProps = {
 
 class SessionPlans extends Component<ListProps> {
     push = (path: string, opt?: any) => () => this.props.navigation.dispatch(StackActions.push(path, opt));
-
-    componentDidMount() {
-        this.props.getPlans();
-    }
 
     render() {
         return (
@@ -50,10 +45,5 @@ const mapStateToProps = (state: StateShape) => ({
     plans: state.plans.items,
 });
 
-
-const mapDispatchToProps = (dispatch: any) => ({
-    getPlans: () => dispatch(thunkGetPlans())
-});
-
-const SessionPlansList = connect(mapStateToProps, mapDispatchToProps)(SessionPlans);
+const SessionPlansList = connect(mapStateToProps)(SessionPlans);
 export default SessionPlansList;

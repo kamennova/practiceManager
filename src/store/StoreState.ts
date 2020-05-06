@@ -12,6 +12,8 @@ export type ItemsShape<T, META> = {
 
 export type SessionState = {
     isOn: boolean,
+    finishedOn?: number,
+    planId?: number,
     history: ActivityRecord[],
 };
 

@@ -3,7 +3,6 @@ import { enableScreens } from 'react-native-screens';
 import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
 import thunk from "redux-thunk";
-import { connectToDb } from "./src/db/connection";
 import { Main } from "./src/Main";
 import { practiceManagerApp } from "./src/store/appReducers";
 import { DEFAULT_THEME, getThemeColors, readTheme, recordTheme, Theme, ThemeContext } from "./src/theme";
@@ -24,8 +23,6 @@ class App extends Component<{}, { theme: Theme }> {
         } else {
             await this.setTheme(DEFAULT_THEME);
         }
-
-        await connectToDb();
     }
 
     setTheme = async (theme: Theme) => {
