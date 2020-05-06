@@ -1,37 +1,50 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from "react-redux";
 import { SESSION_END } from "../../../NavigationPath";
+import { thunkEndSession } from "../../../store/thunks/session";
 import { ActivityType } from "../../../types/Activity";
+import { getSeconds } from "../../../utils/time";
 import { ResumeButton, TimerButtonsWrapper } from "../../basic/Buttons/TimerButton";
 import { TimeTracker } from "../../basic/TimeTrackers";
-import { startTimer } from "../timer";
-import { getActivityColor } from "./../Colors";
 import { SessionTimerWrap } from "./../SessionTimerWrap";
 
-export const FreeBreakTimer = (props: { navigation: any, route: { params: { onGoBack: () => void } } }) => {
-    const [seconds, setSeconds] = useState(0);
-    const color = getActivityColor(ActivityType.Break);
-    // const timer = startTimer(seconds, setSeconds);
+type TimerProps = {
+    navigation: any,
+    route: {
+        params: {
+            onGoBack: () => void,
+        }
+    },
+    onTimeoutEndSession: () => void,
+};
 
+const FreeBreakTimerComponent = (props: TimerProps) => {
+    const [seconds, setSeconds] = useState(0);
+    const [start] = useState(getSeconds()); // todo
+
+    useEffect(() => {
+        let timeout = setInterval(() => {
+            setSeconds(getSeconds() - start);
+        }, 100);
+
+        return () => {
+            if (timeout !== null) clearInterval(timeout)
+        };
+    }, [seconds]);
 
     const resumeActivity = () => {
-        // clearTimeout(timer);
-        // updateSeconds(0);
         props.route.params.onGoBack();
         props.navigation.goBack();
     };
 
-    const endSession = (isTimeout: boolean = false) => {
-        // clearTimeout(timer);
-        props.navigation.navigate(SESSION_END, { timeout: isTimeout });
-    };
-
     if (seconds > 60 * 60) { // todo settings
-        endSession(true);
+        props.onTimeoutEndSession();
+        props.navigation.navigate(SESSION_END);
     }
 
     return (
         <SessionTimerWrap activity={{ type: ActivityType.Break }}>
-            <TimeTracker seconds={seconds} style={{ marginTop: 50 }} textStyle={{ color: color }}/>
+            <TimeTracker seconds={seconds} activityType={ActivityType.Break}/>
 
             <TimerButtonsWrapper>
                 <ResumeButton onPress={resumeActivity}/>
@@ -39,3 +52,9 @@ export const FreeBreakTimer = (props: { navigation: any, route: { params: { onGo
         </SessionTimerWrap>
     );
 };
+
+const mapDispatchToProps = (dispatch: any) => ({
+    onTimeoutEndSession: () => dispatch(thunkEndSession(true))
+});
+
+export const FreeBreakTimer = connect(undefined, mapDispatchToProps)(FreeBreakTimerComponent);

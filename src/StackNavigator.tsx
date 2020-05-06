@@ -11,7 +11,7 @@ import { SessionPlanForm } from "./components/SessionPlan/SessionPlanForm";
 import SessionPlansList from "./components/SessionPlan/SessionPlansList";
 import {
     FreeBreakTimer,
-    FreeSessionActivityChoice,
+    SessionActivityChoice,
     FreeSessionTimer,
     PlannedSessionTimer,
     SessionEndScreen
@@ -109,7 +109,7 @@ export const Root = () => (
         <Stack.Screen name={PLANNED_SESSION_TIMER} component={PlannedSessionTimer} options={timerOptions}/>
         <Stack.Screen name={FREE_SESSION_TIMER} component={FreeSessionTimer} options={timerOptions}/>
         <Stack.Screen name={FREE_BREAK_TIMER} component={FreeBreakTimer} options={timerOptions}/>
-        <Stack.Screen name={FREE_SESSION_ACTIVITY_CHOICE} component={FreeSessionActivityChoice}
+        <Stack.Screen name={FREE_SESSION_ACTIVITY_CHOICE} component={SessionActivityChoice}
                       options={{ title: '', headerTransparent: true }}/>
         <Stack.Screen name={SESSION_END} component={SessionEndScreen}
                       options={{ title: '', headerTransparent: true, headerLeft: '' }}/>

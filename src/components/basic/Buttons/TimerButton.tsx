@@ -1,76 +1,55 @@
+import { MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
-import { Image, ImageSourcePropType, Text, TouchableWithoutFeedback, View } from "react-native";
-import { ButtonProps } from "./ButtonProps";
+import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import { useTheme } from "../../../theme";
+import { TimerButtonStyle as getStyles } from "../../../AppStyle";
 
-export const TimerButton = (props: ButtonProps & { icon?: ImageSourcePropType }) => {
+const IconSize = 24;
+
+type ButtonProps = {
+    onPress?: () => void,
+}
+
+const TimerButton = (props: ButtonProps & { label: string, icon?: string }) => {
+    const colors = useTheme().colors;
+    const styles = getStyles(colors);
+
     return (
         <TouchableWithoutFeedback onPress={props.onPress}>
-            <View style={{
-                padding: 16,
-                paddingLeft: 8,
-                paddingRight: 8,
-                marginRight: -2,
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                borderWidth: 2,
-                borderColor: 'darkgrey',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexBasis: '33%',
-                flexGrow: 1,
-                flexDirection: 'row',
-                ...props.style,
-            }}>
-                {props.icon !== undefined ?
-                    <Image style={{ width: 23, height: 23, opacity: 0.5, marginBottom: 0, marginRight: 5, }}
-                           source={props.icon}/> : undefined}
-                <Text style={{
-                    fontSize: 16,
-                    textAlign: 'center',
-                    alignSelf: 'center',
-                    fontWeight: 'bold',
-                    ...props.textStyle,
-                }}>
-                    {props.children}
+            <View style={styles.wrap}>
+                <MaterialIcons name={props.icon} color={colors.color} size={IconSize}/>
+                <Text style={styles.label}>
+                    {props.label}
                 </Text>
             </View>
         </TouchableWithoutFeedback>
     );
 };
 
-export const NextButton = (props: ButtonProps) => (
-    <TimerButton textStyle={props.textStyle} style={props.style} onPress={props.onPress}
-                 icon={require('../../../../assets/skip_next.png')}>
-        {props.children}
-    </TimerButton>
+export const NextButton = (props: ButtonProps & { label?: string }) => (
+    <TimerButton onPress={props.onPress} icon={'skip-next'} label={props.label ? props.label : 'Next'}/>
 );
 
 export const BreakButton = (props: ButtonProps) => (
-    <TimerButton textStyle={props.textStyle} style={props.style} onPress={props.onPress}
-                 icon={require('../../../../assets/pause.png')}>
-        {props.children}
-    </TimerButton>
+    <TimerButton onPress={props.onPress} icon={'free-breakfast'} label='Break'/>
 );
 
 export const FinishButton = (props: ButtonProps) => (
-    <TimerButton textStyle={props.textStyle} style={props.style} onPress={props.onPress}
-                 icon={require('../../../../assets/stop.png')}>
-        {props.children}
-    </TimerButton>
+    <TimerButton onPress={props.onPress} icon={'stop'} label='Finish'/>
 );
 
 export const ResumeButton = (props: ButtonProps) => (
-    <TimerButton textStyle={props.textStyle} style={props.style} onPress={props.onPress}
-                 icon={require('../../../../assets/play.png')}>
-        {props.children}
-    </TimerButton>
+    <TimerButton onPress={props.onPress} icon={'play-arrow'} label='Resume'/>
 );
 
 export const TimerButtonsWrapper = (props: { children: JSX.Element | JSX.Element[] | (JSX.Element | JSX.Element[])[] }) => (
-    <View style={{
-        marginTop: 'auto',
-        flexDirection: 'row',
-        justifyContent: 'center'
-    }}>
+    <View style={wrapStyle}>
         {props.children}
     </View>
 );
+
+const wrapStyle: ViewStyle = {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-around',
+};

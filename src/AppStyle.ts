@@ -211,7 +211,7 @@ export const SectionRowStyle = (colors: ThemeColors) => StyleSheet.create({
 
 // ---
 
-export const DrawerStyle = (colors: ThemeColors): ViewStyle => ({
+export const DrawerStyle = (colors: ThemeColors = DefaultColors): ViewStyle => ({
     backgroundColor: colors.appBg,
     justifyContent: 'center',
 });
@@ -457,8 +457,8 @@ export const FullScreenModalStyle: ViewStyle = {
 
 export const SessionScreenStyle: ViewStyle = {
     height: '100%',
-    paddingBottom: 40,
-    ...AppPaddingStyle,
+    paddingBottom: 20,
+    alignItems: 'center'
 };
 
 export const TimeTrackerTextStyle: TextStyle = {
@@ -563,6 +563,7 @@ export const ActivityBlockStyle = (colors: ThemeColors = DefaultColors) => Style
     duration: {
         color: 'grey',
         marginLeft: 'auto',
+        marginRight: 12,
     },
     name: {
         fontSize: 17,
@@ -813,5 +814,48 @@ export const ThemeOptionStyle = (colors: ThemeColors, isActive: boolean) => Styl
         height: 10,
         backgroundColor: isActive ? Primary : 'lightgrey',
         marginTop: 15,
+    }
+});
+
+export const TimerTitleStyle = (color: string) => StyleSheet.create({
+    wrap: {
+        marginBottom: 30,
+        marginTop: 150,
+        alignSelf: 'center',
+        alignItems: 'center'
+    },
+    mainTitle: {
+        fontSize: 35,
+        textAlign: 'center',
+        color,
+    },
+    smallTitle: {
+        width: '100%',
+        marginBottom: 7,
+        marginTop: 10,
+        textAlign: 'center',
+        fontSize: 12,
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+        color,
+    }
+});
+
+export const TimerButtonStyle = (colors: ThemeColors) => StyleSheet.create({
+    wrap: {
+        padding: 10,
+        paddingLeft: 8,
+        paddingRight: 8,
+        marginRight: -2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 80,
+    },
+    label: {
+        fontSize: 16,
+        textAlign: 'center',
+        alignSelf: 'center',
+        color: colors.color,
+        marginTop: 13,
     }
 });

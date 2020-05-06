@@ -11,14 +11,14 @@ type TimeTrackerProps = {
 }
 
 export const TimeTracker = (props: TimeTrackerProps) => {
-    const showHours = props.seconds / 3600 >= 1;
+    const hours = Math.floor(props.seconds / 3600);
     const color = getActivityColor(props.activityType);
 
     return (
-        <View style={{ marginTop: 50 }}>
+        <View style={{ marginTop: 50, marginBottom: 30 }}>
             <Text style={{ ...TimeTrackerTextStyle, color: color }}>
-                {showHours ? formatSeconds(Math.floor(props.seconds / 3600)) + ':' : undefined}
-                {formatSeconds(Math.floor((props.seconds / 60) % 60))}:
+                {hours > 0 ? formatSeconds(hours) + ':' : undefined}
+                {formatSeconds(Math.floor(props.seconds / 60) % 60)}:
                 {formatSeconds(props.seconds % 60)}
             </Text>
         </View>

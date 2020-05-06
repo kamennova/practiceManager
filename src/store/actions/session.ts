@@ -15,10 +15,11 @@ type PushActivityAction = {
 
 type EndSessionAction = {
     type: typeof END_SESSION,
+    isTimeout?: boolean,
 };
 
 export const startSession = (): StartSessionAction => ({ type: START_SESSION }),
     pushActivity = (activity: ActivityRecord): PushActivityAction => ({ type: PUSH_ACTIVITY, activity }),
-    endSession = (): EndSessionAction => ({ type: END_SESSION });
+    endSession = (isTimeout: boolean = false): EndSessionAction => ({ type: END_SESSION, isTimeout });
 
 export type SessionActionType = StartSessionAction | PushActivityAction | EndSessionAction;

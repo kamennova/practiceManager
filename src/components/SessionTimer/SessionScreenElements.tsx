@@ -1,58 +1,35 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { Activity, ActivityType } from "../../types/Activity";
+import { connect } from "react-redux";
+import { TimerTitleStyle as getStyles } from "../../AppStyle";
+import { StateShape } from "../../store/StoreState";
+import { Activity } from "../../types/Activity";
+import { getPieceCredits, getTimerActivityTitle, PieceCredits } from "../../utils/title";
 import { getActivityColor } from "./Colors";
 
-type TimerActivityTitle = {
-    small?: string,
-    main: string
-};
+const SessionActivityTitleComponent = (props: { activity: Activity, pieceCredits?: PieceCredits }) => {
+    const color = getActivityColor(props.activity.type);
+    const styles = getStyles(color);
+    const title = getTimerActivityTitle(props.activity, props.pieceCredits);
 
-export const SessionActivityTitle = (props: { activity: Activity }) => {
     return (
-        <View style={{
-            marginBottom: 30,
-            marginTop: 150,
-            alignSelf: 'center',
-            alignItems: 'center'
-        }}>
-            <Text style={{
-                fontSize: 35,
-                color: getActivityColor(props.activity.type),
-                textAlign: 'center',
-            }}>
-                {props.activity.type}
+        <View style={styles.wrap}>
+            <Text style={styles.mainTitle}>
+                {title.main}
             </Text>
-            {/*{props.title.small !== undefined ?*/}
-                {/*<SmallTitle color={props.color}>{props.title.small}</SmallTitle> : undefined}*/}
+            {title.small !== undefined ? <SmallTitle color={color}>{title.small}</SmallTitle> : undefined}
         </View>
     );
 };
 
-export const SmallTitle = (props: { children: string, color?: string }) => (
-    <Text style={{
-        width: '100%',
-        marginBottom: 7,
-        textAlign: 'center',
-        fontSize: 12,
-        color: props.color !== undefined ? props.color : 'black',
-        letterSpacing: 2,
-        textTransform: 'uppercase',
-    }}>
+const mapStateToProps = (state: StateShape, ownProps: { activity: Activity }) => ({
+    pieceCredits: getPieceCredits(state.pieces.items, ownProps.activity.pieceId),
+});
+
+export const SessionActivityTitle = connect(mapStateToProps)(SessionActivityTitleComponent);
+
+const SmallTitle = (props: { children: string, color: string }) => (
+    <Text style={getStyles(props.color).smallTitle}>
         {props.children}
     </Text>
 );
-
-export const getPlannedSessionActivityTitle = (activityType: ActivityType): TimerActivityTitle => {
-    return {
-        small: 'time for',
-        main: activityType
-    }
-};
-
-export const getFreeSessionActivityTitle = (activityType: ActivityType): TimerActivityTitle => {
-    return {
-        small: activityType !== ActivityType.Break ? 'polishing' : 'time for',
-        main: activityType,
-    };
-};

@@ -15,9 +15,9 @@ type ChoiceProps = {
     navigation: any,
 };
 
-const BaseActivity: Activity = { type: ActivityType.Technique, tonality: Tonality.C, exercise: Exercise.Scales };
+const BaseActivity: Activity = { type: ActivityType.Technique };
 
-export const FreeSessionActivityChoice = (props: ChoiceProps) => {
+export const SessionActivityChoice = (props: ChoiceProps) => {
     const [activity, setActivity] = useState<NoBreakActivityInput>(BaseActivity);
 
     const setType = (type: NoBreakActivity) => setActivity({ ...activity, type }),
@@ -25,9 +25,7 @@ export const FreeSessionActivityChoice = (props: ChoiceProps) => {
         setExercise = (exercise: Exercise) => setActivity({ ...activity, exercise }),
         setPieceId = (pieceId: number) => setActivity({ ...activity, pieceId });
 
-    const goToTimer = () => {
-        props.navigation.navigate(FREE_SESSION_TIMER, { activity: getActivity(activity) });
-    };
+    const goToTimer = () => props.navigation.navigate(FREE_SESSION_TIMER, { activity: getActivity(activity) });
 
     return (
         <View style={FullScreenModalStyle}>
@@ -37,7 +35,7 @@ export const FreeSessionActivityChoice = (props: ChoiceProps) => {
             <View style={{ paddingLeft: 50, paddingRight: 50, }}>
                 <ActivityTypeSelect noBreak={true}
                                     onChooseType={(type) => setType(type as NoBreakActivity)}
-                                    wrapStyle={{marginBottom: 20}}
+                                    wrapStyle={{ marginBottom: 20 }}
                                     activeType={activity.type}/>
 
                 <ComplexActivityFields type={activity.type}
