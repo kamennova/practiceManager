@@ -7,6 +7,7 @@ import { FREE_SESSION_ACTIVITY_CHOICE, PLANNED_SESSION_TIMER } from "../../Navig
 import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
 import { SessionPlan } from "../../types/SessionPlan";
+import { findPlanOrThrowError } from "../../utils/find";
 import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
 import { TimerIcon, TimerOffIcon } from "../basic/icons/Timer";
 import { MyPicker } from "../basic/Inputs/Picker";
@@ -40,7 +41,7 @@ const SessionStart = (props: StartProps) => {
     const replace = (path: string, opt?: any) => props.navigation.dispatch(StackActions.replace(path, opt));
 
     const navigateToTimer = () => usePlan ?
-        replace(PLANNED_SESSION_TIMER, { planId: Number(planId) }) :
+        replace(PLANNED_SESSION_TIMER, { plan: findPlanOrThrowError(props.plans, planId) }) :
         replace(FREE_SESSION_ACTIVITY_CHOICE, { isFirstActivity: true });
 
     const planItems = props.plans.length > 0 ? props.plans.map(item => ({ val: item.id, label: item.name }))
