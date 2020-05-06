@@ -39,15 +39,14 @@ const PieceComponent = (props: PieceScreenProps) => {
     }, [props.route.params.id, props.route.params.lastUpdated]);
 
     const toggleNotifs = async () => {
-        const notifsUpd = !piece.notifsOn;
+        const notifsOn = !piece.notifsOn;
+        const notifId = notifsOn ? await schedulePieceNotif(piece) : null;
 
-        if (notifsUpd) {
-            await schedulePieceNotif(piece);
-        } else {
-            await cancelPieceNotif(piece.id);
+        if (!notifsOn && piece.notifId !== null) {
+            await cancelPieceNotif(piece.id, piece.notifId);
         }
 
-        setPiece({ ...piece, notifsOn: notifsUpd });
+        setPiece({ ...piece, notifId, notifsOn });
     };
 
     const setInterval = async (i: number) => {

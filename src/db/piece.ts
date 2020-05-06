@@ -148,10 +148,10 @@ export const getNotificationId = async (pieceId: number): Promise<null | number>
     const piece = await repo.findOne(pieceId);
 
     if (piece === undefined) {
-        return null;
+        return Promise.resolve(null);
     }
 
-    return piece.notificationId;
+    return Promise.resolve(piece.notificationId);
 };
 
 export const updateNotificationId = async (pieceId: number, notifId: number | null): Promise<void> => {

@@ -46,7 +46,7 @@ export const getMinutes = (m: number) => m % 60,
 
 export const toMinutes = (t: Time) => t.m + t.h * 60;
 
-export const getSeconds = () => Math.floor(Date.now() / 1000);
+export const getSeconds = () => Math.floor(Date.now() / 1000); // todo date.now.getSeconds?
 
 export const dayToSeconds = (d: number) => d * 24 * 60 * 60;
 

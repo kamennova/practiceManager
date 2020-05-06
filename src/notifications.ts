@@ -1,9 +1,10 @@
 import { Notifications } from "expo";
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
-import { getNotificationId, updateNotificationId, updateNotificationInterval } from "./db/piece";
+import { updateNotificationId, updateNotificationInterval } from "./db/piece";
 import { Piece } from "./types/Piece";
 import { dayToSeconds, getDaysFromSeconds } from "./utils/time";
+import { PieceCredits } from "./utils/title";
 
 export const getNotifsPermission = async () => {
     if (Constants.isDevice) {
@@ -15,22 +16,24 @@ export const getNotifsPermission = async () => {
     }
 };
 
-const getPieceNotifContent = (name: string, authors: string, lastPracticed: number) => ({
-    title: `Time to practice ${name} by ${authors}`,
-    body: `You haven't practiced this piece in ${getDaysFromSeconds(Date.now() - lastPracticed)} days`,
-});
+const getPieceNotifContent = (pieceCredits: PieceCredits, lastPracticed: number) => {
+    const days = getDaysFromSeconds(Date.now() - lastPracticed),
+        daysText = days > 1 ? `${days} days` : `a day`;
+    const authorsText = (pieceCredits.authors !== undefined ? `by ${pieceCredits.authors}` : '');
 
-const updatePieceNotifId = async (pieceId: number, notifId: number | null) => await
-    updateNotificationId(pieceId, notifId);
+    return {
+        title: `Time to practice ${pieceCredits.name} ${authorsText}`,
+        body: `You haven't practiced this piece for ${daysText}`,
+    };
+};
 
-export const getPieceNotifId = async (pieceId: number): Promise<number | null> => await getNotificationId(pieceId);
+export const schedulePieceNotif = async (piece: Piece): Promise<number> => {
+    const startPoint = piece.lastPracticedOn !== undefined ? piece.lastPracticedOn : piece.addedOn,
+        lastPracticeInterval = Date.now() - startPoint.getSeconds(),
+        secondsTillFireNotif = dayToSeconds(piece.notifsInterval) - lastPracticeInterval;
 
-export const schedulePieceNotif = async (piece: Piece): Promise<void> => {
-    const startPoint = piece.lastPracticedOn !== undefined ? piece.lastPracticedOn : piece.addedOn;
-    const lastPracticeInterval = Date.now() - startPoint.getSeconds();
-    const secondsTillFireNotif = dayToSeconds(piece.notifsInterval) - lastPracticeInterval;
-
-    const content = getPieceNotifContent(piece.name, piece.authors.toString(), lastPracticeInterval);
+    const authors = piece.authors.length > 0 ? piece.authors : undefined;
+    const content = getPieceNotifContent({ name: piece.name, authors }, lastPracticeInterval);
 
     const localNotification = {
         title: content.title,
@@ -49,27 +52,36 @@ export const schedulePieceNotif = async (piece: Piece): Promise<void> => {
 
     const notifId = Number(await Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions));
 
-    await updatePieceNotifId(piece.id, notifId);
+    await updateNotificationId(piece.id, notifId);
+
+    return Promise.resolve(notifId);
 };
 
-export const updatePieceNotifInterval = async (piece: Piece) => {
-    await updateNotificationInterval(piece.id, piece.notifsInterval);
+export const updatePieceNotifInterval = async (piece: Piece) =>
+    await Promise.all([
+        updateNotificationInterval(piece.id, piece.notifsInterval),
+        rescheduleNotifIfSet(piece)
+    ]);
 
+const rescheduleNotifIfSet = async (piece: Piece) => {
     if (piece.notifsOn && piece.notifId !== null) {
         await Promise.all([
-            Notifications.cancelScheduledNotificationAsync(piece.notifId),
+            cancelNotifById(piece.notifId),
             schedulePieceNotif(piece),
         ]);
     }
 };
 
-export const cancelPieceNotif = async (pieceId: number) => {
-    const notifId = await getPieceNotifId(pieceId);
+export const cancelPieceNotif = async (pieceId: number, notifId: number) =>
+    await Promise.all([
+        updateNotificationId(pieceId, null),
+        cancelNotifById(notifId),
+    ]);
 
+export const cancelNotifById = async (id: number) => await Notifications.cancelScheduledNotificationAsync(id);
+
+export const cancelNotifIfSet = async (notifId: number | null) => {
     if (notifId !== null) {
-        await Promise.all([
-            updatePieceNotifId(pieceId, null),
-            Notifications.cancelScheduledNotificationAsync(notifId),
-        ]);
+        await cancelNotifById(notifId);
     }
 };

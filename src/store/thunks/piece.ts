@@ -1,14 +1,14 @@
 import { Dispatch } from "redux";
 import {
     addPiece as addPieceToDb,
-    deletePiece as deletePieceFromDb,
+    deletePiece as deletePieceFromDb, getNotificationId,
     getPieceById,
     getPieces,
     getPiecesMeta,
     togglePieceIsFavourite,
     updatePiece
 } from "../../db/piece";
-import { cancelPieceNotif, schedulePieceNotif } from "../../notifications";
+import { cancelNotifIfSet, schedulePieceNotif } from "../../notifications";
 import { Piece } from "../../types/Piece";
 import {
     addPiece,
@@ -62,8 +62,9 @@ export const thunkTogglePieceFav: ThunkResult = (id: number) => async (dispatch:
     return dispatch(togglePieceFav(id));
 };
 
-export const thunkDeletePiece: ThunkResult = (id: number) => async (dispatch: Dispatch) => {
-    await Promise.all([deletePieceFromDb(id), cancelPieceNotif(id)]);
-
-    return dispatch(deletePiece(id));
-};
+export const thunkDeletePiece: ThunkResult = (pieceId: number) => async (dispatch: Dispatch) =>
+    await getNotificationId(pieceId)
+        .then((notifId) => Promise.all([
+            deletePieceFromDb(pieceId),
+            cancelNotifIfSet(notifId)]))
+        .then(() => dispatch(deletePiece(pieceId)));
