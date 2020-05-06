@@ -18,10 +18,11 @@ export type PieceBase = Item & {
 export type Piece = PieceBase & {
     notifsOn: boolean,
     notifsInterval: number,
+    notifId: number | null,
     notes: Note[],
     recordings: Recording[],
     originalUri?: string,
-}
+};
 
 export enum PieceComplexity {
     Easy = 'Easy',

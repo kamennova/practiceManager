@@ -97,7 +97,7 @@ export const togglePieceNotifs = async (id: number): Promise<void> => {
     await repo.save(pieceUpd);
 };
 
-export const updatePieceNotifsInterval = async (id: number, interval: number): Promise<void> => {
+export const updateNotificationInterval = async (id: number, interval: number): Promise<void> => {
     const repo = getRepository(PieceEntity);
     const pieceUpd = await repo.findOne(id);
 
@@ -143,12 +143,35 @@ export const getPieces = async (): Promise<Piece[]> => {
     return (await repo.find({ relations: ['authors', 'tags', 'notes'] })).map(pieceFromEntity);
 };
 
+export const getNotificationId = async (pieceId: number): Promise<null | number> => {
+    const repo = getRepository(PieceEntity);
+    const piece = await repo.findOne(pieceId);
+
+    if (piece === undefined) {
+        return Promise.resolve(null);
+    }
+
+    return Promise.resolve(piece.notificationId);
+};
+
+export const updateNotificationId = async (pieceId: number, notifId: number | null): Promise<void> => {
+    const repo = getRepository(PieceEntity);
+    const piece = await repo.findOne(pieceId);
+
+    if (piece === undefined) {
+        return;
+    }
+
+    piece.notificationId = notifId;
+    await repo.save(piece);
+};
+
 const pieceBaseFromEntity = (ent: PieceEntity): PieceBase => ({
     id: ent.id,
     name: ent.name,
     timeSpent: 0,
     isFavourite: ent.isFavourite,
-    imageUri: ent.imageUri === '' ? undefined : ent.imageUri,
+    imageUri: ent.imageUri !== null ? ent.imageUri : undefined,
     tags: ent.tags.map(tag => tag.name),
     authors: ent.authors.map(author => author.name),
     addedOn: new Date(ent.addedOn),
@@ -161,7 +184,8 @@ const pieceFromEntity = (ent: PieceEntity): Piece => ({
     ...pieceBaseFromEntity(ent),
     notifsOn: ent.notificationsOn,
     notifsInterval: ent.notificationsInterval,
+    notifId: ent.notificationId,
     notes: [],
     recordings: [],
-    originalUri: ent.originalUri,
+    originalUri: ent.originalUri !== null ? ent.originalUri : undefined,
 });

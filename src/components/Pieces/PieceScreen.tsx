@@ -3,6 +3,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { getPieceById } from "../../db/piece";
+import { cancelPieceNotif, schedulePieceNotif, updatePieceNotifInterval } from "../../notifications";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";
 import { ThemeColors, useTheme } from "../../theme";
@@ -37,12 +38,20 @@ const PieceComponent = (props: PieceScreenProps) => {
         fetchData();
     }, [props.route.params.id, props.route.params.lastUpdated]);
 
-    const toggleNotifs = () => {
-        setPiece({ ...piece, notifsOn: !piece.notifsOn });
+    const toggleNotifs = async () => {
+        const notifsOn = !piece.notifsOn;
+        const notifId = notifsOn ? await schedulePieceNotif(piece) : null;
+
+        if (!notifsOn && piece.notifId !== null) {
+            await cancelPieceNotif(piece.id, piece.notifId);
+        }
+
+        setPiece({ ...piece, notifId, notifsOn });
     };
 
-    const setInterval = (i: number) => {
+    const setInterval = async (i: number) => {
         setPiece({ ...piece, notifsInterval: i });
+        await updatePieceNotifInterval(piece);
     };
 
     return (

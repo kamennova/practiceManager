@@ -11,7 +11,7 @@ import {
 export const connectToDb = async () => createConnection({
     type: "expo",
     driver: require('expo-sqlite'),
-    database: "practiceManagerDB3",
+    database: "practiceManagerDB4",
     entities: [
         PieceEntity,
         AuthorEntity,

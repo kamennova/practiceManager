@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View } from "react-native";
+import { DurationInputStyle as getStyles } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
-import { ThemeColors } from "../../../theme";
 import { getHours, getMinutes, Time, toMinutes } from "../../../utils/time";
 import { NumberInput } from "./NumberInput";
 
@@ -34,16 +34,3 @@ export const DurationInput = (props: InputProps) => {
         </View>
     );
 };
-
-const getStyles = (colors: ThemeColors) => StyleSheet.create({
-    wrap: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    textStyle: {
-        fontSize: 16,
-        color: colors.color,
-        marginLeft: 5,
-        marginRight: 12,
-    },
-});

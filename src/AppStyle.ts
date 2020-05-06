@@ -859,3 +859,16 @@ export const TimerButtonStyle = (colors: ThemeColors) => StyleSheet.create({
         marginTop: 13,
     }
 });
+
+export const DurationInputStyle = (colors: ThemeColors) => StyleSheet.create({
+    wrap: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    textStyle: {
+        fontSize: 16,
+        color: colors.color,
+        marginLeft: 5,
+        marginRight: 12,
+    },
+});
