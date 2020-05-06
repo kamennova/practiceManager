@@ -10,7 +10,7 @@ type WidgetsProps = {
 
 export const TimerWidgets = (props: WidgetsProps) => {
     return (
-        <View>
+        <View style={{marginBottom: 30}}>
             {props.isVisible ? <WidgetsList/> : <WidgetsButton onPress={props.toggleIsVisible}/>}
         </View>
     );

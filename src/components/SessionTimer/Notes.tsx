@@ -18,7 +18,7 @@ export const TimerNotes = (props: NotesProps) => {
 const AddNoteButton = (props: { onAdd: () => void }) => (
     <TouchableWithoutFeedback onPress={props.onAdd}>
         <View>
-            <Text>+ Add note</Text>
+            <Text style={{ textDecorationLine: 'underline' }}>+ Add note</Text>
         </View>
     </TouchableWithoutFeedback>
 );
