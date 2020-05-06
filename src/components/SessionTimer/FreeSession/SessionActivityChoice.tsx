@@ -11,7 +11,7 @@ import { ActivityTypeSelect } from "../../basic/Inputs/ActivityTypeSelect";
 import { ModalSmallTitle, ModalTitle } from "../../basic/Titles/ModalTitle";
 
 type ChoiceProps = {
-    route: Route,
+    route: Route & {params: {isFirstActivity?: boolean}},
     navigation: any,
 };
 
@@ -19,13 +19,16 @@ const BaseActivity: Activity = { type: ActivityType.Technique };
 
 export const SessionActivityChoice = (props: ChoiceProps) => {
     const [activity, setActivity] = useState<NoBreakActivityInput>(BaseActivity);
+    const isFirstActivity = props.route.params.isFirstActivity;
 
     const setType = (type: NoBreakActivity) => setActivity({ ...activity, type }),
         setTonality = (tonality: Tonality) => setActivity({ ...activity, tonality }),
         setExercise = (exercise: Exercise) => setActivity({ ...activity, exercise }),
         setPieceId = (pieceId: number) => setActivity({ ...activity, pieceId });
 
-    const goToTimer = () => props.navigation.navigate(FREE_SESSION_TIMER, { activity: getActivity(activity) });
+    const goToTimer = () => isFirstActivity ?
+        props.navigation.replace(FREE_SESSION_TIMER, { activity: getActivity(activity) }) :
+        props.navigation.navigate(FREE_SESSION_TIMER, { activity: getActivity(activity) });
 
     return (
         <View style={FullScreenModalStyle}>

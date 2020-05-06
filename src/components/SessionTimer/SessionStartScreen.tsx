@@ -41,7 +41,7 @@ const SessionStart = (props: StartProps) => {
 
     const navigateToTimer = () => usePlan ?
         replace(PLANNED_SESSION_TIMER, { planId: Number(planId) }) :
-        replace(FREE_SESSION_ACTIVITY_CHOICE);
+        replace(FREE_SESSION_ACTIVITY_CHOICE, { isFirstActivity: true });
 
     const planItems = props.plans.length > 0 ? props.plans.map(item => ({ val: item.id, label: item.name }))
         : [{ val: '-', label: '-' }];
