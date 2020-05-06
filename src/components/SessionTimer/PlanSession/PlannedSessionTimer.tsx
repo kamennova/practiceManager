@@ -1,63 +1,67 @@
+import { StackActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Route } from "react-native";
 import { connect } from "react-redux";
 import { FREE_BREAK_TIMER, SESSION_END } from "../../../NavigationPath";
-import { StateShape } from "../../../store/StoreState";
+import { pushActivity } from "../../../store/actions";
+import { thunkEndSession } from "../../../store/thunks/session";
+import { ActivityType } from "../../../types/Activity";
+import { ActivityRecord } from "../../../types/ActivityRecord";
 import { SessionPlan } from "../../../types/SessionPlan";
 import { getSeconds } from "../../../utils/time";
 import { TimeTracker } from "../../basic/TimeTrackers";
 import { SessionTimer } from "./../SessionTimer";
 
 type SessionScreenProps = {
-    route: Route & { params: { planId: number } },
-    plan: SessionPlan,
+    route: Route & { params: { plan: SessionPlan } },
     navigation: any,
+    pushActivity: (_: ActivityRecord) => void,
+    onEndSession: () => void,
 };
 
-const SessionComponent = (props: SessionScreenProps) => {
+const TimerComponent = (props: SessionScreenProps) => {
     const [activityIndex, setActivityIndex] = useState(0);
-    const activity = props.plan.schedule[activityIndex];
+    const plan = props.route.params.plan;
+    const activity = () => plan.schedule[activityIndex];
 
-    const [seconds, setSeconds] = useState(activity.duration);
+    const [seconds, setSeconds] = useState(activity().duration);
     const [isPaused, setIsPaused] = useState(false);
     const [start, setStart] = useState(getSeconds());
 
     const nextActivity = () => {
-        console.log('index', activityIndex);
-
-        if (activityIndex === props.plan.schedule.length - 1) { // this activity was the last one
-            console.log(props.plan);
-            props.navigation.navigate('Root', {screen: SESSION_END});
+        if (activityIndex === plan.schedule.length - 1) { // this activity was the last one
+            props.onEndSession();
+            props.navigation.dispatch(StackActions.replace(SESSION_END));
         } else {
             setActivityIndex(activityIndex + 1);
+            setSeconds(activity().duration);
+            setStart(getSeconds());
+            props.pushActivity({ startedOn: getSeconds(), ...activity() })
         }
     };
 
-    if (seconds <= 0) {
-        nextActivity();
-    }
+    const isOutOfActivities = () => activityIndex >= plan.schedule.length;
 
     useEffect(() => {
         let timeout: number | null = null;
 
-        if (!isPaused) {
+        if (!isPaused && !isOutOfActivities()) {
             // @ts-ignore
             timeout = setInterval(() => {
-                setSeconds(activity.duration - (getSeconds() - start));
+                setSeconds(activity().duration - (getSeconds() - start));
             }, 100);
-        } else if (isPaused && timeout !== null) {
+
+            if (seconds <= 0) {
+                nextActivity(); // todo +second
+            }
+        } else if (timeout !== null) {
             clearInterval(timeout);
         }
 
         return () => {
             if (timeout !== null) clearInterval(timeout)
         };
-    }, [isPaused, seconds]);
-
-    useEffect(() => {
-        console.log('index update');
-        setStart(getSeconds());
-    }, [activityIndex]);
+    }, [isPaused, seconds, activityIndex, activity]);
 
     const resumeTimer = () => {
         setStart(getSeconds() - seconds);
@@ -67,31 +71,22 @@ const SessionComponent = (props: SessionScreenProps) => {
     const onBreak = () => {
         setIsPaused(true);
 
-        // props.pushActivity({ startedOn: Date.now(), type: ActivityType.Break }); //todo
+        props.pushActivity({ startedOn: getSeconds(), type: ActivityType.Break });
         props.navigation.navigate(FREE_BREAK_TIMER, {
             onGoBack: resumeTimer
         });
     };
 
     return (
-        <SessionTimer isFree={false} onNextActivity={nextActivity} activity={activity} onBreak={onBreak}>
-            <TimeTracker seconds={seconds} activityType={activity.type}/>
+        <SessionTimer isFree={false} onNextActivity={nextActivity} activity={activity()} onBreak={onBreak}>
+            <TimeTracker seconds={seconds} activityType={activity().type}/>
         </SessionTimer>
     );
 };
 
-const mapStateToProps = (state: StateShape, ownProps: SessionScreenProps) => ({
-    plan: findPlanOrThrowError(state.plans.items, ownProps.route.params.planId),
+const mapDispatchToProps = (dispatch: any) => ({
+    pushActivity: (act: ActivityRecord) => dispatch(pushActivity(act)),
+    onEndSession: () => dispatch(thunkEndSession()),
 });
 
-const findPlanOrThrowError = (plans: SessionPlan[], planId: number) => {
-    const plan = plans.find(item => item.id === planId);
-
-    if (plan === undefined) {
-        throw new Error('Plan not found');
-    }
-
-    return plan;
-};
-
-export const PlannedSessionTimer = connect(mapStateToProps)(SessionComponent);
+export const PlannedSessionTimer = connect(undefined, mapDispatchToProps)(TimerComponent);

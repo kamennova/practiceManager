@@ -1,5 +1,10 @@
-import { Activity, ActivityType } from "../types/Activity";
+import { Activity, ActivityType, TechniqueActivity } from "../types/Activity";
 import { PieceBase } from "../types/Piece";
+
+export type PieceCredits = {
+    name: string,
+    authors?: string[],
+};
 
 export const getActivityTitle = (activity: Activity, pieceCredits?: PieceCredits): string => {
     switch (activity.type) {
@@ -10,9 +15,13 @@ export const getActivityTitle = (activity: Activity, pieceCredits?: PieceCredits
         case ActivityType.Piece:
             return (pieceCredits?.name !== undefined ? pieceCredits.name : 'Piece');
         case ActivityType.Technique:
-            return (activity.exercise !== undefined ? activity.exercise : 'Technique') +
-                (activity.tonality !== undefined ? ' ' + activity.tonality : '');
+            return getTechniqueTitle(activity);
     }
+};
+
+type TimerTitle = {
+    small?: string,
+    main: string
 };
 
 export const getTimerActivityTitle = (activity: Activity, pieceCredits?: PieceCredits): TimerTitle => {
@@ -33,12 +42,13 @@ export const getTimerActivityTitle = (activity: Activity, pieceCredits?: PieceCr
                 small: authors !== undefined ? authors : undefined
             };
         case ActivityType.Technique:
-            return {
-                main: (activity.exercise !== undefined ? activity.exercise : 'Technique') +
-                    (activity.tonality !== undefined ? ' in ' + activity.tonality : '')
-            };
+            return { main: getTechniqueTitle(activity), };
     }
 };
+
+const getTechniqueTitle = (activity: TechniqueActivity) =>
+    (activity.exercise !== undefined ? activity.exercise : 'Technique') +
+    (activity.tonality !== undefined ? ' in ' + activity.tonality : '');
 
 export const getPieceCredits = (pieces: PieceBase[], id?: number): PieceCredits | undefined => {
     if (id === undefined) {
@@ -48,16 +58,6 @@ export const getPieceCredits = (pieces: PieceBase[], id?: number): PieceCredits 
     const piece = pieces.find(item => item.id === id);
 
     return piece !== undefined ? { name: piece.name, authors: piece.authors } : undefined;
-};
-
-export type PieceCredits = {
-    name: string,
-    authors?: string[],
-};
-
-type TimerTitle = {
-    small?: string,
-    main: string
 };
 
 export const getPlannedSessionActivityTitle = (activityType: ActivityType): TimerTitle => {
