@@ -85,3 +85,5 @@ export const cancelNotifIfSet = async (notifId: number | null) => {
         await cancelNotifById(notifId);
     }
 };
+
+export const cancelAllNotifs = async () => await Notifications.cancelAllScheduledNotificationsAsync();
