@@ -1,9 +1,9 @@
-import { DrawerActions, StackActions } from '@react-navigation/native';
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import { DrawerActions, StackActions } from '@react-navigation/native';
 import React from "react";
+import { StyleSheet } from "react-native";
 import { DASHBOARD, REPERTOIRE, SESSION_PLAN_LIST, SESSION_START, SETTINGS } from "../../NavigationPath";
-import { ThemeColors } from "../../theme";
-import { useTheme } from "../../theme";
+import { ThemeColors, useTheme } from "../../theme";
 import { StartButton } from "./Buttons/ActionButton";
 import { DashboardIcon, PlansIcon, RepertoireIcon, SettingsIcon } from "./icons/Drawer";
 
@@ -21,15 +21,13 @@ export const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     };
 
     return (
-        <DrawerContentScrollView {...props}
-                                 contentContainerStyle={{ height: '100%', justifyContent: 'center', paddingBottom: 140, paddingLeft: 20 }}>
+        <DrawerContentScrollView {...props} contentContainerStyle={drawerStyle.container}>
             <CustomDrawerItem label={'Dashboard'} onPress={jumpTo(DASHBOARD)} icon={<DashboardIcon/>}/>
-            <CustomDrawerItem label={'Repertoire'} onPress={jumpTo(REPERTOIRE)} icon={<RepertoireIcon/>}/>
+            <CustomDrawerItem label={'Pieces'} onPress={jumpTo(REPERTOIRE)} icon={<RepertoireIcon/>}/>
             <CustomDrawerItem label={'Practice plans'} onPress={jumpTo(SESSION_PLAN_LIST)} icon={<PlansIcon/>}/>
             <CustomDrawerItem label={'Settings'} onPress={jumpTo(SETTINGS)} icon={<SettingsIcon/>}/>
             <DrawerItem label={() => <StartButton onPress={push(SESSION_START)}/>}
-                        onPress={push(SESSION_START)}
-                        style={{ alignSelf: 'center', position: 'absolute', bottom: 20 }}/>
+                        onPress={push(SESSION_START)} style={drawerStyle.btnWrap}/>
         </DrawerContentScrollView>
     );
 };
@@ -47,6 +45,20 @@ const CustomDrawerItem = (props: ItemProps) => (
                 label={props.label}
                 onPress={props.onPress}/>
 );
+
+const drawerStyle = StyleSheet.create({
+    container: {
+        height: '100%',
+        justifyContent: 'center',
+        paddingBottom: 140,
+        paddingLeft: 20,
+    },
+    btnWrap: {
+        alignSelf: 'center',
+        position: 'absolute',
+        bottom: 20,
+    },
+});
 
 const labelStyle = (colors: ThemeColors) => ({
     color: colors.color,

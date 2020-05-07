@@ -13,7 +13,7 @@ const Drawer = createDrawerNavigator();
 
 const MainComponent = (props: { getPieces: () => void, getPlans: () => void }) => {
     useEffect(() => {
-        loadDbData()
+        loadDbData();
     });
 
     const loadDbData = async () => {
@@ -28,12 +28,11 @@ const MainComponent = (props: { getPieces: () => void, getPlans: () => void }) =
                 sceneContainerStyle={{ height: '100%' }}
                 drawerStyle={DrawerStyle()}
                 drawerContentOptions={{ contentContainerStyle: DrawerContentStyle }}
-                drawerContent={props => (<CustomDrawerContent {...props} />)}>
+                drawerContent={props => <CustomDrawerContent {...props} />}>
                 <Drawer.Screen name='Root' component={Root}/>
             </Drawer.Navigator>
         </NavigationContainer>
     );
-
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
