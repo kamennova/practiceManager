@@ -35,11 +35,9 @@ export const HeaderIconWrap = (colors: ThemeColors): ViewStyle => ({
     justifyContent: 'center',
 });
 
-const ItemHeight = 70,
-    ItemBorderRadius = 2,
-    ImagePadding = 0,
-    ImageHeight = ItemHeight - 2 - ImagePadding * 2,
-    ImageWidth = 170 - ImagePadding;
+const ItemHeight = 71,
+    ItemBorderRadius = BorderRadius,
+    ImageWidth = 170;
 
 export const PieceListStyle = (colors: ThemeColors, theme: Theme = DEFAULT_THEME) => StyleSheet.create({
     author: {
@@ -48,20 +46,20 @@ export const PieceListStyle = (colors: ThemeColors, theme: Theme = DEFAULT_THEME
     },
     image: {
         width: ImageWidth,
-        height: ImageHeight,
+        height: ItemHeight,
         marginLeft: 'auto',
-        marginRight: ImagePadding,
         opacity: theme === Theme.Dark ? 0.7 : 1,
-        borderTopRightRadius: ItemBorderRadius,
-        borderBottomRightRadius: ItemBorderRadius,
     },
     imageTop: {
         width: 200,
-        height: ImageHeight,
+        height: ItemHeight,
         position: 'absolute',
-        right: -200 + ImageWidth
+        top: 0,
+        right: -200 + ImageWidth,
     },
-    itemWrap: { padding: 10, paddingLeft: 12 },
+    itemWrap: {
+        padding: 8,
+    },
 });
 
 export const ListItemTitleStyle = (colors: ThemeColors = DefaultColors) => ({
@@ -83,6 +81,14 @@ export const ListItemStyle = (colors: ThemeColors): ViewStyle => ({
     borderRadius: ItemBorderRadius,
 });
 
+export const PieceItemStyle = (colors: ThemeColors): ViewStyle => ({
+    backgroundColor: colors.appBg,
+    borderBottomWidth: 1,
+    borderColor: colors.borderFaded,
+    flexDirection: 'row',
+    minHeight: ItemHeight,
+    alignItems: 'center',
+});
 
 const PlanItemMargin = 10;
 const PlanItemWidth = (Dimensions.get('window').width - AppSidePadding * 2 - PlanItemMargin) / 2 - 1;

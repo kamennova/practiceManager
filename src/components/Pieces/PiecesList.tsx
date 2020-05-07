@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, Image, Text, TextStyle, TouchableNativeFeedback, View } from "react-native";
-import { ListItemStyle, ListItemTitleStyle, PieceListStyle as stylesFunc } from "../../AppStyle";
+import { ListItemTitleStyle, PieceItemStyle, PieceListStyle as stylesFunc } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
 import { Theme, useTheme } from "../../theme";
 import { PieceBase } from "../../types/Piece";
@@ -14,6 +14,7 @@ export const PiecesList = (props: { pieces: PieceBase[] }) => {
         <View>
             {props.pieces.length === 0 ? <NothingAlert/> : undefined}
             <FlatList data={props.pieces}
+                      style={{borderTopWidth: 1, borderTopColor: useTheme().colors.borderFaded }}
                       renderItem={({ item }) => (
                           <PieceItem key={item.id.toString()}
                                      onPress={() => navigation.navigate(PIECE, { id: item.id })} {...item} />)}/>
@@ -27,7 +28,7 @@ const PieceItem = (props: PieceBase & { onPress: () => void }) => {
 
     return (
         <TouchableNativeFeedback onPress={props.onPress}>
-            <View style={ListItemStyle(theme.colors)}>
+            <View style={PieceItemStyle(theme.colors)}>
                 <View style={styles.itemWrap}>
                     <PieceName style={ListItemTitleStyle(theme.colors)}>
                         {props.name}
