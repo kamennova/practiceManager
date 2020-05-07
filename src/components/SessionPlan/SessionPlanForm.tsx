@@ -171,7 +171,7 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
                         activity={this.state.editing > -1 ? this.state.plan.schedule[this.state.editing] : undefined}/>
                 </ScrollView>
 
-                <SaveButton onPress={async () => await this.validateAndSave()}/>
+                <SaveButton style={this.styles.save} onPress={async () => await this.validateAndSave()}/>
             </ScreenWrapper>
         );
     };

@@ -1,12 +1,11 @@
 import React from "react";
-import { Text, TouchableWithoutFeedback, View } from "react-native";
+import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { ActivityTimingStyle, PlanItemStyle as getStyle } from "../../AppStyle";
 import { useTheme } from "../../theme";
 import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
 import { ActivityType } from "../../types/Activity";
 import { SessionPlan } from "../../types/SessionPlan";
 import { formatMinutesShort } from "../../utils/time";
-import { getActivityIcon } from "../basic/inputs/ActivityTypeSelect";
 
 export const SessionPlanItem = (props: { plan: SessionPlan, onPress: () => void }) => {
     const style = getStyle(useTheme().colors);
@@ -26,18 +25,28 @@ export const SessionPlanItem = (props: { plan: SessionPlan, onPress: () => void 
 };
 
 const PlanTiming = (props: { report: ActivitiesReport }) => (
-    <View style={ActivityTimingStyle.timingWrap}>
-        <ActivityTiming activity={ActivityType.Technique} duration={65}/>
+    <View style={timingWrapStyle}>
+        <ActivityTiming activity={ActivityType.Technique} duration={props.report.technique}/>
         <ActivityTiming activity={ActivityType.Piece} duration={props.report.pieces}/>
         <ActivityTiming activity={ActivityType.SightReading} duration={props.report.sightReading}/>
         <ActivityTiming activity={ActivityType.Break} duration={props.report.break}/>
     </View>
 );
 
-const ActivityTiming = (props: { activity: ActivityType, duration: number }) => (
-    <View style={ActivityTimingStyle.timing}>
-        <Text style={{ color: useTheme().colors.colorFaded }}>
-            <Text style={{ fontSize: 16, }}>{formatMinutesShort(props.duration)}</Text></Text>
-        {getActivityIcon(props.activity)({ size: 18 })}
-    </View>
-);
+const ActivityTiming = (props: { activity: ActivityType, duration: number }) => {
+    const style = ActivityTimingStyle(useTheme().colors);
+
+    return (
+        <View style={style.timing}>
+            <Text style={style.duration}>
+                {formatMinutesShort(props.duration)}</Text>
+            <Text style={style.activity}>{props.activity}</Text>
+        </View>
+    );
+};
+
+const timingWrapStyle: ViewStyle = {
+    width: '100%',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap'
+};

@@ -105,19 +105,21 @@ export const PlanItemStyle = (colors: ThemeColors = DefaultColors) => (StyleShee
     },
 }));
 
-export const ActivityTimingStyle = StyleSheet.create({
-    timingWrap: {
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap'
-    },
+export const ActivityTimingStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     timing: {
         flexDirection: 'row',
-        marginBottom: 13,
-        alignItems: 'flex-start',
+        marginBottom: 11,
+        alignItems: 'flex-end',
         width: '100%',
     },
+    duration: {
+        color: colors.color,
+        marginRight: 6,
+        fontSize: 15,
+    },
+    activity: {
+        color: colors.colorFaded,
+    }
 });
 
 export const ButtonStyle: ViewStyle = {
