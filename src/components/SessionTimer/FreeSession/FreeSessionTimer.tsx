@@ -49,6 +49,7 @@ const FreeSession = (props: FreeSessionTimerProps) => {
     };
 
     const resumeTimer = () => {
+        props.pushActivity(activity);
         setStart(getSeconds() - seconds);
         setIsPaused(false);
     };

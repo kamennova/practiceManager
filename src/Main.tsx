@@ -13,7 +13,7 @@ const Drawer = createDrawerNavigator();
 
 const MainComponent = (props: { getPieces: () => void, getPlans: () => void }) => {
     useEffect(() => {
-        loadDbData()
+        loadDbData();
     });
 
     const loadDbData = async () => {
@@ -33,7 +33,6 @@ const MainComponent = (props: { getPieces: () => void, getPlans: () => void }) =
             </Drawer.Navigator>
         </NavigationContainer>
     );
-
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
