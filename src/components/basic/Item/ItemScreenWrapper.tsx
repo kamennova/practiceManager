@@ -4,7 +4,7 @@ import { Route, ScrollView } from "react-native";
 import { ItemPaths } from "../../../NavigationPath";
 import { ActionType } from "../../../types/ActionType";
 import { Item, ItemName } from "../../../types/item/Item";
-import { PrimaryButton } from "../buttons/Button";
+import { ActionButton } from "../buttons/ActionButton";
 import { NextButton, PrevButton } from "../buttons/Direction";
 import { ConfirmDeleteModal } from "../ConfrmDeleteModal";
 import { ItemButtonsWrap } from "../ItemButtons";
@@ -62,7 +62,7 @@ export const ItemScreenWrapper = <ItemType extends Item>(props: ItemScreenWrappe
     return (
         <ScreenWrapper itemMenu={menu} fav={{ val: props.item.isFavourite, update: updateItemFav }}>
             <ScrollView contentContainerStyle={scrollStyle}>
-            {props.children}
+                {props.children}
             </ScrollView>
             {showDeleteModal ?
                 <ConfirmDeleteModal onCancel={() => updateShowDeleteModal(false)} onOk={onDelete}/> : undefined}
@@ -70,11 +70,11 @@ export const ItemScreenWrapper = <ItemType extends Item>(props: ItemScreenWrappe
             <ItemButtonsWrap>
                 <PrevButton
                     onPress={prev}/>
-                <PrimaryButton style={{ marginRight: 15, marginLeft: 15 }}>Practice</PrimaryButton>
+                <ActionButton label='Practice' style={{ marginRight: 15, marginLeft: 15 }}/>
                 <NextButton
                     onPress={next}/>
             </ItemButtonsWrap>
         </ScreenWrapper>);
 };
 
-const scrollStyle = {paddingBottom: 65 };
+const scrollStyle = { paddingBottom: 65 };

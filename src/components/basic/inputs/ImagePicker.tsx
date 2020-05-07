@@ -18,6 +18,7 @@ type PickerProps = {
 export const MyImagePicker = (props: PickerProps) => {
     const colors = useTheme().colors;
     const styles = getStyles(colors);
+    const isPicSet = props.src !== undefined && props.src !== ''; //todo set in db
 
     const getPermission = async () => {
         if (Constants.platform !== undefined && Constants.platform.ios) {
@@ -40,11 +41,11 @@ export const MyImagePicker = (props: PickerProps) => {
         <TouchableWithoutFeedback onPress={async () => await onPick()}>
             <View style={styles.picker}>
                 <View style={styles.imageWrap}>
-                    {props.src !== undefined ? <Image style={styles.pic} source={{ uri: props.src }}/> : <ImageIcon/>}
+                    {isPicSet ? <Image style={styles.pic} source={{ uri: props.src }}/> : <ImageIcon/>}
                 </View>
                 <Text style={styles.text}>Cover picture</Text>
 
-                {props.src !== undefined ? <DeleteButton onDelete={props.onDelete}/> : undefined}
+                {isPicSet ? <DeleteButton onDelete={props.onDelete}/> : undefined}
             </View>
         </TouchableWithoutFeedback>
     );

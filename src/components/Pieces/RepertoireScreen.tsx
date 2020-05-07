@@ -2,7 +2,6 @@ import { StackActions } from '@react-navigation/native';
 import React, { Component } from 'react';
 import { ScrollView } from "react-native";
 import { connect } from 'react-redux'
-import { AppSidePadding } from "../../AppStyle";
 import { PIECE_FORM } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { ActionType } from "../../types/ActionType";
@@ -34,7 +33,6 @@ const RepertoireScreen = connect(mapStateToProps)(Repertoire);
 export default RepertoireScreen;
 
 const scrollStyle = {
-    paddingLeft: AppSidePadding,
     paddingBottom: 90,
     paddingTop: 20,
 };

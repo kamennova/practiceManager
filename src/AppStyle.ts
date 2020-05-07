@@ -71,20 +71,14 @@ export const ListItemTitleStyle = (colors: ThemeColors = DefaultColors) => ({
 });
 
 export const ListItemStyle = (colors: ThemeColors): ViewStyle => ({
-    borderWidth: 0.5,
     borderColor: colors.borderFaded,
     backgroundColor: colors.appBg,
-    marginBottom: 10,
-    flexDirection: 'row',
-    minHeight: ItemHeight,
-    alignItems: 'center',
-    borderRadius: ItemBorderRadius,
 });
 
 export const PieceItemStyle = (colors: ThemeColors): ViewStyle => ({
-    backgroundColor: colors.appBg,
+    ...ListItemStyle(colors),
     borderBottomWidth: 1,
-    borderColor: colors.borderFaded,
+    paddingLeft: AppSidePadding,
     flexDirection: 'row',
     minHeight: ItemHeight,
     alignItems: 'center',
@@ -101,6 +95,9 @@ export const PlanItemStyle = (colors: ThemeColors = DefaultColors) => (StyleShee
         padding: 12,
         paddingLeft: 15,
         width: PlanItemWidth,
+        borderRadius: ItemBorderRadius,
+        borderWidth: 1,
+        marginBottom: 10,
     },
     title: {
         ...ListItemTitleStyle(colors),
@@ -116,9 +113,10 @@ export const ActivityTimingStyle = StyleSheet.create({
         flexWrap: 'wrap'
     },
     timing: {
-        flexDirection: 'column',
-        marginBottom: 13, alignItems: 'center',
-        width: '50%',
+        flexDirection: 'row',
+        marginBottom: 13,
+        alignItems: 'flex-start',
+        width: '100%',
     },
 });
 
@@ -173,6 +171,7 @@ export const DirectionButtonStyle = (colors: ThemeColors = DefaultColors, isDisa
     backgroundColor: colors.appBg,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 3,
     borderWidth: 1,
     borderColor: colors.borderFaded,
     opacity: isDisabled ? 0.4 : 1,
@@ -185,7 +184,7 @@ export const FeaturesStyle = (colors: ThemeColors = DefaultColors) => StyleSheet
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        marginTop: 14,
+        marginTop: 10,
         borderColor: colors.border,
     }
 });
@@ -202,7 +201,7 @@ export const SectionRowStyle = (colors: ThemeColors) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderBottomWidth: 1,
+        // borderBottomWidth: 1,
         borderColor: colors.borderFaded,
         paddingBottom: 12,
         paddingTop: 12,
@@ -247,7 +246,7 @@ export const ActionBtnStyle = StyleSheet.create({
         color: 'white',
         fontSize: 17,
         fontWeight: '400',
-        letterSpacing: 0.4,
+        letterSpacing: 0.1,
     },
     save: {
         position: 'absolute',
@@ -311,8 +310,9 @@ export const ItemBtnsStyle = (colors: ThemeColors): ViewStyle => ({
     position: 'absolute',
     top: Dimensions.get('window').height - 50,
     flexDirection: 'row',
-    width: '100%',
+    width: Dimensions.get('window').width,
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors.appBg,
     padding: AppSidePadding,
     paddingTop: 15,
@@ -384,7 +384,7 @@ const TagFonsize = 14;
 
 export const TagInputStyle = { fontSize: TagFonsize, marginBottom: 8, };
 
-export const TagInputTagStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
+export const TagInputTagStyle = (_: ThemeColors = DefaultColors) => StyleSheet.create({
     wrap: {
         backgroundColor: 'transparent',
         flexDirection: 'row',
@@ -426,7 +426,7 @@ export const CheckboxStyle = {
     marginTop: 0,
 };
 
-const NumInputHeight = 32;
+const NumInputHeight = 25;
 
 export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
     wrap: {
@@ -447,18 +447,18 @@ export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
     },
     numberBtn: {
         height: NumInputHeight,
-        backgroundColor: colors.appBgLight,
+        backgroundColor: colors.appBg,
         alignItems: 'center',
         justifyContent: 'center',
         paddingLeft: 7,
         paddingRight: 7,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: Dark,
     },
     btnText: {
         fontSize: 18,
         fontWeight: 'bold',
-        lineHeight: 19,
+        lineHeight: 20,
         color: Dark,
     },
     input: {
@@ -895,6 +895,7 @@ export const DurationInputStyle = (colors: ThemeColors) => StyleSheet.create({
     wrap: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
     textStyle: {
         fontSize: 16,
