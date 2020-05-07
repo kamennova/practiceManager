@@ -1,10 +1,11 @@
 import React from 'react';
-import { Image, ImageStyle } from "react-native";
+import { MaterialIcons } from '@expo/vector-icons';
+import { ViewStyle } from "react-native";
 
 type IconProps = {
-    style?: ImageStyle
+    style?: ViewStyle,
 }
 
 export const CheckIcon = (props: IconProps) => (
-    <Image style={props.style} source={require('../../../../assets/check.png')}/>
+    <MaterialIcons name='check' style={props.style} size={19} color={'white'}/>
 );

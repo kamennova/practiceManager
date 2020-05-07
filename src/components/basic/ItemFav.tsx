@@ -18,4 +18,9 @@ export const ItemFav = (props: { isFav: boolean, onPress: () => void }) => {
     )
 };
 
-const style = (colors: ThemeColors) => ({ ...HeaderIconWrap(colors), marginLeft: 'auto', marginRight: 10 });
+const style = (colors: ThemeColors) => ({
+    ...HeaderIconWrap(colors),
+    marginLeft: 'auto',
+    marginRight: 10,
+    paddingBottom: 2,
+});

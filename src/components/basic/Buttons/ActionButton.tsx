@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
-import { ActionBtnStyle as getStyle, Dark } from "../../../AppStyle";
-import { useTheme } from "../../../theme";
+import { ActionBtnStyle as styles } from "../../../AppStyle";
 import { CheckIcon } from "../icons/Check";
 import { PlayIcon } from "../icons/PlayIcon";
 
@@ -12,34 +11,25 @@ type BtnProps = {
     style?: ViewStyle,
 }
 
-export const ActionButton = (props: BtnProps) => {
-    const themeObj = useTheme();
-    const style = getStyle(themeObj.theme);
-
-    return (
-        <TouchableWithoutFeedback onPress={props.onPress}>
-            <View style={{ ...style.wrap, ...props.style }}>
-                {props.icon}
-                <Text style={style.text}>{props.label}</Text>
-            </View>
-        </TouchableWithoutFeedback>
-    )
-};
-
-export const AddButton = (props: { onPress: () => void }) => {
-    return (
-        <ActionButton style={getStyle().add} onPress={props.onPress} label='Add'
-                      icon={<Text style={getStyle().plus}>+</Text>}/>
-    )
-};
-
-export const SaveButton = (props: { onPress: () => void, style?: ViewStyle }) => (
-    <ActionButton style={{ ...getStyle().save, ...props.style }} onPress={props.onPress} label='Save'
-                  icon={<CheckIcon style={getStyle().check}/>}/>
+export const ActionButton = (props: BtnProps) => (
+    <TouchableWithoutFeedback onPress={props.onPress}>
+        <View style={{ ...styles.wrap, ...props.style }}>
+            {props.icon}
+            <Text style={styles.text}>{props.label}</Text>
+        </View>
+    </TouchableWithoutFeedback>
 );
 
-export const StartButton = (props: {onPress?: () => void, style?: ViewStyle}) => (
-    <ActionButton style={props.style}
-                  onPress={props.onPress} label='Start session'
-                  icon={<PlayIcon color={Dark} style={{marginRight: 12}} />}/>
+export const AddButton = (props: { onPress: () => void }) => (
+    <ActionButton style={styles.add} onPress={props.onPress} label='Add' icon={<Text style={styles.plus}>+</Text>}/>
+);
+
+export const SaveButton = (props: { onPress: () => void, style?: ViewStyle }) => (
+    <ActionButton style={{ ...styles.save, ...props.style }} onPress={props.onPress} label='Save'
+                  icon={<CheckIcon style={styles.check}/>}/>
+);
+
+export const StartButton = (props: { onPress?: () => void, style?: ViewStyle }) => (
+    <ActionButton style={props.style} onPress={props.onPress} label='Start session'
+                  icon={<PlayIcon color='white' style={{ marginRight: 12 }}/>}/>
 );

@@ -5,6 +5,8 @@ const DefaultColors = ThemeColors[DEFAULT_THEME];
 
 const FONT_SIZE = 16;
 
+const BorderRadius = 5;
+
 export const AppSidePadding = 17,
     TotalHeaderHeight = 86;
 
@@ -223,83 +225,79 @@ export const DrawerContentStyle = {
     paddingLeft: 20,
 };
 
-export const ActivityViewStyle: ViewStyle = {
-    borderWidth: 1,
-    borderColor: 'black',
-    padding: 14,
-    paddingLeft: 12,
-    paddingRight: 12,
-    marginBottom: 17,
-};
-
-export const SubActivityViewStyle: ViewStyle = {
-    paddingTop: 4,
-    paddingBottom: 4,
-};
-
-export const BreakViewStyle: ViewStyle = {
-    borderWidth: 0,
-};
-
-export const ActionBtnStyle = (theme: Theme = DEFAULT_THEME) =>
-    StyleSheet.create({
-        wrap: {
-            flexDirection: 'row',
-            height: 50,
-            alignSelf: 'flex-start',
-            paddingLeft: 19,
-            paddingRight: 25,
-            alignItems: 'center',
-            borderColor: theme !== Theme.Dark ? Primary : Dark,
-            borderWidth: 2,
-            backgroundColor: ThemeColors[theme].appBgLight,
-            elevation: 2,
-        },
-        text: { color: Dark, fontSize: 17, fontWeight: '700' },
-        save: {
-            position: 'absolute',
-            right: AppSidePadding,
-            top: Dimensions.get('window').height - 40,
-        },
-        check: { width: 19, height: 19, marginRight: 5 },
-        add: {
-            position: 'absolute',
-            right: AppSidePadding,
-            top: Dimensions.get('window').height - 130,
-        },
-        plus: { color: Dark, fontSize: 25, lineHeight: 32, marginRight: 8 },
-    });
-
-const SIZE = 240;
+export const ActionBtnStyle = StyleSheet.create({
+    wrap: {
+        flexDirection: 'row',
+        height: 50,
+        alignSelf: 'flex-start',
+        paddingLeft: 19,
+        paddingRight: 25,
+        alignItems: 'center',
+        backgroundColor: Dark,
+        elevation: 2,
+        borderRadius: BorderRadius,
+    },
+    text: {
+        color: 'white',
+        fontSize: 17,
+        fontWeight: '400',
+        letterSpacing: 0.4,
+    },
+    save: {
+        position: 'absolute',
+        right: AppSidePadding,
+        top: Dimensions.get('window').height - 40,
+    },
+    check: {
+        width: 19,
+        height: 19,
+        marginRight: 5,
+    },
+    add: {
+        position: 'absolute',
+        right: AppSidePadding,
+        top: Dimensions.get('window').height - 130,
+    },
+    plus: {
+        color: 'white',
+        fontSize: 21,
+        lineHeight: 28,
+        marginRight: 8,
+    },
+});
 
 export const ImagePickerStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     picker: {
         width: '100%',
-        height: SIZE + 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
         marginBottom: 20,
-        borderBottomWidth: 1,
+        borderWidth: 1,
+        borderRadius: BorderRadius,
         borderColor: colors.borderFaded,
+        paddingRight: 14,
     },
-    pic: { width: '100%', height: SIZE },
-    btnPic: {
-        position: 'absolute',
-        bottom: (SIZE - TotalHeaderHeight) / 2
-    },
-    trash: { width: 21, height: 21 },
-    trashWrap: {
-        ...HeaderIconWrap,
-        position: 'absolute',
-        bottom: 10,
-        right: AppSidePadding,
-    },
-    layer: {
-        position: 'absolute',
+    pic: {
         width: '100%',
         height: '100%',
-        backgroundColor: colors.appBgFaded,
+        borderBottomLeftRadius: BorderRadius,
+        borderTopLeftRadius: BorderRadius,
+        opacity: 0.8,
+    },
+    imageWrap: {
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        height: 55,
+        width: 60,
+        borderTopLeftRadius: BorderRadius,
+        borderBottomLeftRadius: BorderRadius,
+        marginRight: 14,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text: {
+        marginRight: 'auto',
+        fontSize: 15,
+        color: colors.color,
     }
 });
 
@@ -360,6 +358,7 @@ export const TextInputStyle = (colors: ThemeColors) => ({
     width: '100%',
     borderWidth: 1,
     borderColor: colors.borderFaded,
+    borderRadius: BorderRadius,
     padding: 7,
     paddingLeft: 14,
     paddingRight: 14,
@@ -368,18 +367,45 @@ export const TextInputStyle = (colors: ThemeColors) => ({
     color: colors.color,
 });
 
-export const TagInputTagStyle: ViewStyle = {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    borderWidth: 1,
-    borderColor: Primary,
-    marginRight: 10,
-    marginBottom: 10,
-    padding: 10,
-    paddingBottom: 3,
-    paddingTop: 4,
-    paddingRight: 3,
-};
+export const LabelStyle = (colors: ThemeColors = DefaultColors) => ({
+    marginBottom: 5,
+    color: colors.colorFaded,
+});
+
+// --
+
+const TagFonsize = 14;
+
+export const TagInputStyle = { fontSize: TagFonsize, marginBottom: 8, };
+
+export const TagInputTagStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
+    wrap: {
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        marginRight: 10,
+        marginBottom: 10,
+        paddingLeft: 8,
+        paddingBottom: 5,
+        paddingTop: 2,
+        paddingRight: 5,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: Dark,
+    },
+    text: {
+        fontSize: TagFonsize,
+        color: Dark,
+        lineHeight: TagFonsize,
+    },
+    close: {
+        fontSize: 16,
+        marginLeft: 5,
+        color: Dark,
+    }
+});
+
+// --
 
 export const CheckboxWrapperStyle: ViewStyle = {
     marginBottom: 20,
@@ -731,9 +757,8 @@ export const AddActivityBtnStyle = (colors: ThemeColors, theme: Theme) => StyleS
         paddingLeft: 2,
     },
     plus: {
-        fontSize: 19,
+        fontSize: 15,
         color: Dark,
-        fontWeight: 'bold',
         lineHeight: 22,
         marginRight: 5,
     },

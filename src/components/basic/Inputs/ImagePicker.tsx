@@ -3,11 +3,11 @@ import * as ImagePicker from "expo-image-picker";
 import { ImagePickerResult } from "expo-image-picker";
 import * as Permissions from 'expo-permissions';
 import React from 'react';
-import { Image, TouchableWithoutFeedback, View } from "react-native";
-import { ImagePickerStyle as getStyles } from "../../AppStyle";
-import { useTheme } from "../../theme";
-import { TrashIcon } from "./icons/Trash";
-import {Ionicons} from '@expo/vector-icons';
+import { Image, Text, TouchableWithoutFeedback, View } from "react-native";
+import { HeaderIconWrap, ImagePickerStyle as getStyles } from "../../../AppStyle";
+import { useTheme } from "../../../theme";
+import { ImageIcon } from "../icons/Image";
+import { TrashIcon } from "../icons/Trash";
 
 type PickerProps = {
     onChoose: (_: ImagePickerResult) => void,
@@ -39,29 +39,25 @@ export const MyImagePicker = (props: PickerProps) => {
     return (
         <TouchableWithoutFeedback onPress={async () => await onPick()}>
             <View style={styles.picker}>
-                {props.src !== undefined ? [
-                    <Image style={styles.pic} source={{ uri: props.src }}/>,
-                    <Layer/>,
-                    <DeleteIcon onDelete={props.onDelete}/>
-                ] : undefined}
-                <PickImageButton color={colors.color}/>
+                <View style={styles.imageWrap}>
+                    {props.src !== undefined ? <Image style={styles.pic} source={{ uri: props.src }}/> : <ImageIcon/>}
+                </View>
+                <Text style={styles.text}>Cover picture</Text>
+
+                {props.src !== undefined ? <DeleteButton onDelete={props.onDelete}/> : undefined}
             </View>
         </TouchableWithoutFeedback>
     );
 };
 
-const Layer = () => (
-    <View style={getStyles(useTheme().colors).layer}/>
-);
+const DeleteButton = (props: { onDelete: () => void }) => {
+    const styles = HeaderIconWrap(useTheme().colors);
 
-const PickImageButton = (props: {color: string}) => (<Ionicons size={30} color={props.color} style={getStyles().btnPic} name='md-image'/>);
-
-const DeleteIcon = (props: { onDelete: () => void }) => {
-    const styles = getStyles(useTheme().colors);
     return (
-    <TouchableWithoutFeedback onPress={props.onDelete}>
-        <View style={styles.trashWrap}>
-            <TrashIcon style={styles.trash}/>
-        </View>
-    </TouchableWithoutFeedback>
-)};
+        <TouchableWithoutFeedback onPress={props.onDelete}>
+            <View style={styles}>
+                <TrashIcon/>
+            </View>
+        </TouchableWithoutFeedback>
+    )
+};

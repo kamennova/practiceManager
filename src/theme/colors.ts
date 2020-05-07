@@ -4,12 +4,12 @@ export const ThemeColors: { [key in Theme]: ThemeColors } = {
     [Theme.Light]: {
         color: 'black',
         headerBg: '#f1f1f3',
-        appBg: '#f1f1f3',
+        appBg: 'white',
         appBgFaded: 'rgba(241, 241, 243, 0.5)',
         appBgLight: '#e6edff',
         primary: '#6895ff',
         border: 'lightgrey',
-        borderFaded: 'rgba(0, 0, 0, 0.08)',
+        borderFaded: '#dedede',
         colorFaded: 'grey',
     },
     [Theme.Dark]: {
