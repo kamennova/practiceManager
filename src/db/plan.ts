@@ -66,7 +66,7 @@ export const getPlans = async (): Promise<SessionPlan[]> => {
 const planFromEntity = (ent: PlanEntity): SessionPlan => ({
     id: ent.id,
     name: ent.name,
-    schedule: ent.schedule.map(activityFromEntity),
+    schedule: ent.schedule.sort((a, b) => a.order > b.order ? -1 : 1).map(activityFromEntity),
     isFavourite: ent.isFavourite !== null ? ent.isFavourite : false,
     createdOn: ent.createdOn,
 });
