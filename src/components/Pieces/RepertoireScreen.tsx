@@ -7,7 +7,7 @@ import { PIECE_FORM } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { ActionType } from "../../types/ActionType";
 import { PieceBase } from "../../types/Piece";
-import { AddButton } from "../basic/Buttons/ActionButton";
+import { AddButton } from "../basic/buttons/ActionButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PiecesList } from "./PiecesList";
 

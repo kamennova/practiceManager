@@ -7,8 +7,8 @@ import { SESSION_PLAN, SESSION_PLAN_FORM } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { ActionType } from "../../types/ActionType";
 import { SessionPlan } from "../../types/SessionPlan";
-import { NothingAlert } from "../basic/Alerts/NothingAlert";
-import { AddButton } from "../basic/Buttons/ActionButton";
+import { NothingAlert } from "../basic/alerts/NothingAlert";
+import { AddButton } from "../basic/buttons/ActionButton";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { SessionPlanItem } from "./SessionPlanItem";
 

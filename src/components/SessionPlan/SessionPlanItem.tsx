@@ -6,7 +6,7 @@ import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesRep
 import { ActivityType } from "../../types/Activity";
 import { SessionPlan } from "../../types/SessionPlan";
 import { formatMinutesShort } from "../../utils/time";
-import { getActivityIcon } from "../basic/Inputs/ActivityTypeSelect";
+import { getActivityIcon } from "../basic/inputs/ActivityTypeSelect";
 
 export const SessionPlanItem = (props: { plan: SessionPlan, onPress: () => void }) => {
     const style = getStyle(useTheme().colors);

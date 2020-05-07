@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Text, View } from "react-native";
 import { useTheme } from "../../theme";
-import { NumberInput } from "../basic/Inputs/NumberInput";
+import { NumberInput } from "../basic/inputs/NumberInput";
 import { DurationInputStyle as getStyles } from "../../AppStyle";
 import { ItemSection } from "../basic/ItemSection";
 import { SectionRow } from "../basic/SectionRow";

@@ -5,7 +5,7 @@ import { ListItemStyle, ListItemTitleStyle, PieceListStyle as stylesFunc } from 
 import { PIECE } from "../../NavigationPath";
 import { Theme, useTheme } from "../../theme";
 import { PieceBase } from "../../types/Piece";
-import { NothingAlert } from "../basic/Alerts/NothingAlert";
+import { NothingAlert } from "../basic/alerts/NothingAlert";
 
 export const PiecesList = (props: { pieces: PieceBase[] }) => {
     const navigation = useNavigation();

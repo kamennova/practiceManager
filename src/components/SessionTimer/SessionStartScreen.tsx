@@ -9,10 +9,10 @@ import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
 import { SessionPlan } from "../../types/SessionPlan";
 import { findPlanOrThrowError } from "../../utils/find";
-import { MinorButton, PrimaryButton } from "../basic/Buttons/Button";
+import { MinorButton, PrimaryButton } from "../basic/buttons/Button";
 import { TimerIcon, TimerOffIcon } from "../basic/icons/Timer";
-import { MyPicker } from "../basic/Inputs/Picker";
-import { ModalTitle } from "../basic/Titles/ModalTitle";
+import { MyPicker } from "../basic/inputs/Picker";
+import { ModalTitle } from "../basic/titles/ModalTitle";
 import { SessionTypeOption } from "./SessionTypeOption";
 
 type StartProps = {

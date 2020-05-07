@@ -12,11 +12,11 @@ import { EmptyPiece } from "../../types/EmptyPiece";
 import { FormProps, FormState } from "../../types/item/ItemForm";
 import { Piece } from "../../types/Piece";
 import { trimStrArr } from "../../utils/strings";
-import { ErrorAlert } from "../basic/Alerts";
-import { SaveButton } from "../basic/Buttons/ActionButton";
-import { MyImagePicker } from "../basic/Inputs/ImagePicker";
-import { TagInput } from "../basic/Inputs/TagInput";
-import { MyTextInput } from "../basic/Inputs/TextInput";
+import { ErrorAlert } from "../basic/alerts";
+import { SaveButton } from "../basic/buttons/ActionButton";
+import { MyImagePicker } from "../basic/inputs/ImagePicker";
+import { TagInput } from "../basic/inputs/TagInput";
+import { MyTextInput } from "../basic/inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceNotifications } from "./PieceNotifications";
 

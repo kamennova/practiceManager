@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { AppPaddingStyle } from "../../AppStyle";
-import { SmallTitle } from "./Titles/Titles";
+import { SmallTitle } from "./titles/Titles";
 
 export const ItemSection = (props: {children: JSX.Element | JSX.Element[], title: string}) => (
     <View style={style}>

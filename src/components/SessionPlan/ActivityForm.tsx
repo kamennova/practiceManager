@@ -7,8 +7,8 @@ import { ActivityType, Exercise, Tonality } from "../../types/Activity";
 import { getPlanActivity, PlanActivityInput } from "../../types/ActivityInput";
 import { PlanActivity } from "../../types/PlanActivity";
 import { ComplexActivityFields } from "../basic/ComplexActivityFields";
-import { ActivityTypeSelect } from "../basic/Inputs/ActivityTypeSelect";
-import { DurationInput } from "../basic/Inputs/DurationInput";
+import { ActivityTypeSelect } from "../basic/inputs/ActivityTypeSelect";
+import { DurationInput } from "../basic/inputs/DurationInput";
 
 type BlockFormProps = {
     onSave: (_: PlanActivity) => void,

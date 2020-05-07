@@ -2,8 +2,8 @@ import React from 'react';
 import { View } from "react-native";
 import { SmallModalStyle } from "../../AppStyle";
 import { useTheme } from "../../theme";
-import { Button, MinorButton } from "./Buttons/Button";
-import { ModalTitle } from "./Titles/ModalTitle";
+import { Button, MinorButton } from "./buttons/Button";
+import { ModalTitle } from "./titles/ModalTitle";
 
 export const ConfirmDeleteModal = (props: { onCancel: () => void, onOk: () => void }) => {
     return (

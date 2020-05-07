@@ -4,7 +4,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { DASHBOARD, REPERTOIRE, SESSION_PLAN_LIST, SESSION_START, SETTINGS } from "../../NavigationPath";
 import { ThemeColors, useTheme } from "../../theme";
-import { StartButton } from "./Buttons/ActionButton";
+import { StartButton } from "./buttons/ActionButton";
 import { DashboardIcon, PlansIcon, RepertoireIcon, SettingsIcon } from "./icons/Drawer";
 
 export const CustomDrawerContent = (props: DrawerContentComponentProps) => {

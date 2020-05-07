@@ -4,11 +4,11 @@ import { FullScreenModalStyle } from "../../../AppStyle";
 import { FREE_SESSION_TIMER } from "../../../NavigationPath";
 import { Activity, ActivityType, Exercise, Tonality } from "../../../types/Activity";
 import { getActivity, NoBreakActivity, NoBreakActivityInput } from "../../../types/ActivityInput";
-import { ActionButton } from "../../basic/Buttons/ActionButton";
-import { MinorButton } from "../../basic/Buttons/Button";
+import { ActionButton } from "../../basic/buttons/ActionButton";
+import { MinorButton } from "../../basic/buttons/Button";
 import { ComplexActivityFields } from "../../basic/ComplexActivityFields";
-import { ActivityTypeSelect } from "../../basic/Inputs/ActivityTypeSelect";
-import { ModalSmallTitle, ModalTitle } from "../../basic/Titles/ModalTitle";
+import { ActivityTypeSelect } from "../../basic/inputs/ActivityTypeSelect";
+import { ModalSmallTitle, ModalTitle } from "../../basic/titles/ModalTitle";
 
 type ChoiceProps = {
     route: Route & { params?: { isFirstActivity: boolean } },

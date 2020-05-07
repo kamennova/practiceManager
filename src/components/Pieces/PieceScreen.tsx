@@ -12,7 +12,7 @@ import { ItemScreenProps } from "../../types/item/ItemScreen";
 import { Piece, PieceBase } from "../../types/Piece";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
-import { ScreenTitle } from "../basic/Titles/Titles";
+import { ScreenTitle } from "../basic/titles/Titles";
 import { PieceFeatures } from "./PieceFeatures";
 import { PieceNotes } from "./PieceNotes";
 import { PieceNotifications } from "./PieceNotifications";
