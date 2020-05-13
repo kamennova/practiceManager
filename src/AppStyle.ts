@@ -138,22 +138,6 @@ export const ButtonStyle: ViewStyle = {
 
 const PrimaryBtnHeight = 46;
 
-export const PrimaryButtonStyle: ViewStyle = {
-    height: PrimaryBtnHeight,
-    alignItems: 'center',
-    borderColor: Dark,
-    borderWidth: 0,
-    backgroundColor: Primary,
-};
-
-export const PrimaryButtonTextStyle: TextStyle = {
-    color: 'darkblue',
-    textTransform: 'uppercase',
-    fontSize: 13,
-    fontWeight: 'bold',
-    letterSpacing: 1
-};
-
 export const BigButtonStyle: ViewStyle = {
     paddingTop: 12,
     paddingBottom: 12,
@@ -236,8 +220,7 @@ export const ActionBtnStyle = StyleSheet.create({
     wrap: {
         flexDirection: 'row',
         height: 50,
-        alignSelf: 'flex-start',
-        paddingLeft: 19,
+        paddingLeft: 25,
         paddingRight: 25,
         alignItems: 'center',
         backgroundColor: Dark,
@@ -616,7 +599,12 @@ export const ActivityBlockStyle = (colors: ThemeColors = DefaultColors) => Style
         height: 25,
         borderColor: colors.borderFaded,
         marginRight: -1
-    }
+    },
+    arrowsWrap: {
+        borderLeftWidth: 1,
+        borderColor: colors.borderFaded
+    },
+    dotsWrap: { width: 30, },
 });
 
 export const PlanFormStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({

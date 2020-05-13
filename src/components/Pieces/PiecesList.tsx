@@ -12,12 +12,12 @@ export const PiecesList = (props: { pieces: PieceBase[] }) => {
 
     return (
         <View>
-            {props.pieces.length === 0 ? <NothingAlert/> : undefined}
+            {props.pieces.length === 0 ? <NothingAlert/> :
             <FlatList data={props.pieces}
                       style={{borderTopWidth: 1, borderTopColor: useTheme().colors.borderFaded }}
                       renderItem={({ item }) => (
                           <PieceItem key={item.id.toString()}
-                                     onPress={() => navigation.navigate(PIECE, { id: item.id })} {...item} />)}/>
+                                     onPress={() => navigation.navigate(PIECE, { id: item.id })} {...item} />)}/> }
         </View>
     );
 };
