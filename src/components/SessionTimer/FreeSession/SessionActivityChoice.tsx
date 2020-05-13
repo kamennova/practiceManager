@@ -34,7 +34,7 @@ export const SessionActivityChoice = (props: ChoiceProps) => {
             <ModalSmallTitle>Free session</ModalSmallTitle>
             <ModalTitle> What are you up for? </ModalTitle>
 
-            <View style={{ paddingLeft: 50, paddingRight: 50, }}>
+            <View style={{ paddingLeft: 30, paddingRight: 30, }}>
                 <ActivityTypeSelect noBreak={true}
                                     onChooseType={(type) => setType(type as NoBreakActivity)}
                                     wrapStyle={{ marginBottom: 20 }}

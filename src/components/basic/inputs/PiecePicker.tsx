@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
-import { TextInputStyle } from "../../../AppStyle";
+import { PiecePickerStyles as getStyles, TextInputStyle } from "../../../AppStyle";
 import { StateShape } from "../../../store/StoreState";
 import { useTheme } from "../../../theme";
 import { PieceBase } from "../../../types/Piece";
@@ -27,9 +27,8 @@ const PiecePickerComponent = (props: InputProps) => {
         if (text.length === 0) {
             setTips([]);
         } else {
-
             setTips(props.pieces.filter(p => p.name.includes(text)).slice(0, MAX_TIPS)
-                .map(p => ({ value: p.id, label: p.name + ' by ' + p.authors })));
+                .map(p => ({ value: p.id, label: p.name + (p.authors.length > 0 ? ' by ' + p.authors : '') })));
             setShowTips(true);
         }
     };
@@ -37,9 +36,11 @@ const PiecePickerComponent = (props: InputProps) => {
     const chooseVal = (value: string | number) => {
         setInput(tips.find(item => item.value === value)?.label);
         props.onChoose(value);
+        hideTips();
     };
 
     const hideTips = () => setShowTips(false);
+    const styles = getStyles(useTheme().colors);
 
     return (
         <View style={styles.wrap}>
@@ -53,48 +54,23 @@ const PiecePickerComponent = (props: InputProps) => {
 };
 
 const TipDropdown = (props: { items: PickerItem[], onChoose: (val: string | number) => void }) => (
-    <View style={styles.dropdown}>
+    <View style={getStyles(useTheme().colors).dropdown}>
         {props.items.length === 0 ? <Text>Nothing found :/</Text> : undefined}
         {props.items.map(item => <Tip label={item.label} onChoose={() => props.onChoose(item.value)}/>)}
     </View>
 );
 
-const Tip = (props: { label: string, onChoose: () => void }) => (
-    <TouchableOpacity onPress={() => props.onChoose()}>
-        <View style={styles.tip}>
-            <Text style={styles.text}>{props.label}</Text>
-        </View>
-    </TouchableOpacity>
-);
+const Tip = (props: { label: string, onChoose: () => void }) => {
+    const styles = getStyles(useTheme().colors);
 
-const styles = StyleSheet.create({
-    wrap: {
-        width: '100%',
-        marginBottom: 8,
-    },
-    dropdown: {
-        borderWidth: 1,
-        borderColor: 'lightgrey',
-        backgroundColor: 'white',
-        padding: 4,
-        paddingLeft: 12,
-        paddingRight: 12,
-    },
-    tip: {
-        width: '100%',
-        paddingTop: 8,
-        paddingBottom: 8,
-    },
-    text: {
-        fontSize: 16,
-    },
-    input: {
-        width: '100%',
-        flexGrow: 1,
-        flexShrink: 0,
-        marginBottom: 0,
-    }
-});
+    return (
+        <TouchableOpacity onPress={props.onChoose}>
+            <View style={styles.tip}>
+                <Text style={styles.text}>{props.label}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+};
 
 const mapStateToProps = (state: StateShape) => ({
     pieces: state.pieces.items,

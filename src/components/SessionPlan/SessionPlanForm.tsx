@@ -18,7 +18,7 @@ import { ErrorAlert } from "../basic/alerts";
 import { SaveButton } from "../basic/buttons/ActionButton";
 import { AddActivityBtn } from "../basic/buttons/AddActivityBtn";
 import { MyTextInput } from "../basic/inputs/TextInput";
-import { ItemMenu } from "../basic/ItemMenu";
+import { ItemMenu } from "../basic/Item/ItemMenu";
 import { ItemSection } from "../basic/ItemSection";
 import { Layer } from "../basic/Layer";
 import { ScreenWrapper } from "../basic/ScreenWrapper";

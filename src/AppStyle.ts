@@ -466,10 +466,10 @@ export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
 export const FullScreenModalStyle: ViewStyle = {
     ...AppPaddingStyle,
     paddingTop: 220,
-    paddingBottom: 30,
+    paddingBottom: 0,
     justifyContent: 'center',
     alignContent: 'center',
-    minHeight: '100%',
+    minHeight: Dimensions.get('window').height,
 };
 
 export const SessionScreenStyle: ViewStyle = {
@@ -719,6 +719,7 @@ export const ActivityChoiceStyle = (colors: ThemeColors = ThemeColors[DEFAULT_TH
         justifyContent: 'flex-start',
         alignItems: 'center',
         borderWidth: 1,
+        borderRadius: 3,
         flexGrow: 0,
         maxWidth: 80,
     },
@@ -893,4 +894,33 @@ export const DurationInputStyle = (colors: ThemeColors) => StyleSheet.create({
         marginLeft: 5,
         marginRight: 12,
     },
+});
+
+export const PiecePickerStyles = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
+    wrap: {
+        width: '100%',
+        marginBottom: 8,
+    },
+    dropdown: {
+        borderWidth: 1,
+        borderColor: 'lightgrey',
+        backgroundColor: colors.appBg,
+        padding: 4,
+        paddingLeft: 12,
+        paddingRight: 12,
+    },
+    tip: {
+        width: '100%',
+        paddingTop: 8,
+        paddingBottom: 8,
+    },
+    text: {
+        fontSize: 16,
+    },
+    input: {
+        width: '100%',
+        flexGrow: 1,
+        flexShrink: 0,
+        marginBottom: 0,
+    }
 });
