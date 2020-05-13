@@ -120,7 +120,7 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
                     this.props.route.params.plan.id : this.props.addedItemId,
                 lastUpdated: this.mode === ActionType.Edit ? Date.now() : undefined
             });
-            this.setState({plan: EmptyPlan, errors: ''});
+            this.setState({ plan: EmptyPlan, errors: '' });
         } else {
             this.setState({ plan: this.state.plan, errors: res.errors });
         }
@@ -186,10 +186,10 @@ const mapStateToProps = (state: StateShape) => ({
     addedItemId: state.plans.lastAddedId,
 });
 
-const mapDispatchToProps = (dispatch: any, ownProps: FormProps<Piece, {piece: Piece}>) => ({
-   onHandleSave: (ownProps.route.params.mode === ActionType.Edit) ?
-       (plan: SessionPlan) => dispatch(thunkEditPlan(plan)) :
-       (plan: SessionPlan) => dispatch(thunkAddPlan(plan)),
+const mapDispatchToProps = (dispatch: any, ownProps: FormProps<Piece, { piece: Piece }>) => ({
+    onHandleSave: (ownProps.route.params.mode === ActionType.Edit) ?
+        (plan: SessionPlan) => dispatch(thunkEditPlan(plan)) :
+        (plan: SessionPlan) => dispatch(thunkAddPlan(plan)),
 });
 
 export const SessionPlanForm = connect(mapStateToProps, mapDispatchToProps)(SessionPlanFormClass);

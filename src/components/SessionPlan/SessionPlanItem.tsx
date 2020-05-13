@@ -39,7 +39,7 @@ const ActivityTiming = (props: { activity: ActivityType, duration: number }) => 
     return (
         <View style={style.timing}>
             <Text style={style.duration}>
-                {formatMinutesShort(props.duration)}</Text>
+                {formatMinutesShort(props.duration/60)}</Text>
             <Text style={style.activity}>{props.activity}</Text>
         </View>
     );
