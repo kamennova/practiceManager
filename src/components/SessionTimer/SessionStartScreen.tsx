@@ -9,7 +9,7 @@ import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
 import { SessionPlan } from "../../types/SessionPlan";
 import { findPlanOrThrowError } from "../../utils/find";
-import { MinorButton, PrimaryButton } from "../basic/buttons/Button";
+import { Button, MinorButton } from "../basic/buttons/Button";
 import { TimerIcon, TimerOffIcon } from "../basic/icons/Timer";
 import { MyPicker } from "../basic/inputs/Picker";
 import { ModalTitle } from "../basic/titles/ModalTitle";
@@ -78,7 +78,7 @@ const SessionStart = (props: StartProps) => {
             </View>
 
             <View style={{ marginTop: 'auto', marginBottom: 25 }}>
-                <PrimaryButton onPress={startSession} style={{ marginBottom: 15 }}> Start </PrimaryButton>
+                <Button onPress={startSession} style={{ alignSelf: 'center', marginBottom: 15 }} label='Start' />
                 <MinorButton style={{ alignSelf: 'center' }}
                              onPress={props.navigation.goBack}>Cancel</MinorButton>
             </View>

@@ -63,11 +63,7 @@ const PieceComponent = (props: PieceScreenProps) => {
 
             {showPic && piece.imageUri !== undefined ? <PieceImage uri={piece.imageUri}/> : undefined}
 
-            <View style={{
-                ...AppPaddingStyle,
-                paddingTop: showPic ? 10 : 100,
-                paddingBottom: 22,
-            }}>
+            <View style={screenHeadStyle(showPic)}>
                 <PieceTags tags={piece.tags}/>
                 <ScreenTitle>{piece.name}</ScreenTitle>
                 {piece.authors.length > 0 ? <PieceAuthors authors={piece.authors}/> : undefined}
@@ -115,3 +111,9 @@ const getStyles = (colors: ThemeColors) => StyleSheet.create({
 });
 
 const picStyles = { width: '100%', height: 280 };
+
+const screenHeadStyle = (showPic: boolean) => ({
+    ...AppPaddingStyle,
+    paddingTop: showPic ? 10 : 100,
+    paddingBottom: 22,
+});
