@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableNativeFeedback, View, ViewStyle } from "react-native";
-import { ItemMenuStyle } from "../../AppStyle";
-import { ThemeColors, useTheme } from "../../theme";
+import { ItemMenuStyle } from "../../../AppStyle";
+import { ThemeColors, useTheme } from "../../../theme";
 
 export type MenuOption = {
     label: string,

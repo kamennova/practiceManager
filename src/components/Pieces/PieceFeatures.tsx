@@ -1,7 +1,7 @@
 import React from "react";
 import { PieceStatus } from "../../types/Piece";
 import { minutesToHumanlyFormat } from "../../utils/time";
-import { ItemFeatures } from "../basic/ItemFeatures";
+import { ItemFeatures } from "../basic/Item/ItemFeatures";
 
 export const PieceFeatures = (props: { status: PieceStatus, timeSpent: number, lastPracticed?: Date }) => (
     <ItemFeatures items={[

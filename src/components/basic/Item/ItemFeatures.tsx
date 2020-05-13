@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { FeaturesStyle as getStyles } from "../../AppStyle";
-import { useTheme } from "../../theme";
+import { FeaturesStyle as getStyles } from "../../../AppStyle";
+import { useTheme } from "../../../theme";
 
 type FeaturesProps = {
   items: Array<{label: string, val: number|string}>

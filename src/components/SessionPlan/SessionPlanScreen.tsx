@@ -11,7 +11,7 @@ import { ItemScreenProps } from "../../types/item/ItemScreen";
 import { SessionPlan, SessionSchedule } from "../../types/SessionPlan";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
-import { ItemFeatures } from "../basic/ItemFeatures";
+import { ItemFeatures } from "../basic/Item/ItemFeatures";
 import { ScreenTitle, SmallTitle } from "../basic/titles/Titles";
 import { ActivityBlock } from "./ActivityBlock";
 

@@ -6,8 +6,8 @@ import { ActionType } from "../../../types/ActionType";
 import { Item, ItemName } from "../../../types/item/Item";
 import { Button } from "../buttons/Button";
 import { NextButton, PrevButton } from "../buttons/Direction";
-import { ConfirmDeleteModal } from "../ConfrmDeleteModal";
-import { ItemButtonsWrap } from "../ItemButtons";
+import { ConfirmDeleteModal } from "./ConfrmDeleteModal";
+import { ItemButtonsWrap } from "./ItemButtons";
 import { ScreenWrapper } from "../ScreenWrapper";
 
 export type ItemScreenWrapperProps<ItemT extends Item> = {

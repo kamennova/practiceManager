@@ -1,9 +1,8 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from "react";
 import { TouchableWithoutFeedback, View } from "react-native";
-import { HeaderIconWrap } from "../../AppStyle";
-import { Ionicons } from '@expo/vector-icons';
-import { ThemeColors } from "../../theme";
-import { useTheme } from "../../theme";
+import { HeaderIconWrap } from "../../../AppStyle";
+import { ThemeColors, useTheme } from "../../../theme";
 
 export const ItemFav = (props: { isFav: boolean, onPress: () => void }) => {
     const colors = useTheme().colors;

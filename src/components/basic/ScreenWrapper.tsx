@@ -1,11 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from 'react';
-import { TouchableWithoutFeedback, View } from "react-native";
+import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { HeaderIconWrap } from "../../AppStyle";
 import { useTheme } from "../../theme";
 import { DotsIcon } from "./icons/DotsIcon";
-import { ItemFav } from "./ItemFav";
-import { ItemMenu, MenuOption } from "./ItemMenu";
+import { ItemFav } from "./Item/ItemFav";
+import { ItemMenu, MenuOption } from "./Item/ItemMenu";
 
 type WrapperProps = {
     children: JSX.Element | (JSX.Element | undefined | JSX.Element[])[],
@@ -22,7 +22,7 @@ export const ScreenWrapper = (props: WrapperProps) => {
 
     useNavigation().setOptions({
         headerRight: () => (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={styles.itemMenu}>
                 {props.fav !== undefined && !showMenu ?
                     <ItemFav isFav={props.fav.val} onPress={props.fav.update}/> : undefined}
                 {(props.itemMenu !== undefined && !showMenu) ?
@@ -45,11 +45,20 @@ export const ScreenWrapper = (props: WrapperProps) => {
 
 const Layer = (props: { onPress: () => void }) => (
     <TouchableWithoutFeedback onPress={props.onPress}>
-        <View style={{
-            position: 'absolute',
-            height: '100%',
-            width: '100%',
-            top: 0,
-            left: 0,
-        }}/>
-    </TouchableWithoutFeedback>);
+        <View style={styles.layer}/>
+    </TouchableWithoutFeedback>
+);
+
+const styles = StyleSheet.create({
+    layer: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        top: 0,
+        left: 0,
+    },
+    itemMenu: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+});
