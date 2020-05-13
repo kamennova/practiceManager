@@ -1,6 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { IPlan } from "./IPlan";
 import { PieceActivityDetailsEntity } from "./PieceActivity";
-import { PlanEntity } from "./Plan";
 import { TechniqueActivityDetailsEntity } from "./TechniqueActivity";
 
 @Entity('planActivity')
@@ -25,6 +25,6 @@ export class PlanActivityEntity {
     @JoinColumn()
     details!: PieceActivityDetailsEntity | TechniqueActivityDetailsEntity | null;
 
-    @ManyToOne(_type => PlanEntity, plan => plan.schedule)
-    plan!: PlanEntity;
+    @ManyToOne('PlanEntity', 'schedule')
+    plan!: IPlan;
 }
