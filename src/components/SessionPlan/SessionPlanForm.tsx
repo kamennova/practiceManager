@@ -14,11 +14,11 @@ import { Piece } from "../../types/Piece";
 import { PlanActivity } from "../../types/PlanActivity";
 import { SessionPlan } from "../../types/SessionPlan";
 import { swipe } from "../../utils/array";
-import { ErrorAlert } from "../basic/Alerts";
-import { SaveButton } from "../basic/Buttons/ActionButton";
-import { AddActivityBtn } from "../basic/Buttons/AddActivityBtn";
-import { MyTextInput } from "../basic/Inputs/TextInput";
-import { ItemMenu } from "../basic/ItemMenu";
+import { ErrorAlert } from "../basic/alerts";
+import { SaveButton } from "../basic/buttons/ActionButton";
+import { AddActivityBtn } from "../basic/buttons/AddActivityBtn";
+import { MyTextInput } from "../basic/inputs/TextInput";
+import { ItemMenu } from "../basic/Item/ItemMenu";
 import { ItemSection } from "../basic/ItemSection";
 import { Layer } from "../basic/Layer";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
@@ -120,7 +120,7 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
                     this.props.route.params.plan.id : this.props.addedItemId,
                 lastUpdated: this.mode === ActionType.Edit ? Date.now() : undefined
             });
-            this.setState({plan: EmptyPlan, errors: ''});
+            this.setState({ plan: EmptyPlan, errors: '' });
         } else {
             this.setState({ plan: this.state.plan, errors: res.errors });
         }
@@ -170,6 +170,7 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
                         onSave={this.onSaveActivity}
                         activity={this.state.editing > -1 ? this.state.plan.schedule[this.state.editing] : undefined}/>
                 </ScrollView>
+
                 <SaveButton style={this.styles.save} onPress={async () => await this.validateAndSave()}/>
             </ScreenWrapper>
         );
@@ -185,10 +186,10 @@ const mapStateToProps = (state: StateShape) => ({
     addedItemId: state.plans.lastAddedId,
 });
 
-const mapDispatchToProps = (dispatch: any, ownProps: FormProps<Piece, {piece: Piece}>) => ({
-   onHandleSave: (ownProps.route.params.mode === ActionType.Edit) ?
-       (plan: SessionPlan) => dispatch(thunkEditPlan(plan)) :
-       (plan: SessionPlan) => dispatch(thunkAddPlan(plan)),
+const mapDispatchToProps = (dispatch: any, ownProps: FormProps<Piece, { piece: Piece }>) => ({
+    onHandleSave: (ownProps.route.params.mode === ActionType.Edit) ?
+        (plan: SessionPlan) => dispatch(thunkEditPlan(plan)) :
+        (plan: SessionPlan) => dispatch(thunkAddPlan(plan)),
 });
 
 export const SessionPlanForm = connect(mapStateToProps, mapDispatchToProps)(SessionPlanFormClass);

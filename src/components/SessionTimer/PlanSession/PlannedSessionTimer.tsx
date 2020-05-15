@@ -8,7 +8,7 @@ import { thunkEndSession } from "../../../store/thunks/session";
 import { Activity, ActivityType } from "../../../types/Activity";
 import { SessionPlan } from "../../../types/SessionPlan";
 import { getSeconds } from "../../../utils/time";
-import { TimeTracker } from "../../basic/TimeTrackers";
+import { TimeTracker } from "../../basic/timeTrackers";
 import { SessionTimer } from "./../SessionTimer";
 
 type SessionScreenProps = {

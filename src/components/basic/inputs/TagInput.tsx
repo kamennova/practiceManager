@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Text, TextInput, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
-import { TagInputTagStyle, TextInputStyle } from "../../../AppStyle";
+import { TagInputStyle, TagInputTagStyle, TextInputStyle } from "../../../AppStyle";
+import { useTheme } from "../../../theme";
+import { FormInputWrap } from "./FormInputWrap";
 
 const DEFAULT_SEPARATOR = ',';
 
@@ -19,6 +21,7 @@ type InputProps = {
 export const TagInput = (props: InputProps) => {
     const [val, updateVal] = useState('');
     const separator = props.separator !== undefined ? props.separator : DEFAULT_SEPARATOR;
+    const styles = { ...TextInputStyle(useTheme().colors), ...TagInputStyle, ...props.style };
 
     const sendTag = () => {
         const last = val.length - 1;
@@ -33,25 +36,24 @@ export const TagInput = (props: InputProps) => {
     const deleteTag = (tag: string) => props.onUpdateTags(props.list.filter(t => t !== tag));
 
     return (
-        <View>
+        <FormInputWrap label='Tags' style={{marginBottom: 12}}>
             <TextInput
                 onSubmitEditing={sendTag}
-                style={{ ...TextInputStyle, marginBottom: 8, ...props.style }}
+                style={styles}
                 value={val}
                 onChangeText={updateVal}
                 onKeyPress={({ nativeEvent: { key } }) => {
                     if (key === separator) sendTag();
                 }}
-                placeholder={props.placeholder !== undefined ? props.placeholder : `Tags (separated by «${separator}»)`}
+                placeholder={props.placeholder !== undefined ? props.placeholder : `Separated by «${separator}»`}
                 placeholderTextColor={'grey'}
-                keyboardType={'default'}
-            />
+                keyboardType={'default'}/>
             {props.list.length > 0 ?
                 <TagWrapper>
                     {props.list.map(tag => <Tag style={props.tagStyle} tag={tag} onDelete={deleteTag}/>)}
                 </TagWrapper> : undefined
             }
-        </View>
+        </FormInputWrap>
     );
 };
 
@@ -68,16 +70,18 @@ type TagProps = {
 };
 
 const Tag = (props: TagProps) => {
+    const style = TagInputTagStyle(useTheme().colors);
+
     return (
         <View style={{
-            ...TagInputTagStyle,
+            ...style.wrap,
             ...props.style
         }}>
-            <Text>
+            <Text style={style.text}>
                 {props.tag}
             </Text>
             <TouchableWithoutFeedback onPress={() => props.onDelete(props.tag)}>
-                <Text style={{ fontSize: 16, marginLeft: 5 }}>✖</Text>
+                <Text style={style.close}>✖</Text>
             </TouchableWithoutFeedback>
         </View>
     );

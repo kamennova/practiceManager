@@ -6,7 +6,7 @@ import { FREE_BREAK_TIMER, FREE_SESSION_ACTIVITY_CHOICE } from "../../../Navigat
 import { pushActivity } from "../../../store/actions";
 import { Activity, ActivityType } from "../../../types/Activity";
 import { getSeconds } from "../../../utils/time";
-import { TimeTracker } from "../../basic/TimeTrackers";
+import { TimeTracker } from "../../basic/timeTrackers";
 import { SessionTimer } from "../SessionTimer";
 
 type FreeSessionTimerProps = {

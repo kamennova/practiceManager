@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { SESSION_END } from "../../NavigationPath";
 import { thunkEndSession } from "../../store/thunks/session";
 import { Activity } from "../../types/Activity";
-import { BreakButton, FinishButton, NextButton, TimerButtonsWrapper } from "../basic/Buttons/TimerButton";
+import { BreakButton, FinishButton, NextButton, TimerButtonsWrapper } from "../basic/buttons/TimerButton";
 import { TimerNotes } from "./Notes";
 import { SessionTimerWrap } from "./SessionTimerWrap";
 import { TimerWidgets } from "./TimerWidgets";

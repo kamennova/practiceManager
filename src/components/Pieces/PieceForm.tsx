@@ -2,7 +2,7 @@ import { ImagePickerResult } from "expo-image-picker";
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
-import { AppPaddingStyle } from "../../AppStyle";
+import { AppPaddingStyle, TotalHeaderHeight } from "../../AppStyle";
 import { validatePiece } from "../../db/validation";
 import { PIECE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
@@ -12,15 +12,15 @@ import { EmptyPiece } from "../../types/EmptyPiece";
 import { FormProps, FormState } from "../../types/item/ItemForm";
 import { Piece } from "../../types/Piece";
 import { trimStrArr } from "../../utils/strings";
-import { SaveButton } from "../basic/Buttons/ActionButton";
-import { ErrorAlert } from "../basic/Alerts";
-import { MyImagePicker } from "../basic/ImagePicker";
-import { TagInput } from "../basic/Inputs/TagInput";
-import { MyTextInput } from "../basic/Inputs/TextInput";
+import { ErrorAlert } from "../basic/alerts";
+import { SaveButton } from "../basic/buttons/ActionButton";
+import { MyImagePicker } from "../basic/inputs/ImagePicker";
+import { TagInput } from "../basic/inputs/TagInput";
+import { MyTextInput } from "../basic/inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceNotifications } from "./PieceNotifications";
 
-class PieceFormComponent extends Component<FormProps<Piece, {piece: Piece}>, FormState<{piece: Piece}>> {
+class PieceFormComponent extends Component<FormProps<Piece, { piece: Piece }>, FormState<{ piece: Piece }>> {
     mode = this.props.route.params.mode === undefined ? ActionType.Create : this.props.route.params.mode;
 
     state = {
@@ -81,23 +81,23 @@ class PieceFormComponent extends Component<FormProps<Piece, {piece: Piece}>, For
         return (
             <ScreenWrapper fav={this.fav()}>
                 <ScrollView contentContainerStyle={styles.wrap}>
-                    <MyImagePicker src={this.state.piece.imageUri}
-                                   onDelete={() => this.setPiece({ ...this.state.piece, imageUri: undefined })}
-                                   onChoose={this.pickImage}/>
-
                     <View style={AppPaddingStyle}>
-                        <MyTextInput placeholder={'Title'}
+
+                        <MyTextInput label={'Title'}
                                      isRequired={true}
                                      value={this.state.piece.name}
                                      autoFocus={this.props.route.params.mode === ActionType.Create}
                                      onChangeText={this.setName}/>
 
-                        <MyTextInput placeholder='Author'
+                        <MyTextInput label='Author'
                                      value={this.state.piece.authors.toString()}
                                      onChangeText={this.setAuthors}/>
 
-                        <TagInput list={this.state.piece.tags}
-                                  onUpdateTags={this.setTags}/>
+                        <TagInput list={this.state.piece.tags} onUpdateTags={this.setTags}/>
+
+                        <MyImagePicker src={this.state.piece.imageUri}
+                                       onDelete={() => this.setPiece({ ...this.state.piece, imageUri: undefined })}
+                                       onChoose={this.pickImage}/>
 
                         {this.state.errors.length !== 0 ? <ErrorAlert message={this.state.errors}/> : undefined}
                     </View>
@@ -116,7 +116,7 @@ class PieceFormComponent extends Component<FormProps<Piece, {piece: Piece}>, For
     }
 }
 
-const mapDispatchToProps = (dispatch: any, ownProps: FormProps<Piece, {piece: Piece}>) => ({
+const mapDispatchToProps = (dispatch: any, ownProps: FormProps<Piece, { piece: Piece }>) => ({
     onHandleSave: (ownProps.route.params.mode === ActionType.Edit) ?
         (piece: Piece) => dispatch(thunkEditPiece(piece)) :
         (piece: Piece) => dispatch(thunkAddPiece(piece)),
@@ -127,5 +127,5 @@ const mapStateToProps = (state: StateShape) => ({ addedItemId: state.pieces.last
 export const PieceForm = connect(mapStateToProps, mapDispatchToProps)(PieceFormComponent);
 
 const styles = StyleSheet.create({
-    wrap: { paddingBottom: 60 },
+    wrap: { paddingBottom: 60, paddingTop: TotalHeaderHeight + 20 },
 });

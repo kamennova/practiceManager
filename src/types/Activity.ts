@@ -27,9 +27,21 @@ export enum ActivityType {
 export type ComplexActivityType = ActivityType.Technique | ActivityType.Piece | ActivityType.SightReading;
 
 export enum Exercise {
-    'Scales',
-    'Arpeggio',
-    'Chords',
+    Scales = 'Scales',
+    Arpeggio = 'Arpeggio',
+    Chords = 'Chords',
 }
 
-export enum Tonality { 'A', 'A#', 'C', 'C#/D♭', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'}
+export enum Tonality {
+    A = 'A',
+    ASharp = 'A#',
+    C = 'C',
+    CSharp = 'C#/D♭',
+    D = 'D',
+    DSharp = 'D#',
+    E = 'E',
+    F = 'F',
+    FSharp = 'F#',
+    G = 'G',
+    GSharp = 'G#',
+}

@@ -6,8 +6,8 @@ import { SessionState, StateShape } from "../../store/StoreState";
 import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
 import { PlanActivity } from "../../types/PlanActivity";
 import { secondsToHumanlyFormat } from "../../utils/time";
-import { PrimaryButton } from "../basic/Buttons/Button";
-import { ModalTitle } from "../basic/Titles/ModalTitle";
+import { Button } from "../basic/buttons/Button";
+import { ModalTitle } from "../basic/titles/ModalTitle";
 
 type SessionEndProps = {
     session: SessionState,
@@ -40,7 +40,7 @@ const SessionEnd = (props: SessionEndProps) => {
                     }}> {secondsToHumanlyFormat(report.totalDuration)}</Text> in total
                 </Text>
 
-                <PrimaryButton onPress={() => props.navigation.dispatch(StackActions.pop())}>Ok</PrimaryButton>
+                <Button onPress={() => props.navigation.dispatch(StackActions.pop())} label='Ok'/>
             </View>
         </View>
     );

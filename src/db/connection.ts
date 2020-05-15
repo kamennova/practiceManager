@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
+import { getConnectionManager } from "typeorm/browser";
 import { AuthorEntity, NoteEntity, PieceEntity, RecordingEntity, TagEntity } from "./entity/piece";
 import {
     PieceActivityDetailsEntity,
@@ -11,7 +12,7 @@ import {
 export const connectToDb = async () => createConnection({
     type: "expo",
     driver: require('expo-sqlite'),
-    database: "practiceManagerDB4",
+    database: "practiceManagerDB6",
     entities: [
         PieceEntity,
         AuthorEntity,
@@ -27,6 +28,11 @@ export const connectToDb = async () => createConnection({
     migrationsRun: true,
     logging: false,
 }).catch(error => {
+    if (error.name === "AlreadyHasActiveConnectionError") {
+        const currentConnection = getConnectionManager().get("default");
+        return currentConnection;
+    }
+
     console.log(error);
     return Promise.reject(error)
 });

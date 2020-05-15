@@ -1,10 +1,11 @@
 import React from 'react';
-import { Image, ImageStyle } from "react-native";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useTheme } from "../../../theme";
 
 type IconProps = {
-    style?: ImageStyle
+    size?: number,
 }
 
 export const TrashIcon = (props: IconProps) => (
-    <Image style={props.style} source={require('../../../../assets/trash.png')}/>
+    <MaterialCommunityIcons name='trash-can-outline' size={21} color={useTheme().colors.color}/>
 );

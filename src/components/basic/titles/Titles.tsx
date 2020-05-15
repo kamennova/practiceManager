@@ -9,7 +9,6 @@ export type TitleProps = {
 
 export const ScreenTitle = (props: TitleProps) => {
     const style = styles(useTheme().colors);
-    console.log(useTheme().colors);
 
     return (
     <Text style={style.screen}>

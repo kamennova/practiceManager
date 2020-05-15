@@ -27,7 +27,7 @@ const ActivityBlockComponent = (props: BlockProps) => {
             </View>
             <View style={styles.rightWrap}>
                 <View style={styles.textWrap}>
-                    <Text style={styles.duration}>{formatMinutesShort(props.activity.duration)}</Text>
+                    <Text style={styles.duration}>{formatMinutesShort(props.activity.duration / 60)}</Text>
                 </View>
                 {props.children}
             </View>

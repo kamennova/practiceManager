@@ -2,8 +2,8 @@ import React from "react";
 import { View, ViewStyle, StyleSheet } from "react-native";
 import { ActivityType, ComplexActivityType, Exercise, Tonality } from "../../types/Activity";
 import { enumKeys } from "../../utils/array";
-import { MyPicker } from "./Inputs/Picker";
-import { PiecePicker } from "./Inputs/PiecePicker";
+import { MyPicker } from "./inputs/Picker";
+import { PiecePicker } from "./inputs/PiecePicker";
 
 type FieldsProps = {
     type: ComplexActivityType,
@@ -34,7 +34,7 @@ export const ComplexActivityFields = (props: FieldsProps) => {
                               onValueChange={props.setTonality}
                               wrapperStyle={styles.tonalityWrap}/>
                 ] :
-                <PiecePicker onChoose={props.setPieceId}/>}
+                <PiecePicker pieceId={props.pieceId} onChoose={props.setPieceId}/>}
         </View>
     );
 };

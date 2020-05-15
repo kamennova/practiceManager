@@ -7,8 +7,8 @@ import { ActivityType, Exercise, Tonality } from "../../types/Activity";
 import { getPlanActivity, PlanActivityInput } from "../../types/ActivityInput";
 import { PlanActivity } from "../../types/PlanActivity";
 import { ComplexActivityFields } from "../basic/ComplexActivityFields";
-import { ActivityTypeSelect } from "../basic/Inputs/ActivityTypeSelect";
-import { DurationInput } from "../basic/Inputs/DurationInput";
+import { ActivityTypeSelect } from "../basic/inputs/ActivityTypeSelect";
+import { DurationInput } from "../basic/inputs/DurationInput";
 
 type BlockFormProps = {
     onSave: (_: PlanActivity) => void,
@@ -16,14 +16,14 @@ type BlockFormProps = {
     activity?: PlanActivity,
 };
 
-const BaseActivity = { type: ActivityType.Break, duration: 3 };
+const BaseActivity = { type: ActivityType.Break, duration: 15 * 60 };
 
 export const ActivityForm = (props: BlockFormProps) => {
     const initAct = props.activity !== undefined ? props.activity : BaseActivity;
     const [activity, setActivity] = useState<PlanActivityInput>(initAct);
 
     const setType = (type: ActivityType) => setActivity({ ...activity, type }),
-        setDuration = (mins: number) => setActivity({ ...activity, duration: mins }),
+        setDuration = (mins: number) => setActivity({ ...activity, duration: mins * 60 }),
         setTonality = (tonality: Tonality) => setActivity({ ...activity, tonality }),
         setExercise = (exercise: Exercise) => setActivity({ ...activity, exercise }),
         setPieceId = (pieceId: number) => setActivity({ ...activity, pieceId });
@@ -50,7 +50,7 @@ export const ActivityForm = (props: BlockFormProps) => {
                                        pieceId={activity.pieceId} setPieceId={setPieceId}/>}
 
             <View style={styles.bottomWrap}>
-                <DurationInput minutes={activity.duration} onChange={setDuration}/>
+                <DurationInput minutes={activity.duration / 60} onChange={setDuration}/>
                 <AddButton onCancel={reset} onSave={onSave}/>
             </View>
         </View>

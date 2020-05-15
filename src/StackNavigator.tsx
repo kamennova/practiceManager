@@ -41,7 +41,6 @@ import { ActionType } from "./types/ActionType";
 
 const Stack = createStackNavigator();
 
-
 const options = (colors: ThemeColors) => ({
     cardStyle: { backgroundColor: colors.appBg },
     headerStyle: AppHeaderStyle(colors),

@@ -12,7 +12,7 @@ import { ItemScreenProps } from "../../types/item/ItemScreen";
 import { Piece, PieceBase } from "../../types/Piece";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
-import { ScreenTitle } from "../basic/Titles/Titles";
+import { ScreenTitle } from "../basic/titles/Titles";
 import { PieceFeatures } from "./PieceFeatures";
 import { PieceNotes } from "./PieceNotes";
 import { PieceNotifications } from "./PieceNotifications";
@@ -63,11 +63,7 @@ const PieceComponent = (props: PieceScreenProps) => {
 
             {showPic && piece.imageUri !== undefined ? <PieceImage uri={piece.imageUri}/> : undefined}
 
-            <View style={{
-                ...AppPaddingStyle,
-                paddingTop: showPic ? 10 : 100,
-                paddingBottom: 22,
-            }}>
+            <View style={screenHeadStyle(showPic)}>
                 <PieceTags tags={piece.tags}/>
                 <ScreenTitle>{piece.name}</ScreenTitle>
                 {piece.authors.length > 0 ? <PieceAuthors authors={piece.authors}/> : undefined}
@@ -114,4 +110,10 @@ const getStyles = (colors: ThemeColors) => StyleSheet.create({
     authors: { fontSize: 15, marginBottom: 15, color: colors.colorFaded },
 });
 
-const picStyles = { width: '100%', height: 300 };
+const picStyles = { width: '100%', height: 280 };
+
+const screenHeadStyle = (showPic: boolean) => ({
+    ...AppPaddingStyle,
+    paddingTop: showPic ? 10 : 100,
+    paddingBottom: 22,
+});

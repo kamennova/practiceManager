@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { Route, View } from "react-native";
+import {  Route, View } from "react-native";
 import { FullScreenModalStyle } from "../../../AppStyle";
 import { FREE_SESSION_TIMER } from "../../../NavigationPath";
 import { Activity, ActivityType, Exercise, Tonality } from "../../../types/Activity";
 import { getActivity, NoBreakActivity, NoBreakActivityInput } from "../../../types/ActivityInput";
-import { ActionButton } from "../../basic/Buttons/ActionButton";
-import { MinorButton } from "../../basic/Buttons/Button";
+import { Button, MinorButton } from "../../basic/buttons/Button";
 import { ComplexActivityFields } from "../../basic/ComplexActivityFields";
-import { ActivityTypeSelect } from "../../basic/Inputs/ActivityTypeSelect";
-import { ModalSmallTitle, ModalTitle } from "../../basic/Titles/ModalTitle";
+import { ActivityTypeSelect } from "../../basic/inputs/ActivityTypeSelect";
+import { ModalSmallTitle, ModalTitle } from "../../basic/titles/ModalTitle";
 
 type ChoiceProps = {
     route: Route & { params?: { isFirstActivity: boolean } },
@@ -35,7 +34,7 @@ export const SessionActivityChoice = (props: ChoiceProps) => {
             <ModalSmallTitle>Free session</ModalSmallTitle>
             <ModalTitle> What are you up for? </ModalTitle>
 
-            <View style={{ paddingLeft: 50, paddingRight: 50, }}>
+            <View style={{ paddingLeft: 30, paddingRight: 30, }}>
                 <ActivityTypeSelect noBreak={true}
                                     onChooseType={(type) => setType(type as NoBreakActivity)}
                                     wrapStyle={{ marginBottom: 20 }}
@@ -54,7 +53,7 @@ export const SessionActivityChoice = (props: ChoiceProps) => {
                 alignItems: 'center'
             }}>
                 <MinorButton onPress={() => props.navigation.goBack()}>Cancel</MinorButton>
-                <ActionButton style={{ position: 'relative' }} label={'Start'} onPress={goToTimer}/>
+                <Button style={{ position: 'relative' }} label={'Start'} onPress={goToTimer}/>
             </View>
         </View>
     );

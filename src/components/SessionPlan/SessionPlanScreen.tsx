@@ -11,8 +11,8 @@ import { ItemScreenProps } from "../../types/item/ItemScreen";
 import { SessionPlan, SessionSchedule } from "../../types/SessionPlan";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
-import { ItemFeatures } from "../basic/ItemFeatures";
-import { ScreenTitle, SmallTitle } from "../basic/Titles/Titles";
+import { ItemFeatures } from "../basic/Item/ItemFeatures";
+import { ScreenTitle, SmallTitle } from "../basic/titles/Titles";
 import { ActivityBlock } from "./ActivityBlock";
 
 type PlanScreenProps = ItemScreenProps<{}>;
@@ -53,9 +53,9 @@ export const SessionPlanComponent = (props: PlanScreenProps) => {
                 color: 'grey',
                 fontSize: 16,
                 ...AppPaddingStyle,
-                marginTop: 54,
+                marginTop: 20,
             }}>
-                Total duration: {report.totalDuration} minutes
+                Total duration: {report.totalDuration / 60} minutes
             </Text>
             <SessionScheduleView schedule={plan.schedule}/>
 
@@ -65,9 +65,9 @@ export const SessionPlanComponent = (props: PlanScreenProps) => {
 
 const PlanFeatures = (props: { report: ActivitiesReport }) => (
     <ItemFeatures items={[
-        { label: 'Technique', val: props.report.technique + 'm' },
-        { label: 'Pieces', val: props.report.pieces + 'm' },
-        { label: 'Sight-reading', val: props.report.sightReading + 'm' },
+        { label: 'Technique', val: props.report.technique / 60 + 'm' },
+        { label: 'Pieces', val: props.report.pieces / 60 + 'm' },
+        { label: 'Sight-reading', val: props.report.sightReading / 60 + 'm' },
     ]}/>
 );
 

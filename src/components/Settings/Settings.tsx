@@ -3,7 +3,7 @@ import { StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
 import { Theme, ThemeColors } from "../../theme";
 import { ThemeOptionStyle as getStyles } from "../../AppStyle";
 import { ThemeContext, useTheme } from "../../theme";
-import { MyPicker } from "../basic/Inputs/Picker";
+import { MyPicker } from "../basic/inputs/Picker";
 import { ItemSection } from "../basic/ItemSection";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { SectionRow } from "../basic/SectionRow";

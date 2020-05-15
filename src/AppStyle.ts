@@ -5,6 +5,8 @@ const DefaultColors = ThemeColors[DEFAULT_THEME];
 
 const FONT_SIZE = 16;
 
+const BorderRadius = 5;
+
 export const AppSidePadding = 17,
     TotalHeaderHeight = 86;
 
@@ -33,11 +35,9 @@ export const HeaderIconWrap = (colors: ThemeColors): ViewStyle => ({
     justifyContent: 'center',
 });
 
-const ItemHeight = 70,
-    ItemBorderRadius = 2,
-    ImagePadding = 0,
-    ImageHeight = ItemHeight - 2 - ImagePadding * 2,
-    ImageWidth = 170 - ImagePadding;
+const ItemHeight = 71,
+    ItemBorderRadius = BorderRadius,
+    ImageWidth = 170;
 
 export const PieceListStyle = (colors: ThemeColors, theme: Theme = DEFAULT_THEME) => StyleSheet.create({
     author: {
@@ -46,20 +46,20 @@ export const PieceListStyle = (colors: ThemeColors, theme: Theme = DEFAULT_THEME
     },
     image: {
         width: ImageWidth,
-        height: ImageHeight,
+        height: ItemHeight,
         marginLeft: 'auto',
-        marginRight: ImagePadding,
         opacity: theme === Theme.Dark ? 0.7 : 1,
-        borderTopRightRadius: ItemBorderRadius,
-        borderBottomRightRadius: ItemBorderRadius,
     },
     imageTop: {
         width: 200,
-        height: ImageHeight,
+        height: ItemHeight,
         position: 'absolute',
-        right: -200 + ImageWidth
+        top: 0,
+        right: -200 + ImageWidth,
     },
-    itemWrap: { padding: 10, paddingLeft: 12 },
+    itemWrap: {
+        padding: 8,
+    },
 });
 
 export const ListItemTitleStyle = (colors: ThemeColors = DefaultColors) => ({
@@ -71,16 +71,18 @@ export const ListItemTitleStyle = (colors: ThemeColors = DefaultColors) => ({
 });
 
 export const ListItemStyle = (colors: ThemeColors): ViewStyle => ({
-    borderWidth: 0.5,
     borderColor: colors.borderFaded,
     backgroundColor: colors.appBg,
-    marginBottom: 10,
+});
+
+export const PieceItemStyle = (colors: ThemeColors): ViewStyle => ({
+    ...ListItemStyle(colors),
+    borderBottomWidth: 1,
+    paddingLeft: AppSidePadding,
     flexDirection: 'row',
     minHeight: ItemHeight,
     alignItems: 'center',
-    borderRadius: ItemBorderRadius,
 });
-
 
 const PlanItemMargin = 10;
 const PlanItemWidth = (Dimensions.get('window').width - AppSidePadding * 2 - PlanItemMargin) / 2 - 1;
@@ -93,6 +95,9 @@ export const PlanItemStyle = (colors: ThemeColors = DefaultColors) => (StyleShee
         padding: 12,
         paddingLeft: 15,
         width: PlanItemWidth,
+        borderRadius: ItemBorderRadius,
+        borderWidth: 1,
+        marginBottom: 10,
     },
     title: {
         ...ListItemTitleStyle(colors),
@@ -100,18 +105,21 @@ export const PlanItemStyle = (colors: ThemeColors = DefaultColors) => (StyleShee
     },
 }));
 
-export const ActivityTimingStyle = StyleSheet.create({
-    timingWrap: {
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap'
-    },
+export const ActivityTimingStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     timing: {
-        flexDirection: 'column',
-        marginBottom: 13, alignItems: 'center',
-        width: '50%',
+        flexDirection: 'row',
+        marginBottom: 11,
+        alignItems: 'flex-end',
+        width: '100%',
     },
+    duration: {
+        color: colors.color,
+        marginRight: 6,
+        fontSize: 15,
+    },
+    activity: {
+        color: colors.colorFaded,
+    }
 });
 
 export const ButtonStyle: ViewStyle = {
@@ -129,22 +137,6 @@ export const ButtonStyle: ViewStyle = {
 };
 
 const PrimaryBtnHeight = 46;
-
-export const PrimaryButtonStyle: ViewStyle = {
-    height: PrimaryBtnHeight,
-    alignItems: 'center',
-    borderColor: Dark,
-    borderWidth: 0,
-    backgroundColor: Primary,
-};
-
-export const PrimaryButtonTextStyle: TextStyle = {
-    color: 'darkblue',
-    textTransform: 'uppercase',
-    fontSize: 13,
-    fontWeight: 'bold',
-    letterSpacing: 1
-};
 
 export const BigButtonStyle: ViewStyle = {
     paddingTop: 12,
@@ -165,6 +157,7 @@ export const DirectionButtonStyle = (colors: ThemeColors = DefaultColors, isDisa
     backgroundColor: colors.appBg,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 3,
     borderWidth: 1,
     borderColor: colors.borderFaded,
     opacity: isDisabled ? 0.4 : 1,
@@ -177,7 +170,7 @@ export const FeaturesStyle = (colors: ThemeColors = DefaultColors) => StyleSheet
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        marginTop: 14,
+        marginTop: 10,
         borderColor: colors.border,
     }
 });
@@ -194,7 +187,7 @@ export const SectionRowStyle = (colors: ThemeColors) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderBottomWidth: 1,
+        // borderBottomWidth: 1,
         borderColor: colors.borderFaded,
         paddingBottom: 12,
         paddingTop: 12,
@@ -223,83 +216,78 @@ export const DrawerContentStyle = {
     paddingLeft: 20,
 };
 
-export const ActivityViewStyle: ViewStyle = {
-    borderWidth: 1,
-    borderColor: 'black',
-    padding: 14,
-    paddingLeft: 12,
-    paddingRight: 12,
-    marginBottom: 17,
-};
-
-export const SubActivityViewStyle: ViewStyle = {
-    paddingTop: 4,
-    paddingBottom: 4,
-};
-
-export const BreakViewStyle: ViewStyle = {
-    borderWidth: 0,
-};
-
-export const ActionBtnStyle = (theme: Theme = DEFAULT_THEME) =>
-    StyleSheet.create({
-        wrap: {
-            flexDirection: 'row',
-            height: 50,
-            alignSelf: 'flex-start',
-            paddingLeft: 19,
-            paddingRight: 25,
-            alignItems: 'center',
-            borderColor: theme !== Theme.Dark ? Primary : Dark,
-            borderWidth: 2,
-            backgroundColor: ThemeColors[theme].appBgLight,
-            elevation: 2,
-        },
-        text: { color: Dark, fontSize: 17, fontWeight: '700' },
-        save: {
-            position: 'absolute',
-            right: AppSidePadding,
-            top: Dimensions.get('window').height - 40,
-        },
-        check: { width: 19, height: 19, marginRight: 5 },
-        add: {
-            position: 'absolute',
-            right: AppSidePadding,
-            top: Dimensions.get('window').height - 130,
-        },
-        plus: { color: Dark, fontSize: 25, lineHeight: 32, marginRight: 8 },
-    });
-
-const SIZE = 240;
+export const ActionBtnStyle = StyleSheet.create({
+    wrap: {
+        flexDirection: 'row',
+        height: 50,
+        paddingLeft: 25,
+        paddingRight: 25,
+        alignItems: 'center',
+        backgroundColor: Dark,
+        elevation: 2,
+        borderRadius: BorderRadius,
+    },
+    text: {
+        color: 'white',
+        fontSize: 17,
+        fontWeight: '400',
+        letterSpacing: 0.1,
+    },
+    save: {
+        position: 'absolute',
+        right: AppSidePadding,
+        top: Dimensions.get('window').height - 40,
+    },
+    check: {
+        width: 19,
+        height: 19,
+        marginRight: 5,
+    },
+    add: {
+        position: 'absolute',
+        right: AppSidePadding,
+        top: Dimensions.get('window').height - 130,
+    },
+    plus: {
+        color: 'white',
+        fontSize: 21,
+        lineHeight: 28,
+        marginRight: 8,
+    },
+});
 
 export const ImagePickerStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
     picker: {
         width: '100%',
-        height: SIZE + 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
         marginBottom: 20,
-        borderBottomWidth: 1,
+        borderWidth: 1,
+        borderRadius: BorderRadius,
         borderColor: colors.borderFaded,
+        paddingRight: 14,
     },
-    pic: { width: '100%', height: SIZE },
-    btnPic: {
-        position: 'absolute',
-        bottom: (SIZE - TotalHeaderHeight) / 2
-    },
-    trash: { width: 21, height: 21 },
-    trashWrap: {
-        ...HeaderIconWrap,
-        position: 'absolute',
-        bottom: 10,
-        right: AppSidePadding,
-    },
-    layer: {
-        position: 'absolute',
+    pic: {
         width: '100%',
         height: '100%',
-        backgroundColor: colors.appBgFaded,
+        borderBottomLeftRadius: BorderRadius,
+        borderTopLeftRadius: BorderRadius,
+        opacity: 0.8,
+    },
+    imageWrap: {
+        backgroundColor: 'rgba(0, 0, 0, 0.05)',
+        height: 55,
+        width: 60,
+        borderTopLeftRadius: BorderRadius,
+        borderBottomLeftRadius: BorderRadius,
+        marginRight: 14,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text: {
+        marginRight: 'auto',
+        fontSize: 15,
+        color: colors.color,
     }
 });
 
@@ -307,8 +295,9 @@ export const ItemBtnsStyle = (colors: ThemeColors): ViewStyle => ({
     position: 'absolute',
     top: Dimensions.get('window').height - 50,
     flexDirection: 'row',
-    width: '100%',
+    width: Dimensions.get('window').width,
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors.appBg,
     padding: AppSidePadding,
     paddingTop: 15,
@@ -360,6 +349,7 @@ export const TextInputStyle = (colors: ThemeColors) => ({
     width: '100%',
     borderWidth: 1,
     borderColor: colors.borderFaded,
+    borderRadius: BorderRadius,
     padding: 7,
     paddingLeft: 14,
     paddingRight: 14,
@@ -368,18 +358,45 @@ export const TextInputStyle = (colors: ThemeColors) => ({
     color: colors.color,
 });
 
-export const TagInputTagStyle: ViewStyle = {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    borderWidth: 1,
-    borderColor: Primary,
-    marginRight: 10,
-    marginBottom: 10,
-    padding: 10,
-    paddingBottom: 3,
-    paddingTop: 4,
-    paddingRight: 3,
-};
+export const LabelStyle = (colors: ThemeColors = DefaultColors) => ({
+    marginBottom: 5,
+    color: colors.colorFaded,
+});
+
+// --
+
+const TagFonsize = 14;
+
+export const TagInputStyle = { fontSize: TagFonsize, marginBottom: 8, };
+
+export const TagInputTagStyle = (_: ThemeColors = DefaultColors) => StyleSheet.create({
+    wrap: {
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        marginRight: 10,
+        marginBottom: 10,
+        paddingLeft: 8,
+        paddingBottom: 5,
+        paddingTop: 2,
+        paddingRight: 5,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: Dark,
+    },
+    text: {
+        fontSize: TagFonsize,
+        color: Dark,
+        lineHeight: TagFonsize,
+    },
+    close: {
+        fontSize: 16,
+        marginLeft: 5,
+        color: Dark,
+    }
+});
+
+// --
 
 export const CheckboxWrapperStyle: ViewStyle = {
     marginBottom: 20,
@@ -394,7 +411,7 @@ export const CheckboxStyle = {
     marginTop: 0,
 };
 
-const NumInputHeight = 32;
+const NumInputHeight = 25;
 
 export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
     wrap: {
@@ -415,18 +432,18 @@ export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
     },
     numberBtn: {
         height: NumInputHeight,
-        backgroundColor: colors.appBgLight,
+        backgroundColor: colors.appBg,
         alignItems: 'center',
         justifyContent: 'center',
         paddingLeft: 7,
         paddingRight: 7,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: Dark,
     },
     btnText: {
         fontSize: 18,
         fontWeight: 'bold',
-        lineHeight: 19,
+        lineHeight: 20,
         color: Dark,
     },
     input: {
@@ -449,10 +466,10 @@ export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
 export const FullScreenModalStyle: ViewStyle = {
     ...AppPaddingStyle,
     paddingTop: 220,
-    paddingBottom: 30,
+    paddingBottom: 0,
     justifyContent: 'center',
     alignContent: 'center',
-    minHeight: '100%',
+    minHeight: Dimensions.get('window').height,
 };
 
 export const SessionScreenStyle: ViewStyle = {
@@ -582,7 +599,12 @@ export const ActivityBlockStyle = (colors: ThemeColors = DefaultColors) => Style
         height: 25,
         borderColor: colors.borderFaded,
         marginRight: -1
-    }
+    },
+    arrowsWrap: {
+        borderLeftWidth: 1,
+        borderColor: colors.borderFaded
+    },
+    dotsWrap: { width: 30, },
 });
 
 export const PlanFormStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
@@ -630,7 +652,8 @@ export const ActivityForm = (colors: ThemeColors = DefaultColors) => StyleSheet.
         flexDirection: 'row',
         padding: 7,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: colors.borderFaded,
+        borderRadius: 3,
         paddingLeft: 15,
         paddingRight: 20,
         alignItems: 'center',
@@ -697,6 +720,7 @@ export const ActivityChoiceStyle = (colors: ThemeColors = ThemeColors[DEFAULT_TH
         justifyContent: 'flex-start',
         alignItems: 'center',
         borderWidth: 1,
+        borderRadius: 3,
         flexGrow: 0,
         maxWidth: 80,
     },
@@ -731,9 +755,8 @@ export const AddActivityBtnStyle = (colors: ThemeColors, theme: Theme) => StyleS
         paddingLeft: 2,
     },
     plus: {
-        fontSize: 19,
+        fontSize: 15,
         color: Dark,
-        fontWeight: 'bold',
         lineHeight: 22,
         marginRight: 5,
     },
@@ -864,6 +887,7 @@ export const DurationInputStyle = (colors: ThemeColors) => StyleSheet.create({
     wrap: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
     },
     textStyle: {
         fontSize: 16,
@@ -871,4 +895,35 @@ export const DurationInputStyle = (colors: ThemeColors) => StyleSheet.create({
         marginLeft: 5,
         marginRight: 12,
     },
+});
+
+export const PiecePickerStyles = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
+    wrap: {
+        width: '100%',
+        marginBottom: 8,
+    },
+    dropdown: {
+        borderWidth: 1,
+        borderColor: colors.borderFaded,
+        backgroundColor: colors.appBg,
+        padding: 4,
+        paddingLeft: 12,
+        paddingRight: 12,
+    },
+    tip: {
+        width: '100%',
+        paddingTop: 8,
+        paddingBottom: 8,
+    },
+    text: {
+        color: colors.color,
+        fontSize: 16,
+    },
+    input: {
+        ...TextInputStyle(colors),
+        width: '100%',
+        flexGrow: 1,
+        flexShrink: 0,
+        marginBottom: 0,
+    }
 });

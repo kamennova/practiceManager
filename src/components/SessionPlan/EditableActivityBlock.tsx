@@ -18,11 +18,9 @@ export const EditableActivityBlock = (props: EditableBlockProps) => {
     const styles = getStyles(useTheme().colors);
 
     return (
-        <ActivityBlock activity={props.activity}
-                       isLast={props.isLast}
-                       isFirst={props.isFirst}>
-            <DotsIcon wrapStyle={{ width: 30, }} onPress={props.onShowMenu}/>
-            <View style={{borderLeftWidth: 1, borderColor: useTheme().colors.borderFaded}}>
+        <ActivityBlock activity={props.activity} isLast={props.isLast} isFirst={props.isFirst}>
+            <DotsIcon wrapStyle={styles.dotsWrap} onPress={props.onShowMenu}/>
+            <View style={styles.arrowsWrap}>
                 <ArrowIcon size={IconSize}
                            wrapStyle={{ ...styles.iconStyle, opacity: props.isFirst ? 0.3 : 1 }}
                            onPress={props.isFirst ? undefined : () => props.onMove(-1)}

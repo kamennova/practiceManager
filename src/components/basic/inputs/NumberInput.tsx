@@ -52,7 +52,7 @@ export const NumberInput = (props: NumberInputProps) => {
 
     return (
         <View style={styles.wrap}>
-            <PlusButton onPress={inc}/>
+            <MinusButton onPress={dec}/>
             <View style={styles.inputWrap}>
                 <TextInput style={styles.input}
                            keyboardType='numeric'
@@ -65,7 +65,7 @@ export const NumberInput = (props: NumberInputProps) => {
                     <Text style={styles.text}>{getMeasure(props.value, props.measure, props.measurePlural)}</Text>
                     : undefined}
             </View>
-            <MinusButton onPress={dec}/>
+            <PlusButton onPress={inc}/>
         </View>
     );
 };
@@ -78,8 +78,8 @@ const PlusButton = (props: { onPress: () => void }) => {
 
     return (
         <TouchableNativeFeedback onPress={props.onPress}>
-            <View style={styles.numberBtn}>
-                <Text style={styles.btnText}>+</Text>
+            <View style={{ ...styles.numberBtn, borderTopRightRadius: 3, borderBottomRightRadius: 3 }}>
+                <Text style={{ ...styles.btnText, fontSize: 13 }}>+</Text>
             </View>
         </TouchableNativeFeedback>
     );
@@ -90,7 +90,7 @@ const MinusButton = (props: { onPress: () => void }) => {
 
     return (
         <TouchableNativeFeedback onPress={props.onPress}>
-            <View style={styles.numberBtn}>
+            <View style={{ ...styles.numberBtn, borderTopLeftRadius: 3, borderBottomLeftRadius: 3 }}>
                 <Text style={styles.btnText}>-</Text>
             </View>
         </TouchableNativeFeedback>

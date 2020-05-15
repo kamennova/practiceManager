@@ -9,7 +9,7 @@ export const ThemeColors: { [key in Theme]: ThemeColors } = {
         appBgLight: '#e6edff',
         primary: '#6895ff',
         border: 'lightgrey',
-        borderFaded: 'rgba(0, 0, 0, 0.08)',
+        borderFaded: '#dedede',
         colorFaded: 'grey',
     },
     [Theme.Dark]: {

@@ -1,25 +1,29 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, Image, Text, TextStyle, TouchableNativeFeedback, View } from "react-native";
-import { ListItemStyle, ListItemTitleStyle, PieceListStyle as stylesFunc } from "../../AppStyle";
+import { ListItemTitleStyle, PieceItemStyle, PieceListStyle as stylesFunc } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
 import { Theme, useTheme } from "../../theme";
+import { ThemeColors } from "../../theme/colors";
 import { PieceBase } from "../../types/Piece";
-import { NothingAlert } from "../basic/Alerts/NothingAlert";
+import { NothingAlert } from "../basic/alerts/NothingAlert";
 
 export const PiecesList = (props: { pieces: PieceBase[] }) => {
     const navigation = useNavigation();
 
     return (
         <View>
-            {props.pieces.length === 0 ? <NothingAlert/> : undefined}
-            <FlatList data={props.pieces}
-                      renderItem={({ item }) => (
-                          <PieceItem key={item.id.toString()}
-                                     onPress={() => navigation.navigate(PIECE, { id: item.id })} {...item} />)}/>
+            {props.pieces.length === 0 ? <NothingAlert/> :
+                <FlatList data={props.pieces}
+                          style={borderStyle(useTheme().colors)}
+                          renderItem={({ item }) => (
+                              <PieceItem key={item.id.toString()}
+                                         onPress={() => navigation.navigate(PIECE, { id: item.id })} {...item} />)}/>}
         </View>
     );
 };
+
+const borderStyle = (colors: ThemeColors) => ({ borderTopWidth: 1, borderTopColor: colors.borderFaded });
 
 const PieceItem = (props: PieceBase & { onPress: () => void }) => {
     const theme = useTheme();
@@ -27,7 +31,7 @@ const PieceItem = (props: PieceBase & { onPress: () => void }) => {
 
     return (
         <TouchableNativeFeedback onPress={props.onPress}>
-            <View style={ListItemStyle(theme.colors)}>
+            <View style={PieceItemStyle(theme.colors)}>
                 <View style={styles.itemWrap}>
                     <PieceName style={ListItemTitleStyle(theme.colors)}>
                         {props.name}
