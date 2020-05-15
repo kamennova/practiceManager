@@ -34,7 +34,7 @@ export const ComplexActivityFields = (props: FieldsProps) => {
                               onValueChange={props.setTonality}
                               wrapperStyle={styles.tonalityWrap}/>
                 ] :
-                <PiecePicker onChoose={props.setPieceId}/>}
+                <PiecePicker pieceId={props.pieceId} onChoose={props.setPieceId}/>}
         </View>
     );
 };

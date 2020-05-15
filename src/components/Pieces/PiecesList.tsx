@@ -4,6 +4,7 @@ import { FlatList, Image, Text, TextStyle, TouchableNativeFeedback, View } from 
 import { ListItemTitleStyle, PieceItemStyle, PieceListStyle as stylesFunc } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
 import { Theme, useTheme } from "../../theme";
+import { ThemeColors } from "../../theme/colors";
 import { PieceBase } from "../../types/Piece";
 import { NothingAlert } from "../basic/alerts/NothingAlert";
 
@@ -14,13 +15,15 @@ export const PiecesList = (props: { pieces: PieceBase[] }) => {
         <View>
             {props.pieces.length === 0 ? <NothingAlert/> :
                 <FlatList data={props.pieces}
-                          style={{ borderTopWidth: 1, borderTopColor: useTheme().colors.borderFaded }}
+                          style={borderStyle(useTheme().colors)}
                           renderItem={({ item }) => (
                               <PieceItem key={item.id.toString()}
                                          onPress={() => navigation.navigate(PIECE, { id: item.id })} {...item} />)}/>}
         </View>
     );
 };
+
+const borderStyle = (colors: ThemeColors) => ({ borderTopWidth: 1, borderTopColor: colors.borderFaded });
 
 const PieceItem = (props: PieceBase & { onPress: () => void }) => {
     const theme = useTheme();

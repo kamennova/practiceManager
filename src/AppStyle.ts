@@ -652,7 +652,8 @@ export const ActivityForm = (colors: ThemeColors = DefaultColors) => StyleSheet.
         flexDirection: 'row',
         padding: 7,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: colors.borderFaded,
+        borderRadius: 3,
         paddingLeft: 15,
         paddingRight: 20,
         alignItems: 'center',
@@ -903,7 +904,7 @@ export const PiecePickerStyles = (colors: ThemeColors = DefaultColors) => StyleS
     },
     dropdown: {
         borderWidth: 1,
-        borderColor: 'lightgrey',
+        borderColor: colors.borderFaded,
         backgroundColor: colors.appBg,
         padding: 4,
         paddingLeft: 12,
@@ -915,9 +916,11 @@ export const PiecePickerStyles = (colors: ThemeColors = DefaultColors) => StyleS
         paddingBottom: 8,
     },
     text: {
+        color: colors.color,
         fontSize: 16,
     },
     input: {
+        ...TextInputStyle(colors),
         width: '100%',
         flexGrow: 1,
         flexShrink: 0,

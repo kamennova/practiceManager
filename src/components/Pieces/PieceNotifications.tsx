@@ -13,13 +13,14 @@ type NotifProps = {
 }
 
 export const PieceNotifications = (props: NotifProps) => {
-    const styles = getStyles(useTheme().colors);
+    const colors = useTheme().colors;
+    const styles = getStyles(colors);
 
     return (
         <ItemSection title='Reminders' activeElem={<Switch onValueChange={props.updateEnabled}
                                                            value={props.enabled} style={{ marginRight: 2 }}/>}>
             <View style={styles.wrap}>
-                <Text>Practice every</Text>
+                <Text style={{color: colors.color}}>Practice every</Text>
                 <DaysInput updateInterval={props.updateInterval} interval={props.interval}/>
             </View>
         </ItemSection>

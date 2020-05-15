@@ -78,7 +78,7 @@ const SessionStart = (props: StartProps) => {
             </View>
 
             <View style={{ marginTop: 'auto', marginBottom: 25 }}>
-                <Button onPress={startSession} style={{ alignSelf: 'center', marginBottom: 15 }} label='Start' />
+                <Button onPress={startSession} style={{ alignSelf: 'center', marginBottom: 15 }} label='Start'/>
                 <MinorButton style={{ alignSelf: 'center' }}
                              onPress={props.navigation.goBack}>Cancel</MinorButton>
             </View>
@@ -86,8 +86,11 @@ const SessionStart = (props: StartProps) => {
     );
 };
 
-const NoPlansText = () => (<View style={{ paddingTop: 15, paddingBottom: 15, marginLeft: 5 }}><Text>You don't have any
-    plans yet</Text></View>);
+const NoPlansText = () => (
+    <View style={{ paddingTop: 15, paddingBottom: 15, marginLeft: 5 }}>
+        <Text style={{color: useTheme().colors.colorFaded}}>You don't have any plans yet</Text>
+    </View>
+);
 
 const mapStateToProps = (state: StateShape) => ({
     plans: state.plans.items,
