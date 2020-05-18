@@ -29,8 +29,7 @@ class Repertoire extends Component<{ pieces: PieceBase[], getPieces: () => void,
 
 const pushForm = StackActions.push(PIECE_FORM, { mode: ActionType.Create, });
 
-const RepertoireScreen = connect(mapStateToProps)(Repertoire);
-export default RepertoireScreen;
+export const RepertoireScreen = connect(mapStateToProps)(Repertoire);
 
 const scrollStyle = {
     paddingBottom: 90,

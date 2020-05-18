@@ -5,15 +5,15 @@ import { BackIcon, NavIcon } from "./components/basic/icons/Header";
 import { Dashboard } from "./components/Dashboard";
 import { PieceForm } from "./components/Pieces/PieceForm";
 import PieceScreen from "./components/Pieces/PieceScreen";
-import RepertoireScreen from "./components/Pieces/RepertoireScreen";
+import { RepertoireScreen } from "./components/Pieces/RepertoireScreen";
 import { SessionPlanScreen } from "./components/SessionPlan";
 import { SessionPlanForm } from "./components/SessionPlan/SessionPlanForm";
 import SessionPlansList from "./components/SessionPlan/SessionPlansList";
 import {
     FreeBreakTimer,
-    SessionActivityChoice,
     FreeSessionTimer,
     PlannedSessionTimer,
+    SessionActivityChoice,
     SessionEndScreen
 } from "./components/SessionTimer";
 import { SessionStartScreen } from "./components/SessionTimer/SessionStartScreen";
