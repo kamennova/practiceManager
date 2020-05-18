@@ -6,7 +6,6 @@ import { SESSION_END } from "../../NavigationPath";
 import { thunkEndSession } from "../../store/thunks/session";
 import { Activity } from "../../types/Activity";
 import { BreakButton, FinishButton, NextButton, TimerButtonsWrapper } from "../basic/buttons/TimerButton";
-import { TimerNotes } from "./Notes";
 import { SessionTimerWrap } from "./SessionTimerWrap";
 import { TimerWidgets } from "./TimerWidgets";
 
@@ -33,9 +32,6 @@ const SessionTimerComponent = (props: SessionTimerProps) => {
     return (
         <SessionTimerWrap activity={props.activity}>
             {props.children}
-
-            <TimerNotes notes={[]} onAdd={() => {
-            }}/>
 
             <View style={{ width :'100%', marginTop: 'auto', alignItems: 'center'}}>
                 <TimerWidgets isVisible={showWidgets} toggleIsVisible={toggleShowWidgets}/>

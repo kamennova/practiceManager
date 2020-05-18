@@ -176,7 +176,7 @@ export const FeaturesStyle = (colors: ThemeColors = DefaultColors) => StyleSheet
 });
 
 export const NoteText = (colors: ThemeColors) => ({
-    fontSize: FONT_SIZE,
+    fontSize: 14,
     color: colors.colorFaded,
 });
 
@@ -648,29 +648,11 @@ export const ActivityForm = (colors: ThemeColors = DefaultColors) => StyleSheet.
         borderTopWidth: 1,
         borderColor: colors.borderFaded,
     },
-    add: {
-        flexDirection: 'row',
-        padding: 7,
-        borderWidth: 1,
-        borderColor: colors.borderFaded,
-        borderRadius: 3,
-        paddingLeft: 15,
-        paddingRight: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginLeft: 'auto'
-    },
     plus: {
         fontSize: 23,
         marginRight: 10,
         color: Dark,
         lineHeight: 27,
-    },
-    text: {
-        fontSize: 17,
-        color: Dark,
-        fontWeight: 'bold',
-        marginLeft: 6,
     },
     choosePrompt: {
         fontSize: 15,
@@ -696,6 +678,27 @@ export const ActivityForm = (colors: ThemeColors = DefaultColors) => StyleSheet.
     fieldsPadding: {
         paddingTop: 20,
         paddingBottom: 20
+    },
+});
+
+export const SendBtnStyles = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
+    text: {
+        fontSize: 17,
+        color: Dark,
+        fontWeight: 'bold',
+        marginLeft: 6,
+    },
+    add: {
+        flexDirection: 'row',
+        padding: 7,
+        borderWidth: 1,
+        borderColor: colors.borderFaded,
+        borderRadius: 3,
+        paddingLeft: 15,
+        paddingRight: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 'auto'
     },
 });
 
@@ -925,5 +928,34 @@ export const PiecePickerStyles = (colors: ThemeColors = DefaultColors) => StyleS
         flexGrow: 1,
         flexShrink: 0,
         marginBottom: 0,
+    }
+});
+
+export const NotesStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
+    note: {
+        borderWidth: 1,
+        borderColor: colors.borderFaded,
+        padding: 12,
+        flexDirection: 'row'
+    },
+    date: {
+        color: colors.colorFaded,
+        marginTop: 3,
+        fontSize: 13,
+    },
+    edit: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'flex-start',
+        marginLeft: 'auto',
+        paddingLeft: 12,
+    },
+    noteText: {
+        color: colors.color,
+        fontSize: 16,
+        lineHeight: 22,
+    },
+    wrap: {
+        marginBottom: 12,
     }
 });

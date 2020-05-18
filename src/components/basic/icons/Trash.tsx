@@ -7,5 +7,5 @@ type IconProps = {
 }
 
 export const TrashIcon = (props: IconProps) => (
-    <MaterialCommunityIcons name='trash-can-outline' size={21} color={useTheme().colors.color}/>
+    <MaterialCommunityIcons name='trash-can-outline' size={props.size || 21} color={useTheme().colors.color}/>
 );
