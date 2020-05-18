@@ -13,6 +13,7 @@ type InputProps = {
     placeholder?: string,
     style?: ViewStyle,
     keyboardType?: 'default' | 'numeric';
+    lines?: number,
 };
 
 export const MyTextInput = (props: InputProps) => {
@@ -23,8 +24,11 @@ export const MyTextInput = (props: InputProps) => {
 
     return (
         <FormInputWrap label={props.label}>
-            <TextInput style={styles}
+            <TextInput numberOfLines={props.lines}
+                       multiline={props.lines !== undefined && props.lines > 1}
+                       style={styles}
                        value={props.value}
+                       textAlignVertical={'top'}
                        autoFocus={props.autoFocus}
                        onChangeText={props.onChangeText}
                        placeholder={props.placeholder}

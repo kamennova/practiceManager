@@ -12,6 +12,7 @@ import { ItemScreenProps } from "../../types/item/ItemScreen";
 import { Piece, PieceBase } from "../../types/Piece";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
+import { PieceNoteModal } from "../basic/PieceNoteModal";
 import { ScreenTitle } from "../basic/titles/Titles";
 import { PieceFeatures } from "./PieceFeatures";
 import { PieceNotes } from "./PieceNotes";
@@ -22,8 +23,9 @@ type PieceScreenProps = ItemScreenProps<PieceBase>;
 
 const PieceComponent = (props: PieceScreenProps) => {
     const pieceInit = { ...EmptyPiece, ...props.preview };
-    const [piece, setPiece] = useState<Piece>(pieceInit),
-        showPic = piece.imageUri !== undefined && piece.imageUri !== '';
+    const [piece, setPiece] = useState<Piece>(pieceInit);
+    const [showNoteForm, setShowNoteForm] = useState(false);
+    const showPic = piece.imageUri !== undefined && piece.imageUri !== '';
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,6 +39,18 @@ const PieceComponent = (props: PieceScreenProps) => {
 
         fetchData();
     }, [props.route.params.id, props.route.params.lastUpdated]);
+
+    const addNote = async (content: string) => {
+        setPiece({
+            ...piece,
+            notes: [...piece.notes, { content, addedOn: new Date() }]
+        });
+        setShowNoteForm(false);
+    };
+
+    const deleteNote = (index: number) => {
+        setPiece({ ...piece, notes: piece.notes.filter((_, i) => i !== index) });
+    };
 
     const toggleNotifs = async () => {
         const notifsOn = !piece.notifsOn;
@@ -72,11 +86,11 @@ const PieceComponent = (props: PieceScreenProps) => {
                                status={piece.status}/>
             </View>
 
-            <PieceNotes notes={piece.notes}/>
+            <PieceNotes notes={piece.notes} onShowForm={() => setShowNoteForm(true)} onDeleteNote={deleteNote}/>
 
             <PieceNotifications interval={piece.notifsInterval} enabled={piece.notifsOn}
                                 updateInterval={setInterval} updateEnabled={toggleNotifs}/>
-
+            <PieceNoteModal onSaveNote={addNote} isVisible={showNoteForm} onHideModal={() => setShowNoteForm(false)}/>
         </ItemScreenWrapper>
     );
 };

@@ -4,7 +4,7 @@ import { AppPaddingStyle } from "../../AppStyle";
 import { useTheme } from "../../theme";
 
 type SectionProps = {
-    children: JSX.Element | JSX.Element[],
+    children: JSX.Element | (JSX.Element| undefined)[],
     title: string,
     activeElem?: JSX.Element,
 };
@@ -23,7 +23,7 @@ const style = StyleSheet.create({
     wrap: {
         ...AppPaddingStyle,
         paddingTop: 15,
-        paddingBottom: 15,
+        paddingBottom: 10,
     },
     header: {
         flexDirection: 'row',

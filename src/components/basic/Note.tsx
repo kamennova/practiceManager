@@ -1,34 +1,17 @@
-import React, { useState } from "react";
-import { Text, TextInput, TouchableNativeFeedback, View, StyleSheet } from "react-native";
-import { CheckIcon } from "./icons/Check";
-import { PenIcon } from "./icons/Pen";
+import React from "react";
+import { Text, TouchableNativeFeedback, View } from "react-native";
+import { useTheme } from "../../theme";
+import { TrashIcon } from "./icons/Trash";
+import { NotesStyle as getStyles } from "../../AppStyle";
 
-const padding = 12;
-
-export const Note = (props: { addedOn: Date, content: string, onUpdate?: () => void }) => {
-    const [content, updateContent] = useState(props.content);
-    const [isEditing, updateIsEditing] = useState(false);
-
-    const onSubmit = () => {
-        updateIsEditing(false);
-    };
-
-    const onEdit = () => {
-        updateIsEditing(true);
-    };
+export const Note = (props: { addedOn: Date, content: string, onDelete?: () => void }) => {
+    const styles = getStyles(useTheme().colors);
 
     return (
-        <View>
+        <View style={styles.wrap}>
             <View style={styles.note}>
-
-                <TextInput multiline={true}
-                           autoFocus={true}
-                           editable={isEditing}
-                           onChangeText={text => updateContent(text)}
-                           style={styles.noteText} value={content}/>
-
-                {isEditing ? <SubmitIcon onSubmit={onSubmit}/> : <EditIcon onEdit={onEdit}/>}
-
+                <Text style={styles.noteText}>{props.content}</Text>
+                <DeleteBtn onDelete={props.onDelete}/>
             </View>
             <Text style={styles.date}>
                 {props.addedOn.toDateString()}
@@ -37,33 +20,10 @@ export const Note = (props: { addedOn: Date, content: string, onUpdate?: () => v
     );
 };
 
-const EditIcon = (props: { onEdit: () => void }) => (
-    <TouchableNativeFeedback onPress={props.onEdit}>
-        <View style={styles.edit}>
-            <PenIcon style={{ width: 20, height: 20 }}/>
+const DeleteBtn = (props: { onDelete?: () => void }) => (
+    <TouchableNativeFeedback onPress={props.onDelete}>
+        <View style={getStyles().edit}>
+            <TrashIcon size={18}/>
         </View>
     </TouchableNativeFeedback>
 );
-
-const SubmitIcon = (props: { onSubmit: () => void }) => (
-    <TouchableNativeFeedback onPress={props.onSubmit}>
-        <View style={styles.edit}>
-            <CheckIcon style={{ width: 20, height: 20 }}/>
-        </View>
-    </TouchableNativeFeedback>
-);
-
-const styles = StyleSheet.create({
-    note: { borderWidth: 1, borderColor: 'lightgrey', padding: padding, paddingRight: 40 },
-    date: { color: 'grey', marginTop: 3 },
-    edit: {
-        position: 'absolute',
-        width: 30,
-        height: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        right: padding,
-        top: padding
-    },
-    noteText: { fontSize: 16, lineHeight: 22 },
-});

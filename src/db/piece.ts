@@ -1,6 +1,27 @@
 import { getRepository } from "typeorm";
+import { Note } from "../types/Note";
 import { Piece, PieceBase, PieceComplexity, PieceGenre, PieceStatus } from "../types/Piece";
-import { AuthorEntity, PieceEntity, TagEntity } from "./entity/piece";
+import { AuthorEntity, NoteEntity, PieceEntity, TagEntity } from "./entity/piece";
+
+export const createNotes = async (notes: Note[]): Promise<NoteEntity[]> => {
+    const ents: NoteEntity[] = [],
+        repo = getRepository(NoteEntity);
+
+    await Promise.all(notes.map(async note => {
+        const same = await repo.findOne({content: note.content });
+
+        if (same === undefined) {
+            const ent = new NoteEntity();
+            ent.content = note.content;
+            ent.addedOn = Date.now();
+            ents.push(ent);
+        } else {
+            ents.push(same)
+        }
+    }));
+
+    return Promise.resolve(ents);
+};
 
 export const createTags = async (tags: string[]): Promise<TagEntity[]> => {
     const ents: TagEntity[] = [],
@@ -166,6 +187,18 @@ export const updateNotificationId = async (pieceId: number, notifId: number | nu
     await repo.save(piece);
 };
 
+export const addNote = async (piece: Piece):Promise<void> => {
+    const repo = getRepository(PieceEntity);
+    const pieceUpd = await repo.findOne(piece.id);
+
+    if (pieceUpd === undefined) {
+        return;
+    }
+
+    pieceUpd.notes = await createNotes(piece.notes);
+    await repo.save(pieceUpd);
+};
+
 const pieceBaseFromEntity = (ent: PieceEntity): PieceBase => ({
     id: ent.id,
     name: ent.name,
@@ -185,7 +218,7 @@ const pieceFromEntity = (ent: PieceEntity): Piece => ({
     notifsOn: ent.notificationsOn,
     notifsInterval: ent.notificationsInterval,
     notifId: ent.notificationId,
-    notes: [],
+    notes: ent.notes !== null ? ent.notes.map(note => ({addedOn: new Date(note.addedOn), content: note.content})) : [],
     recordings: [],
     originalUri: ent.originalUri !== null ? ent.originalUri : undefined,
 });

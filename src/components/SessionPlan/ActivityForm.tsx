@@ -1,11 +1,11 @@
-import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Text, TouchableNativeFeedback, View } from "react-native";
-import { ActivityForm as getStyles, Dark } from "../../AppStyle";
+import { Text, View } from "react-native";
+import { ActivityForm as getStyles } from "../../AppStyle";
 import { useTheme } from "../../theme";
 import { ActivityType, Exercise, Tonality } from "../../types/Activity";
 import { getPlanActivity, PlanActivityInput } from "../../types/ActivityInput";
 import { PlanActivity } from "../../types/PlanActivity";
+import { SendButton } from "../basic/buttons/SendButton";
 import { ComplexActivityFields } from "../basic/ComplexActivityFields";
 import { ActivityTypeSelect } from "../basic/inputs/ActivityTypeSelect";
 import { DurationInput } from "../basic/inputs/DurationInput";
@@ -28,11 +28,6 @@ export const ActivityForm = (props: BlockFormProps) => {
         setExercise = (exercise: Exercise) => setActivity({ ...activity, exercise }),
         setPieceId = (pieceId: number) => setActivity({ ...activity, pieceId });
 
-    const reset = () => {
-        setActivity(BaseActivity);
-        props.onClose();
-    };
-
     const onSave = () => props.onSave(getPlanActivity(activity));
 
     const styles = getStyles(useTheme().colors);
@@ -51,21 +46,8 @@ export const ActivityForm = (props: BlockFormProps) => {
 
             <View style={styles.bottomWrap}>
                 <DurationInput minutes={activity.duration / 60} onChange={setDuration}/>
-                <AddButton onCancel={reset} onSave={onSave}/>
+                <SendButton onSave={onSave}/>
             </View>
         </View>
-    );
-};
-
-const AddButton = (props: { onSave: () => void, onCancel: () => void }) => {
-    const styles = getStyles(useTheme().colors);
-
-    return (
-        <TouchableNativeFeedback onPress={props.onSave}>
-            <View style={styles.add}>
-                <Ionicons name='md-send' size={20} color={Dark}/>
-                <Text style={styles.text}>Ok</Text>
-            </View>
-        </TouchableNativeFeedback>
     );
 };

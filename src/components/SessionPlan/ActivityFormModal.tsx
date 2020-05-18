@@ -1,7 +1,6 @@
 import React from "react";
-import { Modal } from "react-native";
 import { PlanActivity } from "../../types/PlanActivity";
-import { Layer } from "../basic/Layer";
+import { OpacityModal } from "../basic/OpacityModal";
 import { ActivityForm } from "./ActivityForm";
 
 type ModalProps = {
@@ -12,8 +11,7 @@ type ModalProps = {
 };
 
 export const ActivityFormModal = (props: ModalProps) => (
-    <Modal visible={props.isVisible} transparent={true}>
-        <Layer isDark={true} onPress={props.hideModal}/>
+    <OpacityModal isVisible={props.isVisible} hideModal={props.hideModal}>
         <ActivityForm onSave={props.onSave} onClose={props.hideModal} activity={props.activity}/>
-    </Modal>
+    </OpacityModal>
 );
