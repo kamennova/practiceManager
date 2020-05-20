@@ -1,7 +1,8 @@
-import { PieceActivityDetailsEntity } from "../activity/PieceActivity";
-import { TechniqueActivityDetailsEntity } from "../activity/TechniqueActivity";
+import { PieceActivityDetailsEntity } from "./PieceActivity";
+import { TechniqueActivityDetailsEntity } from "./TechniqueActivity";
 
-export interface IPlanActivity {
+
+export interface IActivity {
     id: number,
     type: string,
     duration: number,
