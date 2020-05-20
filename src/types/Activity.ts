@@ -2,16 +2,15 @@ export type BaseActivity = {
     type: ActivityType,
 }
 
-export type TechniqueActivity = BaseActivity & {
-    type: ActivityType.Technique,
+export type TechniqueDetails = {
     exercise?: Exercise,
     tonality?: Tonality,
 };
+export type TechniqueActivity = BaseActivity & { type: ActivityType.Technique, } & TechniqueDetails;
 
-export type PieceActivity = BaseActivity & {
-    type: ActivityType.SightReading | ActivityType.Piece,
-    pieceId?: number,
-}
+export type PieceDetails = { pieceId?: number, };
+
+export type PieceActivity = BaseActivity & { type: ActivityType.SightReading | ActivityType.Piece, } & PieceDetails
 
 export type BreakActivity = BaseActivity & { type: ActivityType.Break };
 

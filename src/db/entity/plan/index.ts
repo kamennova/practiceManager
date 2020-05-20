@@ -1,4 +1,2 @@
-export * from './Activity';
-export * from './PieceActivity';
-export * from './TechniqueActivity';
+export * from './PlanActivity';
 export * from './Plan';
