@@ -4,7 +4,7 @@ import { Dimensions, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { SessionState, StateShape } from "../../store/StoreState";
 import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
-import { PlanActivity } from "../../types/PlanActivity";
+import { getActivitiesWithDuration } from "../../utils/activity";
 import { secondsToHumanlyFormat } from "../../utils/time";
 import { Button } from "../basic/buttons/Button";
 import { ModalTitle } from "../basic/titles/ModalTitle";
@@ -15,7 +15,7 @@ type SessionEndProps = {
 };
 
 const SessionEnd = (props: SessionEndProps) => {
-    const activities = getActivities(props.session);
+    const activities = getActivitiesWithDuration(props.session);
     const report = getActivitiesReport(activities);
 
     return (
@@ -64,14 +64,6 @@ const ActivityStats = (props: { label: string, duration: number, isLast?: boolea
         </View>
     );
 };
-
-const getActivities = (session: SessionState): PlanActivity[] =>
-    session.history.map((act, i) => ({
-        ...act,
-        duration: Math.floor(
-            ((i !== session.history.length - 1 ? session.history[i + 1].startedOn : (session.finishedOn || 0))
-                - act.startedOn) / 1000),
-    }));
 
 const mapStateToProps = (state: StateShape) => ({
     session: state.session,

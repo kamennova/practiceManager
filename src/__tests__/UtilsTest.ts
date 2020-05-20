@@ -1,6 +1,6 @@
 import { ActivityType, Exercise, Tonality } from "../types/Activity";
-import { enumKeys, replaceItem, swipe } from "../utils/array";
-import { getHours, getMinutes } from "../utils/time";
+import { enumKeys, pieceGroupBy, replaceItem, swipe } from "../utils/array";
+import { daysAgo, formatDateDiff, getHours, getMinutes } from "../utils/time";
 import { getActivityTitle } from "../utils/title";
 
 it('replaceItem', () => {
@@ -59,3 +59,23 @@ it('sightreading title with details', () => expect(getActivityTitle({
     type: ActivityType.SightReading,
     pieceId: 1
 }, { name: 'Canon', authors: ['Pachelbel'] })).toBe('Sight reading: Canon'));
+
+it('pieceGroupByDuration', () => {
+    const grouped = pieceGroupBy([
+        { pieceId: 4, duration: 5 },
+        { pieceId: 4, duration: 8 },
+        { pieceId: 1, duration: 2 },
+        { pieceId: 3, duration: 8 }]);
+
+    expect(grouped[4]).toBe(13);
+    expect(grouped[1]).toBe(2);
+    expect(grouped[3]).toBe(8);
+});
+
+it('formatDateDiff', () => {
+    expect(formatDateDiff(new Date())).toBe('Today');
+    expect(formatDateDiff(daysAgo(1))).toBe('Yesterday');
+    expect(formatDateDiff(daysAgo(3))).toBe('3 days ago');
+    expect(formatDateDiff(daysAgo(7))).toBe('1 week ago');
+    expect(formatDateDiff(daysAgo(200))).toBe('Long ago');
+});

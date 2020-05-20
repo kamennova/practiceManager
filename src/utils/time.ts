@@ -51,3 +51,22 @@ export const getSeconds = () => Math.floor(Date.now() / 1000); // todo date.now.
 export const dayToSeconds = (d: number) => d * 24 * 60 * 60;
 
 export const getDaysFromSeconds = (s: number) => Math.floor(s / 60 / 60 / 24);
+
+export const formatDateDiff = (date: Date): string => {
+    const dateDiff = Math.floor((new Date() - date) / (1000 * 60 * 60 * 24));
+
+    if (dateDiff === 0) {
+        return 'Today'
+    } else if (dateDiff === 1) {
+        return 'Yesterday';
+    } else if (dateDiff < 7) {
+        return `${dateDiff} days ago`;
+    } else if (dateDiff < 30) {
+        const weeks = Math.floor(dateDiff / 7);
+        return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
+    }
+
+    return 'Long ago';
+};
+
+export const daysAgo = (days: number): Date => new Date(new Date().setDate(new Date().getDate() - days));
