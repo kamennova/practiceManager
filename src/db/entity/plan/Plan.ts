@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { IPlanActivity } from "./IPlanActivity";
+import { IActivity } from "../activity/IActivity";
 
 @Entity('plan')
 export class PlanEntity {
@@ -16,5 +16,5 @@ export class PlanEntity {
     createdOn!: number;
 
     @OneToMany('PlanActivityEntity', 'plan', { eager: true, cascade: ['insert', 'update'] })
-    schedule!: IPlanActivity[];
+    schedule!: IActivity[];
 }

@@ -4,7 +4,7 @@ import { ActivityTimingStyle, PlanItemStyle as getStyle } from "../../AppStyle";
 import { useTheme } from "../../theme";
 import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
 import { ActivityType } from "../../types/Activity";
-import { SessionPlan } from "../../types/SessionPlan";
+import { SessionPlan } from "../../types/plan";
 import { formatMinutesShort } from "../../utils/time";
 
 export const SessionPlanItem = (props: { plan: SessionPlan, onPress: () => void }) => {

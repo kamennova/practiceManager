@@ -1,5 +1,5 @@
 import { Activity, ActivityType, TechniqueActivity } from "../types/Activity";
-import { PieceBase } from "../types/Piece";
+import { PieceBase } from "../types/piece";
 
 export type PieceCredits = {
     name: string,

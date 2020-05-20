@@ -1,4 +1,4 @@
-import { Piece, PieceBase } from "../../types/Piece";
+import { Piece, PieceBase } from "../../types/piece";
 import { replaceItem } from "../../utils/array";
 import {
     ADD_PIECE,

@@ -1,9 +1,8 @@
 import { getRepository } from "typeorm";
-import { PlanActivity } from "../types/PlanActivity";
-import { SessionPlan, SessionSchedule } from "../types/SessionPlan";
+import { PlanActivity, SessionPlan } from "../types/plan";
 import { createActivity, getActivity } from "./activity";
+import { IActivity } from "./entity/activity/IActivity";
 import { PlanActivityEntity, PlanEntity } from "./entity/plan";
-import { IPlanActivity } from "./entity/plan/IPlanActivity";
 
 export const addPlan = async (plan: SessionPlan): Promise<number> => {
     const newPlan = new PlanEntity();
@@ -18,7 +17,7 @@ export const addPlan = async (plan: SessionPlan): Promise<number> => {
     return newPlan.id;
 };
 
-const createSchedule = async (schedule: SessionSchedule): Promise<PlanActivityEntity[]> =>
+const createSchedule = async (schedule: PlanActivity[]): Promise<PlanActivityEntity[]> =>
     await Promise.all(schedule.map((item, i) => createPlanActivity(item, i)));
 
 const createPlanActivity = async (activity: PlanActivity, order: number): Promise<PlanActivityEntity> => {
@@ -46,7 +45,7 @@ const planFromEntity = async (ent: PlanEntity): Promise<SessionPlan> => ({
 });
 
 // sort?
-const getSchedule = async (schedule: IPlanActivity[]) =>
+const getSchedule = async (schedule: IActivity[]) =>
     await Promise.all(schedule.map(item => getActivity(item.activityId)));
 
 export const togglePlanIsFavourite = async (id: number): Promise<void> => {

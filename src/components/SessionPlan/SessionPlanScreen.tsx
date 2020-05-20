@@ -6,9 +6,8 @@ import { getPlanById } from "../../db/plan";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePlan, thunkTogglePlanFav } from "../../store/thunks/plan";
 import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
-import { EmptyPlan } from "../../types/EmptyPlan";
+import { EmptyPlan, PlanActivity, SessionPlan } from "../../types/plan";
 import { ItemScreenProps } from "../../types/item/ItemScreen";
-import { SessionPlan, SessionSchedule } from "../../types/SessionPlan";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
 import { ItemFeatures } from "../basic/Item/ItemFeatures";
@@ -71,7 +70,7 @@ const PlanFeatures = (props: { report: ActivitiesReport }) => (
     ]}/>
 );
 
-const SessionScheduleView = (props: { schedule: SessionSchedule }) => {
+const SessionScheduleView = (props: { schedule: PlanActivity[] }) => {
     return (
         <View style={{
             marginTop: 20,

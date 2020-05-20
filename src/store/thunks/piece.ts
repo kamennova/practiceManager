@@ -9,7 +9,7 @@ import {
     updatePiece
 } from "../../db/piece";
 import { cancelNotifIfSet, schedulePieceNotif } from "../../notifications";
-import { Piece } from "../../types/Piece";
+import { Piece } from "../../types/piece";
 import {
     addPiece,
     deletePiece,

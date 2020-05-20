@@ -4,7 +4,7 @@ import { ActivityForm as getStyles } from "../../AppStyle";
 import { useTheme } from "../../theme";
 import { ActivityType, Exercise, Tonality } from "../../types/Activity";
 import { getPlanActivity, PlanActivityInput } from "../../types/ActivityInput";
-import { PlanActivity } from "../../types/PlanActivity";
+import { PlanActivity } from "../../types/plan";
 import { SendButton } from "../basic/buttons/SendButton";
 import { ComplexActivityFields } from "../basic/ComplexActivityFields";
 import { ActivityTypeSelect } from "../basic/inputs/ActivityTypeSelect";

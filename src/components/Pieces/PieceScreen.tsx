@@ -7,9 +7,8 @@ import { cancelPieceNotif, schedulePieceNotif, updatePieceNotifInterval } from "
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";
 import { ThemeColors, useTheme } from "../../theme";
-import { EmptyPiece } from "../../types/EmptyPiece";
 import { ItemScreenProps } from "../../types/item/ItemScreen";
-import { Piece, PieceBase } from "../../types/Piece";
+import { EmptyPiece, Piece, PieceBase } from "../../types/piece";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
 import { PieceNoteModal } from "../basic/PieceNoteModal";

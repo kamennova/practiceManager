@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm";
 import { Note } from "../types/Note";
-import { Piece, PieceBase, PieceComplexity, PieceGenre, PieceStatus } from "../types/Piece";
+import { Piece, PieceBase, PieceComplexity, PieceGenre, PieceStatus } from "../types/piece/Piece";
 import { AuthorEntity, NoteEntity, PieceEntity, TagEntity } from "./entity/piece";
 
 export const createNotes = async (notes: Note[]): Promise<NoteEntity[]> => {

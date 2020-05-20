@@ -1,4 +1,4 @@
-import { SessionPlan } from "../../types/SessionPlan";
+import { SessionPlan } from "../../types/plan";
 
 export const ADD_PLAN = 'Add_plan',
     EDIT_PLAN = 'Edit_plan',

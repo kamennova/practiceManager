@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm";
 import { ActivityType, Exercise, PieceDetails, TechniqueDetails, Tonality } from "../types/Activity";
-import { PlanActivity } from "../types/PlanActivity";
+import { PlanActivity } from "../types/plan";
 import { ActivityEntity } from "./entity/activity/Activity";
 import { IActivity } from "./entity/activity/IActivity";
 import { PieceActivityDetailsEntity } from "./entity/activity/PieceActivity";
@@ -25,6 +25,9 @@ export const createActivity = async (activity: PlanActivity, order: number): Pro
 
     return newAct.id;
 };
+
+export const getActivities = async (activities: IActivity[]) =>
+    await Promise.all(activities.map(item => getActivity(item.activityId)));
 
 export const getActivity = async (id: number) => {
     const repo = getRepository(ActivityEntity);
@@ -59,7 +62,7 @@ const createTechniqueActivityDetails = async (exercise?: Exercise, tonality?: To
     return act.id;
 };
 
-const activityFromEntity = async (ent: IActivity): Promise<PlanActivity> => {
+const activityFromEntity = async (ent: ActivityEntity): Promise<PlanActivity> => {
     const type = ent.type as ActivityType;
 
     switch (type) {

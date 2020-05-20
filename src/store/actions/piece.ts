@@ -1,4 +1,4 @@
-import { Piece, PieceBase } from "../../types/Piece";
+import { Piece, PieceBase } from "../../types/piece";
 
 export const ADD_PIECE = 'Add_piece',
     SET_PIECE = 'Set_piece',

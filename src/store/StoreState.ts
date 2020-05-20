@@ -1,8 +1,6 @@
 import { ActivityRecord } from "../types/ActivityRecord";
-import { EmptyPiece } from "../types/EmptyPiece";
-import { EmptyPlan } from "../types/EmptyPlan";
-import { Piece, PieceBase } from "../types/Piece";
-import { SessionPlan } from "../types/SessionPlan";
+import { EmptyPlan, SessionPlan } from "../types/plan";
+import { EmptyPiece, Piece, PieceBase } from "../types/piece";
 
 export type ItemsShape<T, META> = {
     items: META[],

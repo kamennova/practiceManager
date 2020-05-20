@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import { PiecePickerStyles as getStyles } from "../../../AppStyle";
 import { StateShape } from "../../../store/StoreState";
 import { useTheme } from "../../../theme";
-import { PieceBase } from "../../../types/Piece";
+import { PieceBase } from "../../../types/piece";
 
 const MAX_TIPS = 10;
 
