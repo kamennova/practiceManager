@@ -5,4 +5,5 @@ export type Session = {
     history: PlanActivity[],
     planId?: number;
     startedOn: Date,
+    isTimeout?: boolean,
 };

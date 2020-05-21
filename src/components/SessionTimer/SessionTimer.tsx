@@ -24,8 +24,8 @@ const SessionTimerComponent = (props: SessionTimerProps) => {
 
     const toggleShowWidgets = () => setShowWidgets(!showWidgets);
 
-    const endSession = () => {
-        props.onEndSession();
+    const endSession = async () => {
+        await props.onEndSession();
         nav.dispatch(StackActions.replace(SESSION_END));
     };
 

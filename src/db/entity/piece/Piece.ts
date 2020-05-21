@@ -27,8 +27,11 @@ export class PieceEntity {
     @Column("datetime")
     addedOn!: number;
 
-    @Column({type: "datetime", nullable: true })
-    lastPracticedOn!: string | undefined;
+    @Column({type: 'smallint', default: 0})
+    timeSpent!: number;
+
+    @Column({ type: "integer", nullable: true })
+    lastPracticedOn!: number | null;
 
     @Column("boolean")
     notificationsOn!: boolean;
