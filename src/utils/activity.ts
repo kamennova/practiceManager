@@ -1,5 +1,5 @@
 import { SessionState } from "../store/StoreState";
-import { PlanActivity } from "../types/PlanActivity";
+import { PlanActivity } from "../types/plan";
 
 export const getActivitiesWithDuration = (session: SessionState): PlanActivity[] =>
     session.history.map((act, i) => ({

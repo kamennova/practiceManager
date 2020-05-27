@@ -6,7 +6,7 @@ import { ActivityType } from "../../../types/Activity";
 import { getSeconds } from "../../../utils/time";
 import { ResumeButton, TimerButtonsWrapper } from "../../basic/buttons/TimerButton";
 import { TimeTracker } from "../../basic/timeTrackers";
-import { SessionTimerWrap } from "./../SessionTimerWrap";
+import { SessionTimerWrap } from "../SessionTimerWrap";
 
 type TimerProps = {
     navigation: any,

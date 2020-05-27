@@ -1,13 +1,11 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { getConnectionManager } from "typeorm/browser";
+import { ActivityEntity } from "./entity/activity/Activity";
+import { PieceActivityDetailsEntity } from "./entity/activity/PieceActivity";
+import { TechniqueActivityDetailsEntity } from "./entity/activity/TechniqueActivity";
 import { AuthorEntity, NoteEntity, PieceEntity, RecordingEntity, TagEntity } from "./entity/piece";
-import {
-    PieceActivityDetailsEntity,
-    PlanActivityEntity,
-    PlanEntity,
-    TechniqueActivityDetailsEntity
-} from "./entity/plan";
+import { PlanActivityEntity, PlanEntity, } from "./entity/plan";
 
 export const connectToDb = async () => createConnection({
     type: "expo",
@@ -22,7 +20,8 @@ export const connectToDb = async () => createConnection({
         PlanEntity,
         PlanActivityEntity,
         PieceActivityDetailsEntity,
-        TechniqueActivityDetailsEntity
+        TechniqueActivityDetailsEntity,
+        ActivityEntity,
     ],
     synchronize: false,
     migrationsRun: true,

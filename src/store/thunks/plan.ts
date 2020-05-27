@@ -6,7 +6,7 @@ import {
     togglePlanIsFavourite,
     updatePlan
 } from "../../db/plan";
-import { SessionPlan } from "../../types/SessionPlan";
+import { SessionPlan } from "../../types/plan";
 import { addPlan, deletePlan, editPlan, setPlans, togglePlanFav } from "../actions";
 import { ThunkResult } from "./ThunkResult";
 

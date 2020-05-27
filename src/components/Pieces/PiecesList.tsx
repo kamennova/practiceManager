@@ -5,7 +5,7 @@ import { ListItemTitleStyle, PieceItemStyle, PieceListStyle as stylesFunc } from
 import { PIECE } from "../../NavigationPath";
 import { Theme, useTheme } from "../../theme";
 import { ThemeColors } from "../../theme/colors";
-import { PieceBase } from "../../types/Piece";
+import { PieceBase } from "../../types/piece";
 import { NothingAlert } from "../basic/alerts/NothingAlert";
 
 export const PiecesList = (props: { pieces: PieceBase[] }) => {

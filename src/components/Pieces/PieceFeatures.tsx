@@ -1,5 +1,5 @@
 import React from "react";
-import { PieceStatus } from "../../types/Piece";
+import { PieceStatus } from "../../types/piece";
 import { formatDateDiff, secondsToHumanlyFormat } from "../../utils/time";
 import { ItemFeatures } from "../basic/Item/ItemFeatures";
 

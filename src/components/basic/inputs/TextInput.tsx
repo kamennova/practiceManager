@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput, ViewStyle } from "react-native";
 import { Dark, TextInputStyle } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
@@ -17,9 +17,10 @@ type InputProps = {
 };
 
 export const MyTextInput = (props: InputProps) => {
+    const [isFocused, setIsFocused] = useState(props.autoFocus !== undefined ? props.autoFocus : false);
     const colors = useTheme().colors;
     const styles = {
-        ...TextInputStyle(colors), borderColor: props.isRequired ? Dark : colors.borderFaded, ...props.style
+        ...TextInputStyle(colors), borderColor: isFocused ? Dark : colors.borderFaded, ...props.style
     };
 
     return (
@@ -27,6 +28,8 @@ export const MyTextInput = (props: InputProps) => {
             <TextInput numberOfLines={props.lines}
                        multiline={props.lines !== undefined && props.lines > 1}
                        style={styles}
+                       onFocus={() => setIsFocused(true)}
+                       onBlur={() => setIsFocused(false)}
                        value={props.value}
                        textAlignVertical={'top'}
                        autoFocus={props.autoFocus}

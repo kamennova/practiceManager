@@ -7,7 +7,7 @@ import { FREE_SESSION_ACTIVITY_CHOICE, PLANNED_SESSION_TIMER } from "../../Navig
 import { startSession } from "../../store/actions";
 import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
-import { SessionPlan } from "../../types/SessionPlan";
+import { SessionPlan } from "../../types/plan";
 import { findPlanOrThrowError } from "../../utils/find";
 import { Button, MinorButton } from "../basic/buttons/Button";
 import { TimerIcon, TimerOffIcon } from "../basic/icons/Timer";

@@ -6,10 +6,10 @@ import { FREE_BREAK_TIMER, SESSION_END } from "../../../NavigationPath";
 import { pushActivity } from "../../../store/actions";
 import { thunkEndSession } from "../../../store/thunks/session";
 import { Activity, ActivityType } from "../../../types/Activity";
-import { SessionPlan } from "../../../types/SessionPlan";
+import { SessionPlan } from "../../../types/plan";
 import { getSeconds } from "../../../utils/time";
 import { TimeTracker } from "../../basic/timeTrackers";
-import { SessionTimer } from "./../SessionTimer";
+import { SessionTimer } from "../SessionTimer";
 
 type SessionScreenProps = {
     route: Route & { params: { plan: SessionPlan } },

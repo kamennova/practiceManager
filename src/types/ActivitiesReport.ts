@@ -1,5 +1,5 @@
 import { ActivityType } from "./Activity";
-import { PlanActivity } from "./PlanActivity";
+import { PlanActivity } from "./plan";
 
 export type ActivitiesReport = {
     totalDuration: number,
@@ -15,7 +15,6 @@ export const getActivitiesReport = (activities: PlanActivity[]): ActivitiesRepor
     technique: techniqueDuration(activities),
     sightReading: sightReadingDuration(activities),
     break: breakDuration(activities),
-
 });
 
 const sumActivitiesDuration = (activities: PlanActivity[]): number => {

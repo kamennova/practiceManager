@@ -1,6 +1,6 @@
 import { getRepository } from "typeorm";
 import { Note } from "../types/Note";
-import { Piece, PieceBase, PieceComplexity, PieceGenre, PieceStatus } from "../types/Piece";
+import { Piece, PieceBase, PieceComplexity, PieceGenre, PieceStatus } from "../types/piece/Piece";
 import { AuthorEntity, NoteEntity, PieceEntity, TagEntity } from "./entity/piece";
 
 export const createNotes = async (notes: Note[]): Promise<NoteEntity[]> => {
@@ -199,16 +199,31 @@ export const addNote = async (piece: Piece):Promise<void> => {
     await repo.save(pieceUpd);
 };
 
+export const updatePiecePracticeDetails = async (pieceId: number, practiceTime: number): Promise<void> => {
+    const repo = getRepository(PieceEntity);
+    const piece = await repo.findOne(pieceId);
+
+    if (piece === undefined) {
+        return;
+    }
+
+    piece.lastPracticedOn = Date.now();
+    piece.timeSpent = piece.timeSpent + practiceTime;
+    await repo.save(piece);
+};
+
+
 const pieceBaseFromEntity = (ent: PieceEntity): PieceBase => ({
     id: ent.id,
     name: ent.name,
-    timeSpent: 0,
+    timeSpent: ent.timeSpent,
     isFavourite: ent.isFavourite,
     imageUri: ent.imageUri !== null ? ent.imageUri : undefined,
     tags: ent.tags.map(tag => tag.name),
     authors: ent.authors.map(author => author.name),
     addedOn: new Date(ent.addedOn),
-    status: PieceStatus.NotStarted,
+    status: ent.lastPracticedOn ? PieceStatus.InWork : PieceStatus.NotStarted,
+    lastPracticedOn: ent.lastPracticedOn !== null ? new Date(Number(ent.lastPracticedOn)) : undefined,
     complexity: PieceComplexity.Easy,
     genre: PieceGenre.Classical,
 });
@@ -218,7 +233,10 @@ const pieceFromEntity = (ent: PieceEntity): Piece => ({
     notifsOn: ent.notificationsOn,
     notifsInterval: ent.notificationsInterval,
     notifId: ent.notificationId,
-    notes: ent.notes !== null ? ent.notes.map(note => ({addedOn: new Date(note.addedOn), content: note.content})) : [],
+    notes: ent.notes !== null ? ent.notes.map(note => ({
+        addedOn: new Date(note.addedOn),
+        content: note.content
+    })) : [],
     recordings: [],
     originalUri: ent.originalUri !== null ? ent.originalUri : undefined,
 });

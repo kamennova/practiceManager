@@ -1,5 +1,5 @@
-import { Item } from "./item/Item";
-import { Note } from "./Note";
+import { Item } from "../item/Item";
+import { Note } from "../Note";
 import { Recording } from "./Recording";
 
 export type PieceBase = Item & {

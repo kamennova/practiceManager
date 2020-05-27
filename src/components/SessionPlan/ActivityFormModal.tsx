@@ -1,5 +1,5 @@
 import React from "react";
-import { PlanActivity } from "../../types/PlanActivity";
+import { PlanActivity } from "../../types/plan";
 import { OpacityModal } from "../basic/OpacityModal";
 import { ActivityForm } from "./ActivityForm";
 
