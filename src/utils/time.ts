@@ -17,7 +17,7 @@ export const secondsToHumanlyFormat = (seconds: number): string => {
         return seconds + 's';
     }
 
-    return formatMinutesShort(Math.floor(seconds) / 60);
+    return formatMinutesShort(Math.floor(seconds / 60)) + ' ' + seconds % 60 + 's';
 };
 
 export const minutesToHumanlyFormat = (minutes: number, _format?: TimeFormat): string => {

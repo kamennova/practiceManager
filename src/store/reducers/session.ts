@@ -1,9 +1,17 @@
-import { Session } from "../../types/Session";
-import { END_SESSION, PUSH_ACTIVITY, SessionActionType, START_SESSION, } from "../actions";
+import {
+    END_SESSION,
+    EndSessionAction,
+    PUSH_ACTIVITY,
+    SessionActionType,
+    SET_SESSIONS,
+    START_SESSION,
+} from "../actions";
 import { initialState, SessionsShape } from "../StoreState";
 
 export const sessions = (state: SessionsShape = initialState.sessions, action: SessionActionType): SessionsShape => {
     switch (action.type) {
+        case SET_SESSIONS:
+            return { ...state, items: action.sessions };
         case START_SESSION:
             return { ...state, current: { history: [], isOn: true } };
         case PUSH_ACTIVITY:
@@ -21,7 +29,9 @@ export const sessions = (state: SessionsShape = initialState.sessions, action: S
     }
 };
 
-const end = (state: SessionsShape, action: { session: Session }): SessionsShape => {
-    console.log({ ...state, items: [...state.items, action.session], current: { isOn: false, history: [] } });
-    return { ...state, items: [...state.items, action.session], current: { isOn: false, history: [] } };
-};
+const end = (state: SessionsShape, action: EndSessionAction): SessionsShape => ({
+    ...state,
+    items: [...state.items, action.session],
+    current: { isOn: false, history: [] }
+});
+

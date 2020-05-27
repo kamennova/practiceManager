@@ -28,10 +28,11 @@ const createSessionActivity = async (activity: PlanActivity, order: number): Pro
     return act;
 };
 
-export const getSessions = async () => {
+export const getSessions = async (): Promise<Session[]> => {
     const repo = getRepository(SessionEntity);
+    const entities = await repo.find();
 
-    return (await repo.find()).map(sessionFromEntity);
+    return Promise.all(entities.map(sessionFromEntity));
 };
 
 const sessionFromEntity = async (ent: SessionEntity): Promise<Session> => ({

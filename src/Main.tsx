@@ -8,17 +8,19 @@ import { connectToDb } from "./db/connection";
 import { Root } from "./StackNavigator";
 import { thunkGetPiecesMeta } from "./store/thunks";
 import { thunkGetPlans } from "./store/thunks/plan";
+import { thunkGetSessions } from "./store/thunks/session";
 import { useTheme } from "./theme";
 
 const Drawer = createDrawerNavigator();
 
-const MainComponent = (props: { getPieces: () => void, getPlans: () => void }) => {
+const MainComponent = (props: { getPieces: () => void, getPlans: () => void, getSessions: () => void, }) => {
     useEffect(() => {
         loadDbData();
     });
 
     const loadDbData = async () => {
         await connectToDb()
+            .then(() => props.getSessions())
             .then(() => props.getPlans())
             .then(() => props.getPieces());
     };
@@ -38,7 +40,8 @@ const MainComponent = (props: { getPieces: () => void, getPlans: () => void }) =
 
 const mapDispatchToProps = (dispatch: any) => ({
     getPieces: () => dispatch(thunkGetPiecesMeta()),
-    getPlans: () => dispatch(thunkGetPlans())
+    getPlans: () => dispatch(thunkGetPlans()),
+    getSessions: () => dispatch(thunkGetSessions()),
 });
 
 export const Main = connect(undefined, mapDispatchToProps)(MainComponent);
