@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { connect } from "react-redux";
 import { DrawerContentStyle, DrawerStyle } from "./AppStyle";
 import { CustomDrawerContent } from "./components/basic/CustomDrawer";
-import { connectToDb } from "./db/connection";
 import { Root } from "./StackNavigator";
 import { thunkGetPiecesMeta } from "./store/thunks";
 import { thunkGetPlans } from "./store/thunks/plan";
@@ -18,9 +17,7 @@ const MainComponent = (props: { getPieces: () => void, getPlans: () => void, get
     });
 
     const loadDbData = async () => {
-        await connectToDb()
-            .then(() => props.getPlans())
-            .then(() => props.getPieces());
+        await props.getPieces();
     };
 
     return (
