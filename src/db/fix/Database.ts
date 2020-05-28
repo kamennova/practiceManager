@@ -3,7 +3,7 @@ import { CheckResult } from "../validation";
 import { db } from "./Db";
 import { PieceRow } from "./RowTypes";
 
-const rowToPieceBase = (row: PieceRow): PieceBase => ({
+const rowToPieceBase = (row: PieceRow, tags?: string[]): PieceBase => ({
     id: row.id,
     imageUri: row.imageUri !== null ? row.imageUri : undefined,
     isFavourite: row.isFavourite !== 0,
@@ -11,22 +11,22 @@ const rowToPieceBase = (row: PieceRow): PieceBase => ({
     timeSpent: row.timeSpent,
     lastPracticedOn: row.lastPracticedOn !== null ? new Date(row.lastPracticedOn) : undefined,
     authors: row.authors !== '' ? row.authors.split(', ') : [],
-    tags: [],
     addedOn: new Date(row.addedOn),
     status: row.timeSpent > 0 ? PieceStatus.InWork : PieceStatus.NotStarted,
+    tags: tags !== undefined ? tags : [],
 });
 
-const rowToPiece = (row: PieceRow): Piece => ({
-    ...rowToPieceBase(row),
+const rowToPiece = (row: PieceRow, tags: string[], notes: []): Piece => ({
+    ...rowToPieceBase(row, tags),
     notifsOn: row.notifsOn,
     notifsInterval: row.notifsInterval,
     notifId: row.notifId,
-    notes: [],
+    notes,
     recordings: [],
 });
 
-export default () => {
-    console.log('db funcs');
+export default (message?: string) => {
+    console.log('db funcs', message);
 
     const getPiecesMeta = async (): Promise<PieceBase[]> => {
         return new Promise((resolve, reject) =>
@@ -205,30 +205,44 @@ export default () => {
     };
 
     const getPieceById = async (id: number): Promise<Piece | undefined> => {
-        return await new Promise((resolve, reject) =>
-            db.transaction(tx => {
-                tx.executeSql(`SELECT *, (SELECT tag FROM Tags WHERE pieceId = Pieces.id) as tags
-                               FROM Pieces
-                               WHERE id = ?`,
-                    [id],
-                    // @ts-ignore
-                    (_tr, { rows }) => {
-                        console.log(rows);
+        const piece = await fetchPiece(id);
 
-                        if (rows.length === 0) {
-                            return resolve(undefined);
-                        }
+        if (piece === undefined) {
+            return undefined;
+        }
 
-                        return resolve(rowToPiece(rows._array[0]));
-                    },
-                    (_tr, err) => {
-                        console.log('error getting piece by id');
-                        reject(err);
-                        return false;
-                    }
-                )
-            }));
+        const tags = await fetchTags(id);
+
+        return rowToPiece(piece, tags, []);
     };
+
+    const fetchPiece = (id: number): Promise<PieceRow | undefined> => new Promise((resolve, reject) =>
+        db.transaction(tx => tx.executeSql(`SELECT *
+                                            FROM Pieces
+                                            WHERE id = ?`,
+            [id],
+            // @ts-ignore
+            (_tr, { rows }) => rows.length === 0 ? resolve(undefined) : resolve(rows._array[0]),
+            (_tr, err) => {
+                console.log('error getting piece by id');
+                reject(err);
+                return false;
+            })
+        ));
+
+    const fetchTags = (pieceId: number): Promise<string[]> => new Promise((resolve, reject) =>
+        db.transaction(tx => tx.executeSql(`SELECT tag
+                                            FROM Tags
+                                            WHERE pieceId = ?`,
+            [pieceId],
+            // @ts-ignore
+            (_tr, { rows }) => resolve(rows._array.map(item => item.tag)),
+            (_tr, err) => {
+                console.log('error getting tags by id');
+                reject(err);
+                return false;
+            })
+        ));
 
     const updateNotifInterval = async (id: number, interval: number): Promise<void> => {
         console.log('updating interval, ', id, interval);
