@@ -7,16 +7,39 @@ import { createOneToManyTable, dbHelpers } from './dbCommon';
 const AuthorItem = 'author';
 const TagItem = 'tag';
 
-const rowToPiece = (row: any): PieceBase => ({
+type PieceRow = {
+    id: number,
+    name: string,
+    isFavourite: boolean,
+    lastPracticedOn: number,
+    imageUri: string | null,
+    timeSpent: number,
+    addedOn: number,
+    notifsOn: boolean,
+    notifsInterval: number,
+    notifId: number | null,
+};
+
+const rowToPieceBase = (row: PieceRow): PieceBase => ({
     id: row.id,
+    imageUri: row.imageUri !== null ? row.imageUri : undefined,
     isFavourite: row.isFavourite,
     name: row.name,
-    timeSpent: 0,
+    timeSpent: row.timeSpent,
+    lastPracticedOn: new Date(row.lastPracticedOn),
     authors: [],
-    lastPracticedOn: new Date(row.lastPracticedOnDate),
     tags: [],
-    addedOn: row.addedOn,
-    status: PieceStatus.NotStarted,
+    addedOn: new Date(row.addedOn),
+    status: row.timeSpent > 0 ? PieceStatus.InWork : PieceStatus.NotStarted,
+});
+
+const rowToPiece = (row: PieceRow): Piece => ({
+    ...rowToPieceBase(row),
+    notifsOn: row.notifsOn,
+    notifsInterval: row.notifsInterval,
+    notifId: row.notifId,
+    notes: [],
+    recordings: [],
 });
 
 export default () => {
@@ -25,6 +48,7 @@ export default () => {
 
     db.transaction(tx => {
         tx.executeSql(
+            // DROP Table Pieces;
             'CREATE TABLE IF NOT EXISTS Pieces (' +
             'id integer primary key not null, ' +
             'name varchar(225) not null, ' +
@@ -33,9 +57,10 @@ export default () => {
             'isFavourite boolean not null default false, ' +
             'imageUri varchar(225), ' +
             'lastPracticedOn timestamp, ' +
-            'notifsOn smallint default 0,' +
+            'notifsOn boolean not null default false,' +
             'notifsInterval smallint default 3, ' +
-            'notifId varchar(225) ' +
+            'notifId smallint, ' +
+            'authors varchar(225)' +
             ')',
             [],
             () => {
@@ -47,17 +72,17 @@ export default () => {
             });
 
         createOneToManyTable(AuthorItem, tx);
-        createOneToManyTable(TagItem, tx);
+        createTableTags(tx);
     });
 
     const getPiecesMeta = async (): Promise<PieceBase[]> => {
         return new Promise((resolve, reject) =>
             db.transaction(tx =>
-                tx.executeSql('SELECT * FROM Pieces',
+                tx.executeSql('SELECT *, (SELECT tagName from Tag LEFT JOIN PieceTags ON Tag.id = PieceTags.tagId WHERE PieceTags.pieceId = Pieces.id) as tags FROM Pieces',
                     [],
                     (_, { rows }) => resolve(
                         // @ts-ignore
-                        rows._array.map(rowToPiece)
+                        rows._array.map(rowToPieceBase)
                     ),
                     (_tr, err) => {
                         reject(err);
@@ -69,12 +94,8 @@ export default () => {
     const addPieceToDb = async (piece: Piece): Promise<number> => {
         const pieceId = await insertPiece(piece);
 
-        if (piece.authors !== undefined) {
-            await Promise.all(piece.authors.map(author => insertPieceAuthor(pieceId, author)));
-        }
-
-        if (piece.tags !== undefined) {
-            await Promise.all(piece.tags.map(tag => insertPieceTag(pieceId, tag)));
+        if (piece.tags.length > 0) {
+            await insertTags(piece.tags, pieceId);
         }
 
         return pieceId;
@@ -102,6 +123,8 @@ export default () => {
     };
 
     const insertPiece = async (piece: Piece): Promise<number> => {
+        console.log('inserting piece...');
+
         return new Promise((resolve, reject) =>
             db.transaction(tx => {
                 tx.executeSql(`INSERT INTO Pieces (name,
@@ -110,8 +133,9 @@ export default () => {
                                                    notifsInterval,
                                                    imageUri,
                                                    isFavourite,
-                                                   timeSpent)
-                               values (?, ?, ?, ?, ?, ?, ?)`,
+                                                   timeSpent,
+                                                   authors)
+                               values (?, ?, ?, ?, ?, ?, ?, ?)`,
                     [
                         piece.name,
                         Date.now(),
@@ -120,8 +144,12 @@ export default () => {
                         piece.imageUri !== undefined ? null : piece.imageUri,
                         piece.isFavourite,
                         0,
+                        piece.authors.length > 0 ? piece.authors.join(', ') : '',
                     ],
-                    (_tr, { insertId }) => resolve(insertId),
+                    (_tr, { insertId }) => {
+                        console.log('piece insert');
+                        return resolve(insertId);
+                    },
                     (_tr, err) => {
                         console.log('error inserting piece');
                         reject(err);
@@ -129,6 +157,39 @@ export default () => {
                     }
                 )
             }));
+    };
+
+    const insertTags = async (tags: string[], pieceId: number) => {
+        return await Promise.all([
+            tags.map(tag => new Promise((_, reject) =>
+                db.transaction(tx => {
+                    tx.executeSql(`INSERT INTO Tags (tag, pieceId)
+                                   values (?, ?)`,
+                        [tag, pieceId],
+                        (_tr) => {
+                            console.log('tag inserted insert');
+                        },
+                        (_tr, err) => {
+                            console.log('error inserting tag');
+                            reject(err);
+                            return false;
+                        }
+                    )
+                })))]);
+    };
+
+    const createTableTags = (tx: SQLTransaction) => {
+        tx.executeSql(
+            'CREATE TABLE IF NOT EXISTS Tags (' +
+            'pieceId integer not null, ' +
+            'tag varchar(225) not null ' +
+            ')',
+            [],
+            () => console.log('table tags created'),
+            (_tr, err) => {
+                console.log('error creating table tags', err);
+                return false
+            });
     };
 
     const toggleIsFavourite = async (id: number): Promise<void> => {
@@ -168,7 +229,9 @@ export default () => {
                                FROM Pieces
                                WHERE id = ?`,
                     [id],
-                    (_tr, { insertId }) => resolve(insertId),
+                    (_tr, { insertId }) => {
+                        return resolve(insertId);
+                    },
                     (_tr, err) => {
                         reject(err);
                         return false;

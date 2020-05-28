@@ -84,7 +84,9 @@ export const createOneToManyTable = (itemName: string, tx: SQLTransaction) => {
 
     tx.executeSql(`CREATE TABLE IF NOT EXISTS ${tableName} (id integer primary key not null, ${colName} varchar(225) UNIQUE not null )`,
         [],
-        undefined,
+        () => {
+            console.log(`table ${tableName} created`)
+        },
         (_tr, err) => {
             console.log(`err creating table ${tableName}`, err);
             return false;
