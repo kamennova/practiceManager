@@ -1,24 +1,20 @@
 import { Dispatch } from "redux";
 import { updatePiecePracticeDetails } from "../../db/piece";
-import { addSession, getSessions } from "../../db/session";
 import { ActivityType } from "../../types/Activity";
 import { PlanActivity } from "../../types/plan";
 import { Session } from "../../types/Session";
 import { getActivitiesWithDuration } from "../../utils/activity";
 import { pieceGroupBy } from "../../utils/array";
-import { endSession, setSessions, updatePiecesPractice } from "../actions";
+import { endSession, updatePiecesPractice } from "../actions";
 import { SessionState, StateShape } from "../StoreState";
 import { ThunkResult } from "./ThunkResult";
-
-export const thunkGetSessions: ThunkResult = () => async (dispatch: Dispatch) =>
-    await getSessions().then(res => dispatch(setSessions(res)));
 
 export const thunkEndSession: ThunkResult = (isTimeout: boolean = false) => async (dispatch: Dispatch, getState: () => StateShape) => {
     const state = getState();
     const session = getSessionFromState({ ...state.sessions.current, isTimeout, finishedOn: Date.now() });
 
     const piecesPractice = getPiecesPractice(session);
-    await Promise.all([updatePiecesPracticeInDb(piecesPractice), addSession(session)]);
+    await updatePiecesPracticeInDb(piecesPractice);
 
     dispatch(updatePiecesPractice(piecesPractice));
 

@@ -1,19 +1,19 @@
 import "reflect-metadata";
-import { createConnection, getConnectionManager } from "typeorm";
-import { ActivityEntity } from "./entity/activity/Activity";
-import { PieceActivityDetailsEntity } from "./entity/activity/PieceActivity";
-import { TechniqueActivityDetailsEntity } from "./entity/activity/TechniqueActivity";
+import { createConnection } from "typeorm";
+import { getConnectionManager } from "typeorm/browser";
 import { AuthorEntity, NoteEntity, PieceEntity, RecordingEntity, TagEntity } from "./entity/piece";
-import { PlanActivityEntity, PlanEntity, } from "./entity/plan";
-import { SessionActivityEntity, SessionEntity } from "./entity/session";
+import {
+    PieceActivityDetailsEntity,
+    PlanActivityEntity,
+    PlanEntity,
+    TechniqueActivityDetailsEntity
+} from "./entity/plan";
 
 export const connectToDb = async () => createConnection({
     type: "expo",
     driver: require('expo-sqlite'),
-    database: "practiceManagerDB6",
+    database: "practiceManagerDB130",
     entities: [
-        SessionEntity,
-        SessionActivityEntity,
         PieceEntity,
         AuthorEntity,
         TagEntity,
@@ -23,7 +23,6 @@ export const connectToDb = async () => createConnection({
         PlanActivityEntity,
         PieceActivityDetailsEntity,
         TechniqueActivityDetailsEntity,
-        ActivityEntity,
     ],
     synchronize: false,
     migrationsRun: true,

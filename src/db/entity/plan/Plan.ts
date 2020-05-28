@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { IActivity } from "../activity/IActivity";
+import { IActivity } from "./IActivity";
 
 @Entity('plan')
 export class PlanEntity {

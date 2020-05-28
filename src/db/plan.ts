@@ -1,15 +1,21 @@
 import { getRepository } from "typeorm";
-import { PlanActivity, SessionPlan } from "../types/plan";
-import { createActivity, getActivity } from "./activity";
-import { IActivity } from "./entity/activity/IActivity";
-import { PlanActivityEntity, PlanEntity } from "./entity/plan";
+import { ActivityType, Exercise, Tonality } from "../types/Activity";
+import { PlanActivity } from "../types/plan";
+import { SessionPlan } from "../types/plan";
+import {
+    PieceActivityDetailsEntity,
+    PlanActivityEntity,
+    PlanEntity,
+    TechniqueActivityDetailsEntity
+} from "./entity/plan";
+import { IActivity } from "./entity/plan/IActivity";
 
 export const addPlan = async (plan: SessionPlan): Promise<number> => {
     const newPlan = new PlanEntity();
     newPlan.name = plan.name;
     newPlan.createdOn = Date.now();
     newPlan.isFavourite = plan.isFavourite;
-    newPlan.schedule = await createSchedule(plan.schedule);
+    newPlan.schedule = createSchedule(plan.schedule);
 
     const repo = getRepository(PlanEntity);
     await repo.save(newPlan);
@@ -17,36 +23,69 @@ export const addPlan = async (plan: SessionPlan): Promise<number> => {
     return newPlan.id;
 };
 
-const createSchedule = async (schedule: PlanActivity[]): Promise<PlanActivityEntity[]> =>
-    await Promise.all(schedule.map((item, i) => createPlanActivity(item, i)));
+export const createSchedule = (schedule: PlanActivity[]): PlanActivityEntity[] =>
+    schedule.map((item, i) => createActivity(item, i));
 
-const createPlanActivity = async (activity: PlanActivity, order: number): Promise<PlanActivityEntity> => {
-    const activityId = await createActivity(activity, order);
+export const createActivity = (activity: PlanActivity, order: number) => {
+    const newAct = new PlanActivityEntity();
+    newAct.duration = activity.duration;
+    newAct.order = order;
+    newAct.type = activity.type;
 
-    const planAct = new PlanActivityEntity();
-    planAct.activityId = activityId;
+    if (activity.type === ActivityType.Technique) {
+        newAct.details = createTechniqueActivityDetails(activity.exercise, activity.tonality);
+    } else if (activity.type === ActivityType.Piece || activity.type === ActivityType.SightReading) {
+        newAct.details = createPieceActivityDetails(activity.pieceId);
+    } else {
+        newAct.details = null;
+    }
 
-    return planAct;
+    return newAct;
+};
+
+const createPieceActivityDetails = (pieceId?: number) => {
+    const pieceAct = new PieceActivityDetailsEntity();
+    pieceAct.pieceId = pieceId !== undefined ? pieceId : null;
+
+    return pieceAct;
+};
+
+const createTechniqueActivityDetails = (exercise?: Exercise, tonality?: Tonality) => {
+    const act = new TechniqueActivityDetailsEntity();
+    act.exercise = exercise !== undefined ? exercise.toString() : null;
+    act.tonality = tonality !== undefined ? tonality.toString() : null;
+
+    return act;
 };
 
 export const getPlans = async (): Promise<SessionPlan[]> => {
     const repo = getRepository(PlanEntity);
-    const entities = await repo.find();
 
-    return await Promise.all(entities.map(planFromEntity));
+    return (await repo.find()).map(planFromEntity);
 };
 
-const planFromEntity = async (ent: PlanEntity): Promise<SessionPlan> => ({
+const planFromEntity = (ent: PlanEntity): SessionPlan => ({
     id: ent.id,
     name: ent.name,
-    schedule: await getSchedule(ent.schedule),
+    schedule: ent.schedule.sort((a, b) => a.order > b.order ? -1 : 1).map(activityFromEntity),
     isFavourite: ent.isFavourite !== null ? ent.isFavourite : false,
     createdOn: ent.createdOn,
 });
 
-// sort?
-const getSchedule = async (schedule: IActivity[]) =>
-    await Promise.all(schedule.map(item => getActivity(item.activityId)));
+const activityFromEntity = (ent: IActivity): PlanActivity => {
+    const type = ent.type as ActivityType;
+    const details = ent.details !== null ? ent.details : undefined;
+
+    switch (type) {
+        case ActivityType.Break:
+            return { type, duration: ent.duration };
+        case ActivityType.SightReading :
+        case ActivityType.Piece:
+            return { type, duration: ent.duration, pieceId: details?.pieceId };
+        case ActivityType.Technique:
+            return { type, duration: ent.duration, exercise: details?.exercise, tonality: details?.tonality };
+    }
+};
 
 export const togglePlanIsFavourite = async (id: number): Promise<void> => {
     const repo = getRepository(PlanEntity);
@@ -77,7 +116,7 @@ export const getPlanById = async (id: number): Promise<SessionPlan> =>
 export const updatePlan = async (plan: SessionPlan): Promise<void> => {
     const ent = await getPlanEntity(plan.id);
     ent.name = plan.name;
-    ent.schedule = await createSchedule(plan.schedule);
+    ent.schedule = createSchedule(plan.schedule);
 
     const repo = getRepository(PlanEntity);
     await repo.save(ent);
