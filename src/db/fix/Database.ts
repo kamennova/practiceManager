@@ -2,7 +2,7 @@ import { Piece, PieceBase, PieceStatus } from "../../types/piece";
 import { CheckResult } from "../validation";
 import { db } from "./Db";
 
-import { createOneToManyTable, dbHelpers } from './dbCommon';
+import { dbHelpers } from './dbCommon';
 
 const AuthorItem = 'author';
 const TagItem = 'tag';
@@ -47,34 +47,7 @@ const rowToPiece = (row: PieceRow): Piece => ({
 export default () => {
     const { insertOneToManyItem } = dbHelpers(db);
 
-    db.transaction(tx => {
-        tx.executeSql(
-            // 'DROP Table Pieces;' +
-            'CREATE TABLE IF NOT EXISTS Pieces (' +
-            'id integer primary key not null, ' +
-            'name varchar(225) not null, ' +
-            'addedOn timestamp not null, ' +
-            'timeSpent smallint not null default 0, ' +
-            'isFavourite integer not null default 0, ' +
-            'imageUri varchar(225), ' +
-            'lastPracticedOn timestamp, ' +
-            'notifsOn boolean not null default false,' +
-            'notifsInterval smallint default 3, ' +
-            'notifId smallint, ' +
-            'authors varchar(225)' +
-            ')',
-            [],
-            () => {
-                console.log('table created')
-            },
-            (_tr, err) => {
-                console.log('error creating table pieces', err);
-                return false
-            });
-
-        createOneToManyTable(AuthorItem, tx);
-        createTableTags(tx);
-    });
+    console.log('db funcs');
 
     const getPiecesMeta = async (): Promise<PieceBase[]> => {
         return new Promise((resolve, reject) =>
@@ -177,20 +150,6 @@ export default () => {
                         }
                     )
                 })))]);
-    };
-
-    const createTableTags = (tx: SQLTransaction) => {
-        tx.executeSql(
-            'CREATE TABLE IF NOT EXISTS Tags (' +
-            'pieceId integer not null, ' +
-            'tag varchar(225) not null ' +
-            ')',
-            [],
-            () => console.log('table tags created'),
-            (_tr, err) => {
-                console.log('error creating table tags', err);
-                return false
-            });
     };
 
     const toggleIsFavourite = async (id: number): Promise<void> => {
