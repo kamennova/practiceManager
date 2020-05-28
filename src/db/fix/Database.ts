@@ -25,248 +25,231 @@ const rowToPiece = (row: PieceRow, tags: string[], notes: []): Piece => ({
     recordings: [],
 });
 
-export default (message?: string) => {
-    console.log('db funcs', message);
+export const getPiecesMeta = async (): Promise<PieceBase[]> => {
+    console.log('get pieces');
+    return new Promise((resolve, reject) =>
+        db.transaction(tx =>
+            tx.executeSql('SELECT *, (SELECT tag FROM Tags WHERE pieceId = Pieces.id) as tags FROM Pieces',
+                [],
+                (_, { rows }) => resolve(
+                    // @ts-ignore
+                    rows._array.map(rowToPieceBase)
+                ),
+                (_tr, err) => {
+                    reject(err);
+                    return false
+                }
+            )));
+};
 
-    const getPiecesMeta = async (): Promise<PieceBase[]> => {
-        return new Promise((resolve, reject) =>
-            db.transaction(tx =>
-                tx.executeSql('SELECT *, (SELECT tag FROM Tags WHERE pieceId = Pieces.id) as tags FROM Pieces',
-                    [],
-                    (_, { rows }) => resolve(
-                        // @ts-ignore
-                        rows._array.map(rowToPieceBase)
-                    ),
-                    (_tr, err) => {
-                        reject(err);
-                        return false
-                    }
-                )));
-    };
+export const addPieceToDb = async (piece: Piece): Promise<number> => {
+    const pieceId = await insertPiece(piece);
 
-    const addPieceToDb = async (piece: Piece): Promise<number> => {
-        const pieceId = await insertPiece(piece);
+    if (piece.tags.length > 0) {
+        await insertTags(piece.tags, pieceId);
+    }
 
-        if (piece.tags.length > 0) {
-            await insertTags(piece.tags, pieceId);
-        }
+    return pieceId;
+};
 
-        return pieceId;
-    };
+export const updatePieceInDb = async (piece: Piece): Promise<void> => {
+    await new Promise((_, reject) =>
+        db.transaction(tx => {
+            tx.executeSql(`UPDATE Pieces
+                           SET name     = ?,
+                               imageUri = ?
+                           WHERE id = ?`,
+                [
+                    piece.name,
+                    piece.imageUri !== undefined ? piece.imageUri : null,
+                    piece.id,
+                ],
+                undefined,
+                (_tr, err) => {
+                    reject(err);
+                    return false;
+                }
+            )
+        }));
+};
 
-    const updatePieceInDb = async (piece: Piece): Promise<void> => {
-        await new Promise((_, reject) =>
+export const insertPiece = async (piece: Piece): Promise<number> => {
+    console.log('inserting piece...');
+
+    return new Promise((resolve, reject) =>
+        db.transaction(tx => {
+            tx.executeSql(`INSERT INTO Pieces (name,
+                                               addedOn,
+                                               notifsOn,
+                                               notifsInterval,
+                                               imageUri,
+                                               isFavourite,
+                                               timeSpent,
+                                               authors)
+                           values (?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    piece.name,
+                    Date.now(),
+                    piece.notifsOn,
+                    piece.notifsInterval,
+                    piece.imageUri !== undefined ? piece.imageUri : null,
+                    piece.isFavourite ? 1 : 0,
+                    0,
+                    piece.authors.length > 0 ? piece.authors.join(', ') : '',
+                ],
+                (_tr, { insertId }) => {
+                    console.log('piece insert');
+                    return resolve(insertId);
+                },
+                (_tr, err) => {
+                    console.log('error inserting piece');
+                    reject(err);
+                    return false;
+                }
+            )
+        }));
+};
+
+export const insertTags = async (tags: string[], pieceId: number) => {
+    return await Promise.all([
+        tags.map(tag => new Promise((_, reject) =>
             db.transaction(tx => {
-                tx.executeSql(`UPDATE Pieces
-                               SET name     = ?,
-                                   imageUri = ?
-                               WHERE id = ?`,
-                    [
-                        piece.name,
-                        piece.imageUri !== undefined ? piece.imageUri : null,
-                        piece.id,
-                    ],
-                    undefined,
-                    (_tr, err) => {
-                        reject(err);
-                        return false;
-                    }
-                )
-            }));
-    };
-
-    const insertPiece = async (piece: Piece): Promise<number> => {
-        console.log('inserting piece...');
-
-        return new Promise((resolve, reject) =>
-            db.transaction(tx => {
-                tx.executeSql(`INSERT INTO Pieces (name,
-                                                   addedOn,
-                                                   notifsOn,
-                                                   notifsInterval,
-                                                   imageUri,
-                                                   isFavourite,
-                                                   timeSpent,
-                                                   authors)
-                               values (?, ?, ?, ?, ?, ?, ?, ?)`,
-                    [
-                        piece.name,
-                        Date.now(),
-                        piece.notifsOn,
-                        piece.notifsInterval,
-                        piece.imageUri !== undefined ? piece.imageUri : null,
-                        piece.isFavourite ? 1 : 0,
-                        0,
-                        piece.authors.length > 0 ? piece.authors.join(', ') : '',
-                    ],
-                    (_tr, { insertId }) => {
-                        console.log('piece insert');
-                        return resolve(insertId);
+                tx.executeSql(`INSERT INTO Tags (tag, pieceId)
+                               values (?, ?)`,
+                    [tag, pieceId],
+                    (_tr) => {
+                        console.log('tag inserted,', tag);
                     },
                     (_tr, err) => {
-                        console.log('error inserting piece');
+                        console.log('error inserting tag');
                         reject(err);
                         return false;
                     }
                 )
-            }));
-    };
+            })))]);
+};
 
-    const insertTags = async (tags: string[], pieceId: number) => {
-        return await Promise.all([
-            tags.map(tag => new Promise((_, reject) =>
-                db.transaction(tx => {
-                    tx.executeSql(`INSERT INTO Tags (tag, pieceId)
-                                   values (?, ?)`,
-                        [tag, pieceId],
-                        (_tr) => {
-                            console.log('tag inserted,', tag);
-                        },
-                        (_tr, err) => {
-                            console.log('error inserting tag');
-                            reject(err);
-                            return false;
-                        }
-                    )
-                })))]);
-    };
-
-    const toggleIsFavourite = async (id: number): Promise<void> => {
-        await new Promise((_, reject) =>
-            db.transaction(tx => {
-                tx.executeSql(`UPDATE Pieces
-                               SET isFavourite = CASE isFavourite WHEN 0 THEN 1 ELSE 0 END
-                               WHERE id = ?`,
-                    [id],
-                    () => console.log('toggle fav'),
-                    (_tr, err) => {
-                        reject(err);
-                        return false;
-                    }
-                )
-            }));
-    };
-
-    const deletePieceFromDb = async (id: number): Promise<void> => {
-        await new Promise((_, reject) => db.transaction(tx =>
-            tx.executeSql('DELETE FROM Pieces WHERE id = ?',
+export const toggleIsFavourite = async (id: number): Promise<void> => {
+    await new Promise((_, reject) =>
+        db.transaction(tx => {
+            tx.executeSql(`UPDATE Pieces
+                           SET isFavourite = CASE isFavourite WHEN 0 THEN 1 ELSE 0 END
+                           WHERE id = ?`,
                 [id],
-                () => {
-                    console.log('deleted successfully');
+                () => console.log('toggle fav'),
+                (_tr, err) => {
+                    reject(err);
+                    return false;
+                }
+            )
+        }));
+};
+
+export const deletePieceFromDb = async (id: number): Promise<void> => {
+    await new Promise((_, reject) => db.transaction(tx =>
+        tx.executeSql('DELETE FROM Pieces WHERE id = ?',
+            [id],
+            () => {
+                console.log('deleted successfully');
+            },
+            (_tr, err) => {
+                reject(err);
+                return false;
+            }
+        )));
+};
+
+export const getNotificationId = async (id: number): Promise<number> => {
+    return new Promise((resolve, reject) =>
+        db.transaction(tx => {
+            tx.executeSql(`SELECT notifId
+                           FROM Pieces
+                           WHERE id = ?`,
+                [id],
+                (_tr, { insertId }) => {
+                    return resolve(insertId);
                 },
                 (_tr, err) => {
                     reject(err);
                     return false;
                 }
-            )));
-    };
+            )
+        }));
+};
 
-    const getNotificationId = async (id: number): Promise<number> => {
-        return new Promise((resolve, reject) =>
-            db.transaction(tx => {
-                tx.executeSql(`SELECT notifId
-                               FROM Pieces
-                               WHERE id = ?`,
-                    [id],
-                    (_tr, { insertId }) => {
-                        return resolve(insertId);
-                    },
-                    (_tr, err) => {
-                        reject(err);
-                        return false;
-                    }
-                )
-            }));
-    };
+export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
+    if (piece.name.length === 0) {
+        return Promise.resolve({ valid: false, errors: 'You forgot to enter piece title ✍' });
+    }
 
-    const validatePiece = async (piece: Piece): Promise<CheckResult> => {
-        if (piece.name.length === 0) {
-            return Promise.resolve({ valid: false, errors: 'You forgot to enter piece title ✍' });
-        }
+    return new Promise((resolve, reject) =>
+        db.transaction(tx => {
+            tx.executeSql(`SELECT COUNT(*) as count
+                           FROM Pieces
+                           WHERE name = ?
+                             AND NOT id = ?`,
+                [piece.name, piece.id],
+                // @ts-ignore
+                (_tr, { rows }) => rows._array.count > 0 ? resolve({
+                    valid: false,
+                    errors: 'Same name'
+                }) : resolve({ valid: true }),
+                (_tr, err) => {
+                    reject(err);
+                    return false;
+                }
+            )
+        }));
+};
 
-        return new Promise((resolve, reject) =>
-            db.transaction(tx => {
-                tx.executeSql(`SELECT COUNT(*) as count
-                               FROM Pieces
-                               WHERE name = ?
-                                 AND NOT id = ?`,
-                    [piece.name, piece.id],
-                    // @ts-ignore
-                    (_tr, { rows }) => rows._array.count > 0 ? resolve({
-                        valid: false,
-                        errors: 'Same name'
-                    }) : resolve({ valid: true }),
-                    (_tr, err) => {
-                        reject(err);
-                        return false;
-                    }
-                )
-            }));
-    };
+export const getPieceById = async (id: number): Promise<Piece | undefined> => {
+    const piece = await fetchPiece(id);
 
-    const getPieceById = async (id: number): Promise<Piece | undefined> => {
-        const piece = await fetchPiece(id);
+    if (piece === undefined) {
+        return undefined;
+    }
 
-        if (piece === undefined) {
-            return undefined;
-        }
+    const tags = await fetchTags(id);
 
-        const tags = await fetchTags(id);
+    return rowToPiece(piece, tags, []);
+};
 
-        return rowToPiece(piece, tags, []);
-    };
+export const fetchPiece = (id: number): Promise<PieceRow | undefined> => new Promise((resolve, reject) =>
+    db.transaction(tx => tx.executeSql(`SELECT *
+                                        FROM Pieces
+                                        WHERE id = ?`,
+        [id],
+        // @ts-ignore
+        (_tr, { rows }) => rows.length === 0 ? resolve(undefined) : resolve(rows._array[0]),
+        (_tr, err) => {
+            console.log('error getting piece by id');
+            reject(err);
+            return false;
+        })
+    ));
 
-    const fetchPiece = (id: number): Promise<PieceRow | undefined> => new Promise((resolve, reject) =>
-        db.transaction(tx => tx.executeSql(`SELECT *
-                                            FROM Pieces
-                                            WHERE id = ?`,
-            [id],
-            // @ts-ignore
-            (_tr, { rows }) => rows.length === 0 ? resolve(undefined) : resolve(rows._array[0]),
-            (_tr, err) => {
-                console.log('error getting piece by id');
-                reject(err);
-                return false;
-            })
-        ));
+export const fetchTags = (pieceId: number): Promise<string[]> => new Promise((resolve, reject) =>
+    db.transaction(tx => tx.executeSql(`SELECT tag
+                                        FROM Tags
+                                        WHERE pieceId = ?`,
+        [pieceId],
+        // @ts-ignore
+        (_tr, { rows }) => resolve(rows._array.map(item => item.tag)),
+        (_tr, err) => {
+            console.log('error getting tags by id');
+            reject(err);
+            return false;
+        })
+    ));
 
-    const fetchTags = (pieceId: number): Promise<string[]> => new Promise((resolve, reject) =>
-        db.transaction(tx => tx.executeSql(`SELECT tag
-                                            FROM Tags
-                                            WHERE pieceId = ?`,
-            [pieceId],
-            // @ts-ignore
-            (_tr, { rows }) => resolve(rows._array.map(item => item.tag)),
-            (_tr, err) => {
-                console.log('error getting tags by id');
-                reject(err);
-                return false;
-            })
-        ));
+export const updateNotifInterval = async (id: number, interval: number): Promise<void> => {
+    console.log('updating interval, ', id, interval);
+};
 
-    const updateNotifInterval = async (id: number, interval: number): Promise<void> => {
-        console.log('updating interval, ', id, interval);
-    };
+export const updateNotifId = async (pieceId: number, notifId: number | null): Promise<void> => {
+    console.log('updating notif id, ', pieceId, notifId);
+};
 
-    const updateNotifId = async (pieceId: number, notifId: number | null): Promise<void> => {
-        console.log('updating notif id, ', pieceId, notifId);
-    };
-
-    const updatePracticeDetails = async (pieceId: number, practiceTime: number): Promise<void> => {
-        console.log('update practice details', pieceId, practiceTime);
-    };
-
-    return {
-        getPiecesMeta,
-        addPieceToDb,
-        updatePieceInDb,
-        deletePieceFromDb,
-        getNotificationId,
-        toggleIsFavourite,
-        validatePiece,
-        getPieceById,
-        updateNotifInterval,
-        updateNotifId,
-        updatePracticeDetails,
-    };
+export const updatePracticeDetails = async (pieceId: number, practiceTime: number): Promise<void> => {
+    console.log('update practice details', pieceId, practiceTime);
 };

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle, TotalHeaderHeight } from "../../AppStyle";
-import pieceDb from "../../db/fix/Database";
+import { validatePiece } from "../../db/fix/Database";
 import { PIECE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkAddPiece, thunkEditPiece } from "../../store/thunks";
@@ -18,8 +18,6 @@ import { TagInput } from "../basic/inputs/TagInput";
 import { MyTextInput } from "../basic/inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceNotifications } from "./PieceNotifications";
-
-const { validatePiece } = pieceDb();
 
 class PieceFormComponent extends Component<FormProps<Piece, { piece: Piece }>, FormState<{ piece: Piece }>> {
     mode = this.props.route.params.mode === undefined ? ActionType.Create : this.props.route.params.mode;

@@ -146,5 +146,7 @@ export const setUpDb = async () => {
                 reject(err);
                 return false;
             });
+
+        _resolve(null);
     }));
 };

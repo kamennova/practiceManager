@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
-import pieceDb from "../../db/fix/Database";
+import { getPieceById } from "../../db/fix/Database";
 import { cancelPieceNotif, schedulePieceNotif, updatePieceNotifInterval } from "../../notifications";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";
@@ -19,8 +19,6 @@ import { PieceNotifications } from "./PieceNotifications";
 import { PieceTags } from "./PieceTags";
 
 type PieceScreenProps = ItemScreenProps<PieceBase>;
-
-const { getPieceById } = pieceDb();
 
 const PieceComponent = (props: PieceScreenProps) => {
     const pieceInit = { ...EmptyPiece, ...props.preview };

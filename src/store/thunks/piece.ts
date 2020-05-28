@@ -1,17 +1,16 @@
 import { Dispatch } from "redux";
-import pieceDb from "../../db/fix/Database";
+import {
+    addPieceToDb,
+    deletePieceFromDb,
+    getNotificationId,
+    getPiecesMeta,
+    toggleIsFavourite,
+    updatePieceInDb
+} from "../../db/fix/Database";
 import { cancelNotifIfSet, schedulePieceNotif } from "../../notifications";
 import { Piece } from "../../types/piece";
-import {
-    addPiece,
-    deletePiece,
-    editPiece,
-    setPiecesMeta,
-    togglePieceFav,
-} from "../actions";
+import { addPiece, deletePiece, editPiece, setPiecesMeta, togglePieceFav, } from "../actions";
 import { ThunkResult } from "./ThunkResult";
-
-const { getPiecesMeta, addPieceToDb, updatePieceInDb, deletePieceFromDb, getNotificationId, toggleIsFavourite } = pieceDb();
 
 export const thunkGetPiecesMeta: ThunkResult = () => async (dispatch: Dispatch) => {
     const pieces = await getPiecesMeta();

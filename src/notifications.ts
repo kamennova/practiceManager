@@ -1,12 +1,10 @@
 import { Notifications } from "expo";
-import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
-import pieceDb from "./db/fix/Database";
+import * as Permissions from 'expo-permissions';
+import { updateNotifId, updateNotifInterval } from "./db/fix/Database";
 import { Piece } from "./types/piece";
 import { dayToSeconds, getDaysFromSeconds } from "./utils/time";
 import { PieceCredits } from "./utils/title";
-
-const { updateNotifId, updateNotifInterval } = pieceDb();
 
 export const getNotifsPermission = async () => {
     if (Constants.isDevice) {
