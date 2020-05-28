@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { DrawerContentStyle, DrawerStyle } from "./AppStyle";
 import { CustomDrawerContent } from "./components/basic/CustomDrawer";
@@ -13,12 +13,19 @@ import { useTheme } from "./theme";
 const Drawer = createDrawerNavigator();
 
 const MainComponent = (props: { getPieces: () => void, getPlans: () => void, getSessions: () => void, }) => {
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-        loadDbData();
-    });
+        if (isLoading) {
+            loadDbData();
+        }
+
+    }, [isLoading]);
 
     const loadDbData = async () => {
-        await setUpDb().then(() => props.getPieces());
+        await setUpDb()
+            .then(() => props.getPieces())
+            .then(() => setIsLoading(false));
     };
 
     return (
