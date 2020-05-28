@@ -2,8 +2,7 @@ import { getRepository } from "typeorm";
 import { PlanActivity } from "../types/plan";
 import { Session } from "../types/Session";
 import { createActivity, getActivities } from "./activity";
-import { SessionEntity } from "./entity/session/Session";
-import { SessionActivityEntity } from "./entity/session/SessionActivity";
+import { SessionActivityEntity, SessionEntity } from "./entity/session";
 import { getPlanEntity } from "./plan";
 
 export const addSession = async (session: Session): Promise<void> => {

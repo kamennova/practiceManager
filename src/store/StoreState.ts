@@ -31,5 +31,5 @@ export type StateShape = {
 export const initialState: StateShape = {
     pieces: { items: [], currentItem: EmptyPiece },
     plans: { items: [], currentItem: EmptyPlan },
-    sessions: { current: { isOn: false, history: [] }, items: [] },
+    sessions: { items: [], current: { isOn: false, history: [] } },
 };
