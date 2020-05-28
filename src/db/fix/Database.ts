@@ -1,26 +1,7 @@
 import { Piece, PieceBase, PieceStatus } from "../../types/piece";
 import { CheckResult } from "../validation";
 import { db } from "./Db";
-
-import { dbHelpers } from './dbCommon';
-
-const AuthorItem = 'author';
-const TagItem = 'tag';
-
-type PieceRow = {
-    id: number,
-    name: string,
-    isFavourite: number,
-    lastPracticedOn: number | null,
-    imageUri: string | null,
-    timeSpent: number,
-    authors: string,
-    addedOn: number,
-    notifsOn: boolean,
-    notifsInterval: number,
-    notifId: number | null,
-    tags: string | null,
-};
+import { PieceRow } from "./RowTypes";
 
 const rowToPieceBase = (row: PieceRow): PieceBase => ({
     id: row.id,
@@ -30,7 +11,7 @@ const rowToPieceBase = (row: PieceRow): PieceBase => ({
     timeSpent: row.timeSpent,
     lastPracticedOn: row.lastPracticedOn !== null ? new Date(row.lastPracticedOn) : undefined,
     authors: row.authors !== '' ? row.authors.split(', ') : [],
-    tags: row.tags !== null ? [row.tags] : [],
+    tags: [],
     addedOn: new Date(row.addedOn),
     status: row.timeSpent > 0 ? PieceStatus.InWork : PieceStatus.NotStarted,
 });
@@ -45,8 +26,6 @@ const rowToPiece = (row: PieceRow): Piece => ({
 });
 
 export default () => {
-    const { insertOneToManyItem } = dbHelpers(db);
-
     console.log('db funcs');
 
     const getPiecesMeta = async (): Promise<PieceBase[]> => {
@@ -198,14 +177,6 @@ export default () => {
                     }
                 )
             }));
-    };
-
-    const insertPieceAuthor = async (pieceId: number, author: string): Promise<void> => {
-        await insertOneToManyItem(pieceId, author, AuthorItem);
-    };
-
-    const insertPieceTag = async (pieceId: number, tag: string): Promise<void> => {
-        await insertOneToManyItem(pieceId, tag, TagItem,);
     };
 
     const validatePiece = async (piece: Piece): Promise<CheckResult> => {
