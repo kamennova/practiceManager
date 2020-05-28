@@ -1,10 +1,12 @@
 import { Notifications } from "expo";
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
-import { updateNotificationId, updateNotificationInterval } from "./db/piece";
-import { Piece } from "./types/Piece";
+import pieceDb from "./db/fix/Database";
+import { Piece } from "./types/piece";
 import { dayToSeconds, getDaysFromSeconds } from "./utils/time";
 import { PieceCredits } from "./utils/title";
+
+const { updateNotifId, updateNotifInterval } = pieceDb();
 
 export const getNotifsPermission = async () => {
     if (Constants.isDevice) {
@@ -52,14 +54,14 @@ export const schedulePieceNotif = async (piece: Piece): Promise<number> => {
 
     const notifId = Number(await Notifications.scheduleLocalNotificationAsync(localNotification, schedulingOptions));
 
-    await updateNotificationId(piece.id, notifId);
+    await updateNotifId(piece.id, notifId);
 
     return Promise.resolve(notifId);
 };
 
 export const updatePieceNotifInterval = async (piece: Piece) =>
     await Promise.all([
-        updateNotificationInterval(piece.id, piece.notifsInterval),
+        updateNotifInterval(piece.id, piece.notifsInterval),
         rescheduleNotifIfSet(piece)
     ]);
 
@@ -74,7 +76,7 @@ const rescheduleNotifIfSet = async (piece: Piece) => {
 
 export const cancelPieceNotif = async (pieceId: number, notifId: number) =>
     await Promise.all([
-        updateNotificationId(pieceId, null),
+        updateNotifId(pieceId, null),
         cancelNotifById(notifId),
     ]);
 

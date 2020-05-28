@@ -1,6 +1,6 @@
-import * as SQLite from 'expo-sqlite';
 import { Piece, PieceBase, PieceStatus } from "../../types/piece";
 import { CheckResult } from "../validation";
+import { db } from "./Db";
 
 import { createOneToManyTable, dbHelpers } from './dbCommon';
 
@@ -10,25 +10,27 @@ const TagItem = 'tag';
 type PieceRow = {
     id: number,
     name: string,
-    isFavourite: boolean,
-    lastPracticedOn: number,
+    isFavourite: number,
+    lastPracticedOn: number | null,
     imageUri: string | null,
     timeSpent: number,
+    authors: string,
     addedOn: number,
     notifsOn: boolean,
     notifsInterval: number,
     notifId: number | null,
+    tags: string | null,
 };
 
 const rowToPieceBase = (row: PieceRow): PieceBase => ({
     id: row.id,
     imageUri: row.imageUri !== null ? row.imageUri : undefined,
-    isFavourite: row.isFavourite,
+    isFavourite: row.isFavourite !== 0,
     name: row.name,
     timeSpent: row.timeSpent,
-    lastPracticedOn: new Date(row.lastPracticedOn),
-    authors: [],
-    tags: [],
+    lastPracticedOn: row.lastPracticedOn !== null ? new Date(row.lastPracticedOn) : undefined,
+    authors: row.authors !== '' ? row.authors.split(', ') : [],
+    tags: row.tags !== null ? [row.tags] : [],
     addedOn: new Date(row.addedOn),
     status: row.timeSpent > 0 ? PieceStatus.InWork : PieceStatus.NotStarted,
 });
@@ -43,18 +45,17 @@ const rowToPiece = (row: PieceRow): Piece => ({
 });
 
 export default () => {
-    const db = SQLite.openDatabase('PracticeManager');
     const { insertOneToManyItem } = dbHelpers(db);
 
     db.transaction(tx => {
         tx.executeSql(
-            // DROP Table Pieces;
+            // 'DROP Table Pieces;' +
             'CREATE TABLE IF NOT EXISTS Pieces (' +
             'id integer primary key not null, ' +
             'name varchar(225) not null, ' +
             'addedOn timestamp not null, ' +
             'timeSpent smallint not null default 0, ' +
-            'isFavourite boolean not null default false, ' +
+            'isFavourite integer not null default 0, ' +
             'imageUri varchar(225), ' +
             'lastPracticedOn timestamp, ' +
             'notifsOn boolean not null default false,' +
@@ -78,7 +79,7 @@ export default () => {
     const getPiecesMeta = async (): Promise<PieceBase[]> => {
         return new Promise((resolve, reject) =>
             db.transaction(tx =>
-                tx.executeSql('SELECT *, (SELECT tagName from Tag LEFT JOIN PieceTags ON Tag.id = PieceTags.tagId WHERE PieceTags.pieceId = Pieces.id) as tags FROM Pieces',
+                tx.executeSql('SELECT *, (SELECT tag FROM Tags WHERE pieceId = Pieces.id) as tags FROM Pieces',
                     [],
                     (_, { rows }) => resolve(
                         // @ts-ignore
@@ -110,7 +111,7 @@ export default () => {
                                WHERE id = ?`,
                     [
                         piece.name,
-                        piece.imageUri,
+                        piece.imageUri !== undefined ? piece.imageUri : null,
                         piece.id,
                     ],
                     undefined,
@@ -141,8 +142,8 @@ export default () => {
                         Date.now(),
                         piece.notifsOn,
                         piece.notifsInterval,
-                        piece.imageUri !== undefined ? null : piece.imageUri,
-                        piece.isFavourite,
+                        piece.imageUri !== undefined ? piece.imageUri : null,
+                        piece.isFavourite ? 1 : 0,
                         0,
                         piece.authors.length > 0 ? piece.authors.join(', ') : '',
                     ],
@@ -167,7 +168,7 @@ export default () => {
                                    values (?, ?)`,
                         [tag, pieceId],
                         (_tr) => {
-                            console.log('tag inserted insert');
+                            console.log('tag inserted,', tag);
                         },
                         (_tr, err) => {
                             console.log('error inserting tag');
@@ -196,10 +197,10 @@ export default () => {
         await new Promise((_, reject) =>
             db.transaction(tx => {
                 tx.executeSql(`UPDATE Pieces
-                               SET isFavourite = NOT isFavourite
+                               SET isFavourite = CASE isFavourite WHEN 0 THEN 1 ELSE 0 END
                                WHERE id = ?`,
                     [id],
-                    undefined,
+                    () => console.log('toggle fav'),
                     (_tr, err) => {
                         reject(err);
                         return false;
@@ -273,6 +274,44 @@ export default () => {
             }));
     };
 
+    const getPieceById = async (id: number): Promise<Piece | undefined> => {
+        return await new Promise((resolve, reject) =>
+            db.transaction(tx => {
+                tx.executeSql(`SELECT *, (SELECT tag FROM Tags WHERE pieceId = Pieces.id) as tags
+                               FROM Pieces
+                               WHERE id = ?`,
+                    [id],
+                    // @ts-ignore
+                    (_tr, { rows }) => {
+                        console.log(rows);
+
+                        if (rows.length === 0) {
+                            return resolve(undefined);
+                        }
+
+                        return resolve(rowToPiece(rows._array[0]));
+                    },
+                    (_tr, err) => {
+                        console.log('error getting piece by id');
+                        reject(err);
+                        return false;
+                    }
+                )
+            }));
+    };
+
+    const updateNotifInterval = async (id: number, interval: number): Promise<void> => {
+        console.log('updating interval, ', id, interval);
+    };
+
+    const updateNotifId = async (pieceId: number, notifId: number | null): Promise<void> => {
+        console.log('updating notif id, ', pieceId, notifId);
+    };
+
+    const updatePracticeDetails = async (pieceId: number, practiceTime: number): Promise<void> => {
+        console.log('update practice details', pieceId, practiceTime);
+    };
+
     return {
         getPiecesMeta,
         addPieceToDb,
@@ -280,6 +319,10 @@ export default () => {
         deletePieceFromDb,
         getNotificationId,
         toggleIsFavourite,
-        validatePiece
+        validatePiece,
+        getPieceById,
+        updateNotifInterval,
+        updateNotifId,
+        updatePracticeDetails,
     };
 };
