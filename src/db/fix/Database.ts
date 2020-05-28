@@ -10,9 +10,9 @@ const TagItem = 'tag';
 const rowToPiece = (row: any): PieceBase => ({
     id: row.id,
     isFavourite: row.isFavourite,
-    name: row.pieceName,
+    name: row.name,
     timeSpent: 0,
-    authors: row.authors.split(','),
+    authors: [],
     lastPracticedOn: new Date(row.lastPracticedOnDate),
     tags: [],
     addedOn: row.addedOn,
