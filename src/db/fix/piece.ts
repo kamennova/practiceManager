@@ -1,6 +1,7 @@
 import { Piece, PieceBase, PieceStatus } from "../../types/piece";
 import { CheckResult } from "../validation";
 import { db } from "./Db";
+import { executeSql } from "./common";
 import { PieceRow } from "./RowTypes";
 
 const rowToPieceBase = (row: PieceRow, tags?: string[]): PieceBase => ({
@@ -55,11 +56,7 @@ export const addPieceToDb = async (piece: Piece): Promise<number> => {
 export const updatePieceInDb = async (piece: Piece): Promise<void> => {
     await new Promise((_, reject) =>
         db.transaction(tx => {
-            tx.executeSql(`UPDATE Pieces
-                           SET name     = ?,
-                               imageUri = ?,
-                               authors = ?
-                           WHERE id = ?`,
+            tx.executeSql('UPDATE Pieces SET name = ?, imageUri = ?, authors  = ? WHERE id = ?',
                 [
                     piece.name,
                     piece.imageUri !== undefined ? piece.imageUri : null,
@@ -116,8 +113,7 @@ export const insertTags = async (tags: string[], pieceId: number) => {
     return await Promise.all([
         tags.map(tag => new Promise((_, reject) =>
             db.transaction(tx => {
-                tx.executeSql(`INSERT INTO Tags (tag, pieceId)
-                               values (?, ?)`,
+                tx.executeSql('INSERT INTO Tags (tag, pieceId) VALUES (?, ?)',
                     [tag, pieceId],
                     (_tr) => {
                         console.log('tag inserted,', tag);
@@ -132,76 +128,31 @@ export const insertTags = async (tags: string[], pieceId: number) => {
 };
 
 export const toggleIsFavourite = async (id: number): Promise<void> => {
-    await new Promise((_, reject) =>
-        db.transaction(tx => {
-            tx.executeSql(`UPDATE Pieces
-                           SET isFavourite = CASE isFavourite WHEN 0 THEN 1 ELSE 0 END
-                           WHERE id = ?`,
-                [id],
-                () => console.log('toggle fav'),
-                (_tr, err) => {
-                    reject(err);
-                    return false;
-                }
-            )
-        }));
+    await executeSql('UPDATE Pieces SET isFavourite = CASE isFavourite WHEN 0 THEN 1 ELSE 0 END WHERE id = ?',
+        [id]);
 };
 
 export const deletePieceFromDb = async (id: number): Promise<void> => {
-    await new Promise((_, reject) => db.transaction(tx =>
-        tx.executeSql('DELETE FROM Pieces WHERE id = ?',
-            [id],
-            () => {
-                console.log('deleted successfully');
-            },
-            (_tr, err) => {
-                reject(err);
-                return false;
-            }
-        )));
+    await executeSql('DELETE FROM Pieces WHERE id = ?', [id]);
 };
 
-export const getNotificationId = async (id: number): Promise<number> => {
-    return new Promise((resolve, reject) =>
-        db.transaction(tx => {
-            tx.executeSql(`SELECT notifId
-                           FROM Pieces
-                           WHERE id = ?`,
-                [id],
-                (_tr, { insertId }) => {
-                    return resolve(insertId);
-                },
-                (_tr, err) => {
-                    reject(err);
-                    return false;
-                }
-            )
-        }));
-};
+export const getNotificationId = async (id: number): Promise<number | null> =>
+    await executeSql('SELECT notifId FROM Pieces WHERE id = ?', [id])
+    // @ts-ignore
+        .then((res) => res.rows._array[0].notifId);
 
 export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
     if (piece.name.length === 0) {
         return Promise.resolve({ valid: false, errors: 'You forgot to enter piece title ✍' });
     }
 
-    return new Promise((resolve, reject) =>
-        db.transaction(tx => {
-            tx.executeSql(`SELECT COUNT(*) as count
-                           FROM Pieces
-                           WHERE name = ?
-                             AND NOT id = ?`,
-                [piece.name, piece.id],
-                // @ts-ignore
-                (_tr, { rows }) => rows._array.count > 0 ? resolve({
-                    valid: false,
-                    errors: 'Same name'
-                }) : resolve({ valid: true }),
-                (_tr, err) => {
-                    reject(err);
-                    return false;
-                }
-            )
-        }));
+    return await executeSql('SELECT COUNT(*) as count FROM Pieces WHERE name = ? AND NOT id = ?',
+        [piece.name, piece.id])
+    // @ts-ignore
+        .then((res) => res.rows._array[0].count > 0 ? ({
+            valid: false,
+            errors: 'Piece with the same name already exists'
+        }) : ({ valid: true }));
 };
 
 export const getPieceById = async (id: number): Promise<Piece | undefined> => {
@@ -217,9 +168,7 @@ export const getPieceById = async (id: number): Promise<Piece | undefined> => {
 };
 
 export const fetchPiece = (id: number): Promise<PieceRow | undefined> => new Promise((resolve, reject) =>
-    db.transaction(tx => tx.executeSql(`SELECT *
-                                        FROM Pieces
-                                        WHERE id = ?`,
+    db.transaction(tx => tx.executeSql('SELECT * FROM Pieces WHERE id = ?',
         [id],
         // @ts-ignore
         (_tr, { rows }) => rows.length === 0 ? resolve(undefined) : resolve(rows._array[0]),
@@ -230,19 +179,11 @@ export const fetchPiece = (id: number): Promise<PieceRow | undefined> => new Pro
         })
     ));
 
-export const fetchTags = (pieceId: number): Promise<string[]> => new Promise((resolve, reject) =>
-    db.transaction(tx => tx.executeSql(`SELECT tag
-                                        FROM Tags
-                                        WHERE pieceId = ?`,
-        [pieceId],
-        // @ts-ignore
-        (_tr, { rows }) => resolve(rows._array.map(item => item.tag)),
-        (_tr, err) => {
-            console.log('error getting tags by id');
-            reject(err);
-            return false;
-        })
-    ));
+export const fetchTags = async (pieceId: number): Promise<string[]> =>
+    await executeSql('SELECT tag FROM Tags WHERE pieceId = ?',
+        [pieceId])
+    // @ts-ignore
+        .then((res) => res.rows._array.map(item => item.tag));
 
 export const updateNotifInterval = async (id: number, interval: number): Promise<void> => {
     console.log('updating interval, ', id, interval);
@@ -253,5 +194,7 @@ export const updateNotifId = async (pieceId: number, notifId: number | null): Pr
 };
 
 export const updatePracticeDetails = async (pieceId: number, practiceTime: number): Promise<void> => {
-    console.log('update practice details', pieceId, practiceTime);
+    await executeSql('UPDATE Pieces SET timeSpent = timeSpent + ? WHERE id = ?',
+        [practiceTime, pieceId],
+    );
 };

@@ -1,10 +1,43 @@
 import { SQLTransaction, WebSQLDatabase } from "expo-sqlite";
 import { capitalize } from "../../utils/strings";
+import { db } from "./Db";
 
 export type ItemResult = {
     id: number,
     name: string,
 }
+
+export const executeSql = async (query: string, params: any[] = []): Promise<SQLResultSet> =>
+    new Promise((resolve, reject) =>
+        db.transaction(tx =>
+            tx.executeSql(
+                query,
+                params,
+                (_, res) => {
+                    console.log('executed');
+                    return resolve(res);
+                    },
+                (_, err) => {
+                    console.log(err);
+                    reject(err);
+                    return false;
+                }))
+    );
+
+export const parallelSql = async (sql: Array<{ query: string, params: any[] }>): Promise<SQLResultSet> =>
+    new Promise((resolve, reject) =>
+        db.transaction(tx => {
+            sql.map(sqlItem => tx.executeSql(
+                sqlItem.query,
+                sqlItem.params,
+                (_, res) => resolve(res),
+                (_, err) => {
+                    console.log(err);
+                    reject(err);
+                    return false;
+                }));
+        })
+    );
 
 const getItemTableName = (itemName: string): string => capitalize(itemName);
 
