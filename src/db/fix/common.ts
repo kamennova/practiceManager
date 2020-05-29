@@ -14,9 +14,8 @@ export const executeSql = async (query: string, params: any[] = []): Promise<SQL
                 query,
                 params,
                 (_, res) => {
-                    console.log('executed');
                     return resolve(res);
-                    },
+                },
                 (_, err) => {
                     console.log(err);
                     reject(err);
@@ -38,6 +37,17 @@ export const parallelSql = async (sql: Array<{ query: string, params: any[] }>):
                 }));
         })
     );
+
+export const executeTx = (tx: SQLTransaction, query: string, params: any[] = []): Promise<SQLResultSet> =>
+    new Promise((resolve, reject) => {
+        tx.executeSql(query, params,
+            (_, res) => resolve(res),
+            (_, err) => {
+                console.log('err', err);
+                reject(err);
+                return false;
+            });
+    });
 
 const getItemTableName = (itemName: string): string => capitalize(itemName);
 

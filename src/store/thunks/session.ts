@@ -1,20 +1,24 @@
 import { Dispatch } from "redux";
-import { updatePiecePracticeDetails } from "../../db/piece";
+import { updatePracticeDetails } from "../../db/fix/piece";
+import { addSessionToDb, getSessions } from "../../db/fix/session";
 import { ActivityType } from "../../types/Activity";
 import { PlanActivity } from "../../types/plan";
 import { Session } from "../../types/Session";
 import { getActivitiesWithDuration } from "../../utils/activity";
 import { pieceGroupBy } from "../../utils/array";
-import { endSession, updatePiecesPractice } from "../actions";
+import { endSession, setSessions, updatePiecesPractice } from "../actions";
 import { SessionState, StateShape } from "../StoreState";
 import { ThunkResult } from "./ThunkResult";
+
+export const thunkGetSessions: ThunkResult = () => async (dispatch: Dispatch) =>
+    await getSessions().then(res => dispatch(setSessions([])));
 
 export const thunkEndSession: ThunkResult = (isTimeout: boolean = false) => async (dispatch: Dispatch, getState: () => StateShape) => {
     const state = getState();
     const session = getSessionFromState({ ...state.sessions.current, isTimeout, finishedOn: Date.now() });
 
     const piecesPractice = getPiecesPractice(session);
-    await updatePiecesPracticeInDb(piecesPractice);
+    await Promise.all([updatePiecesPracticeInDb(piecesPractice), addSessionToDb(session)]);
 
     dispatch(updatePiecesPractice(piecesPractice));
 
@@ -33,7 +37,7 @@ const getSessionFromState = (state: SessionState): Session => {
 const updatePiecesPracticeInDb = async (practice: { [key: number]: number }) =>
     await Promise.all(Object.keys(practice)
         .map(id => Number(id))
-        .map((id) => updatePiecePracticeDetails(id, practice[id]))
+        .map((id) => updatePracticeDetails(id, practice[id]))
     );
 
 const getPiecesPractice = (session: Session): { [key: number]: number } => {
