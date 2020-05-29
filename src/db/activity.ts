@@ -1,108 +1,43 @@
-import { getRepository } from "typeorm";
-import { ActivityType, Exercise, PieceDetails, TechniqueDetails, Tonality } from "../types/Activity";
+import { ActivityType, Exercise, Tonality } from "../types/Activity";
 import { PlanActivity } from "../types/plan";
-import { ActivityEntity } from "./entity/activity/Activity";
-import { IActivity } from "./entity/activity/IActivity";
-import { PieceActivityDetailsEntity } from "./entity/activity/PieceActivity";
-import { TechniqueActivityDetailsEntity } from "./entity/activity/TechniqueActivity";
+import { executeSql } from "./common";
+import { ActivityRow } from "./RowTypes";
 
-export const createActivity = async (activity: PlanActivity, order: number): Promise<number> => {
-    const newAct = new ActivityEntity();
-    newAct.duration = activity.duration;
-    newAct.order = order;
-    newAct.type = activity.type;
+export const insertActivity = (activity: PlanActivity,
+                               order: number): Promise<SQLResultSet> =>
+    executeSql('INSERT INTO Activities (type, duration, activityOrder, exercise, tonality, pieceId) ' +
+        'VALUES (?, ?, ?, ?, ?, ?)',
+        [
+            activity.type,
+            activity.duration,
+            order,
+            activityExercise(activity),
+            activityTonality(activity),
+            activityPieceId(activity)
+        ]);
 
-    if (activity.type === ActivityType.Technique) {
-        newAct.detailsId = await createTechniqueActivityDetails(activity.exercise, activity.tonality);
-    } else if (activity.type === ActivityType.Piece || activity.type === ActivityType.SightReading) {
-        newAct.detailsId = await createPieceActivityDetails(activity.pieceId);
-    } else {
-        newAct.detailsId = null;
-    }
-
-    const repo = getRepository(ActivityEntity);
-    await repo.save(newAct);
-
-    return newAct.id;
-};
-
-export const getActivities = async (activities: IActivity[]) =>
-    await Promise.all(activities.map(item => getActivity(item.activityId)));
-
-export const getActivity = async (id: number) => {
-    const repo = getRepository(ActivityEntity);
-
-    const activity = await repo.findOne(id);
-
-    if (activity === undefined) {
-        throw new Error('Not found');
-    }
-
-    return await activityFromEntity(activity);
-};
-
-const createPieceActivityDetails = async (pieceId?: number): Promise<number> => {
-    const pieceAct = new PieceActivityDetailsEntity();
-    pieceAct.pieceId = pieceId !== undefined ? pieceId : null;
-
-    const repo = getRepository(PieceActivityDetailsEntity);
-    await repo.save(pieceAct);
-
-    return pieceAct.id;
-};
-
-const createTechniqueActivityDetails = async (exercise?: Exercise, tonality?: Tonality): Promise<number> => {
-    const act = new TechniqueActivityDetailsEntity();
-    act.exercise = exercise !== undefined ? exercise.toString() : null;
-    act.tonality = tonality !== undefined ? tonality.toString() : null;
-
-    const repo = getRepository(TechniqueActivityDetailsEntity);
-    await repo.save(act);
-
-    return act.id;
-};
-
-const activityFromEntity = async (ent: ActivityEntity): Promise<PlanActivity> => {
-    const type = ent.type as ActivityType;
-
+export const activityFromRow = (row: ActivityRow): PlanActivity => {
+    const type = row.type as ActivityType;
     switch (type) {
         case ActivityType.Break:
-            return { type, duration: ent.duration };
-        case ActivityType.SightReading :
-        case ActivityType.Piece:
-            return {
-                type,
-                duration: ent.duration, ...(ent.detailsId !== null ? await getPieceDetails(ent.detailsId) : {})
-            };
+            return { duration: row.duration, type };
         case ActivityType.Technique:
             return {
+                duration: row.duration,
                 type,
-                duration: ent.duration, ...(ent.detailsId !== null ? await getTechniqueDetails(ent.detailsId) : {})
+                exercise: row.exercise !== null ? row.exercise as Exercise : undefined,
+                tonality: row.tonality !== null ? row.tonality as Tonality : undefined,
             };
+        case ActivityType.Piece:
+        case ActivityType.SightReading:
+            return { duration: row.duration, type, pieceId: row.pieceId !== null ? row.pieceId : undefined };
+
     }
 };
 
-const getPieceDetails = async (id: number): Promise<PieceDetails> => {
-    const repo = getRepository(PieceActivityDetailsEntity);
-    const details = await repo.findOne(id);
-
-    if (details === undefined) {
-        throw new Error('Not found');
-    }
-
-    return { pieceId: details.pieceId !== null ? details.pieceId : undefined };
-};
-
-const getTechniqueDetails = async (id: number): Promise<TechniqueDetails> => {
-    const repo = getRepository(TechniqueActivityDetailsEntity);
-    const details = await repo.findOne(id);
-
-    if (details === undefined) {
-        throw new Error('Not found');
-    }
-
-    return {
-        tonality: details.tonality !== null ? Tonality[details.tonality] as Tonality : undefined,
-        exercise: details.exercise !== null ? details.exercise as Exercise : undefined,
-    };
-};
+const activityExercise = (activity: PlanActivity) => activity.type !== ActivityType.Technique ?
+    undefined : activity.exercise;
+const activityTonality = (activity: PlanActivity) => activity.type !== ActivityType.Technique ?
+    undefined : activity.tonality;
+const activityPieceId = (activity: PlanActivity) =>
+    (activity.type !== ActivityType.Piece && activity.type !== ActivityType.SightReading) ? undefined : activity.pieceId;

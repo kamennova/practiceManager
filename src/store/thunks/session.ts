@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
-import { updatePracticeDetails } from "../../db/fix/piece";
-import { addSessionToDb, getSessions } from "../../db/fix/session";
+import { updatePracticeDetails } from "../../db/piece";
+import { addSessionToDb, getSessions } from "../../db/session";
 import { ActivityType } from "../../types/Activity";
 import { PlanActivity } from "../../types/plan";
 import { Session } from "../../types/Session";

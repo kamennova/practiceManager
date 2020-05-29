@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 import { ActivityBlockHeight, AppPaddingStyle, AppSidePadding, PlanFormStyle as getStyles } from "../../AppStyle";
-import { validatePlan } from "../../db/fix/plan";
+import { validatePlan } from "../../db/plan";
 import { SESSION_PLAN } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkAddPlan, thunkEditPlan } from "../../store/thunks/plan";

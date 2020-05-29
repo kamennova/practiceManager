@@ -1,7 +1,7 @@
-import { Note } from "../../types/Note";
-import { Piece, PieceBase, PieceStatus } from "../../types/piece";
-import { PlanActivity } from "../../types/plan";
-import { Session } from "../../types/Session";
+import { Note } from "../types/Note";
+import { Piece, PieceBase, PieceStatus } from "../types/piece";
+import { PlanActivity } from "../types/plan";
+import { Session } from "../types/Session";
 import { NoteRow, PieceRow, SessionRow } from "./RowTypes";
 
 export const rowToPieceBase = (row: PieceRow, tags?: string[]): PieceBase => ({

@@ -1,5 +1,5 @@
-import { PlanActivity } from "../../types/plan";
-import { Session } from "../../types/Session";
+import { PlanActivity } from "../types/plan";
+import { Session } from "../types/Session";
 import { activityFromRow, insertActivity } from "./activity";
 import { executeSql } from "./common";
 import { rowToSession } from "./RowTransform";

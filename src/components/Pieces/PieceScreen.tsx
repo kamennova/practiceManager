@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
-import { getPieceById } from "../../db/fix/piece";
+import { getPieceById } from "../../db/piece";
 import { cancelPieceNotif, schedulePieceNotif, updatePieceNotifInterval } from "../../notifications";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";

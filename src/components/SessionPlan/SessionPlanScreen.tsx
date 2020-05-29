@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle, TotalHeaderHeight } from "../../AppStyle";
-import { getPlanById } from "../../db/fix/plan";
+import { getPlanById } from "../../db/plan";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePlan, thunkTogglePlanFav } from "../../store/thunks/plan";
 import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";

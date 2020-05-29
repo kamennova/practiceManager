@@ -6,7 +6,7 @@ import {
     getPiecesMeta,
     toggleIsFavourite,
     updatePieceInDb
-} from "../../db/fix/piece";
+} from "../../db/piece";
 import { cancelNotifIfSet, schedulePieceNotif } from "../../notifications";
 import { Piece } from "../../types/piece";
 import { addPiece, deletePiece, editPiece, setPiecesMeta, togglePieceFav, } from "../actions";

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { DrawerContentStyle, DrawerStyle } from "./AppStyle";
 import { CustomDrawerContent } from "./components/basic/CustomDrawer";
-import { setUpDb } from "./db/fix/Setup";
+import { setUpDb } from "./db/Setup";
 import { Root } from "./StackNavigator";
 import { thunkGetPiecesMeta } from "./store/thunks";
 import { thunkGetPlans } from "./store/thunks/plan";

@@ -1,7 +1,7 @@
 import { Notifications } from "expo";
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
-import { updateNotifId, updateNotifInterval } from "./db/fix/piece";
+import { updateNotifId, updateNotifInterval } from "./db/piece";
 import { Piece } from "./types/piece";
 import { dayToSeconds, getDaysFromSeconds } from "./utils/time";
 import { PieceCredits } from "./utils/title";
