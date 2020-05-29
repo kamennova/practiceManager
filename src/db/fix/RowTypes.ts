@@ -10,7 +10,7 @@ export type PieceRow = ItemRow & {
     imageUri: string | null,
     timeSpent: number,
     authors: string,
-    notifsOn: boolean,
+    notifsOn: number,
     notifsInterval: number,
     notifId: number | null,
 };

@@ -20,7 +20,7 @@ export const setUpDb = async () => {
             'isFavourite integer not null default 0, ' +
             'imageUri varchar(225), ' +
             'lastPracticedOn timestamp, ' +
-            'notifsOn boolean not null default false,' +
+            'notifsOn integer not null default 0,' +
             'notifsInterval smallint default 3, ' +
             'notifId smallint, ' +
             'authors varchar(225)' +
