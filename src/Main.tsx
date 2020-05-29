@@ -27,6 +27,7 @@ const MainComponent = (props: { getPieces: () => void, getPlans: () => void, get
         await setUpDb()
             .then(() => props.getPieces())
             .then(() => props.getPlans())
+            .then(() => props.getSessions())
             .then(() => setIsLoading(false));
     };
 

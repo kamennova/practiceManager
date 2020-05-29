@@ -1,6 +1,8 @@
 import { Note } from "../../types/Note";
 import { Piece, PieceBase, PieceStatus } from "../../types/piece";
-import { NoteRow, PieceRow } from "./RowTypes";
+import { PlanActivity } from "../../types/plan";
+import { Session } from "../../types/Session";
+import { NoteRow, PieceRow, SessionRow } from "./RowTypes";
 
 export const rowToPieceBase = (row: PieceRow, tags?: string[]): PieceBase => ({
     id: row.id,
@@ -27,4 +29,11 @@ export const rowToPiece = (row: PieceRow, tags: string[], notes: Note[]): Piece 
 export const rowToNote = (row: NoteRow): Note => ({
     content: row.content,
     addedOn: new Date(row.addedOn),
+});
+
+export const rowToSession = (row: SessionRow, history: PlanActivity[]): Session => ({
+    id: row.id,
+    planId: row.planId !== null ? row.planId : undefined,
+    startedOn: new Date(row.startedOn),
+    history,
 });

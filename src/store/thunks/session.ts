@@ -11,7 +11,7 @@ import { SessionState, StateShape } from "../StoreState";
 import { ThunkResult } from "./ThunkResult";
 
 export const thunkGetSessions: ThunkResult = () => async (dispatch: Dispatch) =>
-    await getSessions().then(res => dispatch(setSessions([])));
+    await getSessions().then(res => dispatch(setSessions(res)));
 
 export const thunkEndSession: ThunkResult = (isTimeout: boolean = false) => async (dispatch: Dispatch, getState: () => StateShape) => {
     const state = getState();

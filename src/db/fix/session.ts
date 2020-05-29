@@ -1,40 +1,47 @@
 import { PlanActivity } from "../../types/plan";
 import { Session } from "../../types/Session";
 import { activityFromRow, insertActivity } from "./activity";
-import { executeTx } from "./common";
-import { db } from "./Db";
-import { SQLTransaction } from "expo-sqlite";
-import { SessionRow } from "./RowTypes";
-
-const sessionFromRow = (row: SessionRow, history: PlanActivity[]): Session => ({
-    id: row.id,
-    planId: row.planId !== null ? row.planId : undefined,
-    startedOn: new Date(row.startedOn),
-    history,
-});
+import { executeSql } from "./common";
+import { rowToSession } from "./RowTransform";
 
 export const addSessionToDb = async (session: Session): Promise<void> => {
-    console.log('inserting session');
-    await new Promise((resolve) =>
-        db.transaction(tx => {
-            insertSession(tx, session)
-                .then(({ insertId }) => insertHistory(tx, session.history, insertId))
-                .then(() => resolve(undefined));
-        }));
+    await insertSession(session)
+        .then((sessionId) => insertHistory(session.history, sessionId));
 };
 
-const insertSession = (tx: SQLTransaction, session: Session): Promise<SQLResultSet> => executeTx(tx,
-    'INSERT INTO Sessions (planId, startedOn) VALUES (?, ?)',
-    [
-        session.planId !== undefined ? session.planId : null,
-        session.startedOn.getSeconds(),
-    ]);
+const insertSession = async (session: Session): Promise<number> =>
+    await executeSql('INSERT INTO Sessions (planId, startedOn) VALUES (?, ?)',
+        [
+            session.planId !== undefined ? session.planId : null,
+            session.startedOn.getSeconds(),
+        ]).then(({ insertId }) => insertId);
 
-const insertHistory = (tx: SQLTransaction, history: PlanActivity[], sessionId: number) => {
-    history.forEach((act, i) => insertActivity(tx, act, i)
-        .then((activityRes) => insertSessionActivity(tx, activityRes.insertId, sessionId))
-    );
+const insertHistory = async (history: PlanActivity[], sessionId: number) =>
+    await Promise.all([
+        history.map((act, i) => insertActivity(act, i)
+            .then(({ insertId }) => insertSessionActivity(insertId, sessionId))
+        )]);
+
+const insertSessionActivity = (actId: number, sessionId: number) =>
+    executeSql('INSERT INTO SessionActivities (activityId, sessionId) VALUES (?, ?)',
+        [actId, sessionId]);
+
+export const getSessions = async (): Promise<Session[]> => {
+    const sessions: Session[] = await executeSql('SELECT * FROM Sessions')
+        // @ts-ignore
+        .then(({ rows }) => rows._array.map(rowToSession));
+
+    return await Promise.all(
+        sessions.map(
+            session => fetchSessionHistory(session.id).then(history => ({ ...session, history }))
+        ));
 };
 
-const insertSessionActivity = (tx: SQLTransaction, actId: number, sessionId: number) =>
-    executeTx(tx, 'INSERT INTO SessionActivities (activityId, sessionId) VALUES (?, ?)', [actId, sessionId]);
+const fetchSessionHistory = (sessionId: number): Promise<PlanActivity[]> => executeSql(
+        `SELECT Activities.*
+         FROM SessionActivities
+                LEFT JOIN Activities ON SessionActivities.activityId = Activities.id
+         WHERE SessionActivities.sessionId = ?`,
+    [sessionId])
+// @ts-ignore
+    .then(({ rows }) => rows._array.map(activityFromRow));

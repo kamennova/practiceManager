@@ -2,7 +2,6 @@ import { Note } from "../../types/Note";
 import { Piece, PieceBase } from "../../types/piece";
 import { CheckResult } from "../validation";
 import { executeSql } from "./common";
-import { db } from "./Db";
 import { rowToNote, rowToPiece } from "./RowTransform";
 import { PieceRow } from "./RowTypes";
 
@@ -110,17 +109,10 @@ export const getPieceById = async (id: number): Promise<Piece | undefined> => {
     return rowToPiece(piece, tags, notes);
 };
 
-export const fetchPiece = (id: number): Promise<PieceRow | undefined> => new Promise((resolve, reject) =>
-    db.transaction(tx => tx.executeSql('SELECT * FROM Pieces WHERE id = ?',
-        [id],
-        // @ts-ignore
-        (_tr, { rows }) => rows.length === 0 ? resolve(undefined) : resolve(rows._array[0]),
-        (_tr, err) => {
-            console.log('error getting piece by id');
-            reject(err);
-            return false;
-        })
-    ));
+export const fetchPiece = (id: number): Promise<PieceRow | undefined> =>
+    executeSql('SELECT * FROM Pieces WHERE id = ?', [id])
+    // @ts-ignore
+        .then(({ rows }) => rows.length === 0 ? undefined : rows._array[0]);
 
 export const fetchTags = async (pieceId: number): Promise<string[]> =>
     await executeSql('SELECT tag FROM Tags WHERE pieceId = ?', [pieceId])
