@@ -1,11 +1,5 @@
 import { Dispatch } from "redux";
-import {
-    addPlan as addPlanToDb,
-    deletePlan as deletePlanFromDb,
-    getPlans,
-    togglePlanIsFavourite,
-    updatePlan
-} from "../../db/plan";
+import { addPlanToDb, deletePlanFromDb, getPlans, togglePlanIsFavourite, updatePlan } from "../../db/fix/plan";
 import { SessionPlan } from "../../types/plan";
 import { addPlan, deletePlan, editPlan, setPlans, togglePlanFav } from "../actions";
 import { ThunkResult } from "./ThunkResult";

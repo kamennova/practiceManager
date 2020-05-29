@@ -1,14 +1,11 @@
-import { SQLTransaction } from "expo-sqlite";
-import { ActivityType, Exercise } from "../../types/Activity";
+import { ActivityType, Exercise, Tonality } from "../../types/Activity";
 import { PlanActivity } from "../../types/plan";
-import { executeTx } from "./common";
+import { executeSql } from "./common";
 import { ActivityRow } from "./RowTypes";
 
-export const insertActivity = (tx: SQLTransaction,
-                               activity: PlanActivity,
-                               order: number): Promise<SQLResultSet> => {
-    console.log('insert activity');
-    return executeTx(tx, 'INSERT INTO Activities (type, duration, activityOrder, exercise, tonality, pieceId) ' +
+export const insertActivity = (activity: PlanActivity,
+                               order: number): Promise<SQLResultSet> =>
+    executeSql('INSERT INTO Activities (type, duration, activityOrder, exercise, tonality, pieceId) ' +
         'VALUES (?, ?, ?, ?, ?, ?)',
         [
             activity.type,
@@ -18,7 +15,6 @@ export const insertActivity = (tx: SQLTransaction,
             activityTonality(activity),
             activityPieceId(activity)
         ]);
-};
 
 export const activityFromRow = (row: ActivityRow): PlanActivity => {
     const type = row.type as ActivityType;
@@ -29,11 +25,12 @@ export const activityFromRow = (row: ActivityRow): PlanActivity => {
             return {
                 duration: row.duration,
                 type,
-                exercise: row.exercise !== null ? row.exercise as Exercise : undefined
+                exercise: row.exercise !== null ? row.exercise as Exercise : undefined,
+                tonality: row.tonality !== null ? row.tonality as Tonality : undefined,
             };
         case ActivityType.Piece:
         case ActivityType.SightReading:
-            return { duration: row.duration, type };
+            return { duration: row.duration, type, pieceId: row.pieceId !== null ? row.pieceId : undefined };
 
     }
 };

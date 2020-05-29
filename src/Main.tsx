@@ -8,6 +8,7 @@ import { setUpDb } from "./db/fix/Setup";
 import { Root } from "./StackNavigator";
 import { thunkGetPiecesMeta } from "./store/thunks";
 import { thunkGetPlans } from "./store/thunks/plan";
+import { thunkGetSessions } from "./store/thunks/session";
 import { useTheme } from "./theme";
 
 const Drawer = createDrawerNavigator();
@@ -25,6 +26,7 @@ const MainComponent = (props: { getPieces: () => void, getPlans: () => void, get
     const loadDbData = async () => {
         await setUpDb()
             .then(() => props.getPieces())
+            .then(() => props.getPlans())
             .then(() => setIsLoading(false));
     };
 
@@ -43,6 +45,7 @@ const MainComponent = (props: { getPieces: () => void, getPlans: () => void, get
 
 const mapDispatchToProps = (dispatch: any) => ({
     getPieces: () => dispatch(thunkGetPiecesMeta()),
+    getSessions: () => dispatch(thunkGetSessions()),
     getPlans: () => dispatch(thunkGetPlans()),
 });
 
