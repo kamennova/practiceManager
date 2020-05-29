@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle, TotalHeaderHeight } from "../../AppStyle";
-import { validatePiece } from "../../db/fix/Database";
+import { validatePiece } from "../../db/fix/piece";
 import { PIECE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkAddPiece, thunkEditPiece } from "../../store/thunks";

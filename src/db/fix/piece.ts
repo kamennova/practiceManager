@@ -57,11 +57,13 @@ export const updatePieceInDb = async (piece: Piece): Promise<void> => {
         db.transaction(tx => {
             tx.executeSql(`UPDATE Pieces
                            SET name     = ?,
-                               imageUri = ?
+                               imageUri = ?,
+                               authors = ?
                            WHERE id = ?`,
                 [
                     piece.name,
                     piece.imageUri !== undefined ? piece.imageUri : null,
+                    piece.authors.length > 0 ? piece.authors.join(', ') : '',
                     piece.id,
                 ],
                 undefined,
