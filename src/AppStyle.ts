@@ -937,7 +937,7 @@ export const NotesStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.cr
         borderWidth: 1,
         borderColor: colors.borderFaded,
         padding: 12,
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     date: {
         color: colors.colorFaded,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
-import { getPieceById } from "../../db/piece";
+import { addNoteToDb, deleteNoteFromDb, getPieceById } from "../../db/piece";
 import { cancelPieceNotif, schedulePieceNotif, updatePieceNotifInterval } from "../../notifications";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";
@@ -39,17 +39,20 @@ const PieceComponent = (props: PieceScreenProps) => {
         fetchData();
     }, [props.route.params.id, props.route.params.lastUpdated]);
 
-    const addNote = async (content: string) => {
-        setPiece({
-            ...piece,
-            notes: [...piece.notes, { content, addedOn: new Date() }]
+    const addNote = async (content: string) =>
+        await addNoteToDb(content, piece.id).then((id) => {
+            setPiece({
+                ...piece,
+                notes: [...piece.notes, { content, addedOn: new Date(), id }]
+            });
+            setShowNoteForm(false);
         });
-        setShowNoteForm(false);
-    };
 
-    const deleteNote = (index: number) => {
-        setPiece({ ...piece, notes: piece.notes.filter((_, i) => i !== index) });
-    };
+    const deleteNote = async (id: number) =>
+        await deleteNoteFromDb(id)
+            .then(() => {
+                setPiece({ ...piece, notes: piece.notes.filter((note) => note.id !== id) });
+            });
 
     const toggleNotifs = async () => {
         const notifsOn = !piece.notifsOn;

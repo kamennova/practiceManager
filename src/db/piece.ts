@@ -1,5 +1,6 @@
 import { Note } from "../types/Note";
 import { Piece, PieceBase } from "../types/piece";
+import { getSeconds } from "../utils/time";
 import { CheckResult } from "./CheckResult";
 import { executeSql } from "./common";
 import { rowToNote, rowToPiece } from "./RowTransform";
@@ -13,7 +14,7 @@ export const getPiecesMeta = async (): Promise<PieceBase[]> => {
 
     return Promise.all(pieces.map(
         piece => Promise.all([fetchTags(piece.id), fetchNotes(piece.id)])
-            .then((notesAndTags) => ({ ...piece, tags: notesAndTags[0], notes: notesAndTags[1] }))
+            .then(([tags, notes]) => ({ ...piece, tags, notes }))
     ))
 };
 
@@ -109,21 +110,30 @@ export const getPieceById = async (id: number): Promise<Piece | undefined> => {
     return rowToPiece(piece, tags, notes);
 };
 
-export const fetchPiece = (id: number): Promise<PieceRow | undefined> =>
+const fetchPiece = (id: number): Promise<PieceRow | undefined> =>
     executeSql('SELECT * FROM Pieces WHERE id = ?', [id])
     // @ts-ignore
         .then(({ rows }) => rows.length === 0 ? undefined : rows._array[0]);
 
-export const fetchTags = async (pieceId: number): Promise<string[]> =>
+const fetchTags = async (pieceId: number): Promise<string[]> =>
     await executeSql('SELECT tag FROM Tags WHERE pieceId = ?', [pieceId])
     // @ts-ignore
         .then((res) => res.rows._array.map(item => item.tag));
 
-export const fetchNotes = async (pieceId: number): Promise<Note[]> =>
+const fetchNotes = async (pieceId: number): Promise<Note[]> =>
     await executeSql('SELECT * FROM Notes WHERE pieceId = ?', [pieceId])
     // @ts-ignore
         .then((res) => res.rows._array
             .map(rowToNote));
+
+export const addNoteToDb = async (content: string, pieceId: number): Promise<number> =>
+    await executeSql('INSERT INTO Notes (content, pieceId, addedOn) VALUES (?, ?, ?)',
+        [content, pieceId, getSeconds()])
+        .then(({ insertId }) => insertId);
+
+export const deleteNoteFromDb = async (id: number): Promise<void> => {
+    await executeSql('DELETE FROM Notes WHERE id = ?', [id]);
+};
 
 export const updateNotifInterval = async (pieceId: number, interval: number): Promise<void> => {
     await executeSql('UPDATE Pieces SET notifInterval = ? WHERE id = ?',
