@@ -27,8 +27,9 @@ export const rowToPiece = (row: PieceRow, tags: string[], notes: Note[]): Piece 
 });
 
 export const rowToNote = (row: NoteRow): Note => ({
+    id: row.id,
     content: row.content,
-    addedOn: new Date(row.addedOn),
+    addedOn: new Date(row.addedOn * 1000),
 });
 
 export const rowToSession = (row: SessionRow, history: PlanActivity[]): Session => ({

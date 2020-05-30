@@ -51,7 +51,7 @@ export const setUpDb = async () => {
             'CREATE TABLE IF NOT EXISTS Notes (' +
             'id integer primary key not null, ' +
             'pieceId integer not null, ' +
-            'addedOn timestamp not null, ' +
+            'addedOn integer not null default current_timestamp, ' +
             'content varchar(225) not null ' +
             ')',
             [],
