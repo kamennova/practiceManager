@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, View } from "react-native";
 import { DurationInputStyle as getStyles } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
-import { getHours, getMinutes, Time, toMinutes } from "../../../utils/time";
+import { getHours, getMinutes } from "../../../utils/time";
 import { NumberInput } from "./NumberInput";
 
 type InputProps = {
@@ -11,25 +11,20 @@ type InputProps = {
 };
 
 export const DurationInput = (props: InputProps) => {
-    const [dur, setDur] = useState<Time>({ m: getMinutes(props.minutes), h: getHours(props.minutes) });
+    const hours = getHours(props.minutes);
+    const minutes = getMinutes(props.minutes);
 
-    const setMin = (min: number) => {
-        setDur({ m: getMinutes(min), h: dur.h + getHours(min) });
-        props.onChange(toMinutes(dur))
-    };
-
-    const setHour = (h: number) => {
-        setDur({ m: dur.m, h });
-        props.onChange(toMinutes(dur))
-    };
+    const setMin = (min: number) => props.onChange(60 * getHours(props.minutes) + min);
+    const setHour = (h: number) => props.onChange(h * 60 + props.minutes % 60);
 
     const styles = getStyles(useTheme().colors);
 
     return (
         <View style={styles.wrap}>
-            <NumberInput onChange={setHour} value={dur.h} minVal={0} maxVal={8}/>
+            <Text>{props.minutes}</Text>
+            <NumberInput onChange={setHour} value={hours} minVal={0} maxVal={8}/>
             <Text style={styles.textStyle}>h</Text>
-            <NumberInput onChange={setMin} value={dur.m} minVal={dur.h > 0 ? 0 : 1} maxVal={480}/>
+            <NumberInput onChange={setMin} value={minutes} minVal={hours > 0 ? 0 : 1} maxVal={59}/>
             <Text style={styles.textStyle}>min</Text>
         </View>
     );
