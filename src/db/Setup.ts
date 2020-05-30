@@ -19,7 +19,7 @@ export const setUpDb = async () => {
             'timeSpent smallint not null default 0, ' +
             'isFavourite integer not null default 0, ' +
             'imageUri varchar(225), ' +
-            'lastPracticedOn timestamp, ' +
+            'lastPracticedOn integer, ' +
             'notifsOn integer not null default 0,' +
             'notifsInterval smallint default 3, ' +
             'notifId smallint, ' +

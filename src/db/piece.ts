@@ -148,7 +148,7 @@ export const updateNotifId = async (pieceId: number, notifId: number | null): Pr
 };
 
 export const updatePracticeDetails = async (pieceId: number, practiceTime: number): Promise<void> => {
-    await executeSql('UPDATE Pieces SET timeSpent = timeSpent + ? WHERE id = ?',
-        [practiceTime, pieceId],
+    await executeSql('UPDATE Pieces SET timeSpent = timeSpent + ?, lastPracticedOn = ? WHERE id = ?',
+        [practiceTime, getSeconds(), pieceId],
     );
 };
