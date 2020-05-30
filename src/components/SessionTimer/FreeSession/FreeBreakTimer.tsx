@@ -46,7 +46,7 @@ const FreeBreakTimerComponent = (props: TimerProps) => {
         <SessionTimerWrap activity={{ type: ActivityType.Break }}>
             <TimeTracker seconds={seconds} activityType={ActivityType.Break}/>
 
-            <TimerButtonsWrapper>
+            <TimerButtonsWrapper style={{ marginTop: 'auto' }}>
                 <ResumeButton onPress={resumeActivity}/>
             </TimerButtonsWrapper>
         </SessionTimerWrap>

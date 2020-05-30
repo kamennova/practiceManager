@@ -10,9 +10,8 @@ import { Activity, ActivityType } from "../../types/Activity";
 import { PieceBase } from "../../types/piece";
 import { BreakButton, FinishButton, NextButton, TimerButtonsWrapper } from "../basic/buttons/TimerButton";
 import { PieceNoteModal } from "../basic/PieceNoteModal";
-import { TimerPieceNotes } from "./TimerPieceNotes";
 import { SessionTimerWrap } from "./SessionTimerWrap";
-import { TimerWidgets } from "./TimerWidgets";
+import { TimerPieceNotes } from "./TimerPieceNotes";
 
 type SessionTimerProps = {
     isFree: boolean,
@@ -27,19 +26,16 @@ type SessionTimerProps = {
 const SessionTimerComponent = (props: SessionTimerProps) => {
     const [piece, setPiece] = useState(undefined);
     const [showNoteForm, setShowNoteForm] = useState(false);
-    const [showWidgets, setShowWidgets] = useState(false);
     const nav = useNavigation();
 
     useEffect(() => {
-        if (props.activity.type === ActivityType.SightReading || props.activity.type === ActivityType.Piece
-            && props.activity.pieceId !== undefined && piece === undefined) {
-            getPieceById(props.activity.pieceId).then(
-                setPiece
-            );
+        if ((props.activity.type === ActivityType.SightReading || props.activity.type === ActivityType.Piece)
+            && props.activity.pieceId !== undefined) {
+            getPieceById(props.activity.pieceId).then(setPiece);
+        } else {
+            setPiece(undefined);
         }
-    }, []);
-
-    const toggleShowWidgets = () => setShowWidgets(!showWidgets);
+    }, [props.activity]);
 
     const endSession = async () => {
         await props.onEndSession();
@@ -50,23 +46,21 @@ const SessionTimerComponent = (props: SessionTimerProps) => {
         await addNoteToDb(content, piece?.id)
             .then((id) => {
                 setPiece({
-                    ...piece, notes: [...piece.notes, {content, id, addedOn: new Date()}]
+                    ...piece, notes: [...piece.notes, { content, id, addedOn: new Date() }]
                 });
                 setShowNoteForm(false);
             });
 
     const showNotes = (props.activity.type === ActivityType.SightReading || props.activity.type === ActivityType.Piece)
-        && piece !== undefined;
+        && props.activity.pieceId !== undefined && piece !== undefined;
 
     return (
         <SessionTimerWrap activity={props.activity}>
             {props.children}
 
+            {showNotes ? <TimerPieceNotes onAdd={() => setShowNoteForm(true)} notes={piece?.notes}/> : undefined}
+
             <View style={{ width: '100%', marginTop: 'auto', alignItems: 'center' }}>
-
-                {showNotes ? <TimerPieceNotes onAdd={() => setShowNoteForm(true)} notes={piece?.notes}/> : undefined}
-
-                <TimerWidgets isVisible={showWidgets} toggleIsVisible={toggleShowWidgets}/>
                 <TimerButtonsWrapper>
                     <FinishButton onPress={endSession}/>
                     <BreakButton onPress={props.onBreak}/>

@@ -21,7 +21,6 @@ export const DurationInput = (props: InputProps) => {
 
     return (
         <View style={styles.wrap}>
-            <Text>{props.minutes}</Text>
             <NumberInput onChange={setHour} value={hours} minVal={0} maxVal={8}/>
             <Text style={styles.textStyle}>h</Text>
             <NumberInput onChange={setMin} value={minutes} minVal={hours > 0 ? 0 : 1} maxVal={59}/>

@@ -10,7 +10,7 @@ export const rowToPieceBase = (row: PieceRow, tags?: string[]): PieceBase => ({
     isFavourite: row.isFavourite !== 0,
     name: row.name,
     timeSpent: row.timeSpent,
-    lastPracticedOn: row.lastPracticedOn !== null ? new Date(row.lastPracticedOn) : undefined,
+    lastPracticedOn: row.lastPracticedOn !== null ? new Date(row.lastPracticedOn * 1000) : undefined,
     authors: row.authors !== '' ? row.authors.split(', ') : [],
     addedOn: new Date(row.addedOn),
     status: row.timeSpent > 0 ? PieceStatus.InWork : PieceStatus.NotStarted,

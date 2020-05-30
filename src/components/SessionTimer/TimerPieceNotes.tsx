@@ -17,7 +17,6 @@ export const TimerPieceNotes = (props: NotesProps) => {
             marginBottom: 20,
             marginTop: 20,
             width: '100%',
-            flexGrow: 1,
             alignItems: 'center',
         }}>
             {props.notes.length > 0 ? <NotesSlider notes={props.notes}/> : undefined}
@@ -57,7 +56,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         flexGrow: 1,
-        marginBottom: 12,
+        marginBottom: 14,
     },
     noteWrap: {
         flexGrow: 1,

@@ -16,10 +16,6 @@ A mobile app for musicians helping organize practice sessions, maintaining their
 - machine learning based recommendations on what to play next;
 - sync with Musescore account;
 
-## Class diagram:
-
-![Classes](./assets/classes.png)
-
 ## Technologies:
 
 - React Native, framework for building mobile apps using components;
