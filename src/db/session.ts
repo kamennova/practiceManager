@@ -1,50 +1,47 @@
-import { getRepository } from "typeorm";
 import { PlanActivity } from "../types/plan";
 import { Session } from "../types/Session";
-import { createActivity, getActivities } from "./activity";
-import { SessionActivityEntity, SessionEntity } from "./entity/session";
-import { getPlanEntity } from "./plan";
+import { activityFromRow, insertActivity } from "./activity";
+import { executeSql } from "./common";
+import { rowToSession } from "./RowTransform";
 
-export const addSession = async (session: Session): Promise<void> => {
-    const newSession = new SessionEntity();
-    newSession.startedOn = session.startedOn.getSeconds();
-    newSession.plan = session.planId !== undefined ? await getPlanEntity(session.planId) : null;
-    newSession.history = await createSessionHistory(session.history);
-
-    const repo = getRepository(SessionEntity);
-    await repo.save(newSession);
+export const addSessionToDb = async (session: Session): Promise<void> => {
+    await insertSession(session)
+        .then((sessionId) => insertHistory(session.history, sessionId));
 };
 
-const createSessionHistory = async (history: PlanActivity[]): Promise<SessionActivityEntity[]> =>
-    await Promise.all(history.map((item, i) => createSessionActivity(item, i)));
+const insertSession = async (session: Session): Promise<number> =>
+    await executeSql('INSERT INTO Sessions (planId, startedOn) VALUES (?, ?)',
+        [
+            session.planId !== undefined ? session.planId : null,
+            session.startedOn.getSeconds(),
+        ]).then(({ insertId }) => insertId);
 
-const createSessionActivity = async (activity: PlanActivity, order: number): Promise<SessionActivityEntity> => {
-    const actId = await createActivity(activity, order);
+const insertHistory = async (history: PlanActivity[], sessionId: number) =>
+    await Promise.all([
+        history.map((act, i) => insertActivity(act, i)
+            .then(({ insertId }) => insertSessionActivity(insertId, sessionId))
+        )]);
 
-    const act = new SessionActivityEntity();
-    act.activityId = actId;
-
-    return act;
-};
+const insertSessionActivity = (actId: number, sessionId: number) =>
+    executeSql('INSERT INTO SessionActivities (activityId, sessionId) VALUES (?, ?)',
+        [actId, sessionId]);
 
 export const getSessions = async (): Promise<Session[]> => {
-    const repo = getRepository(SessionEntity);
-    const entities = await repo.find();
+    const sessions: Session[] = await executeSql('SELECT * FROM Sessions')
+        // @ts-ignore
+        .then(({ rows }) => rows._array.map(rowToSession));
 
-    return Promise.all(entities.map(sessionFromEntity));
+    return await Promise.all(
+        sessions.map(
+            session => fetchSessionHistory(session.id).then(history => ({ ...session, history }))
+        ));
 };
 
-const sessionFromEntity = async (ent: SessionEntity): Promise<Session> => ({
-    id: ent.id,
-    history: await getActivities(ent.history),
-    startedOn: new Date(ent.startedOn),
-});
-
-export const deleteSession = async (id: number): Promise<void> => {
-    const repo = getRepository(SessionEntity);
-    const session = await repo.findOne(id);
-
-    if (session !== undefined) {
-        await repo.remove(session);
-    }
-};
+const fetchSessionHistory = (sessionId: number): Promise<PlanActivity[]> => executeSql(
+        `SELECT Activities.*
+         FROM SessionActivities
+                LEFT JOIN Activities ON SessionActivities.activityId = Activities.id
+         WHERE SessionActivities.sessionId = ?`,
+    [sessionId])
+// @ts-ignore
+    .then(({ rows }) => rows._array.map(activityFromRow));

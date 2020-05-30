@@ -6,11 +6,11 @@ import { getPlanById } from "../../db/plan";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePlan, thunkTogglePlanFav } from "../../store/thunks/plan";
 import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
-import { EmptyPlan, PlanActivity, SessionPlan } from "../../types/plan";
 import { ItemScreenProps } from "../../types/item/ItemScreen";
+import { EmptyPlan, PlanActivity, SessionPlan } from "../../types/plan";
 import { getSideIds } from "../basic/Item/getSideIds";
-import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
 import { ItemFeatures } from "../basic/Item/ItemFeatures";
+import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
 import { ScreenTitle, SmallTitle } from "../basic/titles/Titles";
 import { ActivityBlock } from "./ActivityBlock";
 

@@ -21,7 +21,6 @@
     "expo-image-picker": "~8.0.1",
     "expo-sqlite": "~8.0.0",
     "metro-minify-terser": "^0.59.0",
-    "pg": "^7.18.2",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -34,8 +33,7 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.2.24"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",

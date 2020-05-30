@@ -1,91 +1,110 @@
-import { getRepository } from "typeorm";
 import { PlanActivity, SessionPlan } from "../types/plan";
-import { createActivity, getActivity } from "./activity";
-import { IActivity } from "./entity/activity/IActivity";
-import { PlanActivityEntity, PlanEntity } from "./entity/plan";
+import { CheckResult } from "./CheckResult";
+import { activityFromRow, insertActivity } from "./activity";
+import { executeSql } from "./common";
+import { PlanRow } from "./RowTypes";
 
-export const addPlan = async (plan: SessionPlan): Promise<number> => {
-    const newPlan = new PlanEntity();
-    newPlan.name = plan.name;
-    newPlan.createdOn = Date.now();
-    newPlan.isFavourite = plan.isFavourite;
-    newPlan.schedule = await createSchedule(plan.schedule);
+const planFromRow = (row: PlanRow, schedule: PlanActivity[]): SessionPlan => ({
+    id: row.id,
+    isFavourite: row.isFavourite === 1,
+    createdOn: row.addedOn,
+    name: row.name,
+    schedule,
+});
 
-    const repo = getRepository(PlanEntity);
-    await repo.save(newPlan);
+export const validatePlan = async (plan: SessionPlan): Promise<CheckResult> => {
+    if (plan.name === '') {
+        return Promise.resolve({ valid: false, errors: 'You forgot to enter plan name' });
+    }
 
-    return newPlan.id;
+    if (plan.schedule.length === 0) {
+        return Promise.resolve({ valid: false, errors: 'You forgot to add activities' });
+    }
+
+    return await executeSql('SELECT COUNT(*) AS count FROM Plans WHERE name = ? AND NOT id =?',
+        [plan.name, plan.id])
+        // @ts-ignore
+        .then(({ rows }) => rows._array[0].count > 1 ? ({
+            valid: false,
+            errors: 'You forgot to add activities'
+        }) : ({ valid: true }));
 };
 
-const createSchedule = async (schedule: PlanActivity[]): Promise<PlanActivityEntity[]> =>
-    await Promise.all(schedule.map((item, i) => createPlanActivity(item, i)));
+export const addPlanToDb = async (plan: SessionPlan): Promise<number> => {
+    const planId = await insertPlan(plan);
 
-const createPlanActivity = async (activity: PlanActivity, order: number): Promise<PlanActivityEntity> => {
-    const activityId = await createActivity(activity, order);
+    await insertSchedule(planId, plan.schedule);
 
-    const planAct = new PlanActivityEntity();
-    planAct.activityId = activityId;
+    return planId;
+};
 
-    return planAct;
+const insertPlan = async (plan: SessionPlan): Promise<number> =>
+    await executeSql('INSERT INTO Plans (name, addedOn, isFavourite) VALUES (?, ?, ?)', [
+        plan.name,
+        plan.createdOn,
+        plan.isFavourite ? 1 : 0,
+    ]).then(({ insertId }) => insertId);
+
+const insertSchedule = async (planId: number, schedule: PlanActivity[]) => await Promise.all(
+    schedule.map((act, i) =>
+        insertActivity(act, i)
+            .then(({ insertId }) => insertPlanActivitySql(insertId, planId))
+    )
+);
+
+const insertPlanActivitySql = (actId: number, planId: number) =>
+    executeSql('INSERT INTO PlanActivities (activityId, planId) VALUES (?, ?)', [actId, planId]);
+
+export const deletePlanFromDb = async (id: number): Promise<void> => {
+    await Promise.all([
+        executeSql('DELETE FROM Plans WHERE id = ?', [id]),
+        ...deleteSchedulePromises(id),
+    ]);
+};
+
+export const togglePlanIsFavourite = async (id: number): Promise<void> => {
+    await executeSql('UPDATE Plans SET isFavourite = CASE isFavourite WHEN 0 THEN 1 ELSE 0 END WHERE id = ?',
+        [id]);
 };
 
 export const getPlans = async (): Promise<SessionPlan[]> => {
-    const repo = getRepository(PlanEntity);
-    const entities = await repo.find();
+    const plans: SessionPlan[] = await executeSql('SELECT * FROM Plans')
+    // @ts-ignore
+        .then(({ rows }) => rows._array.map(row => planFromRow(row, [])));
 
-    return await Promise.all(entities.map(planFromEntity));
+    return await Promise.all(plans.map(plan => {
+        return getPlanSchedule(plan.id).then((schedule) => ({ ...plan, schedule }));
+    }));
 };
 
-const planFromEntity = async (ent: PlanEntity): Promise<SessionPlan> => ({
-    id: ent.id,
-    name: ent.name,
-    schedule: await getSchedule(ent.schedule),
-    isFavourite: ent.isFavourite !== null ? ent.isFavourite : false,
-    createdOn: ent.createdOn,
-});
+const getPlanSchedule = async (planId: number): Promise<PlanActivity[]> =>
+    await executeSql(`SELECT *
+                      FROM PlanActivities
+                             LEFT JOIN Activities ON PlanActivities.activityId = Activities.id
+                      WHERE PlanActivities.planId = ?`,
+        [planId])
+    // @ts-ignore
+        .then(({ rows }) => rows._array.map(activityFromRow));
 
-// sort?
-const getSchedule = async (schedule: IActivity[]) =>
-    await Promise.all(schedule.map(item => getActivity(item.activityId)));
+export const getPlanById = async (id: number): Promise<SessionPlan | undefined> => {
+    const plan = await executeSql('SELECT * FROM Plans WHERE id = ?', [id])
+    // @ts-ignore
+        .then(({ rows }) => rows._array[0]);
+    const schedule = await getPlanSchedule(id);
 
-export const togglePlanIsFavourite = async (id: number): Promise<void> => {
-    const repo = getRepository(PlanEntity);
-    const planUpd = await repo.findOne(id);
-
-    if (planUpd === undefined) {
-        return await Promise.reject('Item not found, id: ' + id);
-    }
-
-    planUpd.isFavourite = !planUpd.isFavourite;
-    await repo.save(planUpd);
+    return planFromRow(plan, schedule);
 };
 
-export const getPlanEntity = async (id: number): Promise<PlanEntity> => {
-    const repo = getRepository(PlanEntity);
-    const plan = await repo.findOne({ id });
-
-    if (plan === undefined) {
-        return await Promise.reject('plan not found, id: ' + id);
-    }
-
-    return Promise.resolve(plan);
+export const updatePlan = async (plan: SessionPlan) => {
+    await Promise.all([
+        executeSql('UPDATE Plans SET name = ? WHERE id = ?', [plan.name, plan.id]),
+        ...deleteSchedulePromises(plan.id)
+    ]).then(() => insertSchedule(plan.id, plan.schedule));
 };
 
-export const getPlanById = async (id: number): Promise<SessionPlan> =>
-    Promise.resolve(planFromEntity(await getPlanEntity(id)));
-
-export const updatePlan = async (plan: SessionPlan): Promise<void> => {
-    const ent = await getPlanEntity(plan.id);
-    ent.name = plan.name;
-    ent.schedule = await createSchedule(plan.schedule);
-
-    const repo = getRepository(PlanEntity);
-    await repo.save(ent);
-};
-
-export const deletePlan = async (id: number): Promise<void> => {
-    const repo = getRepository(PlanEntity);
-    const plan = await getPlanEntity(id);
-
-    await repo.remove(plan);
+const deleteSchedulePromises = (planId: number): Promise<SQLResultSet>[] => {
+    return [
+        executeSql('DELETE FROM Activities WHERE id IN (SELECT activityId FROM PlanActivities WHERE PlanActivities.planId = ?)', [planId]),
+        executeSql('DELETE FROM PlanActivities WHERE planId  = ?', [planId]),
+    ]
 };
