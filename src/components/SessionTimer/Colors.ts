@@ -22,6 +22,6 @@ export const getActivityColor = (activity: ActivityType): string => {
         case ActivityType.Technique:
             return '#006596';
         case ActivityType.SightReading:
-            return '#42006b';
+            return '#7a0090';
     }
 };

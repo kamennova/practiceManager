@@ -1,25 +1,26 @@
+import { useState } from "react";
 import * as React from "react";
 import { StyleSheet, Text, TouchableNativeFeedback, View } from "react-native";
 import { useTheme } from "../../theme";
 import { ThemeColors } from "../../theme/colors";
 
-type WidgetsProps = {
-    isVisible: boolean,
-    toggleIsVisible: () => void,
-};
+export const TimerWidgets = () => {
+    const [showWidgets, setShowWidgets] = useState(false);
 
-export const TimerWidgets = (props: WidgetsProps) => {
+
+    const toggleShowWidgets = () => setShowWidgets(!showWidgets);
+
     return (
         <View style={{marginBottom: 30}}>
-            {props.isVisible ? <WidgetsList/> : <WidgetsButton onPress={props.toggleIsVisible}/>}
+            {showWidgets ? <WidgetsList/> : <WidgetsButton onPress={toggleShowWidgets}/>}
         </View>
     );
 };
 
 const WidgetsList = () => {
     return (
-        <View>
-            <Text>Metronome, tuner, player, recorder</Text>
+        <View style={{height: 30}}>
+            <Text>Widgets coming soon!</Text>
         </View>
     );
 };

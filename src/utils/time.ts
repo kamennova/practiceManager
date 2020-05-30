@@ -8,16 +8,18 @@ export type Time = {
     h: number,
 };
 
-export const secondsToHumanlyFormat = (seconds: number): string => {
-    if (seconds === 0) {
+export const secondsToHumanlyFormat = (totalSeconds: number): string => {
+    if (totalSeconds === 0) {
         return '0';
+    } else if (totalSeconds < 60) {
+        return totalSeconds + 's';
     }
 
-    if (seconds < 60) {
-        return seconds + 's';
-    }
+    const s = totalSeconds % 60,
+        m = Math.floor(totalSeconds / 60),
+        h = Math.floor(m / 60);
 
-    return formatMinutesShort(Math.floor(seconds / 60)) + ' ' + seconds % 60 + 's';
+    return formatMinutesShort(m) + (h > 0 ? '' : ` ${s}s`);
 };
 
 export const minutesToHumanlyFormat = (minutes: number, _format?: TimeFormat): string => {

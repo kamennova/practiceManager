@@ -847,9 +847,10 @@ export const ThemeOptionStyle = (colors: ThemeColors, isActive: boolean) => Styl
 export const TimerTitleStyle = (color: string) => StyleSheet.create({
     wrap: {
         marginBottom: 30,
-        marginTop: 150,
+        marginTop: Dimensions.get('screen').height * 0.15,
         alignSelf: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        minHeight: 80,
     },
     mainTitle: {
         fontSize: 35,

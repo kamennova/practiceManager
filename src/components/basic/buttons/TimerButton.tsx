@@ -42,8 +42,13 @@ export const ResumeButton = (props: ButtonProps) => (
     <TimerButton onPress={props.onPress} icon={'play-arrow'} label='Resume'/>
 );
 
-export const TimerButtonsWrapper = (props: { children: JSX.Element | JSX.Element[] | (JSX.Element | JSX.Element[])[] }) => (
-    <View style={wrapStyle}>
+type WrapperProps = {
+    children: JSX.Element | JSX.Element[] | (JSX.Element | JSX.Element[])[],
+    style?: ViewStyle,
+}
+
+export const TimerButtonsWrapper = (props: WrapperProps) => (
+    <View style={{...wrapStyle, ...props.style}}>
         {props.children}
     </View>
 );
