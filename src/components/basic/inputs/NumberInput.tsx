@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, TextInput, TouchableNativeFeedback, View } from "react-native";
 import { NumberInputStyle as getStyles } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
@@ -13,9 +13,6 @@ type NumberInputProps = {
 };
 
 export const NumberInput = (props: NumberInputProps) => {
-    const [value, updateValue] = useState(props.value);
-    const [isEditing, setIsEditing] = useState(false);
-
     const colors = useTheme().colors;
     const styles = getStyles(colors);
 
@@ -36,19 +33,10 @@ export const NumberInput = (props: NumberInputProps) => {
     const onSubmit = (a: { nativeEvent: { text: string } }) => {
         const val = validateVal(a.nativeEvent.text);
         props.onChange(val);
-        updateValue(val);
-        setIsEditing(false);
     };
 
-    const inc = () => {
-        props.onChange(value + 1);
-        updateValue(value + 1);
-    };
-
-    const dec = () => {
-        props.onChange(value - 1);
-        updateValue(value - 1);
-    };
+    const inc = () => props.onChange(props.value + 1);
+    const dec = () => props.onChange(props.value - 1);
 
     return (
         <View style={styles.wrap}>
@@ -57,10 +45,8 @@ export const NumberInput = (props: NumberInputProps) => {
                 <TextInput style={styles.input}
                            keyboardType='numeric'
                            onSubmitEditing={onSubmit}
-                           onFocus={() => setIsEditing(true)}
-                           onBlur={() => setIsEditing(false)}
-                           onChangeText={(val) => updateValue(val === undefined ? val : Number(val))}
-                           value={value !== undefined ? value.toString() : undefined}/>
+                           onChangeText={(val) => props.onChange(val === undefined ? val : Number(val))}
+                           value={props.value.toString()}/>
                 {props.measure !== undefined ?
                     <Text style={styles.text}>{getMeasure(props.value, props.measure, props.measurePlural)}</Text>
                     : undefined}
