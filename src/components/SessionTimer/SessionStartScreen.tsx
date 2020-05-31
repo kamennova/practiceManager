@@ -8,7 +8,7 @@ import { startSession } from "../../store/actions";
 import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
 import { SessionPlan } from "../../types/plan";
-import { findPlanOrThrowError } from "../../utils/find";
+import { findItemOrThrowError } from "../../utils/find";
 import { Button, MinorButton } from "../basic/buttons/Button";
 import { TimerIcon, TimerOffIcon } from "../basic/icons/Timer";
 import { MyPicker } from "../basic/inputs/Picker";
@@ -45,7 +45,7 @@ const SessionStart = (props: StartProps) => {
     const startSession = () => {
         props.onStartSession();
         usePlan ?
-            replace(PLANNED_SESSION_TIMER, { plan: findPlanOrThrowError(props.plans, planId) }) :
+            replace(PLANNED_SESSION_TIMER, { plan: findItemOrThrowError(props.plans, planId) }) :
             replace(FREE_SESSION_ACTIVITY_CHOICE, { isFirstActivity: true });
     };
 

@@ -5,6 +5,7 @@ import { PiecePickerStyles as getStyles } from "../../../AppStyle";
 import { StateShape } from "../../../store/StoreState";
 import { useTheme } from "../../../theme";
 import { PieceBase } from "../../../types/piece";
+import { findItemOrThrowError } from "../../../utils/find";
 
 const MAX_TIPS = 10;
 
@@ -17,8 +18,12 @@ type InputProps = {
     default?: PickerItem,
 }
 
+const getLabel = (p: PieceBase) => p.name + (p.authors.length > 0 ? ' by ' + p.authors : '');
+
 const PiecePickerComponent = (props: InputProps) => {
-    const [input, setInput] = useState<(string | number) | undefined>(props.pieceId);
+    const init = props.pieceId !== undefined ? getLabel(findItemOrThrowError(props.pieces, props.pieceId)) : '';
+
+    const [input, setInput] = useState<(string | number) | undefined>(init);
     const [tips, setTips] = useState<PickerItem[]>([]);
     const [showTips, setShowTips] = useState(false);
 
@@ -29,7 +34,7 @@ const PiecePickerComponent = (props: InputProps) => {
             setTips([]);
         } else {
             setTips(props.pieces.filter(p => p.name.includes(text)).slice(0, MAX_TIPS)
-                .map(p => ({ value: p.id, label: p.name + (p.authors.length > 0 ? ' by ' + p.authors : '') })));
+                .map(p => ({ value: p.id, label: getLabel(p) })));
             setShowTips(true);
         }
     };
