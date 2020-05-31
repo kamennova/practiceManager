@@ -138,6 +138,6 @@ const picStyles = { width: '100%', height: 280 };
 
 const screenHeadStyle = (showPic: boolean) => ({
     ...AppPaddingStyle,
-    paddingTop: showPic ? 10 : 100,
+    paddingTop: showPic ? 10 : 85,
     paddingBottom: 22,
 });

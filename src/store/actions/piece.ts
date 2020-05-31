@@ -1,7 +1,6 @@
 import { Piece, PieceBase } from "../../types/piece";
 
 export const ADD_PIECE = 'Add_piece',
-    SET_PIECE = 'Set_piece',
     SET_PIECES_META = 'Set_pieces_meta',
     TOGGLE_PIECE_FAV = 'Toggle_piece_fav',
     EDIT_PIECE = 'Edit_piece',
@@ -12,11 +11,6 @@ export const ADD_PIECE = 'Add_piece',
 export type SetPiecesAction = {
     type: typeof SET_PIECES,
     pieces: Piece[],
-};
-
-export type SetPieceAction = {
-    type: typeof SET_PIECE,
-    piece: Piece,
 };
 
 export type SetPiecesMetaAction = {
@@ -50,7 +44,6 @@ export type UpdatePiecesPracticeAction = {
 };
 
 export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, piece }),
-    setPiece = (piece: Piece): SetPieceAction => ({ type: SET_PIECE, piece }),
     editPiece = (piece: PieceBase): EditPieceAction => ({ type: EDIT_PIECE, piece }),
     togglePieceFav = (id: number): TogglePieceFavAction => ({ type: TOGGLE_PIECE_FAV, id }),
     deletePiece = (id: number): DeletePieceAction => ({ type: DELETE_PIECE, id }),
@@ -60,7 +53,6 @@ export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, pi
 
 export type PieceActionTypes = AddPieceAction
     | SetPiecesMetaAction
-    | SetPieceAction
     | EditPieceAction
     | TogglePieceFavAction
     | DeletePieceAction

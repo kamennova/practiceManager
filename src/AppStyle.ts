@@ -291,14 +291,13 @@ export const ImagePickerStyle = (colors: ThemeColors = DefaultColors) => StyleSh
     }
 });
 
-export const ItemBtnsStyle = (colors: ThemeColors): ViewStyle => ({
+export const ItemBtnsStyle = (): ViewStyle => ({
     position: 'absolute',
     top: Dimensions.get('window').height - 50,
     flexDirection: 'row',
     width: Dimensions.get('window').width,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.appBg,
     padding: AppSidePadding,
     paddingTop: 15,
     paddingBottom: 0,
