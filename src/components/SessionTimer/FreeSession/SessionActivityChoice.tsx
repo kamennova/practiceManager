@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {  Route, View } from "react-native";
+import { Route, ScrollView, View } from "react-native";
 import { FullScreenModalStyle } from "../../../AppStyle";
 import { FREE_SESSION_TIMER } from "../../../NavigationPath";
 import { Activity, ActivityType, Exercise, Tonality } from "../../../types/Activity";
@@ -30,31 +30,32 @@ export const SessionActivityChoice = (props: ChoiceProps) => {
         props.navigation.navigate(FREE_SESSION_TIMER, { activity: getActivity(activity) });
 
     return (
-        <View style={FullScreenModalStyle}>
-            <ModalSmallTitle>Free session</ModalSmallTitle>
-            <ModalTitle> What are you up for? </ModalTitle>
+        <ScrollView keyboardShouldPersistTaps='handled'>
+            <View style={FullScreenModalStyle}>
+                <ModalSmallTitle>Free session</ModalSmallTitle>
+                <ModalTitle> What are you up for? </ModalTitle>
+                <View style={{ paddingLeft: 30, paddingRight: 30 }}>
+                    <ActivityTypeSelect noBreak={true}
+                                        onChooseType={(type) => setType(type as NoBreakActivity)}
+                                        wrapStyle={{ marginBottom: 20 }}
+                                        activeType={activity.type}/>
 
-            <View style={{ paddingLeft: 30, paddingRight: 30, }}>
-                <ActivityTypeSelect noBreak={true}
-                                    onChooseType={(type) => setType(type as NoBreakActivity)}
-                                    wrapStyle={{ marginBottom: 20 }}
-                                    activeType={activity.type}/>
+                    <ComplexActivityFields type={activity.type}
+                                           exercise={activity.exercise} setExercise={setExercise}
+                                           pieceId={activity.pieceId} setPieceId={setPieceId}
+                                           tonality={activity.tonality} setTonality={setTonality}/>
+                </View>
 
-                <ComplexActivityFields type={activity.type}
-                                       exercise={activity.exercise} setExercise={setExercise}
-                                       pieceId={activity.pieceId} setPieceId={setPieceId}
-                                       tonality={activity.tonality} setTonality={setTonality}/>
+                <View style={{
+                    marginTop: 'auto',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                }}>
+                    <MinorButton onPress={() => props.navigation.goBack()}>Cancel</MinorButton>
+                    <Button style={{ position: 'relative' }} label={'Start'} onPress={goToTimer}/>
+                </View>
             </View>
-
-            <View style={{
-                marginTop: 'auto',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-            }}>
-                <MinorButton onPress={() => props.navigation.goBack()}>Cancel</MinorButton>
-                <Button style={{ position: 'relative' }} label={'Start'} onPress={goToTimer}/>
-            </View>
-        </View>
+        </ScrollView>
     );
 };
