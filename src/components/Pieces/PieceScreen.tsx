@@ -39,6 +39,15 @@ const PieceComponent = (props: PieceScreenProps) => {
         fetchData();
     }, [props.route.params.id, props.route.params.lastUpdated]);
 
+    useEffect(() => {
+        setPiece({
+            ...piece,
+            timeSpent: props.preview?.timeSpent,
+            lastPracticedOn: props.preview?.lastPracticedOn,
+            status: props.preview?.status,
+        });
+    }, [props.preview?.timeSpent]);
+
     const addNote = async (content: string) =>
         await addNoteToDb(content, piece.id).then((id) => {
             setPiece({
@@ -109,10 +118,9 @@ const PieceAuthors = (props: { authors: string[] }) => {
 const PieceImage = (props: { uri: string }) => (<Image source={{ uri: props.uri }} style={picStyles}/>);
 
 const mapStateToProps = (state: StateShape, ownProps: PieceScreenProps) => ({
-        sideIds: getSideIds(state.pieces.items, ownProps.route.params.id),
-        preview: state.pieces.items.find(i => i.id === ownProps.route.params.id),
-    }
-);
+    sideIds: getSideIds(state.pieces.items, ownProps.route.params.id),
+    preview: state.pieces.items.find(i => i.id === ownProps.route.params.id),
+});
 
 const mapDispatchToProps = (dispatch: any, ownProps: PieceScreenProps) => ({
     deleteItem: () => dispatch(thunkDeletePiece(ownProps.route.params.id)),
@@ -126,10 +134,10 @@ const getStyles = (colors: ThemeColors) => StyleSheet.create({
     authors: { fontSize: 15, marginBottom: 15, color: colors.colorFaded },
 });
 
-const picStyles = { width: '100%', height: 280 };
+const picStyles = { width: '100%', height: 260 };
 
 const screenHeadStyle = (showPic: boolean) => ({
     ...AppPaddingStyle,
-    paddingTop: showPic ? 10 : 100,
+    paddingTop: showPic ? 10 : 85,
     paddingBottom: 22,
 });

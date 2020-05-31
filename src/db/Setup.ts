@@ -8,8 +8,6 @@ import { db } from "./Db";
 * - Sessions, SessionActivities
 * */
 export const setUpDb = async () => {
-    console.log('----db set up----');
-
     return new Promise((_resolve, reject) => db.transaction(tx => {
         tx.executeSql(
             'CREATE TABLE IF NOT EXISTS Pieces (' +
@@ -26,9 +24,7 @@ export const setUpDb = async () => {
             'authors varchar(225)' +
             ')',
             [],
-            () => {
-                console.log('table pieces created')
-            },
+            undefined,
             (_tr, err) => {
                 console.log('error creating table pieces', err);
                 reject(err);
@@ -41,7 +37,7 @@ export const setUpDb = async () => {
             'tag varchar(225) not null ' +
             ')',
             [],
-            () => console.log('table tags created'),
+            undefined,
             (_tr, err) => {
                 console.log('error creating table tags', err);
                 return false
@@ -55,9 +51,7 @@ export const setUpDb = async () => {
             'content varchar(225) not null ' +
             ')',
             [],
-            () => {
-                console.log('Notes table created')
-            },
+            undefined,
             (_tr, err) => {
                 console.log('Error creating table Notes', err);
                 reject(err);
@@ -72,9 +66,7 @@ export const setUpDb = async () => {
             'isFavourite integer not null default 0 ' +
             ')',
             [],
-            () => {
-                console.log('Plans table created')
-            },
+            undefined,
             (_tr, err) => {
                 console.log('error creating table plans', err);
                 reject(err);
@@ -87,9 +79,7 @@ export const setUpDb = async () => {
             'planId integer not null ' +
             ')',
             [],
-            () => {
-                console.log('Plan activities table created')
-            },
+            undefined,
             (_tr, err) => {
                 console.log('error creating table plan activities', err);
                 reject(err);
@@ -107,9 +97,7 @@ export const setUpDb = async () => {
             'pieceId integer ' +
             ')',
             [],
-            () => {
-                console.log('Activities table created')
-            },
+            undefined,
             (_tr, err) => {
                 console.log('Error creating table Activities:', err);
                 reject(err);
@@ -123,9 +111,7 @@ export const setUpDb = async () => {
             'startedOn timestamp not null ' +
             ')',
             [],
-            () => {
-                console.log('Sessions table created')
-            },
+            undefined,
             (_tr, err) => {
                 console.log('Error creating table Sessions:', err);
                 reject(err);
@@ -138,9 +124,7 @@ export const setUpDb = async () => {
             'sessionId integer not null ' +
             ')',
             [],
-            () => {
-                console.log('Session activities table created')
-            },
+            undefined,
             (_tr, err) => {
                 console.log('Error creating table Session activities', err);
                 reject(err);

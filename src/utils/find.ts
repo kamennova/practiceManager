@@ -1,11 +1,11 @@
-import { SessionPlan } from "../types/plan";
+import { Item } from "../types/item/Item";
 
-export const findPlanOrThrowError = (plans: SessionPlan[], planId: number) => {
-    const plan = plans.find(item => item.id === planId);
+export const findItemOrThrowError = <T extends Item>(items: T[], id: number): T => {
+    const item = items.find(i => i.id === id);
 
-    if (plan === undefined) {
-        throw new Error('Plan not found');
+    if (item === undefined) {
+        throw new Error(`Item with id ${id} not found`);
     }
 
-    return plan;
+    return item;
 };

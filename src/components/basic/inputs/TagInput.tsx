@@ -4,7 +4,7 @@ import { TagInputStyle, TagInputTagStyle, TextInputStyle } from "../../../AppSty
 import { useTheme } from "../../../theme";
 import { FormInputWrap } from "./FormInputWrap";
 
-const DEFAULT_SEPARATOR = ',';
+const DEFAULT_SEPARATOR = ' ';
 
 type InputProps = {
     onUpdateTags: (tags: string[]) => void,
@@ -13,7 +13,6 @@ type InputProps = {
     style?: ViewStyle,
     tagStyle?: ViewStyle,
     separator?: string,
-    // todo show tips when typing
     onChangeText?: () => void,
     tips?: string[],
 };
@@ -45,7 +44,7 @@ export const TagInput = (props: InputProps) => {
                 onKeyPress={({ nativeEvent: { key } }) => {
                     if (key === separator) sendTag();
                 }}
-                placeholder={props.placeholder !== undefined ? props.placeholder : `Separated by «${separator}»`}
+                placeholder={props.placeholder !== undefined ? props.placeholder : `Separated by space`}
                 placeholderTextColor={'grey'}
                 keyboardType={'default'}/>
             {props.list.length > 0 ?

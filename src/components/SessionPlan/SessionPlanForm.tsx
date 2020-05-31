@@ -129,7 +129,7 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
     render() {
         return (
             <ScreenWrapper>
-                <ScrollView contentContainerStyle={this.styles.scroll}>
+                <ScrollView contentContainerStyle={this.styles.scroll} keyboardShouldPersistTaps='always'>
                     <View style={AppPaddingStyle}>
                         <MyTextInput onChangeText={(val) => this.setPlan({ ...this.state.plan, name: val })}
                                      value={this.state.plan.name}

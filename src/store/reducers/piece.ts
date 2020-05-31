@@ -6,7 +6,6 @@ import {
     EDIT_PIECE,
     EditPieceAction,
     PieceActionTypes,
-    SET_PIECE,
     SET_PIECES,
     SET_PIECES_META,
     TOGGLE_PIECE_FAV,
@@ -25,8 +24,6 @@ export const pieces = (state: ItemsShape<Piece, PieceBase> = initialState.pieces
             return { ...state, items: updatePiece(state.items, action) };
         case TOGGLE_PIECE_FAV:
             return { ...state, items: findAndTogglePieceFav(state.items, action.id) };
-        case SET_PIECE:
-            return { ...state, currentItem: action.piece };
         case SET_PIECES_META:
             return { ...state, items: action.pieces };
         case SET_PIECES:
