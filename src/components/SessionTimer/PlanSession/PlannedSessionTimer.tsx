@@ -10,6 +10,8 @@ import { SessionPlan } from "../../../types/plan";
 import { getSeconds } from "../../../utils/time";
 import { TimeTracker } from "../../basic/timeTrackers";
 import { SessionTimer } from "../SessionTimer";
+import { Audio } from 'expo-av';
+import { useKeepAwake } from 'expo-keep-awake';
 
 type SessionScreenProps = {
     route: Route & { params: { plan: SessionPlan } },
@@ -27,9 +29,15 @@ const TimerComponent = (props: SessionScreenProps) => {
     const [isPaused, setIsPaused] = useState(false);
     const [start, setStart] = useState(getSeconds());
 
-    const nextActivity = () => {
+    useKeepAwake();
+
+    const nextActivity = async (isSkipped: boolean = true) => {
+        if (!isSkipped) {
+            playSound();
+        }
+
         if (activityIndex === plan.schedule.length - 1) { // this activity was the last one
-            props.onEndSession();
+            await props.onEndSession();
             props.navigation.dispatch(StackActions.replace(SESSION_END));
         } else {
             setActivityIndex(activityIndex + 1);
@@ -49,8 +57,8 @@ const TimerComponent = (props: SessionScreenProps) => {
                 setSeconds(activity().duration - (getSeconds() - start));
             }, 100);
 
-            if (seconds <= 0) {
-                nextActivity(); // todo +second
+            if (seconds === 0) {
+                nextActivity(false);
             }
         } else if (timeout !== null) {
             clearInterval(timeout);
@@ -81,6 +89,13 @@ const TimerComponent = (props: SessionScreenProps) => {
             <TimeTracker seconds={seconds} activityType={activity().type}/>
         </SessionTimer>
     );
+};
+
+const playSound = async () => {
+    const soundObject = new Audio.Sound();
+
+    await soundObject.loadAsync(require('../../../../assets/bell.wav'))
+        .then(() => soundObject.playAsync());
 };
 
 const mapDispatchToProps = (dispatch: any) => ({

@@ -134,7 +134,7 @@ const getStyles = (colors: ThemeColors) => StyleSheet.create({
     authors: { fontSize: 15, marginBottom: 15, color: colors.colorFaded },
 });
 
-const picStyles = { width: '100%', height: 280 };
+const picStyles = { width: '100%', height: 260 };
 
 const screenHeadStyle = (showPic: boolean) => ({
     ...AppPaddingStyle,
