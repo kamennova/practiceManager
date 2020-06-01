@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableNativeFeedback, View, Text, ViewStyle } from "react-native";
 import { ActivityChoiceStyle as getStyles, Dark } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
-import { ActivityType } from "../../../types/Activity";
+import { ActivityType } from "../../../types/activity";
 import { BoltIcon, BreakIcon, EyeIcon, MusicIcon } from "../icons/ActivityIcons";
 
 type ChoiceProps = {

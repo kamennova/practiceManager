@@ -1,6 +1,6 @@
 import { Note } from "../types/Note";
 import { Piece, PieceBase, PieceStatus } from "../types/piece";
-import { PlanActivity } from "../types/plan";
+import { SessionActivity } from "../types/activity";
 import { Session } from "../types/Session";
 import { NoteRow, PieceRow, SessionRow } from "./RowTypes";
 
@@ -32,7 +32,7 @@ export const rowToNote = (row: NoteRow): Note => ({
     addedOn: new Date(row.addedOn * 1000),
 });
 
-export const rowToSession = (row: SessionRow, history: PlanActivity[]): Session => ({
+export const rowToSession = (row: SessionRow, history: SessionActivity[]): Session => ({
     id: row.id,
     planId: row.planId !== null ? row.planId : undefined,
     startedOn: new Date(row.startedOn),

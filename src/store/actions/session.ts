@@ -1,4 +1,4 @@
-import { Activity } from "../../types/Activity";
+import { Activity } from "../../types/activity";
 import { Session } from "../../types/Session";
 
 export const START_SESSION = 'Start_session',

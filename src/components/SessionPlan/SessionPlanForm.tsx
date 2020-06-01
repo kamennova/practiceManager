@@ -8,9 +8,10 @@ import { StateShape } from "../../store/StoreState";
 import { thunkAddPlan, thunkEditPlan } from "../../store/thunks/plan";
 import { DEFAULT_THEME, ThemeColors } from "../../theme";
 import { ActionType } from "../../types/ActionType";
+import { SessionActivity } from "../../types/activity";
 import { FormProps, FormState } from "../../types/item/ItemForm";
 import { Piece } from "../../types/piece";
-import { EmptyPlan, PlanActivity, SessionPlan } from "../../types/plan";
+import { EmptyPlan, SessionPlan } from "../../types/plan";
 import { swipe } from "../../utils/array";
 import { ErrorAlert } from "../basic/alerts";
 import { SaveButton } from "../basic/buttons/ActionButton";
@@ -48,13 +49,13 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
     showModal = () => this.setState({ ...this.state, showModal: true });
     hideModal = () => this.setState({ ...this.state, showModal: false });
 
-    addActivity = (act: PlanActivity) => this.setState({
+    addActivity = (act: SessionActivity) => this.setState({
         ...this.state,
         plan: { ...this.state.plan, schedule: [...this.state.plan.schedule, act] },
         showModal: false,
     });
 
-    replaceActivity = async (act: PlanActivity) => {
+    replaceActivity = async (act: SessionActivity) => {
         const schedule = [...this.state.plan.schedule];
         schedule[this.state.editing] = act;
         await this.setPlan({ ...this.state.plan, schedule });
@@ -79,7 +80,7 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
         this.setState({ ...this.state, showMenu: -1 })
     };
 
-    onSaveActivity = async (act: PlanActivity) => {
+    onSaveActivity = async (act: SessionActivity) => {
         if (this.state.editing > -1) {
             await this.replaceActivity(act);
         } else {

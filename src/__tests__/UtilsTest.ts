@@ -1,4 +1,4 @@
-import { ActivityType, Exercise, Tonality } from "../types/Activity";
+import { ActivityType, Exercise, Tonality } from "../types/activity/Activity";
 import { enumKeys, pieceGroupBy, replaceItem, swipe } from "../utils/array";
 import { daysAgo, formatDateDiff, getHours, getMinutes } from "../utils/time";
 import { getActivityTitle } from "../utils/title";

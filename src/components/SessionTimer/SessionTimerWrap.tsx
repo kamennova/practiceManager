@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { SessionScreenStyle } from "../../AppStyle";
 import { Theme, useTheme } from "../../theme";
-import { Activity } from "../../types/Activity";
+import { Activity } from "../../types/activity";
 import { getScreenBgByActivity } from "./Colors";
 import { SessionActivityTitle } from "./SessionScreenElements";
 

@@ -3,7 +3,6 @@ import { Note } from "../Note";
 import { Recording } from "./Recording";
 
 export type PieceBase = Item & {
-    name: string,
     tags: string[],
     authors: string[],
     complexity?: PieceComplexity,
@@ -11,7 +10,6 @@ export type PieceBase = Item & {
     imageUri?: string,
     timeSpent: number,
     lastPracticedOn?: Date,
-    addedOn: Date,
     status: PieceStatus,
 };
 

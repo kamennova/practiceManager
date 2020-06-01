@@ -3,7 +3,8 @@ import { replaceItem } from "../../utils/array";
 import { ADD_PLAN, DELETE_PLAN, EDIT_PLAN, PlanActionTypes, SET_PLANS } from "../actions";
 import { initialState, ItemsShape } from "../StoreState";
 
-export const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState.plans, action: PlanActionTypes): ItemsShape<SessionPlan, SessionPlan> => {
+export const plans = (state: ItemsShape<SessionPlan, SessionPlan> = initialState.plans, action: PlanActionTypes):
+    ItemsShape<SessionPlan, SessionPlan> => {
     switch (action.type) {
         case ADD_PLAN:
             return { ...state, items: [...state.items, action.plan], lastAddedId: action.plan.id };

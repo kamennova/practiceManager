@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import { ActivityBlockStyle as getStyles } from "../../AppStyle";
 import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
-import { PlanActivity } from "../../types/plan";
+import { SessionActivity } from "../../types/activity";
 import { formatMinutesShort } from "../../utils/time";
 import { getActivityTitle, getPieceCredits, PieceCredits } from "../../utils/title";
 
 export type BlockProps = {
-    activity: PlanActivity,
+    activity: SessionActivity,
     isLast: boolean,
     isFirst: boolean,
     children?: JSX.Element[],

@@ -1,8 +1,8 @@
-import { PlanActivity } from "./plan";
+import { SessionActivity } from "./activity";
 
 export type Session = {
     id: number,
-    history: PlanActivity[],
+    history: SessionActivity[],
     planId?: number;
     startedOn: Date,
     isTimeout?: boolean,

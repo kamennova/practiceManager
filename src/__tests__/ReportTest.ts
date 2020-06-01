@@ -1,6 +1,6 @@
-import { getActivitiesReport } from "../types/ActivitiesReport";
-import { ActivityType } from "../types/Activity";
-import { PlanActivity } from "../types/PlanActivity";
+import { getActivitiesReport } from "../types/activity/ActivitiesReport";
+import { ActivityType } from "../types/activity/Activity";
+import { PlanActivity } from "../types/activity/SessionActivity";
 
 it('activities report test', () => {
     const activities = [

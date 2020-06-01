@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import { Route, ScrollView, View } from "react-native";
 import { FullScreenModalStyle } from "../../../AppStyle";
 import { FREE_SESSION_TIMER } from "../../../NavigationPath";
-import { Activity, ActivityType, Exercise, Tonality } from "../../../types/Activity";
-import { getActivity, NoBreakActivity, NoBreakActivityInput } from "../../../types/ActivityInput";
+import {
+    Activity,
+    ActivityType,
+    Exercise,
+    getActivity,
+    NoBreakActivity,
+    NoBreakActivityInput,
+    Tonality
+} from "../../../types/activity";
 import { Button, MinorButton } from "../../basic/buttons/Button";
 import { ComplexActivityFields } from "../../basic/ComplexActivityFields";
 import { ActivityTypeSelect } from "../../basic/inputs/ActivityTypeSelect";

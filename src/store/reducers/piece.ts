@@ -14,7 +14,8 @@ import {
 } from "../actions";
 import { initialState, ItemsShape } from "../StoreState";
 
-export const pieces = (state: ItemsShape<Piece, PieceBase> = initialState.pieces, action: PieceActionTypes): ItemsShape<Piece, PieceBase> => {
+export const pieces = (state: ItemsShape<Piece, PieceBase> = initialState.pieces, action: PieceActionTypes):
+    ItemsShape<Piece, PieceBase> => {
     switch (action.type) {
         case ADD_PIECE:
             return { ...state, items: [...state.items, action.piece], lastAddedId: action.piece.id };

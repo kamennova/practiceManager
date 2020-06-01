@@ -1,8 +1,7 @@
 import { Dispatch } from "redux";
 import { updatePracticeDetails } from "../../db/piece";
 import { addSessionToDb, getSessions } from "../../db/session";
-import { ActivityType } from "../../types/Activity";
-import { PlanActivity } from "../../types/plan";
+import { ActivityType, SessionActivity } from "../../types/activity";
 import { Session } from "../../types/Session";
 import { getActivitiesWithDuration } from "../../utils/activity";
 import { pieceGroupBy } from "../../utils/array";
@@ -13,17 +12,18 @@ import { ThunkResult } from "./ThunkResult";
 export const thunkGetSessions: ThunkResult = () => async (dispatch: Dispatch) =>
     await getSessions().then(res => dispatch(setSessions(res)));
 
-export const thunkEndSession: ThunkResult = (isTimeout: boolean = false) => async (dispatch: Dispatch, getState: () => StateShape) => {
-    const state = getState();
-    const session = getSessionFromState({ ...state.sessions.current, isTimeout, finishedOn: Date.now() });
+export const thunkEndSession: ThunkResult = (isTimeout: boolean = false) =>
+    async (dispatch: Dispatch, getState: () => StateShape) => {
+        const state = getState();
+        const session = getSessionFromState({ ...state.sessions.current, isTimeout, finishedOn: Date.now() });
 
-    const piecesPractice = getPiecesPractice(session);
-    await Promise.all([updatePiecesPracticeInDb(piecesPractice), addSessionToDb(session)]);
+        const piecesPractice = getPiecesPractice(session);
+        await Promise.all([updatePiecesPracticeInDb(piecesPractice), addSessionToDb(session)]);
 
-    dispatch(updatePiecesPractice(piecesPractice));
+        dispatch(updatePiecesPractice(piecesPractice));
 
-    return dispatch(endSession(session, piecesPractice));
-};
+        return dispatch(endSession(session, piecesPractice));
+    };
 
 const getSessionFromState = (state: SessionState): Session => {
     return {
@@ -43,7 +43,7 @@ const updatePiecesPracticeInDb = async (practice: { [key: number]: number }) =>
 const getPiecesPractice = (session: Session): { [key: number]: number } => {
     const piecePractice = session.history.filter(act =>
         (act.type === ActivityType.SightReading || act.type === ActivityType.Piece) && act.pieceId !== undefined) as
-        (PlanActivity & { pieceId: number })[];
+        (SessionActivity & { pieceId: number })[];
 
     return pieceGroupBy(piecePractice);
 };

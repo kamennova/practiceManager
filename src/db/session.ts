@@ -1,4 +1,4 @@
-import { PlanActivity } from "../types/plan";
+import { SessionActivity } from "../types/activity";
 import { Session } from "../types/Session";
 import { activityFromRow, insertActivity } from "./activity";
 import { executeSql } from "./common";
@@ -16,7 +16,7 @@ const insertSession = async (session: Session): Promise<number> =>
             session.startedOn.getSeconds(),
         ]).then(({ insertId }) => insertId);
 
-const insertHistory = async (history: PlanActivity[], sessionId: number) =>
+const insertHistory = async (history: SessionActivity[], sessionId: number) =>
     await Promise.all([
         history.map((act, i) => insertActivity(act, i)
             .then(({ insertId }) => insertSessionActivity(insertId, sessionId))
@@ -28,7 +28,7 @@ const insertSessionActivity = (actId: number, sessionId: number) =>
 
 export const getSessions = async (): Promise<Session[]> => {
     const sessions: Session[] = await executeSql('SELECT * FROM Sessions')
-        // @ts-ignore
+    // @ts-ignore
         .then(({ rows }) => rows._array.map(rowToSession));
 
     return await Promise.all(
@@ -37,7 +37,7 @@ export const getSessions = async (): Promise<Session[]> => {
         ));
 };
 
-const fetchSessionHistory = (sessionId: number): Promise<PlanActivity[]> => executeSql(
+const fetchSessionHistory = (sessionId: number): Promise<SessionActivity[]> => executeSql(
         `SELECT Activities.*
          FROM SessionActivities
                 LEFT JOIN Activities ON SessionActivities.activityId = Activities.id

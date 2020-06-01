@@ -1,9 +1,8 @@
-import { ActivityType, Exercise, Tonality } from "../types/Activity";
-import { PlanActivity } from "../types/plan";
+import { ActivityType, Exercise, SessionActivity, Tonality } from "../types/activity";
 import { executeSql } from "./common";
 import { ActivityRow } from "./RowTypes";
 
-export const insertActivity = (activity: PlanActivity,
+export const insertActivity = (activity: SessionActivity,
                                order: number): Promise<SQLResultSet> =>
     executeSql('INSERT INTO Activities (type, duration, activityOrder, exercise, tonality, pieceId) ' +
         'VALUES (?, ?, ?, ?, ?, ?)',
@@ -16,7 +15,7 @@ export const insertActivity = (activity: PlanActivity,
             activityPieceId(activity)
         ]);
 
-export const activityFromRow = (row: ActivityRow): PlanActivity => {
+export const activityFromRow = (row: ActivityRow): SessionActivity => {
     const type = row.type as ActivityType;
     switch (type) {
         case ActivityType.Break:
@@ -35,9 +34,9 @@ export const activityFromRow = (row: ActivityRow): PlanActivity => {
     }
 };
 
-const activityExercise = (activity: PlanActivity) => activity.type !== ActivityType.Technique ?
+const activityExercise = (activity: SessionActivity) => activity.type !== ActivityType.Technique ?
     undefined : activity.exercise;
-const activityTonality = (activity: PlanActivity) => activity.type !== ActivityType.Technique ?
+const activityTonality = (activity: SessionActivity) => activity.type !== ActivityType.Technique ?
     undefined : activity.tonality;
-const activityPieceId = (activity: PlanActivity) =>
+const activityPieceId = (activity: SessionActivity) =>
     (activity.type !== ActivityType.Piece && activity.type !== ActivityType.SightReading) ? undefined : activity.pieceId;
