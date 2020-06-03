@@ -73,7 +73,18 @@ export const toggleIsFavourite = async (id: number): Promise<void> => {
 };
 
 export const deletePieceFromDb = async (id: number): Promise<void> => {
-    await executeSql('DELETE FROM Pieces WHERE id = ?', [id]);
+    await Promise.all([
+        executeSql('DELETE FROM Pieces WHERE id = ?', [id]),
+        deleteTags(id),
+        deletePieceActivities(id),
+    ]);
+};
+
+const deletePieceActivities = async (pieceId: number): Promise<void> => {
+    await executeSql(
+        'DELETE FROM PlanActivities WHERE activityId IN (SELECT id FROM Activities WHERE Activities.pieceId = ?)',
+        [pieceId])
+        .then(() => executeSql('DELETE FROM Activities WHERE pieceId = ?', [pieceId]));
 };
 
 export const getNotificationId = async (id: number): Promise<number | null> =>

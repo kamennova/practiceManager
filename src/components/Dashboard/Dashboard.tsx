@@ -21,7 +21,6 @@ const _Dashboard = (props: DashboardProps) => {
 
     return (
         <ScreenWrapper>
-
             <ItemSection title={'Pieces overview'}>
                 <ItemFeatures items={piecesOverview}/>
             </ItemSection>
