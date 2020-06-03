@@ -18,9 +18,10 @@
     "@types/react-native-drawer": "^2.5.3",
     "@types/react-redux": "^7.1.7",
     "expo": "~36.0.0",
+    "expo-av": "~8.0.0",
     "expo-image-picker": "~8.0.1",
+    "expo-keep-awake": "~8.0.0",
     "expo-sqlite": "~8.0.0",
-    "metro-minify-terser": "^0.59.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
@@ -33,9 +34,7 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "reflect-metadata": "^0.1.13",
-    "expo-av": "~8.0.0",
-    "expo-keep-awake": "~8.0.0"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
