@@ -1,13 +1,10 @@
 import React, { Component } from "react";
 import { enableScreens } from 'react-native-screens';
 import { Provider } from "react-redux";
-import { applyMiddleware, createStore } from "redux";
-import thunk from "redux-thunk";
 import { Main } from "./src/Main";
-import { practiceManagerApp } from "./src/store/appReducers";
+import { store } from "./src/store/appReducers";
 import { DEFAULT_THEME, getThemeColors, readTheme, recordTheme, Theme, ThemeContext } from "./src/theme";
 
-const store = createStore(practiceManagerApp, applyMiddleware(thunk));
 enableScreens();
 
 class App extends Component<{}, { theme: Theme }> {

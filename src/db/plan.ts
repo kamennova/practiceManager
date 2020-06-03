@@ -1,35 +1,16 @@
 import { SessionActivity } from "../types/activity";
 import { SessionPlan } from "../types/plan";
 import { activityFromRow, insertActivity } from "./activity";
-import { CheckResult } from "./CheckResult";
 import { executeSql } from "./common";
 import { PlanRow } from "./RowTypes";
 
 const planFromRow = (row: PlanRow, schedule: SessionActivity[]): SessionPlan => ({
     id: row.id,
     isFavourite: row.isFavourite === 1,
-    addedOn: row.addedOn,
+    addedOn: new Date(row.addedOn),
     name: row.name,
     schedule,
 });
-
-export const validatePlan = async (plan: SessionPlan): Promise<CheckResult> => {
-    if (plan.name === '') {
-        return Promise.resolve({ valid: false, errors: 'You forgot to enter plan name' });
-    }
-
-    if (plan.schedule.length === 0) {
-        return Promise.resolve({ valid: false, errors: 'You forgot to add activities' });
-    }
-
-    return await executeSql('SELECT COUNT(*) AS count FROM Plans WHERE name = ? AND NOT id =?',
-        [plan.name, plan.id])
-    // @ts-ignore
-        .then(({ rows }) => rows._array[0].count > 1 ? ({
-            valid: false,
-            errors: 'You forgot to add activities'
-        }) : ({ valid: true }));
-};
 
 export const addPlanToDb = async (plan: SessionPlan): Promise<number> => {
     const planId = await insertPlan(plan);

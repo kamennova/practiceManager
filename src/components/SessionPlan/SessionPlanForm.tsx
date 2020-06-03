@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 import { ActivityBlockHeight, AppPaddingStyle, AppSidePadding, PlanFormStyle as getStyles } from "../../AppStyle";
-import { validatePlan } from "../../db/plan";
+import { validatePlan } from "./validation";
 import { SESSION_PLAN } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkAddPlan, thunkEditPlan } from "../../store/thunks/plan";
@@ -27,7 +27,7 @@ import { EditableActivityBlock } from "./EditableActivityBlock";
 type Coord = { x: number, y: number };
 
 class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: SessionPlan }>,
-    FormState<{ plan: SessionPlan }> & { showMenu: number, showModal: boolean, editing: number }> {
+    FormState<{ plan: SessionPlan }> & { showMenu: number, showModal: boolean, editing: number, }> {
 
     val: Coord = { x: 0, y: 0 };
     mode = this.props.route.params.mode === undefined ? ActionType.Create : this.props.route.params.mode;
@@ -183,6 +183,7 @@ const getMenuStyle = (index: number): ViewStyle => ({
 
 const mapStateToProps = (state: StateShape) => ({
     addedItemId: state.plans.lastAddedId,
+    plans: state.plans,
 });
 
 const mapDispatchToProps = (dispatch: any, ownProps: FormProps<Piece, { piece: Piece }>) => ({
