@@ -13,14 +13,13 @@ type ChoiceProps = {
 }
 
 export const ActivityTypeSelect = (props: ChoiceProps) => {
-    const wrapStyle = {...getStyles(useTheme().colors).btnWrap, ...props.wrapStyle};
+    const wrapStyle = { ...getStyles(useTheme().colors).btnWrap, ...props.wrapStyle };
 
     return (
         <View style={wrapStyle}>
             {(props.noBreak ? noBreakActivityTypes : activityTypes).map((type) =>
                 <ActivityBtn isActive={type === props.activeType}
-                             type={type}
-                             onPress={() => props.onChooseType(type)}/>)}
+                             type={type} onPress={() => props.onChooseType(type)}/>)}
         </View>
     )
 };
@@ -34,6 +33,7 @@ type BtnProps = {
 const ActivityBtn = (props: BtnProps) => {
     const colors = useTheme().colors;
     const styles = getStyles(colors);
+    const icon = getActivityIcon(props.type)({ size: undefined });
 
     return (
         <TouchableNativeFeedback onPress={props.onPress}>
@@ -42,7 +42,7 @@ const ActivityBtn = (props: BtnProps) => {
                 backgroundColor: props.isActive ? colors.appBgLight : 'transparent',
                 borderColor: props.isActive ? Dark : 'transparent'
             }}>
-                <View style={styles.iconWrap}>{getActivityIcon(props.type)({size: undefined})}</View>
+                <View style={styles.iconWrap}>{icon}</View>
                 <Text style={{
                     ...styles.activityBtnText,
                     color: props.isActive ? Dark : colors.colorFaded

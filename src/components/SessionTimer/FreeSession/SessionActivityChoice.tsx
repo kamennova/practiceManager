@@ -37,7 +37,7 @@ export const SessionActivityChoice = (props: ChoiceProps) => {
         props.navigation.navigate(FREE_SESSION_TIMER, { activity: getActivity(activity) });
 
     return (
-        <ScrollView keyboardShouldPersistTaps='handled'>
+        <ScrollView keyboardShouldPersistTaps='always'>
             <View style={FullScreenModalStyle}>
                 <ModalSmallTitle>Free session</ModalSmallTitle>
                 <ModalTitle> What are you up for? </ModalTitle>

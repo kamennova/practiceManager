@@ -86,7 +86,8 @@ export const updatePlan = async (plan: SessionPlan) => {
 
 const deleteSchedulePromises = (planId: number): Promise<SQLResultSet>[] => {
     return [
-        executeSql('DELETE FROM Activities WHERE id IN (SELECT activityId FROM PlanActivities WHERE PlanActivities.planId = ?)', [planId]),
+        executeSql('DELETE FROM Activities WHERE id IN ' +
+            '(SELECT activityId FROM PlanActivities WHERE PlanActivities.planId = ?)', [planId]),
         executeSql('DELETE FROM PlanActivities WHERE planId  = ?', [planId]),
     ]
 };

@@ -4,7 +4,8 @@ import { AddActivityBtnStyle as getStyles } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
 
 export const AddActivityBtn = (props: { onPress: () => void }) => {
-    const styles = getStyles(useTheme().colors, useTheme().theme);
+    const theme = useTheme();
+    const styles = getStyles(theme.colors, theme.theme);
 
     return (
         <TouchableNativeFeedback onPress={props.onPress}>
