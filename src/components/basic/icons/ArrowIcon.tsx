@@ -20,7 +20,8 @@ export const ArrowIcon = (props: IconProps) => {
         <TouchableNativeFeedback onPress={props.onPress}>
             <View style={{
                 alignItems: 'center',
-                justifyContent: 'center', ...props.wrapStyle,
+                justifyContent: 'center',
+                ...props.wrapStyle,
                 transform: [{ rotate: degs + 'deg' }]
             }}>
                 <Ionicons size={props.size || 25} name='md-arrow-back' color={color}/>
@@ -28,4 +29,3 @@ export const ArrowIcon = (props: IconProps) => {
         </TouchableNativeFeedback>
     );
 };
-

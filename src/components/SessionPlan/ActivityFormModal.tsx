@@ -1,13 +1,13 @@
 import React from "react";
-import { PlanActivity } from "../../types/plan";
+import { SessionActivity } from "../../types/activity";
 import { OpacityModal } from "../basic/OpacityModal";
 import { ActivityForm } from "./ActivityForm";
 
 type ModalProps = {
     isVisible: boolean,
     hideModal: () => void,
-    onSave: (_: PlanActivity) => void,
-    activity?: PlanActivity,
+    onSave: (_: SessionActivity) => void,
+    activity?: SessionActivity,
 };
 
 export const ActivityFormModal = (props: ModalProps) => (

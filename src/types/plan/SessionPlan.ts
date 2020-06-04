@@ -1,8 +1,6 @@
 import { Item } from "../item/Item";
-import { PlanActivity } from "./PlanActivity";
+import { SessionActivity } from "../activity";
 
 export type SessionPlan = Item & {
-    name: string;
-    schedule: PlanActivity[]; // order is important
-    createdOn: number,
+    schedule: SessionActivity[]; // order is important
 }

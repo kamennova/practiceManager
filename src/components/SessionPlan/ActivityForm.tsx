@@ -2,18 +2,23 @@ import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { ActivityForm as getStyles } from "../../AppStyle";
 import { useTheme } from "../../theme";
-import { ActivityType, Exercise, Tonality } from "../../types/Activity";
-import { getPlanActivity, PlanActivityInput } from "../../types/ActivityInput";
-import { PlanActivity } from "../../types/plan";
+import {
+    ActivityType,
+    Exercise,
+    getPlanActivity,
+    PlanActivityInput,
+    SessionActivity,
+    Tonality
+} from "../../types/activity";
 import { SendButton } from "../basic/buttons/SendButton";
 import { ComplexActivityFields } from "../basic/ComplexActivityFields";
 import { ActivityTypeSelect } from "../basic/inputs/ActivityTypeSelect";
 import { DurationInput } from "../basic/inputs/DurationInput";
 
 type BlockFormProps = {
-    onSave: (_: PlanActivity) => void,
+    onSave: (_: SessionActivity) => void,
     onClose: () => void,
-    activity?: PlanActivity,
+    activity?: SessionActivity,
 };
 
 const BaseActivity = { type: ActivityType.Break, duration: 15 * 60 };

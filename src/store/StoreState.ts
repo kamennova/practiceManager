@@ -1,4 +1,4 @@
-import { ActivityRecord } from "../types/ActivityRecord";
+import { ActivityRecord } from "../types/activity";
 import { EmptyPiece, Piece, PieceBase } from "../types/piece";
 import { EmptyPlan, SessionPlan } from "../types/plan";
 import { Session } from "../types/Session";

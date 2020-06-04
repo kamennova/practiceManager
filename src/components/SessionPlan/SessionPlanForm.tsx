@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import { ScrollView, Text, View, ViewStyle } from "react-native";
 import { connect } from "react-redux";
 import { ActivityBlockHeight, AppPaddingStyle, AppSidePadding, PlanFormStyle as getStyles } from "../../AppStyle";
-import { validatePlan } from "../../db/plan";
+import { validatePlan } from "./validation";
 import { SESSION_PLAN } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkAddPlan, thunkEditPlan } from "../../store/thunks/plan";
 import { DEFAULT_THEME, ThemeColors } from "../../theme";
 import { ActionType } from "../../types/ActionType";
+import { SessionActivity } from "../../types/activity";
 import { FormProps, FormState } from "../../types/item/ItemForm";
 import { Piece } from "../../types/piece";
-import { EmptyPlan, PlanActivity, SessionPlan } from "../../types/plan";
+import { EmptyPlan, SessionPlan } from "../../types/plan";
 import { swipe } from "../../utils/array";
 import { ErrorAlert } from "../basic/alerts";
 import { SaveButton } from "../basic/buttons/ActionButton";
@@ -26,7 +27,7 @@ import { EditableActivityBlock } from "./EditableActivityBlock";
 type Coord = { x: number, y: number };
 
 class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: SessionPlan }>,
-    FormState<{ plan: SessionPlan }> & { showMenu: number, showModal: boolean, editing: number }> {
+    FormState<{ plan: SessionPlan }> & { showMenu: number, showModal: boolean, editing: number, }> {
 
     val: Coord = { x: 0, y: 0 };
     mode = this.props.route.params.mode === undefined ? ActionType.Create : this.props.route.params.mode;
@@ -48,13 +49,13 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
     showModal = () => this.setState({ ...this.state, showModal: true });
     hideModal = () => this.setState({ ...this.state, showModal: false });
 
-    addActivity = (act: PlanActivity) => this.setState({
+    addActivity = (act: SessionActivity) => this.setState({
         ...this.state,
         plan: { ...this.state.plan, schedule: [...this.state.plan.schedule, act] },
         showModal: false,
     });
 
-    replaceActivity = async (act: PlanActivity) => {
+    replaceActivity = async (act: SessionActivity) => {
         const schedule = [...this.state.plan.schedule];
         schedule[this.state.editing] = act;
         await this.setPlan({ ...this.state.plan, schedule });
@@ -79,7 +80,7 @@ class SessionPlanFormClass extends Component<FormProps<SessionPlan, { plan: Sess
         this.setState({ ...this.state, showMenu: -1 })
     };
 
-    onSaveActivity = async (act: PlanActivity) => {
+    onSaveActivity = async (act: SessionActivity) => {
         if (this.state.editing > -1) {
             await this.replaceActivity(act);
         } else {
@@ -182,6 +183,7 @@ const getMenuStyle = (index: number): ViewStyle => ({
 
 const mapStateToProps = (state: StateShape) => ({
     addedItemId: state.plans.lastAddedId,
+    plans: state.plans,
 });
 
 const mapDispatchToProps = (dispatch: any, ownProps: FormProps<Piece, { piece: Piece }>) => ({

@@ -2,8 +2,7 @@ import React from "react";
 import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { ActivityTimingStyle, PlanItemStyle as getStyle } from "../../AppStyle";
 import { useTheme } from "../../theme";
-import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
-import { ActivityType } from "../../types/Activity";
+import { ActivitiesReport, ActivityType, getActivitiesReport } from "../../types/activity";
 import { SessionPlan } from "../../types/plan";
 import { formatMinutesShort } from "../../utils/time";
 

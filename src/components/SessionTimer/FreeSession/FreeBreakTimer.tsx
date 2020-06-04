@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import { SESSION_END } from "../../../NavigationPath";
 import { thunkEndSession } from "../../../store/thunks/session";
-import { ActivityType } from "../../../types/Activity";
+import { ActivityType } from "../../../types/activity";
 import { getSeconds } from "../../../utils/time";
 import { ResumeButton, TimerButtonsWrapper } from "../../basic/buttons/TimerButton";
 import { TimeTracker } from "../../basic/timeTrackers";

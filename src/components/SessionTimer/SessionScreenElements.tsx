@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import { TimerTitleStyle as getStyles } from "../../AppStyle";
 import { StateShape } from "../../store/StoreState";
-import { Activity } from "../../types/Activity";
+import { Activity } from "../../types/activity";
 import { getPieceCredits, getTimerActivityTitle, PieceCredits } from "../../utils/title";
 import { getActivityColor } from "./Colors";
 

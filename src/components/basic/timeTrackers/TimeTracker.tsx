@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { TimeTrackerTextStyle } from "../../../AppStyle";
-import { ActivityType } from "../../../types/Activity";
+import { ActivityType } from "../../../types/activity/Activity";
 import { formatSeconds } from "../../../utils/time";
 import { getActivityColor } from "../../SessionTimer/Colors";
 

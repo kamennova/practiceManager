@@ -4,7 +4,7 @@ import { Dimensions, Text, View } from "react-native";
 import { connect } from "react-redux";
 import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
-import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
+import { ActivitiesReport, getActivitiesReport } from "../../types/activity";
 import { Session } from "../../types/Session";
 import { secondsToHumanlyFormat } from "../../utils/time";
 import { Button } from "../basic/buttons/Button";

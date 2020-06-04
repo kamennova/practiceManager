@@ -6,7 +6,7 @@ import { addNoteToDb, getPieceById } from "../../db/piece";
 import { SESSION_END } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkEndSession } from "../../store/thunks/session";
-import { Activity, ActivityType } from "../../types/Activity";
+import { Activity, ActivityType } from "../../types/activity";
 import { PieceBase } from "../../types/piece";
 import { BreakButton, FinishButton, NextButton, TimerButtonsWrapper } from "../basic/buttons/TimerButton";
 import { PieceNoteModal } from "../basic/PieceNoteModal";

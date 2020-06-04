@@ -1,5 +1,7 @@
 export type Item = {
     id: number,
+    name: string,
+    addedOn: Date,
     isFavourite: boolean,
 };
 

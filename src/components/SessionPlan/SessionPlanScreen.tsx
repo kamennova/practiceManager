@@ -5,9 +5,9 @@ import { AppPaddingStyle, TotalHeaderHeight } from "../../AppStyle";
 import { getPlanById } from "../../db/plan";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePlan, thunkTogglePlanFav } from "../../store/thunks/plan";
-import { ActivitiesReport, getActivitiesReport } from "../../types/ActivitiesReport";
+import { ActivitiesReport, getActivitiesReport, SessionActivity } from "../../types/activity";
 import { ItemScreenProps } from "../../types/item/ItemScreen";
-import { EmptyPlan, PlanActivity, SessionPlan } from "../../types/plan";
+import { EmptyPlan, SessionPlan } from "../../types/plan";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemFeatures } from "../basic/Item/ItemFeatures";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
@@ -70,7 +70,7 @@ const PlanFeatures = (props: { report: ActivitiesReport }) => (
     ]}/>
 );
 
-const SessionScheduleView = (props: { schedule: PlanActivity[] }) => {
+const SessionScheduleView = (props: { schedule: SessionActivity[] }) => {
     return (
         <View style={{
             marginTop: 20,

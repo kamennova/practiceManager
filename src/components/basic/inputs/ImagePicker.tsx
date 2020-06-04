@@ -18,7 +18,7 @@ type PickerProps = {
 export const MyImagePicker = (props: PickerProps) => {
     const colors = useTheme().colors;
     const styles = getStyles(colors);
-    const isPicSet = props.src !== undefined && props.src !== ''; //todo set in db
+    const isPicSet = props.src !== undefined && props.src !== '';
 
     const getPermission = async () => {
         if (Constants.platform !== undefined && Constants.platform.ios) {

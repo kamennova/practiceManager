@@ -1,7 +1,6 @@
 import { Note } from "../types/Note";
 import { Piece, PieceBase } from "../types/piece";
 import { getSeconds } from "../utils/time";
-import { CheckResult } from "./CheckResult";
 import { executeSql } from "./common";
 import { rowToNote, rowToPiece } from "./RowTransform";
 import { PieceRow } from "./RowTypes";
@@ -73,30 +72,24 @@ export const toggleIsFavourite = async (id: number): Promise<void> => {
 };
 
 export const deletePieceFromDb = async (id: number): Promise<void> => {
-    await executeSql('DELETE FROM Pieces WHERE id = ?', [id]);
+    await Promise.all([
+        executeSql('DELETE FROM Pieces WHERE id = ?', [id]),
+        deleteTags(id),
+        deletePieceActivities(id),
+    ]);
+};
+
+const deletePieceActivities = async (pieceId: number): Promise<void> => {
+    await executeSql(
+        'DELETE FROM PlanActivities WHERE activityId IN (SELECT id FROM Activities WHERE Activities.pieceId = ?)',
+        [pieceId])
+        .then(() => executeSql('DELETE FROM Activities WHERE pieceId = ?', [pieceId]));
 };
 
 export const getNotificationId = async (id: number): Promise<number | null> =>
     await executeSql('SELECT notifId FROM Pieces WHERE id = ?', [id])
     // @ts-ignore
         .then((res) => res.rows._array[0].notifId);
-
-export const validatePiece = async (piece: Piece): Promise<CheckResult> => {
-    if (piece.name.length === 0) {
-        return Promise.resolve({ valid: false, errors: 'You forgot to enter piece title ✍' });
-    }
-
-    return await executeSql('SELECT COUNT(*) as count FROM Pieces WHERE name = ? AND NOT id = ?',
-        [piece.name, piece.id])
-        .then((res) => {
-            // @ts-ignore
-            if (res.rows._array[0].count > 0) {
-                return { valid: false, errors: 'Piece with the same name already exists' }
-            }
-
-            return { valid: true };
-        })
-};
 
 export const getPieceById = async (id: number): Promise<Piece | undefined> => {
     const piece = await fetchPiece(id);

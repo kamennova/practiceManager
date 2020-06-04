@@ -1,5 +1,5 @@
 import { Activity, ActivityType, Exercise, Tonality } from "./Activity";
-import { PlanActivity } from "./PlanActivity";
+import { SessionActivity } from "./SessionActivity";
 
 export type NoBreakActivity = ActivityType.Technique | ActivityType.SightReading | ActivityType.Piece;
 
@@ -18,7 +18,7 @@ export type PlanActivityInput = {
     pieceId?: number,
 };
 
-export const getPlanActivity = (act: PlanActivityInput): PlanActivity => {
+export const getPlanActivity = (act: PlanActivityInput): SessionActivity => {
     switch (act.type) {
         case ActivityType.Break:
             return { type: ActivityType.Break, duration: act.duration };

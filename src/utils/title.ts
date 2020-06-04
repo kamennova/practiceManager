@@ -1,4 +1,4 @@
-import { Activity, ActivityType, TechniqueActivity } from "../types/Activity";
+import { Activity, ActivityType, TechniqueActivity } from "../types/activity";
 import { PieceBase } from "../types/piece";
 
 export type PieceCredits = {

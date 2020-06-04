@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 import { StateShape } from "../../store/StoreState";
-import { getActivitiesReport, totalDuration } from "../../types/ActivitiesReport";
+import { getActivitiesReport, totalDuration } from "../../types/activity";
 import { PieceBase, PieceStatus } from "../../types/piece";
 import { Session } from "../../types/Session";
 import { secondsToHumanlyFormat } from "../../utils/time";
@@ -21,7 +21,6 @@ const _Dashboard = (props: DashboardProps) => {
 
     return (
         <ScreenWrapper>
-
             <ItemSection title={'Pieces overview'}>
                 <ItemFeatures items={piecesOverview}/>
             </ItemSection>

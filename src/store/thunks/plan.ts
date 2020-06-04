@@ -22,4 +22,3 @@ export const thunkDeletePlan: ThunkResult = (id: number) => async (dispatch: Dis
 
 export const thunkTogglePlanFav: ThunkResult = (id: number) => async (dispatch: Dispatch) =>
     await togglePlanIsFavourite(id).then(() => dispatch(togglePlanFav(id)));
-

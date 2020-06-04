@@ -16,27 +16,24 @@ export const NumberInput = (props: NumberInputProps) => {
     const colors = useTheme().colors;
     const styles = getStyles(colors);
 
-    const validateVal = (val: string | undefined): number => {
-        const numVal = Number(val);
-
-        if (props.minVal !== undefined && numVal < props.minVal) {
+    const validateVal = (val: number): number => {
+        if (props.minVal !== undefined && val < props.minVal) {
             return props.minVal;
         }
 
-        if (props.maxVal !== undefined && numVal > props.maxVal) {
+        if (props.maxVal !== undefined && val > props.maxVal) {
             return props.maxVal;
         }
 
-        return numVal;
+        return val;
     };
 
-    const onSubmit = (a: { nativeEvent: { text: string } }) => {
-        const val = validateVal(a.nativeEvent.text);
-        props.onChange(val);
-    };
+    const onSubmit = (a: { nativeEvent: { text: string } }) => onChange(Number(a.nativeEvent.text));
 
-    const inc = () => props.onChange(props.value + 1);
-    const dec = () => props.onChange(props.value - 1);
+    const onChange = (value: number) => props.onChange(validateVal(value));
+
+    const inc = () => onChange(props.value + 1);
+    const dec = () => onChange(props.value - 1);
 
     return (
         <View style={styles.wrap}>
@@ -45,7 +42,7 @@ export const NumberInput = (props: NumberInputProps) => {
                 <TextInput style={styles.input}
                            keyboardType='numeric'
                            onSubmitEditing={onSubmit}
-                           onChangeText={(val) => props.onChange(val === undefined ? val : Number(val))}
+                           onChangeText={(val) => onChange(val !== '' ? Number(val) : 0)}
                            value={props.value.toString()}/>
                 {props.measure !== undefined ?
                     <Text style={styles.text}>{getMeasure(props.value, props.measure, props.measurePlural)}</Text>

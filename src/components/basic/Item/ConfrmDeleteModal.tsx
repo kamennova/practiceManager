@@ -9,7 +9,7 @@ export const ConfirmDeleteModal = (props: { onCancel: () => void, onOk: () => vo
     return (
         <View style={SmallModalStyle(useTheme().colors)}>
             <ModalTitle>Are you sure you want to delete this item?</ModalTitle>
-            <Button onPress={props.onOk} style={{marginBottom: 15}} label='Delete' />
+            <Button onPress={props.onOk} style={{ marginBottom: 15 }} label='Delete'/>
             <MinorButton onPress={props.onCancel}>Cancel</MinorButton>
         </View>
     );

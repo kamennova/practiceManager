@@ -1,16 +1,14 @@
-import { getActivitiesReport } from "../types/ActivitiesReport";
-import { ActivityType } from "../types/Activity";
-import { PlanActivity } from "../types/PlanActivity";
+import { ActivityType, getActivitiesReport, SessionActivity } from "../types/activity";
 
 it('activities report test', () => {
-    const activities = [
+    const activities: SessionActivity[] = [
         { type: ActivityType.Piece, duration: 30 },
         { type: ActivityType.SightReading, duration: 120 },
         { type: ActivityType.Piece, duration: 50 },
         { type: ActivityType.Technique, duration: 100 },
         { type: ActivityType.Technique, duration: 300 },
         { type: ActivityType.Piece, duration: 650 },
-    ] as PlanActivity[];
+    ];
 
     const report = getActivitiesReport(activities);
     expect(report.technique).toBe(400);

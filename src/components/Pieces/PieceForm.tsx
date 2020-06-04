@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle, TotalHeaderHeight } from "../../AppStyle";
-import { validatePiece } from "../../db/piece";
+import { validatePiece } from "./validation";
 import { PIECE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkAddPiece, thunkEditPiece } from "../../store/thunks";
@@ -45,7 +45,7 @@ class PieceFormComponent extends Component<FormProps<Piece, { piece: Piece }>, F
 
     async validateAndSave() {
         this.setPiece({ ...this.state.piece, authors: trimStrArr(this.state.piece.authors) });
-        const res = await validatePiece(this.state.piece);
+        const res = validatePiece(this.state.piece);
 
         if (res.valid) {
             await this.props.onHandleSave(this.state.piece);

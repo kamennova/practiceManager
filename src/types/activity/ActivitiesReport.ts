@@ -1,5 +1,5 @@
 import { ActivityType } from "./Activity";
-import { PlanActivity } from "./plan";
+import { SessionActivity } from "./SessionActivity";
 
 export type ActivitiesReport = {
     totalDuration: number,
@@ -9,7 +9,7 @@ export type ActivitiesReport = {
     sightReading: number,
 };
 
-export const getActivitiesReport = (activities: PlanActivity[]): ActivitiesReport => ({
+export const getActivitiesReport = (activities: SessionActivity[]): ActivitiesReport => ({
     totalDuration: totalDuration(activities),
     pieces: piecesDuration(activities),
     technique: techniqueDuration(activities),
@@ -17,7 +17,7 @@ export const getActivitiesReport = (activities: PlanActivity[]): ActivitiesRepor
     break: breakDuration(activities),
 });
 
-const sumActivitiesDuration = (activities: PlanActivity[]): number => {
+const sumActivitiesDuration = (activities: SessionActivity[]): number => {
     let sum: number = 0;
 
     activities.forEach(activity => sum += activity.duration);
@@ -25,16 +25,16 @@ const sumActivitiesDuration = (activities: PlanActivity[]): number => {
     return sum;
 };
 
-export const totalDuration = (activities: PlanActivity[]): number => sumActivitiesDuration(activities);
+export const totalDuration = (activities: SessionActivity[]): number => sumActivitiesDuration(activities);
 
-export const sightReadingDuration = (activities: PlanActivity[]): number =>
+export const sightReadingDuration = (activities: SessionActivity[]): number =>
     sumActivitiesDuration(activities.filter(act => act.type === ActivityType.SightReading));
 
-export const breakDuration = (activities: PlanActivity[]): number =>
+export const breakDuration = (activities: SessionActivity[]): number =>
     sumActivitiesDuration(activities.filter(act => act.type === ActivityType.Break));
 
-export const piecesDuration = (activities: PlanActivity[]): number =>
+export const piecesDuration = (activities: SessionActivity[]): number =>
     sumActivitiesDuration(activities.filter(act => act.type === ActivityType.Piece));
 
-export const techniqueDuration = (activities: PlanActivity[]): number =>
+export const techniqueDuration = (activities: SessionActivity[]): number =>
     sumActivitiesDuration(activities.filter(act => act.type === ActivityType.Technique));

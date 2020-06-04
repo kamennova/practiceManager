@@ -1,30 +1,40 @@
-import { ActivityType, Exercise, Tonality } from "../types/Activity";
+import { ActivityType, Exercise, Tonality } from "../types/activity/Activity";
 import { enumKeys, pieceGroupBy, replaceItem, swipe } from "../utils/array";
 import { daysAgo, formatDateDiff, getHours, getMinutes } from "../utils/time";
 import { getActivityTitle } from "../utils/title";
 
-it('replaceItem', () => {
-    const replaced = replaceItem<{ id: number, val: number }>(
-        [{ id: 1, val: 2 }, { id: 2, val: 10 }, { id: 3, val: 15 }, { id: 4, val: 4 }],
-        { id: 3, val: 100 });
-    const updItem = replaced.find(it => it.id === 3);
-    expect(updItem?.val).toBe(100);
+it('replaceItem, pure', () => {
+    const arr = [{ id: 1, val: 2 }, { id: 2, val: 10 }, { id: 3, val: 15 }, { id: 4, val: 4 }];
+    const replaced = replaceItem<{ id: number, val: number }>(arr, { id: 3, val: 100 });
+
+    expect(replaced[2].val).toBe(100);
+    expect(arr).toEqual([{ id: 1, val: 2 }, { id: 2, val: 10 }, { id: 3, val: 15 }, { id: 4, val: 4 }]);
 });
 
-it('swipe', () => {
-    const swiped = swipe([1, 2, 3, 4], 0, 1);
-    expect(swiped[0]).toBe(2);
-    expect(swiped[1]).toBe(1);
+it('swipe, pure', () => {
+    const arr = [1, 2, 3, 4, 5];
+
+    const swiped1 = swipe(arr, 0, 1);
+    expect(swiped1[0]).toBe(2);
+    expect(swiped1[1]).toBe(1);
+
+    const swiped2 = swipe(arr, 2, 3);
+    expect(swiped2[2]).toBe(4);
+    expect(swiped2[3]).toBe(3);
+
+    expect(arr).toEqual([1, 2, 3, 4, 5]);
 });
 
 it('enum keys', () => {
     enum TestEnum {
         FirstKey = 'firstVal',
-        SecondKey = 'secondVal',
+        secondKey = 'secondVal',
         ThirdKey = 'thirdVal'
     }
 
-    expect(enumKeys(TestEnum)[0]).toBe('FirstKey');
+    const keys =enumKeys(TestEnum);
+    expect(keys[0]).toBe('FirstKey');
+    expect(keys[1]).toBe('secondKey')
 });
 
 it('get minutes', () => expect(getMinutes(123)).toBe(3));

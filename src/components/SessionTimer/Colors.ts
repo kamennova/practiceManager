@@ -1,4 +1,4 @@
-import { ActivityType } from "../../types/Activity";
+import { ActivityType } from "../../types/activity";
 
 export const getScreenBgByActivity = (activity: ActivityType): string => {
     switch (activity) {
