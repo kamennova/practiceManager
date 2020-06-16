@@ -30,7 +30,7 @@ export const updatePieceInDb = async (piece: Piece): Promise<void> => {
             [
                 piece.name,
                 piece.imageUri !== undefined ? piece.imageUri : null,
-                piece.authors.length > 0 ? piece.authors.join(', ') : '',
+                piece.author !== undefined ? piece.author : null,
                 piece.id,
             ]),
         deleteTags(piece.id)]);
@@ -54,7 +54,7 @@ export const insertPiece = async (piece: Piece): Promise<number> =>
             piece.imageUri !== undefined ? piece.imageUri : null,
             piece.isFavourite ? 1 : 0,
             0,
-            piece.authors.length > 0 ? piece.authors.join(', ') : '',
+            piece.author !== undefined ? piece.author : null,
         ]).then(({ insertId }) => {
         return insertId;
     });

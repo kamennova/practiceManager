@@ -11,7 +11,7 @@ export const rowToPieceBase = (row: PieceRow, tags?: string[]): PieceBase => ({
     name: row.name,
     timeSpent: row.timeSpent,
     lastPracticedOn: row.lastPracticedOn !== null ? new Date(row.lastPracticedOn * 1000) : undefined,
-    authors: row.authors !== '' ? row.authors.split(', ') : [],
+    author: row.author !== null ? row.author : undefined,
     addedOn: new Date(row.addedOn),
     status: row.timeSpent > 0 ? PieceStatus.InWork : PieceStatus.NotStarted,
     tags: tags !== undefined ? tags : [],

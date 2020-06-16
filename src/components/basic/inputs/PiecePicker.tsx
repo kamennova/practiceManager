@@ -18,7 +18,7 @@ type InputProps = {
     default?: PickerItem,
 }
 
-const getLabel = (p: PieceBase) => p.name + (p.authors.length > 0 ? ' by ' + p.authors : '');
+const getLabel = (p: PieceBase) => p.name + (p.author !== undefined ? ' by ' + p.author : '');
 
 const PiecePickerComponent = (props: InputProps) => {
     const init = props.pieceId !== undefined ? getLabel(findItemOrThrowError(props.pieces, props.pieceId)) : '';

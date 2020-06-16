@@ -21,7 +21,7 @@ export const setUpDb = async () => {
             'notifsOn integer not null default 0,' +
             'notifsInterval smallint default 3, ' +
             'notifId smallint, ' +
-            'authors varchar(225)' +
+            'author varchar(225)' +
             ')',
             [],
             undefined,

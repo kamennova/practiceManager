@@ -9,7 +9,7 @@ export type PieceRow = ItemRow & {
     lastPracticedOn: number | null,
     imageUri: string | null,
     timeSpent: number,
-    authors: string,
+    author: string | null,
     notifsOn: number,
     notifsInterval: number,
     notifId: number | null,

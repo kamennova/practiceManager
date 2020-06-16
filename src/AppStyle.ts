@@ -465,11 +465,12 @@ export const NumberInputStyle = (colors: ThemeColors) => StyleSheet.create({
 
 export const FullScreenModalStyle: ViewStyle = {
     ...AppPaddingStyle,
+    flex: 1,
     paddingTop: 220,
     paddingBottom: 0,
     justifyContent: 'center',
     alignContent: 'center',
-    minHeight: Dimensions.get('window').height,
+    height: Dimensions.get('window').height,
 };
 
 export const SessionScreenStyle: ViewStyle = {
