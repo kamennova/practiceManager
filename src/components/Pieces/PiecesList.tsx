@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, Image, Text, TextStyle, TouchableNativeFeedback, View } from "react-native";
-import { ListItemTitleStyle, PieceItemStyle, PieceListStyle as stylesFunc } from "../../AppStyle";
+import { ListItemTitleStyle, PieceItemStyle, PieceListStyle as getStyles } from "../../AppStyle";
 import { PIECE } from "../../NavigationPath";
 import { Theme, useTheme } from "../../theme";
 import { ThemeColors } from "../../theme/colors";
@@ -27,7 +27,7 @@ const borderStyle = (colors: ThemeColors) => ({ borderTopWidth: 1, borderTopColo
 
 const PieceItem = (props: PieceBase & { onPress: () => void }) => {
     const theme = useTheme();
-    const styles = stylesFunc(theme.colors, theme.theme);
+    const styles = getStyles(theme.colors, theme.theme);
 
     return (
         <TouchableNativeFeedback onPress={props.onPress}>
@@ -36,8 +36,8 @@ const PieceItem = (props: PieceBase & { onPress: () => void }) => {
                     <PieceName style={ListItemTitleStyle(theme.colors)}>
                         {props.name}
                     </PieceName>
-                    {props.authors.length > 0 ?
-                        <PieceAuthor style={styles.author} authors={props.authors}/> : undefined}
+                    {props.author !== undefined ?
+                        <PieceAuthor author={props.author}/> : undefined}
                 </View>
                 {props.imageUri !== undefined && props.imageUri !== '' ? [
                     <Image style={styles.image} source={{ uri: props.imageUri }}/>,
@@ -56,8 +56,8 @@ const PieceName = (props: { children: string, style?: TextStyle }) => (
     </Text>
 );
 
-const PieceAuthor = (props: { authors: string[], style?: TextStyle }) => (
-    <Text style={props.style}>
-        {props.authors.reduce((a, b) => a + ', ' + b)}
+const PieceAuthor = (props: { author: string }) => (
+    <Text style={getStyles(useTheme().colors).author}>
+        {props.author}
     </Text>
 );

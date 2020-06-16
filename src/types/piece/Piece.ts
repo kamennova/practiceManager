@@ -4,7 +4,7 @@ import { Recording } from "./Recording";
 
 export type PieceBase = Item & {
     tags: string[],
-    authors: string[],
+    author?: string,
     complexity?: PieceComplexity,
     genre?: PieceGenre,
     imageUri?: string,

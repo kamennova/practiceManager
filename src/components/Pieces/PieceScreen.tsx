@@ -91,7 +91,7 @@ const PieceComponent = (props: PieceScreenProps) => {
             <View style={screenHeadStyle(showPic)}>
                 <PieceTags tags={piece.tags}/>
                 <ScreenTitle>{piece.name}</ScreenTitle>
-                {piece.authors.length > 0 ? <PieceAuthors authors={piece.authors}/> : undefined}
+                {piece.author !== undefined ? <PieceAuthor author={piece.author}/> : undefined}
 
                 <PieceFeatures timeSpent={piece.timeSpent} lastPracticed={piece.lastPracticedOn}
                                status={piece.status}/>
@@ -106,11 +106,11 @@ const PieceComponent = (props: PieceScreenProps) => {
     );
 };
 
-const PieceAuthors = (props: { authors: string[] }) => {
+const PieceAuthor = (props: { author: string }) => {
     const colors = useTheme().colors;
     return (
         <Text style={getStyles(colors).authors}>
-            {props.authors.join(', ')}
+            {props.author}
         </Text>
     )
 };

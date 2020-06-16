@@ -3,14 +3,12 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import { AppPaddingStyle, TotalHeaderHeight } from "../../AppStyle";
-import { validatePiece } from "./validation";
 import { PIECE } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkAddPiece, thunkEditPiece } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { FormProps, FormState } from "../../types/item/ItemForm";
 import { EmptyPiece, Piece } from "../../types/piece";
-import { trimStrArr } from "../../utils/strings";
 import { ErrorAlert } from "../basic/alerts";
 import { SaveButton } from "../basic/buttons/ActionButton";
 import { MyImagePicker } from "../basic/inputs/ImagePicker";
@@ -18,6 +16,7 @@ import { TagInput } from "../basic/inputs/TagInput";
 import { MyTextInput } from "../basic/inputs/TextInput";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
 import { PieceNotifications } from "./PieceNotifications";
+import { validatePiece } from "./validation";
 
 class PieceFormComponent extends Component<FormProps<Piece, { piece: Piece }>, FormState<{ piece: Piece }>> {
     mode = this.props.route.params.mode === undefined ? ActionType.Create : this.props.route.params.mode;
@@ -36,7 +35,7 @@ class PieceFormComponent extends Component<FormProps<Piece, { piece: Piece }>, F
         });
     };
 
-    setAuthors = (a: string) => this.setPiece({ ...this.state.piece, authors: a.split(',') });
+    setAuthor = (author: string) => this.setPiece({ ...this.state.piece, author });
     setName = (name: string) => this.setPiece({ ...this.state.piece, name });
     setTags = (tags: string[]) => this.setPiece({ ...this.state.piece, tags });
 
@@ -44,7 +43,6 @@ class PieceFormComponent extends Component<FormProps<Piece, { piece: Piece }>, F
     updateInterval = (val: number) => this.setPiece({ ...this.state.piece, notifsInterval: val });
 
     async validateAndSave() {
-        this.setPiece({ ...this.state.piece, authors: trimStrArr(this.state.piece.authors) });
         const res = validatePiece(this.state.piece);
 
         if (res.valid) {
@@ -89,8 +87,8 @@ class PieceFormComponent extends Component<FormProps<Piece, { piece: Piece }>, F
                                      onChangeText={this.setName}/>
 
                         <MyTextInput label='Author'
-                                     value={this.state.piece.authors.toString()}
-                                     onChangeText={this.setAuthors}/>
+                                     value={this.state.piece.author}
+                                     onChangeText={this.setAuthor}/>
 
                         <TagInput list={this.state.piece.tags} onUpdateTags={this.setTags}/>
 

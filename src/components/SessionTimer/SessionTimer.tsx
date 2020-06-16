@@ -7,7 +7,7 @@ import { SESSION_END } from "../../NavigationPath";
 import { StateShape } from "../../store/StoreState";
 import { thunkEndSession } from "../../store/thunks/session";
 import { Activity, ActivityType } from "../../types/activity";
-import { PieceBase } from "../../types/piece";
+import { Piece, PieceBase } from "../../types/piece";
 import { BreakButton, FinishButton, NextButton, TimerButtonsWrapper } from "../basic/buttons/TimerButton";
 import { PieceNoteModal } from "../basic/PieceNoteModal";
 import { SessionTimerWrap } from "./SessionTimerWrap";
@@ -24,7 +24,7 @@ type SessionTimerProps = {
 };
 
 const SessionTimerComponent = (props: SessionTimerProps) => {
-    const [piece, setPiece] = useState(undefined);
+    const [piece, setPiece] = useState<Piece|undefined>(undefined);
     const [showNoteForm, setShowNoteForm] = useState(false);
     const nav = useNavigation();
 
