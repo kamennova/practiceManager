@@ -1,26 +1,51 @@
-# Music practice helper
+# PracticeTime - music practice manager
 
-------
+Android app for musicians helping to practice effectively.
 
-A mobile app for musicians helping organize practice sessions, maintaining their repertoire and  track time spent practicing.
+[Open via Expo](https://expo.io/@kamennova/practiceManager)
 
-## Minimum plan:
+#### List you repertoire
 
-- repertoire (pieces list); storing notes & time spent on each piece, notifications for recital;
-- custom session plan builder;
-- tracking time spent on practice & displaying statistics;
+For each added piece you can store notes, set up reminders to practice and track level of mastery and time spent.
 
+![](./reports/piece.png) ![](./reports/add.png) ![](./reports/piecePage.png)
 
-## Maximum plan:
+#### Organize practice sessions
 
-- machine learning based recommendations on what to play next;
-- sync with Musescore account;
+![](./reports/choice.png) ![](./reports/sc.png)
 
-## Technologies:
+Two types of sessions are available:
+* Planned
+* Free
 
-- React Native, framework for building mobile apps using components;
-- Expo, React Native framework for easier testing and deployment;
-- SQLite, Expo and RN - compatible local database;
-- Redux - library helping managing the states;
-- (for maximum plan): Node.js, possibly Koa;
- 
+To have a planned practice session, create a plan with activities you want to practice.
+
+![](./reports/plan.png)
+
+In free session, select activities you want to practice on the go.
+
+![](./reports/freechoice.png)  
+
+#### View statistics
+
+A complete overview of your practice is available:
+* Pieces - partitioned by status - not started, in work and total
+* Sessions - total sessions completed, total time spent and the longest session time
+* Activities - time spent on Pieces, Technique and Sight reading
+
+![](./reports/stats.png)
+
+#### Choose preferred theme
+
+Dark theme is also available.
+
+![](./reports/piece_dark.jpg)
+
+---
+
+#### Technologies:
+
+- React Native + Expo
+- SQLite
+- Redux + Redux Thunk
+- Jest 
