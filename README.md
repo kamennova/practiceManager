@@ -8,15 +8,15 @@ Android app for musicians helping to practice effectively.
 
 For each added piece you can store notes, set up reminders to practice and track level of mastery and time spent.
 
-![](./reports/piece.png)  ![](./reports/piecePage.png)
+![](./reports/piece.png) ![](./reports/add.png) ![](./reports/piecePage.png)
 
 #### Organize practice sessions
 
 ![](./reports/choice.png) ![](./reports/sc.png)
 
-2 types of sessions are available:
-* planned
-* free
+Two types of sessions are available:
+* Planned
+* Free
 
 To have a planned practice session, create a plan with activities you want to practice.
 
@@ -28,13 +28,16 @@ In free session, select activities you want to practice on the go.
 
 #### View statistics
 
-- tracking time spent on practice & displaying statistics;
+A complete overview of your practice is available:
+* Pieces - partitioned by status - not started, in work and total
+* Sessions - total sessions completed, total time spent and the longest session time
+* Activities - time spent on Pieces, Technique and Sight reading
 
 ![](./reports/stats.png)
 
 #### Choose preferred theme
 
-Both light and dark themes are available.
+Dark theme is also available.
 
 ![](./reports/piece_dark.jpg)
 
@@ -44,5 +47,5 @@ Both light and dark themes are available.
 
 - React Native + Expo
 - SQLite
-- Redux + Redux-thunk
+- Redux + Redux Thunk
 - Jest 
