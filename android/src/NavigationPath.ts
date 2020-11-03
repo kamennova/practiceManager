@@ -1,4 +1,4 @@
-import { ItemName } from "./types/item/Item";
+import { ItemName } from "common/types/item/Item";
 
 export const DASHBOARD = 'Dashboard',
     REPERTOIRE = 'Repertoire',

@@ -1,6 +1,6 @@
-import { Note } from "../types/Note";
-import { Piece, PieceBase } from "../types/piece";
-import { getSeconds } from "../utils/time";
+import { Note } from "common/types/Note";
+import { Piece, PieceBase } from "common/types/piece";
+import { getSeconds } from "common/utils/time";
 import { executeSql } from "./common";
 import { rowToNote, rowToPiece } from "./RowTransform";
 import { PieceRow } from "./RowTypes";
