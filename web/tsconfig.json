@@ -25,7 +25,10 @@
     "allowJs": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "types": [
+      "cypress"
+    ]
   },
   "include": [
     "next-env.d.ts",
