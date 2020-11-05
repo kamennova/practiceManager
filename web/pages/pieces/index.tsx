@@ -15,12 +15,9 @@ function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => voi
 
             if (jwt !== undefined) {
                 getPieces(jwt).then(res => {
-                    console.log(res);
                     props.setPieces(res.pieces);
                     setIsLoaded(true);
                 });
-
-                console.log('load pieces');
             }
         }
     }, [isLoaded]);
@@ -30,7 +27,7 @@ function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => voi
             <h2>Pieces</h2>
             <Link href={'/pieces/add'}>Add piece</Link>
             <ul>
-                {props.pieces.map(piece => <li>{piece.name}</li>)}
+                {props.pieces.map(piece => <li><Link href={'/pieces/' + piece.id}>{piece.name}</Link></li>)}
             </ul>
         </div>
     );

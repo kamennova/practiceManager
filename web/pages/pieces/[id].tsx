@@ -1,15 +1,38 @@
+import { EmptyPiece } from "common/types/piece";
 import { useRouter } from "next/router";
-import React from 'react';
-import useSwr from 'swr'
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import React, { useEffect, useState } from 'react';
+import { getCookie } from "../../ts/helpers";
 
 export default function Piece() {
     const router = useRouter();
-    const { data, error } = useSwr(`/api/pieces/${router.query.id}`, fetcher);
+    const [loaded, setLoaded] = useState(false);
+    const [piece, setPiece] = useState(EmptyPiece);
 
-    if (error) return (<div>Failed to load user</div>);
-    if (!data) return (<div>Loading...</div>);
+    useEffect(() => {
+        const func = async () => {
+            if (!loaded) {
+                const token = getCookie('authToken');
 
-    return <div>{data.name}</div>
+                if (token !== undefined) {
+                    fetch(`/api/pieces/${router.query.id}`, {
+                        method: 'GET', headers: { authorization: token }
+                    }).then((resp) => resp.json())
+                        .then(res => {
+                            if (res.error !== undefined) {
+                                console.log(res.error);
+                            } else {
+                                setPiece(res.piece);
+                                setLoaded(true);
+                            }
+                        });
+                }
+            }
+        };
+
+        func();
+    }, []);
+
+    return (
+        <div>{piece.name}</div>
+    );
 }

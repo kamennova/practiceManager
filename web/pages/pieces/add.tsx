@@ -16,6 +16,7 @@ export default function AddPiecePage() {
 
     const savePiece = async () => {
         const jwt = getCookie('authToken');
+
         if (jwt !== undefined) {
             const res = await addPiece(piece, jwt);
             if (res.error !== undefined) {
@@ -23,8 +24,6 @@ export default function AddPiecePage() {
             } else {
                 router.push('/pieces/' + res.pieceId);
             }
-        } else {
-            console.log('jwt undefined');
         }
     };
 
@@ -32,10 +31,11 @@ export default function AddPiecePage() {
         <div>
             Add piece
             <FormControl label={'Title'}>
-                <TextInput value={piece.name} onChange={setProperty('name')}/>
+                <TextInput name='title' value={piece.name} onChange={setProperty('name')}/>
             </FormControl>
 
-            <Checkbox label={'Favourite'} value={piece.isFavourite} onChange={setProperty('isFavourite')}/>
+            <Checkbox label={'Favourite'} name='isFavourite' value={piece.isFavourite}
+                      onChange={setProperty('isFavourite')}/>
 
             <Button onClick={savePiece}>Save</Button>
         </div>
