@@ -1,8 +1,4 @@
-const TEST_USER = {
-    email: 'testemail@gmail.com',
-    password: 'password',
-};
-
+import { TEST_USER } from "../../ts/utils/test";
 
 describe('Authorization', () => {
     it('sign up', () => {

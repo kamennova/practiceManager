@@ -1,4 +1,4 @@
-import { TEST_USER } from "../../ts/TestData";
+import { TEST_USER } from "../../ts/utils/test";
 
 describe('Piece actions', () => {
     it('adds piece', () => {
