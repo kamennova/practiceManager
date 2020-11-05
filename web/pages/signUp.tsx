@@ -27,14 +27,13 @@ export default function SignUp() {
     };
 
     const createUser = async () => {
-        console.log('create user');
         const res = await fetch('/api/users', { method: 'PUT', body: JSON.stringify({ email, password }) })
             .then(result => result.json());
 
         if (res.error) {
             setError(res.error);
         } else {
-            router.push('/signIn.ts');
+            router.push('/signIn');
         }
     };
 
@@ -42,17 +41,17 @@ export default function SignUp() {
         <div className={'form-wrapper'}>
             <h2>Sign up!</h2>
             <FormControl label={'Email'}>
-                <TextInput value={email} onChange={setEmail}/>
+                <TextInput name={'email'} value={email} onChange={setEmail}/>
             </FormControl>
 
 
             <FormControl label={'Password'}>
-                <TextInput value={password} onChange={setPassword}/>
+                <TextInput type='password' name='password' value={password} onChange={setPassword}/>
             </FormControl>
 
 
             <FormControl label={'Confirm password'}>
-                <TextInput value={confirmPass} onChange={setConfirmPass}/>
+                <TextInput type='password' name='confirmPassword' value={confirmPass} onChange={setConfirmPass}/>
             </FormControl>
 
             <p>{error}</p>

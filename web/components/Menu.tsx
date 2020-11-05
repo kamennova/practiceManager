@@ -1,6 +1,7 @@
 import Link from "next/dist/client/link";
 import { useRouter } from "next/router";
 import React from 'react';
+import { clearCookie } from "../ts/helpers";
 import { useUser } from "../ts/user";
 import { Button } from "./Button";
 
@@ -15,6 +16,7 @@ export const Menu = () => {
     const router = useRouter();
 
     const logout = () => {
+        clearCookie('authToken');
         userCtx.setUser(undefined, '');
         router.push('/signIn');
     };

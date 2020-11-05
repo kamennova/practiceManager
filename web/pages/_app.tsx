@@ -4,6 +4,8 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import { Main } from "../components/Main";
+import { getUserIdByToken } from "../ts/api";
+import { getCookie } from "../ts/helpers";
 import { User, UserContext } from "../ts/user";
 import "./style.css";
 
@@ -17,6 +19,23 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
 
     useEffect(() => {
         console.log('app reload!');
+        const jwt = getCookie('authToken');
+
+        if (jwt !== undefined) {
+            const userId = getUserIdByToken(jwt);
+
+            if (userId !== undefined) {
+                fetch('/api/users/' + userId, { method: 'GET', headers: { authorization: jwt } })
+                    .then(resp => resp.json())
+                    .then(res => {
+                        if (res.error !== undefined) {
+                            console.log(res.error);
+                        } else {
+                            setUser(res.user, jwt);
+                        }
+                    });
+            }
+        }
     }, []);
 
     return (
