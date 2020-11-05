@@ -10,5 +10,10 @@ module.exports = {
     },
     "testPathIgnorePatterns": [
         "/node_modules/", "/cypress/"
-    ]
+    ],
+    globals: {
+        'ts-jest': {
+            tsConfig: '<rootDir>/__tests__/tsconfig.json'
+        }
+    }
 };

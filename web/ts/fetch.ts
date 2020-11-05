@@ -1,7 +1,11 @@
 import fetch from "node-fetch";
 
-export const fetchData = async (apiUrl: string, data?: any, method: string = 'POST', headers?: any) => await fetch(`http://localhost:3000/${apiUrl}`, {
-    method,
-    headers: headers !== undefined ? headers : undefined,
-    body: JSON.stringify(data),
-}).then(resp => resp.json());
+export const request = async (apiUrl: string, data?: any, method: string = 'POST', auth?: string) => {
+    const init =
+        method === 'PUT' || method === 'POST' ?
+            { method, body: JSON.stringify({ ...data, jwt: auth }) } :
+            { method, body: JSON.stringify(data), headers: auth !== undefined ? { authorization: auth } : undefined };
+
+    return await fetch(`http://localhost:3000/${apiUrl}`, init).then(resp => resp.json());
+};
+
