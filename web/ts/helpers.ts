@@ -10,3 +10,7 @@ export const getCookie = (name: string): string | undefined => {
 
     return undefined;
 };
+
+export const clearCookie = (name: string): void => {
+    document.cookie = `${name}=;`;
+};

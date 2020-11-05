@@ -78,8 +78,20 @@ export class Database implements IDatabase {
     }
 
     public async getUserByEmail(email: string): Promise<User | undefined> {
-        const res = await this.client.query('select * from users where email = $1 limit 1',
+        const res = await this.client.query('select * from users where email = $1 and is_deleted = false limit 1',
             [email]);
+
+        if (res.rows.length == 0) {
+            return Promise.resolve(undefined);
+        }
+
+        const user = res.rows[0];
+        return Promise.resolve({ id: user.id, email: user.email, password_hash: user.password_hash });
+    }
+
+    public async getUserById(id: number): Promise<User | undefined> {
+        const res = await this.client.query('select * from users where id = $1 limit 1',
+            [id]);
 
         if (res.rows.length == 0) {
             return Promise.resolve(undefined);
@@ -109,5 +121,13 @@ export class Database implements IDatabase {
         }
 
         return Database.rowToPiece(res.rows[0]);
+    }
+
+    public async deleteUserById(id: number) {
+        await this.client.query('update users set is_deleted = true where id = $1', [id]);
+    }
+
+    public async deleteUserByEmail(email: string) {
+        await this.client.query('update users set is_deleted = true where email = $1 and is_deleted = false', [email]);
     }
 }

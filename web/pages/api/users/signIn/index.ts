@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Database } from "../../../../db/Postgres";
-import jwt from 'jsonwebtoken';
-import { restrictMethods } from "../../../../ts/api";
+import { generateToken, restrictMethods } from "../../../../ts/api";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
@@ -27,11 +26,4 @@ const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     return res.status(200).json({ user, jwtToken: generateToken(user.id) });
-};
-
-const generateToken = (userId: number): string => {
-    const signature = 'MySuP3R_z3kr3t';
-    const expiration = '6h';
-
-    return jwt.sign({ id: userId }, signature, { expiresIn: expiration });
 };

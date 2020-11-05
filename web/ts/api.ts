@@ -23,3 +23,34 @@ export const getUserIdByToken = (token: string): number | undefined => {
 
     return decoded.id;
 };
+
+export const generateToken = (userId: number): string => {
+    const signature = 'MySuP3R_z3kr3t';
+    const expiration = '6h';
+
+    return jwt.sign({ id: userId }, signature, { expiresIn: expiration });
+};
+
+export const handleToken = (req: NextApiRequest, res: NextApiResponse): number | undefined | void => {
+    const token = getTokenFromReq(req);
+
+    if (token === '' || token === undefined) {
+        return unauthorizedResponse(res);
+    }
+
+    const userId = getUserIdByToken(token);
+
+    if (userId === undefined) {
+        return invalidAuthTokenResponse(res);
+    }
+
+    return userId;
+};
+
+export const getTokenFromReq = (req: NextApiRequest): string | undefined => {
+    if (req.method === 'POST' || req.method === 'PUT') {
+        return JSON.parse(req.body).jwt;
+    } else {
+        return req.headers.authorization;
+    }
+};

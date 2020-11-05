@@ -8,35 +8,38 @@ import {
     unauthorizedResponse
 } from "../../../ts/api";
 
-export default async function pieceHandler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {
         case 'GET':
-            return await getPiece(req, res);
+            return await getUser(req, res);
         default:
             restrictMethods(['GET'], req, res);
             return;
     }
 }
 
-const getPiece = async (req: NextApiRequest, res: NextApiResponse) => {
-    const pieceId = Number(req.query.id);
+const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
     const token = getTokenFromReq(req);
 
-    if (token === undefined || token === '') {
+    if (token === undefined) {
         return unauthorizedResponse(res);
     }
 
-    const userId = getUserIdByToken(token);
+    const userId = getUserIdByToken(token.toString());
     if (userId === undefined) {
         return invalidAuthTokenResponse(res);
     }
 
-    const db = await Database.connect();
-    const piece = await db.findUserPieceById(pieceId, userId);
-
-    if (piece === undefined) {
-        return res.status(404).json({ error: 'Piece not found' });
+    if (userId !== Number(req.query.id)) {
+        return res.status(403).json({ error: 'Access denied' });
     }
 
-    return res.status(200).json({ piece });
+    const db = await Database.connect();
+    const user = await db.getUserById(userId);
+
+    if (user === undefined) {
+        return res.status(404).json({ error: 'User not found!' });
+    } else {
+        return res.status(200).json({ user });
+    }
 };

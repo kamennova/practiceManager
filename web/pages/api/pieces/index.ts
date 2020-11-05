@@ -1,7 +1,13 @@
 import { EmptyPiece } from "common/types/piece";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Database } from "../../../db/Postgres";
-import { getUserIdByToken, invalidAuthTokenResponse, restrictMethods, unauthorizedResponse } from "../../../ts/api";
+import {
+    getTokenFromReq,
+    getUserIdByToken,
+    invalidAuthTokenResponse,
+    restrictMethods,
+    unauthorizedResponse
+} from "../../../ts/api";
 import { Optional } from "../../../ts/helpers";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 const getPieces = async (req: NextApiRequest, res: NextApiResponse) => {
-    const token = req.headers.authorization;
+    const token = getTokenFromReq(req);
 
     if (token === undefined) {
         return unauthorizedResponse(res);
@@ -30,7 +36,7 @@ const getPieces = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const pieces = await Database.connect().then(db => db.getPiecesMeta(userId));
 
-    return res.status(200).json({pieces: pieces});
+    return res.status(200).json({ pieces });
 };
 
 type AddPieceData = {
@@ -40,19 +46,22 @@ type AddPieceData = {
 };
 
 const addPiece = async (req: NextApiRequest, res: NextApiResponse) => {
-    const data = JSON.parse(req.body);
+    const token = getTokenFromReq(req);
 
-    if (data.jwt == '' || data.jwt === undefined) {
+    if (token == '' || token === undefined) {
         return unauthorizedResponse(res);
     }
 
-    if (!validatePieceData(data)) {
-        return res.status(406).json({ error: 'Incorrect piece data!' });
-    }
+    const userId = getUserIdByToken(token);
 
-    const userId = getUserIdByToken(data.jwt);
     if (userId === undefined) {
         return invalidAuthTokenResponse(res);
+    }
+
+    const data = JSON.parse(req.body);
+
+    if (!validatePieceData(data)) {
+        return res.status(400).json({ error: 'Incorrect piece data!' });
     }
 
     const db = await Database.connect();
