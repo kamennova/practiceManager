@@ -1,6 +1,6 @@
-import { request } from "../../ts/fetch";
-import { createTestUser, deleteTestUser } from "../../ts/utils/test";
-import { TEST_USER } from "../../ts/utils/test";
+import { request } from "../../src/ts/fetch";
+import { createTestUser, deleteTestUser } from "../../src/ts/utils/test";
+import { TEST_USER } from "../../src/ts/utils/test";
 
 beforeAll(async (done) => {
     await deleteTestUser();
@@ -8,7 +8,7 @@ beforeAll(async (done) => {
 });
 
 afterAll(async (done) => {
-    await createTestUser();
+    await deleteTestUser();
     done();
 });
 

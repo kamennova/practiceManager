@@ -1,10 +1,16 @@
 import { createContext, useContext } from 'react';
 import { User } from "./User";
 
-const DEFAULT_USER_VALUE = {
+type ConextState = {
+    user?: User,
+    jwtToken?: string
+    setUser: (_user?: User, _jwtToken?: string) => void,
+}
+
+const DEFAULT_USER_VALUE: ConextState = {
     user: undefined,
     jwtToken: undefined,
-    setUser: (_: User | undefined, _jwtToken: string) => {
+    setUser: (_?: User, _jwtToken?: string) => {
     },
 };
 
