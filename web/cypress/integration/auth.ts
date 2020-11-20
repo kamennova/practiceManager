@@ -1,4 +1,4 @@
-import { TEST_USER } from "../../ts/utils/test";
+import { TEST_USER } from "../../src/ts/utils/test";
 
 describe('Authorization', () => {
     it('sign up', () => {

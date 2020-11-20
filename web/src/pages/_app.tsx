@@ -3,7 +3,7 @@ import { AppProps } from "next/dist/pages/_app";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
-import { Main } from "../components/Main";
+import { Menu } from "../components/Menu";
 import { getUserIdByToken } from "../ts/api";
 import { getCookie } from "../ts/helpers";
 import { User, UserContext } from "../ts/user";
@@ -41,9 +41,8 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     return (
         <Provider store={store}>
             <UserContext.Provider value={{ user, jwtToken, setUser }}>
-                <Main>
-                    <Component {...pageProps} />
-                </Main>
+                {user !== undefined? <Menu/> : undefined}
+                <Component {...pageProps} />
             </UserContext.Provider>
         </Provider>
     );

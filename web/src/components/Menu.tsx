@@ -21,15 +21,19 @@ export const Menu = () => {
         router.push('/signIn');
     };
 
+    const email = userCtx.user !== undefined ? userCtx.user.email : undefined;
+
     return (
-        <nav className={'main-nav'}>
-            <div>
-                Welocme, {userCtx.user?.email}!
-            </div>
-            <ul>
-                {Links.map(item => <li><Link href={item.src}>{item.name}</Link></li>)}
-                <li><Button onClick={logout}>Log out</Button></li>
-            </ul>
-        </nav>
+        <aside className={'main-sidebar'}>
+            <nav className={'main-nav'}>
+                <div className={'user-link'}>
+                    Welcome, {email}!
+                </div>
+                <ul className={'main-links'}>
+                    {Links.map(item => <li><Link href={item.src}>{item.name}</Link></li>)}
+                    <li><Button onClick={logout} className={'btn-logout'}>Log out</Button></li>
+                </ul>
+            </nav>
+        </aside>
     );
 };

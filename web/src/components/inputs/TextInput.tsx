@@ -1,7 +1,7 @@
 import React from 'react';
 
 type InputProps = {
-    value: string,
+    value?: string,
     onChange: (val: string) => void,
     type?: 'text' | 'email' | 'password';
     name?: string

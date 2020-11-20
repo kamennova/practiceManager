@@ -62,12 +62,15 @@ export class Database implements IDatabase {
     }
 
     async toggleIsFavourite(id: number): Promise<void> {
-        await this.client.query('update piece set is_favourite = not is_favourite where id = $1 limit 1',
+        await this.client.query('update piece set is_favourite = not is_favourite where id = $1',
             [id]);
     }
 
     async updatePiece(piece: Piece): Promise<void> {
-        console.log('piece name', piece.name);
+        await this.client.query('update piece set name = $1 where id = $2', [
+            piece.name,
+            piece.id
+        ]);
     }
 
     public async createUser(email: string, password: string): Promise<number> {
@@ -78,7 +81,7 @@ export class Database implements IDatabase {
     }
 
     public async getUserByEmail(email: string): Promise<User | undefined> {
-        const res = await this.client.query('select * from users where email = $1 and is_deleted = false limit 1',
+        const res = await this.client.query('select * from users where email = $1 and (is_deleted = false or is_deleted is null) limit 1',
             [email]);
 
         if (res.rows.length == 0) {
@@ -129,5 +132,9 @@ export class Database implements IDatabase {
 
     public async deleteUserByEmail(email: string) {
         await this.client.query('update users set is_deleted = true where email = $1 and is_deleted = false', [email]);
+    }
+
+    public async deletePieceById(id: number){
+        await this.client.query('delete from piece where id = $1', [id]);
     }
 }

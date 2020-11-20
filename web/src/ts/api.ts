@@ -49,7 +49,7 @@ export const handleToken = (req: NextApiRequest, res: NextApiResponse): number |
 
 export const getTokenFromReq = (req: NextApiRequest): string | undefined => {
     if (req.method === 'POST' || req.method === 'PUT') {
-        return JSON.parse(req.body).jwt;
+        return typeof req.body === 'string' ? JSON.parse(req.body).jwt : req.body.jwt;
     } else {
         return req.headers.authorization;
     }

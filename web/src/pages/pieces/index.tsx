@@ -2,36 +2,51 @@ import { setPiecesMeta } from "common/store/actions";
 import { StateShape } from "common/store/StoreState";
 import { PieceBase } from "common/types/piece";
 import Link from "next/dist/client/link";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { getCookie } from "../../ts/helpers";
+import { Button } from "../../components/Button";
+import { getJwt } from "../../ts/hooks";
 
 function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => void }) {
     const [isLoaded, setIsLoaded] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         if (!isLoaded) {
-            const jwt = getCookie('authToken');
+            const jwt = getJwt();
 
-            if (jwt !== undefined) {
-                getPieces(jwt).then(res => {
-                    props.setPieces(res.pieces);
-                    setIsLoaded(true);
-                });
-            }
+            getPieces(jwt).then(res => {
+                props.setPieces(res.pieces);
+                setIsLoaded(true);
+            });
         }
     }, [isLoaded]);
 
+    const addPiece = () => router.push('/pieces/add');
+
     return (
-        <div>
-            <h2>Pieces</h2>
-            <Link href={'/pieces/add'}>Add piece</Link>
-            <ul>
-                {props.pieces.map(piece => <li><Link href={'/pieces/' + piece.id}>{piece.name}</Link></li>)}
+        <div className={'pieces-page'}>
+            <header className={'page-header'}>
+                <h2>Pieces</h2>
+                <Button className={'add-btn'} onClick={addPiece}>Add piece</Button>
+            </header>
+
+            <div className={'counters'}>
+                <p>Total: <span>{props.pieces.length}</span></p>
+            </div>
+            <ul className={'pieces-list'}>
+                {props.pieces.map(piece => <PieceItem piece={piece}/>)}
             </ul>
         </div>
     );
 }
+
+const PieceItem = (props: { piece: PieceBase }) => (
+    <li className='piece-item'>
+        <h3><Link href={'/pieces/' + props.piece.id}>{props.piece.name}</Link></h3>
+    </li>
+);
 
 const getPieces = async (token: string) => await fetch('/api/pieces', {
     method: 'GET',
