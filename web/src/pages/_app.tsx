@@ -7,7 +7,7 @@ import { Menu } from "../components/Menu";
 import { getUserIdByToken } from "../ts/api";
 import { getCookie } from "../ts/helpers";
 import { User, UserContext } from "../ts/user";
-import "./style.css";
+import "./style.less";
 
 const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     const [user, setUserState] = useState<User | undefined>(undefined);
@@ -41,8 +41,10 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     return (
         <Provider store={store}>
             <UserContext.Provider value={{ user, jwtToken, setUser }}>
-                {user !== undefined? <Menu/> : undefined}
-                <Component {...pageProps} />
+                {user !== undefined ? <Menu/> : undefined}
+                <main>
+                    <Component {...pageProps} />
+                </main>
             </UserContext.Provider>
         </Provider>
     );
