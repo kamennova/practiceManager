@@ -5,6 +5,7 @@ import { Button } from "./Button";
 import { FormControl } from "./FormControl";
 import { Checkbox } from "./inputs/Checkbox";
 import { ImageUpload } from "./inputs/ImageUpload";
+import { MultipleInput } from "./inputs/MultipleInput";
 import { TextInput } from "./inputs/TextInput";
 
 export enum FormMode {
@@ -14,7 +15,9 @@ export enum FormMode {
 export const PieceForm = (props: { mode: FormMode, piece: Piece, onSubmit: (p: Piece) => void }) => {
     const [piece, setPiece] = useState<Piece>(props.piece);
     const setProperty = (prop: keyof Piece) => {
-        return (val: string | any) => setPiece({ ...piece, [prop]: val })
+        return (val: string | any) => {
+            setPiece({ ...piece, [prop]: val });
+        }
     };
     const router = useRouter();
 
@@ -33,7 +36,14 @@ export const PieceForm = (props: { mode: FormMode, piece: Piece, onSubmit: (p: P
                 <ImageUpload onSetImage={setProperty('imageUri')}/>
             </FormControl>
 
-            <Checkbox label={'Favourite'} name='isFavourite' value={piece.isFavourite}
+
+            <FormControl label={'Tags'}>
+                <MultipleInput values={piece.tags} onChange={setProperty('tags')}/>
+            </FormControl>
+
+            <Checkbox label={'Favourite'}
+                      name='isFavourite'
+                      value={piece.isFavourite}
                       onChange={setProperty('isFavourite')}/>
 
             <div className={'form-buttons'}>

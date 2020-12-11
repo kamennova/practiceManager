@@ -11,6 +11,7 @@ export const ImageUpload = (props: UploadProps) => {
 
     const chooseImage = () => {
         if(input !== null && input !== undefined && input.current !== undefined && input.current !== null) {
+            // @ts-ignore
             setUpload(URL.createObjectURL(input.current?.files[0]))
         }
     };

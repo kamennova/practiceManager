@@ -8,8 +8,9 @@ type CheckboxProps = {
 }
 
 export const Checkbox = (props: CheckboxProps) => (
-    <label><input name={props.name}
-        type='checkbox' checked={props.value} onChange={(evt) => props.onChange(evt.target.value === 'true')}/>
+    <label>
+        <input name={props.name}
+               type='checkbox' checked={props.value} onChange={() => props.onChange(!props.value)}/>
         {props.label}
     </label>
 );
