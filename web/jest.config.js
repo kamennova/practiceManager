@@ -8,4 +8,12 @@ module.exports = {
     "transform": {
         "^.+\\.(ts|tsx)$": "ts-jest"
     },
+    "testPathIgnorePatterns": [
+        "/node_modules/", "/cypress/"
+    ],
+    globals: {
+        'ts-jest': {
+            tsconfig: '<rootDir>/__tests__/tsconfig.json'
+        }
+    }
 };

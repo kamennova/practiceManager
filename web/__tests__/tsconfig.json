@@ -27,6 +27,7 @@
     "module": "esnext",
     "jsx": "preserve",
     "types": [
+      "jest"
     ]
   },
   "include": [
