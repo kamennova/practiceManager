@@ -1,6 +1,6 @@
 import { EmptyPiece } from "common/types/piece";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Database } from "../../../db/Postgres";
+import { Database } from "../../../db/Database";
 import {
     getTokenFromReq,
     getUserIdByToken,
@@ -34,7 +34,7 @@ const getPieces = async (req: NextApiRequest, res: NextApiResponse) => {
         return invalidAuthTokenResponse(res);
     }
 
-    const pieces = await Database.connect().then(db => db.getPiecesMeta(userId));
+    const pieces = await Database.getPiecesMeta(userId);
 
     return res.status(200).json({ pieces });
 };
@@ -43,6 +43,8 @@ type AddPieceData = {
     jwt: string,
     name: string,
     isFavourite: boolean,
+    tags: string[],
+    author?: string,
 };
 
 const addPiece = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -64,15 +66,13 @@ const addPiece = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(400).json({ error: 'Incorrect piece data!' });
     }
 
-    const db = await Database.connect();
-    const piece = await db.findUserPieceByName(data.name, userId);
+    const piece = await Database.findUserPieceByName(data.name, userId);
 
     if (piece !== undefined) {
         return res.status(403).json({ error: 'Piece name must be unique!' });
     }
 
-    const pieceId = await db.addPiece(
-        { ...EmptyPiece, name: data.name, isFavourite: data.isFavourite }, userId);
+    const pieceId = await Database.addPiece({ ...EmptyPiece, ...data }, userId);
 
     return res.status(200).json({ pieceId });
 };

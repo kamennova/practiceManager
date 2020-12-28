@@ -27,6 +27,8 @@ export default function SignUp() {
     };
 
     const createUser = async () => {
+        if(!canCreateUser()) return;
+
         const res = await fetch('/api/users', { method: 'PUT', body: JSON.stringify({ email, password }) })
             .then(result => result.json());
 
@@ -44,11 +46,9 @@ export default function SignUp() {
                 <TextInput name={'email'} value={email} onChange={setEmail}/>
             </FormControl>
 
-
             <FormControl label={'Password'}>
                 <TextInput type='password' name='password' value={password} onChange={setPassword}/>
             </FormControl>
-
 
             <FormControl label={'Confirm password'}>
                 <TextInput type='password' name='confirmPassword' value={confirmPass} onChange={setConfirmPass}/>

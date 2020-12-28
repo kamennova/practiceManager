@@ -1,5 +1,5 @@
 import { store } from "common/store/appReducers";
-import { AppProps } from "next/dist/pages/_app";
+import { AppProps, NextWebVitalsMetric } from "next/dist/pages/_app";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
@@ -49,5 +49,11 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
         </Provider>
     );
 };
+
+export function reportWebVitals(metric: NextWebVitalsMetric) {
+    if (metric.label === 'web-vital') {
+        console.log(metric);
+    }
+}
 
 export default MyApp;

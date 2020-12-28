@@ -6,9 +6,10 @@ import { getJwt } from "../../ts/hooks";
 
 export default function AddPiecePage() {
     const router = useRouter();
-    const jwt = getJwt();
 
     const savePiece = async (piece: Piece) => {
+        const jwt = getJwt();
+
         const res = await addPiece(piece, jwt);
         if (res.error !== undefined) {
             console.log(res.error);

@@ -43,7 +43,7 @@ function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => voi
 }
 
 const PieceItem = (props: { piece: PieceBase }) => (
-    <li className='piece-item'>
+    <li className='piece-item' key={props.piece.id}>
         <h3><Link href={'/pieces/' + props.piece.id}>{props.piece.name}</Link></h3>
     </li>
 );
