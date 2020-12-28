@@ -1,5 +1,6 @@
 import { rowToPieceBase } from "common/db/RowTransform";
 import { Piece, PieceBase, PieceStatus } from "common/types/piece";
+import { SessionPlan } from "common/types/plan";
 import { Pool } from 'pg';
 import { User } from "../ts/user";
 import { data } from "./connection";
@@ -7,7 +8,7 @@ import { IDatabase } from "./IDatabase";
 
 const pool = new Pool(data);
 
-class PostgresDatabase implements IDatabase<number>{
+class PostgresDatabase implements IDatabase<number> {
     private static rowToPiece(row: any): Piece {
         return {
             name: row.name,
@@ -25,12 +26,48 @@ class PostgresDatabase implements IDatabase<number>{
         };
     }
 
+    private static rowToPlan(row: any): SessionPlan {
+        return {
+            addedOn: row.added_on,
+            name: row.name,
+            id: row.id,
+            isFavourite: row.is_favourite,
+            schedule: [],
+        };
+    }
+
     public async createUser(email: string, password: string): Promise<number> {
         const id = await pool.query('insert into users(email, password_hash) values ($1, $2) returning id',
             [email, password]);
 
         return id.rows[0].id;
     }
+
+    public async addPlan(plan: SessionPlan): Promise<number> {
+        return Promise.resolve(plan.id);
+    }
+
+
+    public async deletePlan() {
+
+    }
+
+    public async updatePlan() {
+
+    }
+
+    public async findUserPlanById(id: number, userId: number): Promise<SessionPlan | undefined> {
+        const res = await pool.query('select * from plan where user_id = $1 and id = $2 limit 1',
+            [userId, id]);
+
+        if (res.rows.length === 0) {
+            return Promise.resolve(undefined);
+        }
+
+        return PostgresDatabase.rowToPlan(res.rows[0]);
+
+    }
+
 
     public async getUserByEmail(email: string): Promise<User | undefined> {
         const res = await pool.query('select * from users where email = $1 and (is_deleted = false or is_deleted is null) limit 1',
