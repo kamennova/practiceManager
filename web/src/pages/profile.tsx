@@ -1,24 +1,24 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../components/Button";
 import { FormControl } from "../components/FormControl";
 import { TextInput } from "../components/inputs/TextInput";
 import { useUser } from "../ts/user";
-import React from 'react';
 
 export default function Profile() {
     const userCtx = useUser();
-    const [username, setUsername] = useState(userCtx?.user.email);
 
-    const changePass = (pass: string) => {
-        console.log('change password');
+    const changePass = (_: string) => {
+        // todo
     };
+
+    const pass = userCtx.user !== undefined ? userCtx.user.password_hash : '';
 
     return (
         <div>
             <FormControl label={'Username'}>
                 <TextInput value={'username'} onChange={() => 2}/>
             </FormControl>
-            <PasswordChange passwordHash={userCtx.user.password_hash} onChangePass={changePass}/>
+            <PasswordChange passwordHash={pass} onChangePass={changePass}/>
         </div>
     );
 }
