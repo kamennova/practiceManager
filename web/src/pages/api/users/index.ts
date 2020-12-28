@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Database } from "../../../db/Postgres";
+import { Database } from "../../../db/Database";
 import { restrictMethods } from "../../../ts/api";
 import { Optional } from "../../../ts/helpers";
 
@@ -20,16 +20,13 @@ const createUser = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(400).json({ error: 'User input is not valid' });
     }
 
-    const db = await Database.connect();
-
-    if (await db.getUserByEmail(userReq.email) !== undefined) {
+    if (await Database.getUserByEmail(userReq.email) !== undefined) {
         return res.status(400).json({ error: 'User with such email already exists!' });
     }
 
-    const userId = await db.createUser(userReq.email, userReq.password);
+    const userId = await Database.createUser(userReq.email, userReq.password);
 
     return await res.status(200).json({ id: userId });
-
 };
 
 type UserData = {

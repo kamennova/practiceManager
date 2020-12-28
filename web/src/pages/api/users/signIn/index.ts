@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Database } from "../../../../db/Postgres";
+import { Database } from "../../../../db/Database";
 import { generateToken, restrictMethods } from "../../../../ts/api";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,10 +12,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 const signIn = async (req: NextApiRequest, res: NextApiResponse) => {
-    const db = await Database.connect();
     const userReq = JSON.parse(req.body);
 
-    const user = await db.getUserByEmail(userReq.email);
+    const user = await Database.getUserByEmail(userReq.email);
 
     if (user === undefined) {
         return res.status(404).json({ error: 'User with such email does not exist!' });

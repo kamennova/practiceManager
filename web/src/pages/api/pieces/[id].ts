@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Database } from "../../../db/Postgres";
+import { Database } from "../../../db/Database";
 import {
     getTokenFromReq,
     getUserIdByToken,
@@ -35,8 +35,7 @@ const getPiece = async (req: NextApiRequest, res: NextApiResponse) => {
         return invalidAuthTokenResponse(res);
     }
 
-    const db = await Database.connect();
-    const piece = await db.findUserPieceById(pieceId, userId);
+    const piece = await Database.findUserPieceById(pieceId, userId);
 
     if (piece === undefined) {
         return res.status(404).json({ error: 'Piece not found' });
@@ -58,15 +57,14 @@ const updatePiece = async (req: NextApiRequest, res: NextApiResponse) => {
         return invalidAuthTokenResponse(res);
     }
 
-    const db = await Database.connect();
-    const piece = await db.findUserPieceById(pieceId, userId);
+    const piece = await Database.findUserPieceById(pieceId, userId);
 
     if (piece === undefined) {
         return res.status(404).json({ error: 'Piece not found' });
     }
 
     const pieceUpd = req.body.piece;
-    await db.updatePiece(pieceUpd);
+    await Database.updatePiece(pieceUpd);
 
     return await res.status(200).json({ pieceUpd })
 };
@@ -84,14 +82,13 @@ const deletePiece = async (req: NextApiRequest, res: NextApiResponse) => {
         return invalidAuthTokenResponse(res);
     }
 
-    const db = await Database.connect();
-    const piece = await db.findUserPieceById(pieceId, userId);
+    const piece = await Database.findUserPieceById(pieceId, userId);
 
     if (piece === undefined) {
         return res.status(404).json({ error: 'Piece not found' });
     }
 
-    await db.deletePieceById(pieceId);
+    await Database.deletePiece(pieceId);
 
     return res.status(200).json({});
 };

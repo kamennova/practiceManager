@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Database } from "../../../db/Postgres";
+import { Database } from "../../../db/Database";
 import {
     getTokenFromReq,
     getUserIdByToken,
@@ -34,8 +34,7 @@ const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(403).json({ error: 'Access denied' });
     }
 
-    const db = await Database.connect();
-    const user = await db.getUserById(userId);
+    const user = await Database.getUserById(userId);
 
     if (user === undefined) {
         return res.status(404).json({ error: 'User not found!' });

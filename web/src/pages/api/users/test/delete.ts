@@ -14,9 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 const deleteTestUser = async (res: NextApiResponse) => {
-    const db = await Database.connect();
-    await db.deleteUserByEmail(TEST_USER.email);
-    await db.client.end();
+    await Database.deleteUserByEmail(TEST_USER.email);
 
     return res.status(200).json({});
 };

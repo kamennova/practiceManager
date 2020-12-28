@@ -14,9 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 const createTestUser = async (res: NextApiResponse) => {
-    const db = await Database.connect();
-    const userId = await db.createUser(TEST_USER.email, TEST_USER.password);
-    await db.client.end();
+    const userId = await Database.createUser(TEST_USER.email, TEST_USER.password);
 
     return res.status(200).json({ userId });
 };
