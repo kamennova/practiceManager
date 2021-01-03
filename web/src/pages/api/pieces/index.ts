@@ -36,7 +36,7 @@ const getPieces = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const pieces = await Database.getPiecesMeta(userId);
 
-    return res.status(200).json({ pieces });
+    return res.status(200).json({ pieces: pieces.sort((a, b) => a.name.localeCompare(b.name)) });
 };
 
 type AddPieceData = {

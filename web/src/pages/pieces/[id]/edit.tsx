@@ -3,7 +3,7 @@ import { Piece } from "common/types/piece";
 import { useRouter } from "next/router";
 import React, { useEffect } from 'react';
 import { connect } from "react-redux";
-import { FormMode, PieceForm } from "../../../components/PieceForm";
+import { FormMode, PieceForm } from "../../../components/piece/PieceForm";
 import { getJwt, usePiece } from "../../../ts/hooks";
 
 function EditPiece(props: { updatePiece: (p: Piece) => void }) {
@@ -25,10 +25,7 @@ function EditPiece(props: { updatePiece: (p: Piece) => void }) {
     }, [piece]);
 
     return (
-        <div>
-            {piece.name}
-            <PieceForm key={piece.name} mode={FormMode.Edit} piece={piece} onSubmit={onSave}/>
-        </div>
+        <PieceForm key={piece.name} mode={FormMode.Edit} piece={piece} onSubmit={onSave}/>
     );
 }
 

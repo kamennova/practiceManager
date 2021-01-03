@@ -1,4 +1,3 @@
-import { rowToPieceBase } from "common/db/RowTransform";
 import { Piece, PieceBase, PieceStatus } from "common/types/piece";
 import { SessionPlan } from "common/types/plan";
 import { Pool } from 'pg';
@@ -12,7 +11,8 @@ class PostgresDatabase implements IDatabase<number> {
     private static rowToPiece(row: any): Piece {
         return {
             name: row.name,
-            tags: [],
+            tags: row.tags !== null ? row.tags : [],
+            author: row.author,
             status: PieceStatus.NotStarted,
             addedOn: row.added_on,
             id: row.id,
@@ -23,6 +23,18 @@ class PostgresDatabase implements IDatabase<number> {
             recordings: [],
             notifId: null,
             notifsInterval: 4,
+        };
+    }
+
+    private static rowToPieceBase(row: any): PieceBase {
+        return {
+            name: row.name,
+            tags: row.tags !== null ? row.tags : [],
+            status: PieceStatus.NotStarted,
+            addedOn: row.added_on,
+            id: row.id,
+            timeSpent: row.time_spent,
+            isFavourite: row.is_favourite,
         };
     }
 
@@ -122,10 +134,16 @@ class PostgresDatabase implements IDatabase<number> {
     }
 
     public async getPiecesMeta(userId: number): Promise<PieceBase[]> {
-        const res = await pool.query('select * from piece where user_id = $1',
+        const res = await pool.query(`select piece.*,
+                                             (select array_agg(t.tag_name)
+                                              from piece_tags
+                                                     left join tags t on piece_tags.tag_id = t.id
+                                              where piece_tags.piece_id = piece.id) tags
+                                      from piece
+                                      where user_id = $1`,
             [userId]);
 
-        return res.rows.map(row => rowToPieceBase(row));
+        return res.rows.map(row => PostgresDatabase.rowToPieceBase(row));
     }
 
     public async toggleIsFavourite(id: number): Promise<void> {
@@ -142,7 +160,17 @@ class PostgresDatabase implements IDatabase<number> {
 
     public async findUserPieceById(id: number, userId: number): Promise<Piece | undefined> {
         const res = await pool.query(
-            'select piece.*, a.full_name author from piece left join authors a on piece.author_id = a.id where piece.id = $1 and user_id = $2 limit 1',
+                `select piece.*,
+                        (select array_agg(t.tag_name)
+                         from piece_tags
+                                left join tags t on piece_tags.tag_id = t.id
+                         where piece_tags.piece_id = piece.id) tags,
+                        a.full_name                            author
+                 from piece
+                        left join authors a on piece.author_id = a.id
+                 where piece.id = $1
+                   and user_id = $2
+                 limit 1`,
             [id, userId]);
 
         if (res.rows.length === 0) {
@@ -163,6 +191,14 @@ class PostgresDatabase implements IDatabase<number> {
 
     public async deleteUserByEmail(email: string) {
         await pool.query('update users set is_deleted = true where email = $1 and is_deleted = false', [email]);
+    }
+
+    public getPlansMeta(_: number): Promise<SessionPlan[]> {
+        return Promise.resolve([]);
+    }
+
+    public findUserPlanByName(_: string, _userId: number): Promise<SessionPlan | undefined> {
+        return Promise.resolve(undefined);
     }
 
     private async getPieceAuthorId(name: string): Promise<number> {
@@ -219,6 +255,7 @@ class PostgresDatabase implements IDatabase<number> {
 
         return res.rows[0].id;
     }
+
 }
 
 export const Database = new PostgresDatabase();

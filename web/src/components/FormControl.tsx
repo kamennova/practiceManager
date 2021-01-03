@@ -7,7 +7,7 @@ type ControlProps = {
 
 export const FormControl = (props: ControlProps) => (
     <div className={'form-control'}>
-        <label> {props.label} </label><br/>
+        <label> {props.label} </label>
         {props.children}
     </div>
 );

@@ -1,7 +1,7 @@
 import { EmptyPiece, Piece } from "common/types/piece";
 import { useRouter } from "next/router";
 import React from 'react';
-import { FormMode, PieceForm } from "../../components/PieceForm";
+import { FormMode, PieceForm } from "../../components/piece/PieceForm";
 import { getJwt } from "../../ts/hooks";
 
 export default function AddPiecePage() {

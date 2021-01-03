@@ -5,11 +5,18 @@ import Link from "next/dist/client/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { Button } from "../../components/Button";
+import { PrimaryButton } from "../../components/Button";
+import { TagList } from "../../components/piece/TagList";
 import { getJwt } from "../../ts/hooks";
+
+enum SortingOrder {
+    Title,
+    DateAdded,
+}
 
 function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => void }) {
     const [isLoaded, setIsLoaded] = useState(false);
+    const [sortingOrder, setOrder] = useState(SortingOrder.Title);
     const router = useRouter();
 
     useEffect(() => {
@@ -26,27 +33,37 @@ function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => voi
     const addPiece = () => router.push('/pieces/add');
 
     return (
-        <div className={'pieces-page'}>
-            <header className={'page-header'}>
-                <h2>Pieces</h2>
-                <Button className={'add-btn'} onClick={addPiece}>Add piece</Button>
-            </header>
-
-            <div className={'counters'}>
-                <p>Total: <span>{props.pieces.length}</span></p>
+        <div className={'items-page pieces-page'}>
+            <div className={'main-content'}>
+                <header className={'page-header'}>
+                    <h2 className={'page-title'}>Pieces</h2>
+                    <PrimaryButton label={'Add piece'} className={'add-btn'} onClick={addPiece}/>
+                </header>
+                <div className={'list-header'}>
+                    <div className={'list-label sort'}>alphabetical</div>
+                    <div className={'list-label counter'}>Total: <span>{props.pieces.length}</span></div>
+                </div>
             </div>
-            <ul className={'pieces-list'}>
-                {props.pieces.map(piece => <PieceItem piece={piece}/>)}
-            </ul>
+
+            <PiecesList pieces={props.pieces}/>
         </div>
     );
 }
 
-const PieceItem = (props: { piece: PieceBase }) => (
-    <li className='piece-item' key={props.piece.id}>
-        <h3><Link href={'/pieces/' + props.piece.id}>{props.piece.name}</Link></h3>
-    </li>
-);
+const PiecesList = (props: { pieces: PieceBase[] }) => {
+    const router = useRouter();
+
+    return (
+        <ul className={'pieces-list'}>
+            {props.pieces.map(piece => (
+                <li className='piece-item' onClick={() => router.push('/pieces/' + piece.id)} key={piece.id}>
+                    <h3 className={'piece-name item-name'}><Link href={'/pieces/' + piece.id}>{piece.name}</Link></h3>
+                    {piece.tags.length > 0 && <TagList tags={piece.tags}/>}
+                </li>)
+            )}
+        </ul>
+    );
+};
 
 const getPieces = async (token: string) => await fetch('/api/pieces', {
     method: 'GET',

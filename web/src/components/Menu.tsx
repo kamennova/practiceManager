@@ -1,17 +1,17 @@
-import Link from "next/dist/client/link";
 import { useRouter } from "next/router";
-import React from 'react';
+import React, { useState } from 'react';
 import { clearCookie } from "../ts/helpers";
 import { useUser } from "../ts/user";
-import { Button } from "./Button";
 
 const Links = [
-    { src: '/dashboard', name: 'Dashboard' },
-    { src: '/pieces', name: 'Pieces' },
-    { src: '/plans', name: 'Plans' },
+    { src: '/dashboard', name: 'Dashboard', icon: 'bar_chart' },
+    { src: '/pieces', name: 'Pieces', icon: 'library_music' },
+    { src: '/plans', name: 'Plans', icon: 'storage' },
+    { src: '/sessions', name: 'Sessions', icon: 'history' },
 ];
 
 export const Menu = () => {
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
     const userCtx = useUser();
     const router = useRouter();
 
@@ -27,12 +27,18 @@ export const Menu = () => {
         <aside className={'main-sidebar'}>
             <nav className={'main-nav'}>
                 <div className={'user-link'}>
-                    Welcome, {email}!
+                    {email}
+                    {userMenuOpen && <ul/>}
                 </div>
                 <ul className={'main-links'}>
-                    {Links.map(item => <li><Link href={item.src}>{item.name}</Link></li>)}
-                    <li><Button onClick={logout} className={'btn-logout'}>Log out</Button></li>
+                    {Links.map(item => (
+                        <li onClick={() => router.push(item.src)} key={item.name}>
+                            <i className={'material-icons'}>{item.icon}</i>
+                            <span>{item.name}</span>
+                        </li>))}
                 </ul>
+                <button onClick={logout} className={'btn-logout user-btn'}><i
+                    className={'material-icons'}>exit_to_app</i></button>
             </nav>
         </aside>
     );
