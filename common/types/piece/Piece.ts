@@ -4,7 +4,7 @@ import { Recording } from "./Recording";
 
 export type PieceBase = Item & {
     tags: string[],
-    author?: string,
+    author?: Author,
     imageUri?: string,
     timeSpent: number,
     lastPracticedOn?: Date,
@@ -31,9 +31,9 @@ export enum PieceStatus {
 
 export enum PieceComplexity {
     Easy = 'Easy',
-    Intermediate = 'Intermediate',
-    UpperIntermediate = 'UpperIntermediate',
-    Advanced = 'Advanced',
+    Medium = 'Medium',
+    Hard = 'Hard',
+    Challenging = 'Challenging',
 }
 
 
@@ -50,5 +50,12 @@ export enum PieceGenre {
 export enum PieceMood {
     Cheerful = 'Cheerful',
     Sad = 'Sad',
-    Mixed = 'Mixed'
+    Mixed = 'Mixed',
+    Peaceful = 'Peaceful',
+}
+
+export type Author = {
+    id: number,
+    fullName: string,
+    picSrc?: string,
 }

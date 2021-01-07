@@ -1,23 +1,17 @@
-import { Piece, PieceBase, PieceStatus } from "common/types/piece";
+import { Piece, PieceBase, PieceComplexity, PieceMood, PieceStatus, Author } from "common/types/piece";
 import { SessionPlan } from "common/types/plan";
 import { Pool } from 'pg';
 import { User } from "../ts/user";
 import { data } from "./connection";
 import { IDatabase } from "./IDatabase";
+import { Tip } from "common/types/Tip";
 
 const pool = new Pool(data);
 
 class PostgresDatabase implements IDatabase<number> {
     private static rowToPiece(row: any): Piece {
         return {
-            name: row.name,
-            tags: row.tags !== null ? row.tags : [],
-            author: row.author,
-            status: PieceStatus.NotStarted,
-            addedOn: row.added_on,
-            id: row.id,
-            timeSpent: row.time_spent,
-            isFavourite: row.is_favourite,
+            ...this.rowToPieceBase(row),
             notifsOn: row.notifs_on,
             notes: [],
             recordings: [],
@@ -30,11 +24,15 @@ class PostgresDatabase implements IDatabase<number> {
         return {
             name: row.name,
             tags: row.tags !== null ? row.tags : [],
+            author: row.author,
             status: PieceStatus.NotStarted,
             addedOn: row.added_on,
             id: row.id,
             timeSpent: row.time_spent,
             isFavourite: row.is_favourite,
+            imageUri: row.image_src !== null ? row.image_src : undefined,
+            complexity: row.complexity !== null ? row.complexity as PieceComplexity : undefined,
+            mood: row.mood !== null ? row.cmood as PieceMood : undefined,
         };
     }
 
@@ -118,11 +116,12 @@ class PostgresDatabase implements IDatabase<number> {
 
     public async addPiece(piece: Piece, userId: number): Promise<number> {
         const authorId = piece.author !== undefined ?
-            await this.getPieceAuthorId(piece.author) : null;
+            await this.getPieceAuthorId(piece.author.fullName) : null;
 
         const res = await pool.query(
-            'insert into piece(name, is_favourite, notifs_on, user_id, author_id) values ($1, $2, $3, $4, $5) returning id',
-            [piece.name, piece.isFavourite, piece.notifsOn, userId, authorId]);
+                `insert into piece (name, is_favourite, notifs_on, user_id, author_id, image_src, complexity, mood)
+                 values ($1, $2, $3, $4, $5, $6, $7, $8) returning id`,
+            [piece.name, piece.isFavourite, piece.notifsOn, userId, authorId, piece.imageUri, piece.complexity, piece.mood]);
 
         await this.addPieceTags(res.rows[0].id, piece.tags);
 
@@ -152,8 +151,11 @@ class PostgresDatabase implements IDatabase<number> {
     }
 
     public async updatePiece(piece: Piece): Promise<void> {
-        await pool.query('update piece set name = $1 where id = $2', [
+        await pool.query('update piece set name = $1, image_src = $2, complexity = $3, mood = $4 where id = $5', [
             piece.name,
+            piece.imageUri,
+            piece.complexity,
+            piece.mood,
             piece.id
         ]);
     }
@@ -165,7 +167,7 @@ class PostgresDatabase implements IDatabase<number> {
                          from piece_tags
                                 left join tags t on piece_tags.tag_id = t.id
                          where piece_tags.piece_id = piece.id) tags,
-                        a.full_name                            author
+                        a.name                                 author
                  from piece
                         left join authors a on piece.author_id = a.id
                  where piece.id = $1
@@ -201,6 +203,29 @@ class PostgresDatabase implements IDatabase<number> {
         return Promise.resolve(undefined);
     }
 
+    public async countUserPieces(userId: number): Promise<number> {
+        const res = await pool.query(
+            'select count(*) count from piece where user_id = $1', [userId]);
+
+        return res.rows[0].count;
+    }
+
+    public async findUserPiecesLike(input: string, userId: number): Promise<Tip[]> {
+        const res = await pool.query('select id, "name" label, image_src picSrc from piece where user_id = $1 and name like $2', [userId, input]);
+
+        return res.rows;
+    }
+
+    public async findAuthorsLike(input: string): Promise<Author[]> {
+        const res = await pool.query(`select authors.id, authors.name, author_pic.pic_src
+                                      from authors
+                                             left join author_pic on authors.id = author_pic.author_id
+                                      where authors.name ilike $1`,
+            ['%' + input + '%']);
+
+        return res.rows.map(r => ({ fullName: r.name, picSrc: r.pic_src !== null ? r.pic_src : undefined, id: r.id }));
+    }
+
     private async getPieceAuthorId(name: string): Promise<number> {
         const existingId = await this.getExistingAuthorId(name);
 
@@ -208,7 +233,7 @@ class PostgresDatabase implements IDatabase<number> {
             return Promise.resolve(existingId);
         }
 
-        const insert = await pool.query('insert into authors (full_name) values ($1) returning id',
+        const insert = await pool.query('insert into authors (name) values ($1) returning id',
             [name]);
 
         return insert.rows[0].id;
@@ -235,7 +260,7 @@ class PostgresDatabase implements IDatabase<number> {
     }
 
     private async getExistingAuthorId(name: string): Promise<number | undefined> {
-        const res = await pool.query('select id from authors where full_name = $1 limit 1',
+        const res = await pool.query('select id from authors where name = $1 limit 1',
             [name]);
 
         if (res.rows.length === 0) {
@@ -255,7 +280,6 @@ class PostgresDatabase implements IDatabase<number> {
 
         return res.rows[0].id;
     }
-
 }
 
 export const Database = new PostgresDatabase();
