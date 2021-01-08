@@ -1,3 +1,4 @@
+import { pushActivity } from 'common/store/actions';
 import { Activity, ActivityType } from 'common/types/activity';
 import { getSeconds } from 'common/utils/time';
 import * as React from "react";
@@ -5,7 +6,6 @@ import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { SessionTimer } from "./SessionTimer";
 import { TimeTracker } from "./TimeTracker";
-import {pushActivity} from 'common/store/actions';
 
 type TimerProps = {
     activity: Activity,

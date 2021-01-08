@@ -24,7 +24,11 @@ class PostgresDatabase implements IDatabase<number> {
         return {
             name: row.name,
             tags: row.tags !== null ? row.tags : [],
-            author: row.author,
+            author: row.author_id !== null ? {
+                fullName: row.author_name,
+                id: row.author_id,
+                picSrc: row.author_pic !== null ? row.author_pic: undefined
+            } : undefined,
             status: PieceStatus.NotStarted,
             addedOn: row.added_on,
             id: row.id,
@@ -32,7 +36,7 @@ class PostgresDatabase implements IDatabase<number> {
             isFavourite: row.is_favourite,
             imageUri: row.image_src !== null ? row.image_src : undefined,
             complexity: row.complexity !== null ? row.complexity as PieceComplexity : undefined,
-            mood: row.mood !== null ? row.cmood as PieceMood : undefined,
+            mood: row.mood !== null ? row.mood as PieceMood : undefined,
         };
     }
 
@@ -167,9 +171,12 @@ class PostgresDatabase implements IDatabase<number> {
                          from piece_tags
                                 left join tags t on piece_tags.tag_id = t.id
                          where piece_tags.piece_id = piece.id) tags,
-                        a.name                                 author
+                        a.name                                 author_name,
+                        a.id                                   author_id,
+                        a_pic.pic_src                          author_pic
                  from piece
                         left join authors a on piece.author_id = a.id
+                        left join author_pic a_pic on a_pic.author_id = piece.author_id
                  where piece.id = $1
                    and user_id = $2
                  limit 1`,

@@ -5,13 +5,15 @@ import { Session } from "../types/Session";
 
 export type ItemsShape<T, META> = {
     items: META[],
+    totalCount: number,
     currentItem: T,
     lastAddedId?: number,
 };
 
 export type SessionsShape = {
-  items: Session[],
-  current: SessionState,
+    items: Session[],
+    current: SessionState,
+    totalCount: number,
 };
 
 export type SessionState = {
@@ -29,7 +31,7 @@ export type StateShape = {
 };
 
 export const initialState: StateShape = {
-    pieces: { items: [], currentItem: EmptyPiece },
-    plans: { items: [], currentItem: EmptyPlan },
-    sessions: { items: [], current: { isOn: false, history: [] } },
+    pieces: { items: [], currentItem: EmptyPiece, totalCount: 0, },
+    plans: { items: [], currentItem: EmptyPlan, totalCount: 0, },
+    sessions: { items: [], totalCount: 0, current: { isOn: false, history: [] }, },
 };

@@ -1,3 +1,4 @@
+import { endSession } from 'common/store/actions';
 import { StateShape } from "common/store/StoreState";
 import { Activity, ActivityType } from "common/types/activity";
 import { Piece, PieceBase } from "common/types/piece";
@@ -65,7 +66,7 @@ const mapStateToProps = (state: StateShape) => ({
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
-    onEndSession: () => dispatch(),
+    onEndSession: () => dispatch(endSession()),
 });
 
 export const SessionTimer = connect(mapStateToProps, mapDispatchToProps)(SessionTimerComponent);

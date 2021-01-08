@@ -14,7 +14,7 @@ enum SortingOrder {
     DateAdded,
 }
 
-function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => void }) {
+function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[], c: number) => void }) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [sortingOrder, setOrder] = useState(SortingOrder.Title);
     const router = useRouter();
@@ -24,7 +24,7 @@ function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => voi
             const jwt = getJwt();
 
             getPieces(jwt).then(res => {
-                props.setPieces(res.pieces);
+                props.setPieces(res.pieces, res.totalCount);
                 setIsLoaded(true);
             });
         }
@@ -40,8 +40,8 @@ function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => voi
                     <PrimaryButton label={'Add piece'} className={'add-btn'} onClick={addPiece}/>
                 </header>
                 <div className={'list-header'}>
-                    <div className={'list-label sort'}>alphabetical</div>
-                    <div className={'list-label counter'}>Total: <span>{props.pieces.length}</span></div>
+                    <div className={'list-label border-radius sort'}>alphabetical</div>
+                    <div className={'list-label border-radius counter'}>Total: <span>{props.pieces.length}</span></div>
                 </div>
             </div>
 
@@ -57,6 +57,12 @@ const PiecesList = (props: { pieces: PieceBase[] }) => {
         <ul className={'pieces-list'}>
             {props.pieces.map(piece => (
                 <li className='piece-item' onClick={() => router.push('/pieces/' + piece.id)} key={piece.id}>
+
+                    {piece.imageUri && <>
+                        <img src={piece.imageUri} className={'pic'}/>
+                        <div className={'pic-overlay'}/>
+                    </>}
+
                     <h3 className={'piece-name item-name'}><Link href={'/pieces/' + piece.id}>{piece.name}</Link></h3>
                     {piece.tags.length > 0 && <TagList tags={piece.tags}/>}
                 </li>)
@@ -74,7 +80,7 @@ const getPieces = async (token: string) => await fetch('/api/pieces', {
 }).then(resp => resp.json());
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setPieces: (pieces: PieceBase[]) => dispatch(setPiecesMeta(pieces)),
+    setPieces: (pieces: PieceBase[], count: number) => dispatch(setPiecesMeta(pieces, count)),
 });
 
 const mapStateToProps = (state: StateShape) => ({

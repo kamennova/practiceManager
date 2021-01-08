@@ -16,7 +16,7 @@ const start = (props: { start: () => void }) => {
     };
 
     return (
-        <div className={'main-content'}>
+        <div className={'main-content page'}>
             <header className={'page-header'}>
                 <h2 className={'page-title'}>New session</h2>
             </header>

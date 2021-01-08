@@ -5,20 +5,26 @@ import { TextInput } from "../components/inputs/TextInput";
 import { useUser } from "../ts/user";
 
 export default function Profile() {
-    const userCtx = useUser();
+    const { user } = useUser();
+    const [showChangePassword, setShowchange] = useState(false);
 
     const changePass = (_: string) => {
         // todo
     };
 
-    const pass = userCtx.user !== undefined ? userCtx.user.password_hash : '';
+    const pass = user ? user.password_hash : '';
 
     return (
-        <div>
-            <FormControl label={'Username'}>
-                <TextInput value={'username'} onChange={() => 2}/>
-            </FormControl>
-            <PasswordChange passwordHash={pass} onChangePass={changePass}/>
+        <div className={'main-content'}>
+            <header className={'flex profile-header'}>
+                <img className={'circle'}
+                     src={user?.picSrc ? user?.picSrc : 'https://www.classicsforkids.com/images/composers/Bach.jpg'}
+                     width={100} height={100}
+                />
+                <h2>{user?.username ? user?.username : user?.email}</h2>
+            </header>
+
+            {showChangePassword && <PasswordChange passwordHash={pass} onChangePass={changePass}/>}
         </div>
     );
 }

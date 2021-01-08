@@ -1,5 +1,6 @@
+import Link from "next/dist/client/link";
 import { useRouter } from "next/router";
-import React, { useState } from 'react';
+import React from 'react';
 import { clearCookie } from "../ts/helpers";
 import { useUser } from "../ts/user";
 
@@ -8,27 +9,31 @@ const Links = [
     { src: '/pieces', name: 'Pieces', icon: 'library_music' },
     { src: '/plans', name: 'Plans', icon: 'storage' },
     { src: '/sessions', name: 'Sessions', icon: 'history' },
+    { src: '/sessionStart', name: 'Practice', icon: 'play_arrow' }
 ];
 
 export const Menu = () => {
-    const [userMenuOpen, setUserMenuOpen] = useState(false);
-    const userCtx = useUser();
+    const { user, setUser } = useUser();
     const router = useRouter();
 
     const logout = () => {
         clearCookie('authToken');
-        userCtx.setUser(undefined, '');
+        setUser(undefined, '');
         router.push('/signIn');
     };
-
-    const email = userCtx.user !== undefined ? userCtx.user.email : undefined;
 
     return (
         <aside className={'main-sidebar'}>
             <nav className={'main-nav'}>
                 <div className={'user-link'}>
-                    {email}
-                    {userMenuOpen && <ul/>}
+                    <Link href={'/profile'}>
+                        <a className={'profile-link'}>
+                            <img
+                                src={user?.picSrc ? user.picSrc : 'https://www.classicsforkids.com/images/composers/Bach.jpg'}
+                                width={40} height={40} className={'circle'}/>
+                            <span>{user?.email}</span>
+                        </a>
+                    </Link>
                 </div>
                 <ul className={'main-links'}>
                     {Links.map(item => (

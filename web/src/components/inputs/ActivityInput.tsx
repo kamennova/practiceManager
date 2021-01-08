@@ -1,18 +1,21 @@
 import { Activity, ActivityType } from 'common/types/activity';
+import { Tip } from 'common/types/Tip';
 import * as React from "react";
 import { useState } from "react";
+import { PrimaryButton } from "../Button";
 import { PieceSelect } from "./PieceSelect";
 
-export const ActivityInput = (props: { act: Activity, onChoose: (t: Activity) => void }) => {
-    const [type, setType] = useState(props.act.type);
-    const [pieceId, setPieceId] = useState(undefined);
+export const ActivityInput = (props: { act?: Activity, onChoose: (t: Activity) => void }) => {
+    const [type, setType] = useState(props.act?.type || ActivityType.Break);
+    const [piece, setPiece] = useState<Tip | undefined>(undefined);
 
     const showPieceSelect = type !== ActivityType.Break;
 
     return (
         <div style={{ maxWidth: 500 }}>
             <ActivityTypeSelect onChange={setType} current={type}/>
-            {showPieceSelect && <PieceSelect value={pieceId} onChange={(v: string, id: number) => setPieceId(id)}/>}
+            {showPieceSelect && <PieceSelect value={piece} onChange={(t) => setPiece(t)}/>}
+            <PrimaryButton onClick={() => props.onChoose({ type, pieceId: piece?.id })} label={'Start'}/>
         </div>
     );
 };

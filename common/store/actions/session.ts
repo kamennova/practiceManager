@@ -17,7 +17,6 @@ type PushActivityAction = {
 
 export type EndSessionAction = {
     type: typeof END_SESSION,
-    session: Session,
     piecesPractice?: { [key: string]: number },
 };
 
@@ -28,9 +27,8 @@ type SetSessionsAction = {
 
 export const startSession = (): StartSessionAction => ({ type: START_SESSION }),
     pushActivity = (activity: Activity): PushActivityAction => ({ type: PUSH_ACTIVITY, activity }),
-    endSession = (session: Session, piecesPractice?: { [key: string]: number }): EndSessionAction => ({
+    endSession = (piecesPractice?: { [key: string]: number }): EndSessionAction => ({
         type: END_SESSION,
-        session,
         piecesPractice
     }),
     setSessions = (sessions: Session[]): SetSessionsAction => ({ type: SET_SESSIONS, sessions });

@@ -1,11 +1,13 @@
-import { Piece, PieceComplexity, PieceMood } from 'common/types/piece';
+import { Piece } from 'common/types/piece';
 import { useRouter } from "next/router";
 import React, { useState } from 'react';
 import { PrimaryButton } from "../Button";
 import { FormControl } from "../FormControl";
-import { ImageUpload } from "../inputs/ImageUpload";
+import { AuthorInput } from "../inputs/AuthorInput";
+import { PieceComplexitySelect } from "../inputs/ComplexitySelect";
+import { ImageLinkInput } from "../inputs/ImageLink";
+import { MoodSelect } from "../inputs/MoodSelect";
 import { MultipleInput } from "../inputs/MultipleInput";
-import { Select } from "../inputs/Select";
 import { TextInput } from "../inputs/TextInput";
 import { ItemMenuSmall } from "../Item/ItemMenuSmall";
 
@@ -41,34 +43,37 @@ export const PieceForm = (props: { mode: FormMode, piece: Piece, onSubmit: (p: P
 
     return (
         <div className={'main-content'}>
-            <ItemMenuSmall toggleFav={() => setProperty('isFavourite')} goBack={() => router.back()}
-                           isFav={piece.isFavourite}/>
+            <ItemMenuSmall toggleFav={() => setProperty('isFavourite')} goBack={router.back} isFav={piece.isFavourite}/>
             <div className={'item-form-page'}>
                 <FormControl label={'Title'}>
-                    <TextInput name='title' value={piece.name} onChange={setProperty('name')}/>
+                    <TextInput name='piece-title' value={piece.name} onChange={setProperty('name')}/>
                 </FormControl>
 
                 <FormControl label={'Author'}>
-                    <TextInput name='author' value={piece.author} onChange={setProperty('author')}/>
+                    <AuthorInput onChange={setProperty('author')}
+                                 value={piece.author}/>
                 </FormControl>
 
-                <FormControl label={'Image'}>
-                    <ImageUpload onSetImage={setProperty('imageUri')}/>
+                <FormControl label={'Cover image'}>
+                    <ImageLinkInput onSetImage={setProperty('imageUri')}
+                                    image={piece.imageUri}
+                                    browseLink={piece.name ?
+                                        `https://www.google.com/search?q=${piece.name.split(' ').join('+')}+${piece.author ? piece.author.fullName.split(' ').join("+") : ''}&tbm=isch` : undefined}/>
                 </FormControl>
 
                 <FormControl label={'Tags'}>
                     <MultipleInput values={piece.tags} onChange={setProperty('tags')}/>
                 </FormControl>
 
-                <FormControl label={'Complexity'}>
-                    <Select options={Object.keys(PieceComplexity).map(str => ({ label: str }))}
-                            onChange={setProperty('complexity')}/>
-                </FormControl>
+                <div className={'columns'}>
+                    <div className={'col-6 col-left'}>
+                        <PieceComplexitySelect value={piece.complexity} onChange={setProperty('complexity')}/>
+                    </div>
 
-                <FormControl label={'Mood'}>
-                    <Select options={Object.keys(PieceMood).map(str => ({ label: str }))}
-                            onChange={setProperty('mood')}/>
-                </FormControl>
+                    <div className={'col-6 col-right'}>
+                        <MoodSelect value={piece.mood} onChange={setProperty('mood')}/>
+                    </div>
+                </div>
 
                 {error && <span>{error.message}</span>}
 

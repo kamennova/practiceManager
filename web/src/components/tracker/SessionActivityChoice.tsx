@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Select } from "../inputs/Select";
-import { ActivityType } from 'common/types/activity';
+import { ActivityInput } from "../inputs/ActivityInput";
+import { Activity } from 'common/types/activity';
 
-export const SessionActivityChoice = (props: { onChoose: (t: ActivityType) => void }) => {
+export const SessionActivityChoice = (props: { value?: Activity, onChoose: (a: Activity) => void }) => {
     return (
-        <div>
-            <Select options={Object.keys(ActivityType).map(s => ({ label: s }))}
-                    onChange={(t) => props.onChoose(t as ActivityType)}/>
+        <div className={'main-content page-selection'}>
+            <h2 className={'page-title'}>Select activity</h2>
+            <ActivityInput onChoose={props.onChoose} act={props.value}/>
         </div>
     );
 };

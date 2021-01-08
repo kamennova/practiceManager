@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
-type Option = { label: string, value: string, picSrc?: string };
+type Option = {
+    label: string,
+    value: string,
+    icon?: string,
+};
 
 export const Select = (props: { options: Option[], value?: string, onChange: (v: string) => void }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -18,19 +22,25 @@ export const Select = (props: { options: Option[], value?: string, onChange: (v:
 
     return (
         <div onClick={isOpen ? close : open} className={'select'}>
-
             <select className={'visually-hidden'}>
                 {props.options.map(o => <option value={o.value} selected={o.value === props.value}>{o.label}</option>)}
             </select>
 
-            <span className={'current-option'}>{current ? current.label : 'Select'}</span>
+            <span className={'current-option'}>{current ? <OptionContent {...current}/> : 'Select'}</span>
 
             {isOpen && <ul>
                 {props.options.map((item) =>
-                    <li onClick={() => props.onChange(item.value)}>{item.label}</li>)}
+                    <li onClick={() => props.onChange(item.value)}><OptionContent {...item} /></li>)}
             </ul>}
 
             <i className="material-icons arrow-icon">arrow_drop_down</i>
         </div>
     );
 };
+
+const OptionContent = (props: Option) => (
+    <span className={'option-content'}>
+        {props.icon && <i className={'material-icons'}>{props.icon}</i>}
+        <span className={'label'}>{props.label}</span>
+    </span>
+);

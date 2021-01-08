@@ -4,8 +4,9 @@ import { TextInputTips } from "./TextInputTips";
 import React from 'react';
 import { PieceBase } from 'common/types/piece';
 import { StateShape } from 'common/store/StoreState';
+import { Tip } from 'common/types/Tip';
 
-const Select = (props: { items: PieceBase[], itemsCount: number, value?: { id: number, name: string, picSrc?: string }, onChange: () => void }) => {
+const Select = (props: { items: PieceBase[], itemsCount: number, value?: Tip, onChange: (t?: Tip) => void }) => {
     const getTips = async (input: string) => {
         if (props.itemsCount === props.items.length) { // we can search in redux state
             const str = input.toLowerCase();
