@@ -1,16 +1,18 @@
 import { Item } from "../item/Item";
 import { Note } from "../Note";
+import { Tag } from "../Tag";
 import { Recording } from "./Recording";
 
 export type PieceBase = Item & {
-    tags: string[],
-    author?: string,
-    complexity?: PieceComplexity,
-    genre?: PieceGenre,
+    tags: Tag[],
+    author?: Author,
     imageUri?: string,
     timeSpent: number,
     lastPracticedOn?: Date,
     status: PieceStatus,
+    mood?: PieceMood,
+    complexity?: PieceComplexity,
+    genre?: PieceGenre,
 };
 
 export type Piece = PieceBase & {
@@ -22,18 +24,19 @@ export type Piece = PieceBase & {
     originalUri?: string,
 };
 
-export enum PieceComplexity {
-    Easy = 'Easy',
-    Intermediate = 'Intermediate',
-    UpperIntermediate = 'UpperIntermediate',
-    Advanced = 'Advanced',
-}
-
 export enum PieceStatus {
     NotStarted = 'Not started',
     InWork = 'In work',
     Fluent = 'Fluent',
 }
+
+export enum PieceComplexity {
+    Easy = 'Easy',
+    Medium = 'Medium',
+    Hard = 'Hard',
+    Challenging = 'Challenging',
+}
+
 
 export enum PieceGenre {
     Classical = 'Classical',
@@ -43,4 +46,17 @@ export enum PieceGenre {
     Country = 'Country',
     RAndB = 'R&B',
     Other = 'Other',
+}
+
+export enum PieceMood {
+    Cheerful = 'Cheerful',
+    Sad = 'Sad',
+    Mixed = 'Mixed',
+    Peaceful = 'Peaceful',
+}
+
+export type Author = {
+    id: number,
+    fullName: string,
+    picSrc?: string,
 }

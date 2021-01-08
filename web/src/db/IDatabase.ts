@@ -1,6 +1,8 @@
-import { Piece, PieceBase } from "common/types/piece";
+import { Piece, PieceBase, Author } from "common/types/piece";
 import { SessionPlan } from "common/types/plan";
 import { Item } from "common/types/item/Item";
+import { Tip } from "common/types/Tip";
+import { Tag } from "common/types/Tag";
 import { User } from "../ts/user";
 
 export interface IDatabase<IdType> extends IUserDatabase<IdType>, IPieceDatabase<IdType>, IPlanDatabase<IdType> {
@@ -16,6 +18,10 @@ export interface IUserDatabase<IdType> {
     getUserByEmail(email: string): Promise<User | undefined>;
 
     getUserById(id: IdType): Promise<User | undefined>;
+
+    getUserTags(id: IdType): Promise<Tag[]>;
+
+    createUserTag(name: string, color: string, userId: IdType): Promise<IdType>;
 }
 
 export interface IPieceDatabase<IdType> {
@@ -32,6 +38,12 @@ export interface IPieceDatabase<IdType> {
     toggleIsFavourite(id: IdType): Promise<void>;
 
     updatePiece(piece: Piece): Promise<void>;
+
+    findAuthorsLike(s: string): Promise<Author[]>;
+
+    countUserPieces(id: IdType): Promise<number>;
+
+    findUserPiecesLike(input: string, userId: number): Promise<Tip[]>
 }
 
 export interface IPlanDatabase<IdType> {

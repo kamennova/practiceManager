@@ -41,7 +41,7 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
     return (
         <Provider store={store}>
             <UserContext.Provider value={{ user, jwtToken, setUser }}>
-                {user !== undefined ? <Menu/> : undefined}
+                <Menu/>
                 <main>
                     <Component {...pageProps} />
                 </main>
@@ -52,7 +52,7 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
     if (metric.label === 'web-vital') {
-        console.log(metric);
+        // console.log(metric);
     }
 }
 

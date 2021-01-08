@@ -1,6 +1,5 @@
 import {
     END_SESSION,
-    EndSessionAction,
     PUSH_ACTIVITY,
     SessionActionType,
     SET_SESSIONS,
@@ -23,15 +22,14 @@ export const sessions = (state: SessionsShape = initialState.sessions, action: S
                 }
             };
         case END_SESSION:
-            return end(state, action);
+            return end(state);
         default:
             return state;
     }
 };
 
-const end = (state: SessionsShape, action: EndSessionAction): SessionsShape => ({
+const end = (state: SessionsShape): SessionsShape => ({
     ...state,
-    items: [...state.items, action.session],
-    current: { isOn: false, history: [] }
+    current: { ...state.current, isOn: false },
 });
 

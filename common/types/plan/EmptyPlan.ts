@@ -4,6 +4,6 @@ export const EmptyPlan: SessionPlan = {
     id: 0,
     name: '',
     schedule: [],
-    addedOn: 0,
+    addedOn: new Date(),
     isFavourite: false,
 };

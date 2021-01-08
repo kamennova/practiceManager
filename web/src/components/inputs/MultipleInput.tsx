@@ -23,8 +23,12 @@ export const MultipleInput = (props: InputProps) => {
         }
     };
 
+    const removeTag = (t: string) => {
+        props.onChange(props.values.filter(item => item !== t));
+    };
+
     return (
-        <>
+        <p className={'tag-input'}>
             <TextInput
                 onBlur={sendTag}
                 value={newTag}
@@ -34,7 +38,12 @@ export const MultipleInput = (props: InputProps) => {
                 }}
                 placeholder={props.placeholder !== undefined ? props.placeholder : `Separated by space`}
             />
-            {props.values.join(', ')}
-        </>
+            <ul className={'tags-list'}>
+                {props.values.map(v => (<li key={v} className={'tag'}>
+                    {v}
+                    <i className={'material-icons delete-tag'} onClick={() => removeTag(v)}>close</i>
+                    </li>))}
+            </ul>
+        </p>
     );
 };

@@ -26,7 +26,7 @@ export const pieces = (state: ItemsShape<Piece, PieceBase> = initialState.pieces
         case TOGGLE_PIECE_FAV:
             return { ...state, items: findAndTogglePieceFav(state.items, action.id) };
         case SET_PIECES_META:
-            return { ...state, items: action.pieces };
+            return { ...state, items: action.pieces, totalCount: action.totalCount };
         case SET_PIECES:
             return { ...state, items: action.pieces };
         case UPDATE_PIECES_PRACTICE:

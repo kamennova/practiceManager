@@ -5,11 +5,19 @@ import Link from "next/dist/client/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import { Button } from "../../components/Button";
+import { PrimaryButton } from "../../components/Button";
+import { TagList } from "../../components/piece/TagList";
 import { getJwt } from "../../ts/hooks";
+import { getPieces } from "../../utils/requests";
 
-function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => void }) {
+enum SortingOrder {
+    Title,
+    DateAdded,
+}
+
+function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[], c: number) => void }) {
     const [isLoaded, setIsLoaded] = useState(false);
+    const [sortingOrder, setOrder] = useState(SortingOrder.Title);
     const router = useRouter();
 
     useEffect(() => {
@@ -17,7 +25,7 @@ function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => voi
             const jwt = getJwt();
 
             getPieces(jwt).then(res => {
-                props.setPieces(res.pieces);
+                props.setPieces(res.pieces, res.totalCount);
                 setIsLoaded(true);
             });
         }
@@ -26,38 +34,47 @@ function Pieces(props: { pieces: PieceBase[], setPieces: (p: PieceBase[]) => voi
     const addPiece = () => router.push('/pieces/add');
 
     return (
-        <div className={'pieces-page'}>
-            <header className={'page-header'}>
-                <h2>Pieces</h2>
-                <Button className={'add-btn'} onClick={addPiece}>Add piece</Button>
-            </header>
-
-            <div className={'counters'}>
-                <p>Total: <span>{props.pieces.length}</span></p>
+        <div className={'items-page pieces-page'}>
+            <div className={'main-content'}>
+                <header className={'page-header'}>
+                    <h2 className={'page-title'}>Pieces</h2>
+                    <PrimaryButton label={'Add piece'} className={'add-btn'} onClick={addPiece}/>
+                </header>
+                <div className={'list-header'}>
+                    <div className={'list-label border-radius sort'}>alphabetical</div>
+                    <div className={'list-label border-radius counter'}>Total: <span>{props.pieces.length}</span></div>
+                </div>
             </div>
-            <ul className={'pieces-list'}>
-                {props.pieces.map(piece => <PieceItem piece={piece}/>)}
-            </ul>
+
+            <PiecesList pieces={props.pieces}/>
         </div>
     );
 }
 
-const PieceItem = (props: { piece: PieceBase }) => (
-    <li className='piece-item' key={props.piece.id}>
-        <h3><Link href={'/pieces/' + props.piece.id}>{props.piece.name}</Link></h3>
-    </li>
-);
+const PiecesList = (props: { pieces: PieceBase[] }) => {
+    const router = useRouter();
 
-const getPieces = async (token: string) => await fetch('/api/pieces', {
-    method: 'GET',
-    headers: {
-        "Content-Type": "application/json",
-        'Authorization': token
-    }
-}).then(resp => resp.json());
+    return (
+        <ul className={'pieces-list'}>
+            {props.pieces.map(piece => (
+                <li className='piece-item' onClick={() => router.push('/pieces/' + piece.id)} key={piece.id}>
+
+                    {piece.imageUri && <>
+                        <img src={piece.imageUri} className={'pic'}/>
+                        <div className={'pic-overlay'}/>
+                    </>}
+
+                    <h3 className={'piece-name item-name'}><Link href={'/pieces/' + piece.id}>{piece.name}</Link></h3>
+                    {piece.tags.length > 0 &&
+                    <TagList tags={piece.tags}/>}
+                </li>)
+            )}
+        </ul>
+    );
+};
 
 const mapDispatchToProps = (dispatch: any) => ({
-    setPieces: (pieces: PieceBase[]) => dispatch(setPiecesMeta(pieces)),
+    setPieces: (pieces: PieceBase[], count: number) => dispatch(setPiecesMeta(pieces, count)),
 });
 
 const mapStateToProps = (state: StateShape) => ({

@@ -1,9 +1,14 @@
+import { useRouter } from "next/router";
 import React from 'react';
+import { PrimaryButton } from "../Button";
 
 export const ItemButtons = (props: { relatedItems: {item: string, onClick: () => void}[] }) => {
+    const router = useRouter();
+
     return (
         <div className={'item-btns'}>
             <PrevItem item={props.relatedItems[0].item} onClick={props.relatedItems[0].onClick}/>
+            <PrimaryButton label={'Practice'} onClick={() => router.push('/sessionStart')}/>
             <NextItem item={props.relatedItems[1].item} onClick={props.relatedItems[1].onClick}/>
         </div>
     );

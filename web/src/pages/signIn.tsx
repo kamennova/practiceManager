@@ -30,7 +30,7 @@ export default function SignUp() {
     };
 
     return (
-        <div className={'form-wrapper'}>
+        <div className={'form-wrapper main-content'}>
             <h2>Sign in!</h2>
             <FormControl label={'Email'}>
                 <TextInput name={'email'} value={email} onChange={setEmail}/>

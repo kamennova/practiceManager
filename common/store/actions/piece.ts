@@ -16,6 +16,7 @@ export type SetPiecesAction = {
 export type SetPiecesMetaAction = {
     type: typeof SET_PIECES_META,
     pieces: PieceBase[]
+    totalCount: number,
 };
 
 export type AddPieceAction = {
@@ -48,7 +49,7 @@ export const addPiece = (piece: Piece): AddPieceAction => ({ type: ADD_PIECE, pi
     togglePieceFav = (id: number): TogglePieceFavAction => ({ type: TOGGLE_PIECE_FAV, id }),
     deletePiece = (id: number): DeletePieceAction => ({ type: DELETE_PIECE, id }),
     setPieces = (pieces: Piece[]): SetPiecesAction => ({ type: SET_PIECES, pieces }),
-    setPiecesMeta = (pieces: PieceBase[]): SetPiecesMetaAction => ({ type: SET_PIECES_META, pieces }),
+    setPiecesMeta = (pieces: PieceBase[], totalCount: number = 0): SetPiecesMetaAction => ({ type: SET_PIECES_META, pieces, totalCount }),
     updatePiecesPractice = (practice: { [key: number]: number }) => ({ type: UPDATE_PIECES_PRACTICE, practice });
 
 export type PieceActionTypes = AddPieceAction

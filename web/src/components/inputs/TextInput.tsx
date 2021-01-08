@@ -15,6 +15,7 @@ export const TextInput = (props: InputProps) => {
     const onPress = props.onKeyPress !== undefined ? (e) => props.onKeyPress(e.key) : undefined;
     return (
         <input name={props.name}
+               className={'text-input'}
                onBlur={props.onBlur}
                onKeyPress={onPress}
                placeholder={props.placeholder}
