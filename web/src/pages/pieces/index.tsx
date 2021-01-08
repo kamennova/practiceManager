@@ -65,7 +65,7 @@ const PiecesList = (props: { pieces: PieceBase[] }) => {
 
                     <h3 className={'piece-name item-name'}><Link href={'/pieces/' + piece.id}>{piece.name}</Link></h3>
                     {piece.tags.length > 0 &&
-                    <TagList tags={piece.tags.map(t => ({ name: t, color: 'blue', id: 1 }))}/>}
+                    <TagList tags={piece.tags}/>}
                 </li>)
             )}
         </ul>

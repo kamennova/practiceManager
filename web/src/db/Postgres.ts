@@ -1,18 +1,18 @@
-import { Piece, PieceBase, PieceComplexity, PieceMood, PieceStatus, Author } from "common/types/piece";
+import { Author, Piece, PieceBase, PieceComplexity, PieceMood, PieceStatus } from "common/types/piece";
 import { SessionPlan } from "common/types/plan";
+import { Tag } from "common/types/Tag";
+import { Tip } from "common/types/Tip";
 import { Pool } from 'pg';
 import { User } from "../ts/user";
 import { data } from "./connection";
 import { IDatabase } from "./IDatabase";
-import { Tip } from "common/types/Tip";
-import { Tag } from "common/types/Tag";
 
 const pool = new Pool(data);
 
 class PostgresDatabase implements IDatabase<number> {
-    private static rowToPiece(row: any): Piece {
+    private static rowToPiece(row: any, tags?: any[]): Piece {
         return {
-            ...this.rowToPieceBase(row),
+            ...this.rowToPieceBase(row, tags),
             notifsOn: row.notifs_on,
             notes: [],
             recordings: [],
@@ -21,10 +21,10 @@ class PostgresDatabase implements IDatabase<number> {
         };
     }
 
-    private static rowToPieceBase(row: any): PieceBase {
+    private static rowToPieceBase(row: any, tags?: any[]): PieceBase {
         return {
             name: row.name,
-            tags: row.tags !== null ? row.tags : [],
+            tags: tags !== undefined ? tags.map(t => ({ id: t.id, name: t.tag_name, color: t.color })) : [],
             author: row.author_id !== null ? {
                 fullName: row.author_name,
                 id: row.author_id,
@@ -147,7 +147,11 @@ class PostgresDatabase implements IDatabase<number> {
                                       where user_id = $1`,
             [userId]);
 
-        return res.rows.map(row => PostgresDatabase.rowToPieceBase(row));
+        return await Promise.all(res.rows.map((r) => {
+            return this.getPieceTags(r.id).then(tags => {
+                return PostgresDatabase.rowToPieceBase(r, tags);
+            });
+        }));
     }
 
     public async toggleIsFavourite(id: number): Promise<void> {
@@ -187,7 +191,9 @@ class PostgresDatabase implements IDatabase<number> {
             return Promise.resolve(undefined);
         }
 
-        return PostgresDatabase.rowToPiece(res.rows[0]);
+        const tags = await this.getPieceTags(id);
+
+        return PostgresDatabase.rowToPiece(res.rows[0], tags);
     }
 
     public async deletePiece(id: number) {
@@ -241,6 +247,20 @@ class PostgresDatabase implements IDatabase<number> {
         return res.rows.map(r => ({ color: r.color, id: r.id, name: r.tag_name }));
     }
 
+    public async createUserTag(name: string, color: string, userId: number): Promise<number> {
+        const res = await pool.query('insert into tags(tag_name, user_id, color) values ($1, $2, $3) returning id',
+            [name, userId, color]);
+
+        return res.rows[0].id;
+    }
+
+    private async getPieceTags(id: number) {
+        const res = await pool.query('select t.id, t.tag_name, t.color from piece_tags left join tags t on piece_tags.tag_id = t.id where piece_tags.piece_id = $1',
+            [id]);
+
+        return res.rows;
+    }
+
     private async getPieceAuthorId(name: string): Promise<number> {
         const existingId = await this.getExistingAuthorId(name);
 
@@ -267,11 +287,10 @@ class PostgresDatabase implements IDatabase<number> {
         return insert.rows[0].id;
     }
 
-    private async addPieceTags(pieceId: number, tags: string[]): Promise<void> {
-        const ids = await Promise.all(tags.map(tag => this.getPieceTagId(tag)));
-        await Promise.all(ids.map(id => pool.query(
+    private async addPieceTags(pieceId: number, tags: Tag[]): Promise<void> {
+        await Promise.all(tags.map(tag => pool.query(
             'insert into piece_tags(piece_id, tag_id) values ($1, $2)',
-            [pieceId, id])));
+            [pieceId, tag.id])));
     }
 
     private async getExistingAuthorId(name: string): Promise<number | undefined> {
@@ -292,13 +311,6 @@ class PostgresDatabase implements IDatabase<number> {
         if (res.rows.length === 0) {
             return Promise.resolve(undefined);
         }
-
-        return res.rows[0].id;
-    }
-
-    public async createUserTag(name: string, color: string, userId: number): Promise<number> {
-        const res = await pool.query('insert into tags(tag_name, user_id, color) values ($1, $2, $3) returning id',
-            [name, userId, color]);
 
         return res.rows[0].id;
     }

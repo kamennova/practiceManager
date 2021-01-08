@@ -38,10 +38,9 @@ export const PieceForm = (props: { mode: FormMode, piece: Piece, onSubmit: (p: P
 
     const setPieceTag = (tagId: string) => {
         const tag = tags.find(t => t.id === Number(tagId));
-        console.log(tag, piece.tags);
 
         if (tag !== undefined) {
-            setPiece({...piece, tags: [tag.name]});
+            setPiece({ ...piece, tags: [tag] });
         }
     };
 
@@ -82,7 +81,7 @@ export const PieceForm = (props: { mode: FormMode, piece: Piece, onSubmit: (p: P
                 </FormControl>
 
                 <FormControl label={'Tag'}>
-                    <Select value={piece.tags.length > 0 ? piece.tags[0].id : undefined}
+                    <Select value={piece.tags.length > 0 ? piece.tags[0].id.toString() : undefined}
                             options={tags.map(t => ({ label: t.name, value: t.id.toString() }))}
                             onChange={setPieceTag}/>
                 </FormControl>

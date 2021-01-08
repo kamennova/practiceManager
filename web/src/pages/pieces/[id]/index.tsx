@@ -41,7 +41,7 @@ const PieceComponent = (props: { deletePiece: (id: number) => void }) => {
             <div className={'main-content'}>
                 <header className={'page-header item-page-header'}>
                     <h2 className={'page-title item-name'}>{piece.name}</h2>
-                    <TagList tags={piece.tags.map(t => ({id: 1, name: t, color: 'blue'}))}/>
+                    <TagList tags={piece.tags}/>
                     <ItemMenu onDelete={onDelete} onEdit={onEdit} isFav={piece.isFavourite}
                               toggleFav={() => console.log('d')}/>
                 </header>
