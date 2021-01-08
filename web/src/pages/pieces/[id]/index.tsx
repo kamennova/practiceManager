@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { ItemMenu } from "../../../components/Item";
 import { ItemButtons } from "../../../components/Item/Buttons";
 import { DeleteModal } from "../../../components/Item/DeleteModal";
+import { ItemSection } from "../../../components/Item/ItemSection";
 import { PieceFeatures } from "../../../components/piece/PieceFeatures";
 import { PieceStats } from "../../../components/piece/PieceStats";
 import { TagList } from "../../../components/piece/TagList";
@@ -40,7 +41,7 @@ const PieceComponent = (props: { deletePiece: (id: number) => void }) => {
             <div className={'main-content'}>
                 <header className={'page-header item-page-header'}>
                     <h2 className={'page-title item-name'}>{piece.name}</h2>
-                    <TagList tags={piece.tags}/>
+                    <TagList tags={piece.tags.map(t => ({id: 1, name: t, color: 'blue'}))}/>
                     <ItemMenu onDelete={onDelete} onEdit={onEdit} isFav={piece.isFavourite}
                               toggleFav={() => console.log('d')}/>
                 </header>
@@ -57,17 +58,19 @@ const PieceComponent = (props: { deletePiece: (id: number) => void }) => {
                 </div>
             </div>
 
-            <div className={'item-section main-content'}>
-                <h3 className={'section-title'}>Notes</h3>
-                {piece.notes.length === 0 && <p className={'no-items'}>No notes yet!</p>}
-                {piece.notes.map(() => <li>dgfdfg</li>)}
-            </div>
+            <ItemSection title={'Notes'}>
+                <div>
+                    {piece.notes.length === 0 && <p className={'no-items'}>No notes yet!</p>}
+                    {piece.notes.map(() => <li>dgfdfg</li>)}
+                </div>
+            </ItemSection>
 
-            <div className={'item-section main-content'}>
-                <h3 className={'section-title'}>Recordings</h3>
-                {piece.notes.length === 0 && <p className={'no-items'}>No recordings yet!</p>}
-                {piece.notes.map(() => <li>dgfdfg</li>)}
-            </div>
+            <ItemSection title={'Recordings'}>
+                <div>
+                    {piece.notes.length === 0 && <p className={'no-items'}>No recordings yet!</p>}
+                    {piece.notes.map(() => <li>dgfdfg</li>)}
+                </div>
+            </ItemSection>
 
             <div className={'main-content'} style={{ marginTop: 'auto' }}>
                 <ItemButtons

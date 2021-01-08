@@ -28,7 +28,7 @@ export const Select = (props: { options: Option[], value?: string, onChange: (v:
 
             <span className={'current-option'}>{current ? <OptionContent {...current}/> : 'Select'}</span>
 
-            {isOpen && <ul>
+            {isOpen && <ul style={{zIndex: 9999}}>
                 {props.options.map((item) =>
                     <li onClick={() => props.onChange(item.value)}><OptionContent {...item} /></li>)}
             </ul>}

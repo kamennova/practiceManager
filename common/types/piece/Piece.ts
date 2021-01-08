@@ -1,9 +1,10 @@
 import { Item } from "../item/Item";
 import { Note } from "../Note";
+import { Tag } from "../Tag";
 import { Recording } from "./Recording";
 
 export type PieceBase = Item & {
-    tags: string[],
+    tags: Tag[],
     author?: Author,
     imageUri?: string,
     timeSpent: number,

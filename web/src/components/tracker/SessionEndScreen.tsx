@@ -25,8 +25,9 @@ const SessionEnd = (props: { session: SessionState, }) => {
                 <div style={{ marginTop: 20, marginBottom: 120 }} className={'flex'}>
                     <span style={{
                         fontSize: 15,
+                        marginRight: 5,
                         fontWeight: 'bold'
-                    }}> {secondsToHumanlyFormat(report.totalDuration)}</span>{' '} in total
+                    }}> {secondsToHumanlyFormat(report.totalDuration)}{' '}</span><span>in total</span>
                 </div>
 
             </div>

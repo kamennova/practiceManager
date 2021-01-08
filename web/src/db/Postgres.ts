@@ -5,6 +5,7 @@ import { User } from "../ts/user";
 import { data } from "./connection";
 import { IDatabase } from "./IDatabase";
 import { Tip } from "common/types/Tip";
+import { Tag } from "common/types/Tag";
 
 const pool = new Pool(data);
 
@@ -27,7 +28,7 @@ class PostgresDatabase implements IDatabase<number> {
             author: row.author_id !== null ? {
                 fullName: row.author_name,
                 id: row.author_id,
-                picSrc: row.author_pic !== null ? row.author_pic: undefined
+                picSrc: row.author_pic !== null ? row.author_pic : undefined
             } : undefined,
             status: PieceStatus.NotStarted,
             addedOn: row.added_on,
@@ -233,6 +234,13 @@ class PostgresDatabase implements IDatabase<number> {
         return res.rows.map(r => ({ fullName: r.name, picSrc: r.pic_src !== null ? r.pic_src : undefined, id: r.id }));
     }
 
+    public async getUserTags(userId: number): Promise<Tag[]> {
+        const res = await pool.query('select id, color, tag_name from tags where user_id = $1',
+            [userId]);
+
+        return res.rows.map(r => ({ color: r.color, id: r.id, name: r.tag_name }));
+    }
+
     private async getPieceAuthorId(name: string): Promise<number> {
         const existingId = await this.getExistingAuthorId(name);
 
@@ -284,6 +292,13 @@ class PostgresDatabase implements IDatabase<number> {
         if (res.rows.length === 0) {
             return Promise.resolve(undefined);
         }
+
+        return res.rows[0].id;
+    }
+
+    public async createUserTag(name: string, color: string, userId: number): Promise<number> {
+        const res = await pool.query('insert into tags(tag_name, user_id, color) values ($1, $2, $3) returning id',
+            [name, userId, color]);
 
         return res.rows[0].id;
     }

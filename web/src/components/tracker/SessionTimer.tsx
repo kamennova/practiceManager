@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { BreakButton, FinishButton, NextButton } from "../buttons/Timer";
 import { NoteModal } from "../modals/NoteModal";
 import { TimerNotes } from "./TimerNotes";
+import { getTimerActivityTitle } from 'common/utils/title';
 
 type SessionTimerProps = {
     isFree: boolean,
@@ -21,7 +22,6 @@ type SessionTimerProps = {
 const SessionTimerComponent = (props: SessionTimerProps) => {
     const [piece, setPiece] = useState<Piece | undefined>(undefined);
     const [showNoteForm, setShowNoteForm] = useState(false);
-
 
     useEffect(() => {
         if ((props.activity.type === ActivityType.SightReading || props.activity.type === ActivityType.Piece)
@@ -45,7 +45,7 @@ const SessionTimerComponent = (props: SessionTimerProps) => {
 
     return (
         <div className={'session-timer main-content'}>
-            <h2 className={'timer-title'}>{props.activity.type}</h2>
+            <h2 className={'timer-title'}>{getTimerActivityTitle(props.activity).main}</h2>
             {props.children}
 
             {showNotes ? <TimerNotes onAdd={() => setShowNoteForm(true)} notes={piece?.notes}/> : undefined}

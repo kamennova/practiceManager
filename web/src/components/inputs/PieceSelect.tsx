@@ -21,7 +21,7 @@ const Select = (props: { items: PieceBase[], itemsCount: number, value?: Tip, on
         <TextInputTips onSelect={props.onChange}
                        getTips={getTips}
                        allowCreate={false}
-                       value={props.value ? { ...props.value, label: props.value.name } : undefined}/>
+                       value={props.value }/>
     );
 };
 

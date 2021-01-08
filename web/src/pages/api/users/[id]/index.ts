@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Database } from "../../../db/Database";
+import { Database } from "../../../../db/Database";
 import {
     getTokenFromReq,
     getUserIdByToken,
     invalidAuthTokenResponse,
     restrictMethods,
     unauthorizedResponse
-} from "../../../ts/api";
+} from "../../../../ts/api";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     switch (req.method) {

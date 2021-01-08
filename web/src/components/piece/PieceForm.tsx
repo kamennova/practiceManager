@@ -1,13 +1,16 @@
 import { Piece } from 'common/types/piece';
+import { Tag } from 'common/types/Tag';
 import { useRouter } from "next/router";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getJwt } from "../../ts/hooks";
+import { getUserTags } from "../../utils/requests";
 import { PrimaryButton } from "../Button";
 import { FormControl } from "../FormControl";
 import { AuthorInput } from "../inputs/AuthorInput";
 import { PieceComplexitySelect } from "../inputs/ComplexitySelect";
 import { ImageLinkInput } from "../inputs/ImageLink";
 import { MoodSelect } from "../inputs/MoodSelect";
-import { MultipleInput } from "../inputs/MultipleInput";
+import { Select } from "../inputs/Select";
 import { TextInput } from "../inputs/TextInput";
 import { ItemMenuSmall } from "../Item/ItemMenuSmall";
 
@@ -18,12 +21,29 @@ export enum FormMode {
 export const PieceForm = (props: { mode: FormMode, piece: Piece, onSubmit: (p: Piece) => void }) => {
     const [piece, setPiece] = useState<Piece>(props.piece);
     const [error, setError] = useState<{ location: string, message: string } | null>(null);
+    const [tags, setTags] = useState<Tag[]>([]);
+
     const setProperty = (prop: keyof Piece) => {
         return (val: string | any) => {
             setPiece({ ...piece, [prop]: val });
         }
     };
     const router = useRouter();
+
+    useEffect(() => {
+        const jwt = getJwt();
+
+        getUserTags(jwt).then(({ results }) => setTags(results));
+    }, []);
+
+    const setPieceTag = (tagId: string) => {
+        const tag = tags.find(t => t.id === Number(tagId));
+        console.log(tag, piece.tags);
+
+        if (tag !== undefined) {
+            setPiece({...piece, tags: [tag.name]});
+        }
+    };
 
     const validate = () => {
         if (piece.name.length === 0) {
@@ -61,8 +81,10 @@ export const PieceForm = (props: { mode: FormMode, piece: Piece, onSubmit: (p: P
                                         `https://www.google.com/search?q=${piece.name.split(' ').join('+')}+${piece.author ? piece.author.fullName.split(' ').join("+") : ''}&tbm=isch` : undefined}/>
                 </FormControl>
 
-                <FormControl label={'Tags'}>
-                    <MultipleInput values={piece.tags} onChange={setProperty('tags')}/>
+                <FormControl label={'Tag'}>
+                    <Select value={piece.tags.length > 0 ? piece.tags[0].id : undefined}
+                            options={tags.map(t => ({ label: t.name, value: t.id.toString() }))}
+                            onChange={setPieceTag}/>
                 </FormControl>
 
                 <div className={'columns'}>
