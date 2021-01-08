@@ -10,6 +10,7 @@ import { PieceFeatures } from "../../../components/piece/PieceFeatures";
 import { PieceStats } from "../../../components/piece/PieceStats";
 import { TagList } from "../../../components/piece/TagList";
 import { getJwt, usePiece } from "../../../ts/hooks";
+import { deletePieceQuery } from "../../../utils/requests";
 
 const PieceComponent = (props: { deletePiece: (id: number) => void }) => {
     const piece = usePiece();
@@ -25,10 +26,10 @@ const PieceComponent = (props: { deletePiece: (id: number) => void }) => {
         const id = piece.id;
         const jwt = getJwt();
 
-        await deleteQuery(piece.id, jwt).then((res) => {
+        await deletePieceQuery(piece.id, jwt).then((res) => {
             if (!res.error) {
                 props.deletePiece(id);
-                router.push('/pieces')
+                router.push('/pieces');
             }
         });
     };
@@ -79,14 +80,6 @@ const PieceComponent = (props: { deletePiece: (id: number) => void }) => {
         </div>
     );
 };
-
-const deleteQuery = async (id: number, jwt: string) => await fetch('/api/pieces/' + id, {
-    method: 'DELETE',
-    headers: {
-        "Content-Type": "application/json",
-        'Authorization': jwt
-    }
-}).then(resp => resp.json());
 
 const mapDispatchToProps = (dispatch: any) => ({
     deletePiece: (id: number) => dispatch(deletePiece(id)),

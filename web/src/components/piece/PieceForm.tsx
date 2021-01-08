@@ -32,7 +32,6 @@ export const PieceForm = (props: { mode: FormMode, piece: Piece, onSubmit: (p: P
 
     useEffect(() => {
         const jwt = getJwt();
-
         getUserTags(jwt).then(({ results }) => setTags(results));
     }, []);
 

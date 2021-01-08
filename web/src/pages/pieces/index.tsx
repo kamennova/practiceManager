@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { PrimaryButton } from "../../components/Button";
 import { TagList } from "../../components/piece/TagList";
 import { getJwt } from "../../ts/hooks";
+import { getPieces } from "../../utils/requests";
 
 enum SortingOrder {
     Title,
@@ -71,14 +72,6 @@ const PiecesList = (props: { pieces: PieceBase[] }) => {
         </ul>
     );
 };
-
-const getPieces = async (token: string) => await fetch('/api/pieces', {
-    method: 'GET',
-    headers: {
-        "Content-Type": "application/json",
-        'Authorization': token
-    }
-}).then(resp => resp.json());
 
 const mapDispatchToProps = (dispatch: any) => ({
     setPieces: (pieces: PieceBase[], count: number) => dispatch(setPiecesMeta(pieces, count)),
