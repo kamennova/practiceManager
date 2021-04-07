@@ -15,9 +15,12 @@ export const replaceItem = <T extends { id: number }>(arr: T[], newItem: T): T[]
 
 export const pieceGroupBy = (pieces: Array<{ pieceId: number, duration: number }>): { [key: number]: number } => {
     return pieces.reduce((acc, curr) => {
+        // @ts-ignore
         if (acc[curr.pieceId] === undefined) {
+            // @ts-ignore
             acc[curr.pieceId] = curr.duration;
         } else {
+            // @ts-ignore
             acc[curr.pieceId] += curr.duration;
         }
 

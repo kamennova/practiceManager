@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from 'react';
 import { getJwt } from "../../ts/hooks";
 import { getUserTags } from "../../utils/requests";
-import { PrimaryButton } from "../Button";
+import { Button, PrimaryButton } from "../Button";
 import { FormControl } from "../FormControl";
 import { AuthorInput } from "../inputs/AuthorInput";
 import { PieceComplexitySelect } from "../inputs/ComplexitySelect";
@@ -98,6 +98,13 @@ export const PieceForm = (props: { mode: FormMode, piece: Piece, onSubmit: (p: P
                 {error && <span>{error.message}</span>}
 
                 <div className={'form-buttons'}>
+                    <Button onClick={() => setProperty('inWishlist')(!piece.inWishlist)}>
+                        <span>
+                        <i className={'material-icons'} style={{fontSize: 14, marginRight: 5}}>
+                            {piece.inWishlist ? 'done' : 'loyalty'}</i>
+                            {piece.inWishlist ? 'In wishlist' : 'Add to wishlist'}
+                        </span>
+                    </Button>
                     <PrimaryButton onClick={onSubmit} label={'Add'}/>
                 </div>
             </div>

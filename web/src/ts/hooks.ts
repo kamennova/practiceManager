@@ -1,6 +1,8 @@
 import { EmptyPiece } from "common/types/piece/EmptyPiece";
+import { EmptyPlan } from "common/types/plan/EmptyPlan";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { getPieceQuery, getPlanQuery } from "../utils/requests";
 import { getCookie } from "./helpers";
 
 export const usePiece = () => {
@@ -30,10 +32,32 @@ export const usePiece = () => {
     return piece;
 };
 
-const getPieceQuery = async (id: number, token: string) => await fetch(`/api/pieces/${id}`, {
-    method: 'GET',
-    headers: { authorization: token }
-}).then(res => res.json());
+export const usePlan = () => {
+    const router = useRouter();
+    const [loaded, setLoaded] = useState(false);
+    const [piece, setPiece] = useState(EmptyPlan);
+
+    useEffect(() => {
+        const func = async () => {
+            if (!loaded) {
+                const token = getJwt();
+
+                getPlanQuery(Number(router.query.id), token).then(res => {
+                    if (res.error !== undefined) {
+                        console.log(res.error);
+                    } else {
+                        setPiece(res.plan);
+                        setLoaded(true);
+                    }
+                });
+            }
+        };
+
+        func();
+    }, []);
+
+    return piece;
+};
 
 export const getJwt = () => {
     const token = getCookie('authToken');
