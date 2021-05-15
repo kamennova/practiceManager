@@ -12,7 +12,7 @@ import { SessionActivity } from "../../types/activity";
 import { FormProps, FormState } from "../../types/item/ItemForm";
 import { Piece } from "../../types/piece";
 import { EmptyPlan, SessionPlan } from "../../types/plan";
-import { swipe } from "../../utils/array";
+import { swipe } from "common/utils/array";
 import { ErrorAlert } from "../basic/alerts";
 import { SaveButton } from "../basic/buttons/ActionButton";
 import { AddActivityBtn } from "../basic/buttons/AddActivityBtn";

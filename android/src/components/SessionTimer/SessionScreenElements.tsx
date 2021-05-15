@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { TimerTitleStyle as getStyles } from "../../AppStyle";
 import { StateShape } from "../../store/StoreState";
 import { Activity } from "../../types/activity";
-import { getPieceCredits, getTimerActivityTitle, PieceCredits } from "../../utils/title";
+import { getPieceCredits, getTimerActivityTitle, PieceCredits } from "common/utils/title";
 import { getActivityColor } from "./Colors";
 
 const SessionActivityTitleComponent = (props: { activity: Activity, pieceCredits?: PieceCredits }) => {

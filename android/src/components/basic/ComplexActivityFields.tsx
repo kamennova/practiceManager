@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import { ActivityType, ComplexActivityType, Exercise, Tonality } from "../../types/activity";
-import { enumKeys } from "../../utils/array";
+import { enumKeys } from "common/utils/array";
 import { MyPicker } from "./inputs/Picker";
 import { PiecePicker } from "./inputs/PiecePicker";
 

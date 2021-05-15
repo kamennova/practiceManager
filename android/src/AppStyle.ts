@@ -11,7 +11,7 @@ export const AppSidePadding = 17,
     TotalHeaderHeight = 86;
 
 export const Primary = '#6895ff',
-    Dark = '#2d60d8';
+    Dark = '#62443A';
 
 export const AppPaddingStyle = {
     paddingLeft: AppSidePadding,

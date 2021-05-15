@@ -1,5 +1,5 @@
 import { Piece, PieceBase, PieceStatus } from "../../types/piece";
-import { replaceItem } from "../../utils/array";
+import { replaceItem } from "common/utils/array";
 import {
     ADD_PIECE,
     DELETE_PIECE,

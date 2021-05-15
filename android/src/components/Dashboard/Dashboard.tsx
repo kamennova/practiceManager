@@ -4,7 +4,7 @@ import { StateShape } from "../../store/StoreState";
 import { getActivitiesReport, totalDuration } from "../../types/activity";
 import { PieceBase, PieceStatus } from "../../types/piece";
 import { Session } from "../../types/Session";
-import { secondsToHumanlyFormat } from "../../utils/time";
+import { secondsToHumanlyFormat } from "common/utils/time";
 import { ItemFeatures } from "../basic/Item/ItemFeatures";
 import { ItemSection } from "../basic/ItemSection";
 import { ScreenWrapper } from "../basic/ScreenWrapper";

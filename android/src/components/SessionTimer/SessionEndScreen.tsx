@@ -6,7 +6,7 @@ import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
 import { ActivitiesReport, getActivitiesReport } from "../../types/activity";
 import { Session } from "../../types/Session";
-import { secondsToHumanlyFormat } from "../../utils/time";
+import { secondsToHumanlyFormat } from "common/utils/time";
 import { Button } from "../basic/buttons/Button";
 import { ModalTitle } from "../basic/titles/ModalTitle";
 

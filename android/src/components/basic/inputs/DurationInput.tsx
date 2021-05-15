@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from "react-native";
 import { DurationInputStyle as getStyles } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
-import { getHours, getMinutes } from "../../../utils/time";
+import { getHours, getMinutes } from "common/utils/time";
 import { NumberInput } from "./NumberInput";
 
 type InputProps = {
