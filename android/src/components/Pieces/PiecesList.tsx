@@ -6,6 +6,7 @@ import { PIECE } from "../../NavigationPath";
 import { Theme, useTheme } from "../../theme";
 import { ThemeColors } from "../../theme/colors";
 import { PieceBase } from "common/types/piece";
+import { useDeviceSize } from "../basic/adaptive/query";
 import { NothingAlert } from "../basic/alerts/NothingAlert";
 
 export const PiecesList = (props: { pieces: PieceBase[] }) => {
@@ -27,13 +28,14 @@ const borderStyle = (colors: ThemeColors) => ({ borderTopWidth: 1, borderTopColo
 
 const PieceItem = (props: PieceBase & { onPress: () => void }) => {
     const theme = useTheme();
-    const styles = getStyles(theme.colors, theme.theme);
+    const size = useDeviceSize();
+    const styles = getStyles(theme.colors, theme.theme, size);
 
     return (
         <TouchableNativeFeedback onPress={props.onPress}>
             <View style={PieceItemStyle(theme.colors)}>
                 <View style={styles.itemWrap}>
-                    <PieceName style={ListItemTitleStyle(theme.colors)}>
+                    <PieceName style={ListItemTitleStyle(theme.colors, size)}>
                         {props.name}
                     </PieceName>
                     {props.author !== undefined ?
@@ -43,7 +45,7 @@ const PieceItem = (props: PieceBase & { onPress: () => void }) => {
                     <Image style={styles.image} source={{ uri: props.imageUri }}/>,
                     <Image source={theme.theme !== Theme.Dark ? require('../../../assets/grad_white.png') :
                         require('../../../assets/grad_dark.png')}
-                           style={{ ...styles.imageTop }}/>,
+                           style={styles.imageTop}/>,
                 ] : undefined}
             </View>
         </TouchableNativeFeedback>
@@ -57,7 +59,7 @@ const PieceName = (props: { children: string, style?: TextStyle }) => (
 );
 
 const PieceAuthor = (props: { author: string }) => (
-    <Text style={getStyles(useTheme().colors).author}>
+    <Text style={getStyles(useTheme().colors, undefined, useDeviceSize()).author}>
         {props.author}
     </Text>
 );

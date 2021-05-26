@@ -1,4 +1,6 @@
 import { Dimensions, StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { DeviceSize } from "./components/basic/adaptive/query";
+import { Font } from "./sizes";
 import { DEFAULT_THEME, Theme, ThemeColors } from "./theme";
 
 const DefaultColors = ThemeColors[DEFAULT_THEME];
@@ -35,35 +37,50 @@ export const HeaderIconWrap = (colors: ThemeColors): ViewStyle => ({
     justifyContent: 'center',
 });
 
-const ItemHeight = 71,
+const ItemHeight = {
+        [DeviceSize.Small]: 71,
+        [DeviceSize.Medium]: 71,
+        [DeviceSize.Big]: 87,
+    },
     ItemBorderRadius = BorderRadius,
     ImageWidth = 170;
 
-export const PieceListStyle = (colors: ThemeColors, theme: Theme = DEFAULT_THEME) => StyleSheet.create({
+const ItemPadding = {
+    [DeviceSize.Small]: 8,
+    [DeviceSize.Medium]: 8,
+    [DeviceSize.Big]: 16,
+};
+
+export const PieceListStyle = (colors: ThemeColors, theme: Theme = DEFAULT_THEME, size: DeviceSize = DeviceSize.Medium) => StyleSheet.create({
     author: {
-        fontSize: 13,
+        fontSize: Font.Small[size],
         color: colors.colorFaded,
+        marginLeft: size > DeviceSize.Medium ? 12 : 0,
     },
     image: {
         width: ImageWidth,
-        height: ItemHeight,
+        height: ItemHeight[size],
         marginLeft: 'auto',
         opacity: theme === Theme.Dark ? 0.7 : 1,
     },
     imageTop: {
-        width: 200,
-        height: ItemHeight,
+        width: ImageWidth,
+        height: ItemHeight[size],
         position: 'absolute',
         top: 0,
-        right: -200 + ImageWidth,
+        right: 0,
     },
     itemWrap: {
-        padding: 8,
+        paddingLeft: 8,
+        paddingRight: 8,
+        paddingTop: ItemPadding[size],
+        paddingBottom: ItemPadding[size],
+        flexDirection: size > DeviceSize.Medium ? 'row' : 'column',
     },
 });
 
-export const ListItemTitleStyle = (colors: ThemeColors = DefaultColors) => ({
-    fontSize: 17,
+export const ListItemTitleStyle = (colors: ThemeColors = DefaultColors, size: DeviceSize = DeviceSize.Medium) => ({
+    fontSize: Font.Medium[size],
     lineHeight: 24,
     marginBottom: 3,
     color: colors.color,
@@ -75,12 +92,12 @@ export const ListItemStyle = (colors: ThemeColors): ViewStyle => ({
     backgroundColor: colors.appBg,
 });
 
-export const PieceItemStyle = (colors: ThemeColors): ViewStyle => ({
+export const PieceItemStyle = (colors: ThemeColors, size: DeviceSize = DeviceSize.Medium): ViewStyle => ({
     ...ListItemStyle(colors),
     borderBottomWidth: 1,
     paddingLeft: AppSidePadding,
     flexDirection: 'row',
-    minHeight: ItemHeight,
+    minHeight: ItemHeight[size],
     alignItems: 'center',
 });
 
@@ -163,9 +180,9 @@ export const DirectionButtonStyle = (colors: ThemeColors = DefaultColors, isDisa
     opacity: isDisabled ? 0.4 : 1,
 });
 
-export const FeaturesStyle = (colors: ThemeColors = DefaultColors) => StyleSheet.create({
-    label: { fontSize: 13, color: colors.colorFaded, },
-    val: { fontSize: 15, marginBottom: 4, color: colors.color },
+export const FeaturesStyle = (colors: ThemeColors = DefaultColors, size: DeviceSize = DeviceSize.Medium) => StyleSheet.create({
+    label: { fontSize: Font.Small[size], color: colors.colorFaded, },
+    val: { fontSize: Font.Medium[size], marginBottom: 4, color: colors.color },
     wrap: {
         flexDirection: 'row',
         alignItems: 'flex-start',
@@ -175,8 +192,8 @@ export const FeaturesStyle = (colors: ThemeColors = DefaultColors) => StyleSheet
     }
 });
 
-export const NoteText = (colors: ThemeColors) => ({
-    fontSize: 14,
+export const NoteText = (colors: ThemeColors, size: DeviceSize) => ({
+    fontSize: Font.Normal[size],
     color: colors.colorFaded,
 });
 
@@ -187,7 +204,6 @@ export const SectionRowStyle = (colors: ThemeColors) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // borderBottomWidth: 1,
         borderColor: colors.borderFaded,
         paddingBottom: 12,
         paddingTop: 12,
@@ -236,7 +252,7 @@ export const ActionBtnStyle = StyleSheet.create({
     save: {
         position: 'absolute',
         right: AppSidePadding,
-        top: Dimensions.get('window').height - 40,
+        top: Dimensions.get('screen').height - 140,
     },
     check: {
         width: 19,
@@ -246,7 +262,7 @@ export const ActionBtnStyle = StyleSheet.create({
     add: {
         position: 'absolute',
         right: AppSidePadding,
-        top: Dimensions.get('window').height - 130,
+        top: Dimensions.get('screen').height - 200,
     },
     plus: {
         color: 'white',
@@ -291,11 +307,20 @@ export const ImagePickerStyle = (colors: ThemeColors = DefaultColors) => StyleSh
     }
 });
 
+export const RowContainerStyle = (colors: ThemeColors): ViewStyle => ({
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: colors.border,
+    padding: 12,
+    paddingTop: 4,
+});
+
 export const ItemBtnsStyle = (): ViewStyle => ({
     position: 'absolute',
-    top: Dimensions.get('window').height - 50,
+    top: Dimensions.get('screen').height - 125,
     flexDirection: 'row',
     width: Dimensions.get('window').width,
+    height: 10,
     justifyContent: 'center',
     alignItems: 'center',
     padding: AppSidePadding,
@@ -479,11 +504,17 @@ export const SessionScreenStyle: ViewStyle = {
     alignItems: 'center'
 };
 
-export const TimeTrackerTextStyle: TextStyle = {
-    fontSize: 50,
+const TimerSize = {
+    [DeviceSize.Small]: 50,
+    [DeviceSize.Medium]: 62,
+    [DeviceSize.Big]: 120,
+};
+
+export const TimeTrackerTextStyle = (size: DeviceSize): TextStyle => ({
+    fontSize: TimerSize[size],
     color: 'black',
     textAlign: 'center',
-};
+});
 
 export const ErrorAlertStyle: ViewStyle = {
     padding: 8,
@@ -703,7 +734,13 @@ export const SendBtnStyles = (colors: ThemeColors = DefaultColors) => StyleSheet
     },
 });
 
-export const ActivityChoiceStyle = (colors: ThemeColors = ThemeColors[DEFAULT_THEME]) => StyleSheet.create({
+const ActivityLabelMargin = {
+    [DeviceSize.Small]: 6,
+    [DeviceSize.Medium]: 8,
+    [DeviceSize.Big]: 14,
+};
+
+export const ActivityChoiceStyle = (colors: ThemeColors = ThemeColors[DEFAULT_THEME], size: DeviceSize) => StyleSheet.create({
     iconWrap: {
         height: 24,
         alignItems: 'center',
@@ -719,22 +756,22 @@ export const ActivityChoiceStyle = (colors: ThemeColors = ThemeColors[DEFAULT_TH
         padding: 8,
         paddingTop: 12,
         paddingBottom: 10,
-        flexBasis: 79,
+        flexBasis: size > DeviceSize.Medium ? 120 : 82,
         flexShrink: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
         borderWidth: 1,
         borderRadius: 3,
         flexGrow: 0,
-        maxWidth: 80,
+        maxWidth: size > DeviceSize.Medium ? 120 : 82,
     },
     activityBtnText: {
         letterSpacing: 0.1,
         textAlign: 'center',
-        fontSize: 12,
+        fontSize: Font.Small[size],
         fontFamily: 'Roboto',
         fontWeight: 'bold',
-        marginTop: 6,
+        marginTop: ActivityLabelMargin[size],
         color: colors.colorFaded,
     },
 });
@@ -844,7 +881,7 @@ export const ThemeOptionStyle = (colors: ThemeColors, isActive: boolean) => Styl
     }
 });
 
-export const TimerTitleStyle = (color: string) => StyleSheet.create({
+export const TimerTitleStyle = (color: string, size: DeviceSize) => StyleSheet.create({
     wrap: {
         marginBottom: 30,
         marginTop: Dimensions.get('screen').height * 0.15,
@@ -853,7 +890,7 @@ export const TimerTitleStyle = (color: string) => StyleSheet.create({
         minHeight: 80,
     },
     mainTitle: {
-        fontSize: 35,
+        fontSize: Font.Largest[size],
         textAlign: 'center',
         color,
     },
@@ -869,7 +906,13 @@ export const TimerTitleStyle = (color: string) => StyleSheet.create({
     }
 });
 
-export const TimerButtonStyle = (colors: ThemeColors) => StyleSheet.create({
+const TimerBtnWidth = {
+    [DeviceSize.Small]: 80,
+    [DeviceSize.Medium]: 90,
+    [DeviceSize.Big]: 120,
+};
+
+export const TimerButtonStyle = (colors: ThemeColors, size: DeviceSize) => StyleSheet.create({
     wrap: {
         padding: 10,
         paddingLeft: 8,
@@ -877,10 +920,10 @@ export const TimerButtonStyle = (colors: ThemeColors) => StyleSheet.create({
         marginRight: -2,
         justifyContent: 'center',
         alignItems: 'center',
-        width: 80,
+        width: TimerBtnWidth[size],
     },
     label: {
-        fontSize: 16,
+        fontSize: Font.Medium[size],
         textAlign: 'center',
         alignSelf: 'center',
         color: colors.color,
@@ -888,18 +931,22 @@ export const TimerButtonStyle = (colors: ThemeColors) => StyleSheet.create({
     }
 });
 
-export const DurationInputStyle = (colors: ThemeColors) => StyleSheet.create({
+export const DurationInputStyle = (colors: ThemeColors, size: DeviceSize) => StyleSheet.create({
     wrap: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
     textStyle: {
-        fontSize: 16,
+        fontSize: Font.Normal[size],
         color: colors.color,
         marginLeft: 5,
         marginRight: 12,
     },
+    label: {
+        color: colors.color,
+        fontSize: Font.Normal[size],
+    }
 });
 
 export const PiecePickerStyles = (colors: ThemeColors = DefaultColors) => StyleSheet.create({

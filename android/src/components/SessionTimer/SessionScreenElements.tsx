@@ -5,11 +5,13 @@ import { TimerTitleStyle as getStyles } from "../../AppStyle";
 import { StateShape } from "../../store/StoreState";
 import { Activity } from "../../types/activity";
 import { getPieceCredits, getTimerActivityTitle, PieceCredits } from "common/utils/title";
+import { useDeviceSize } from "../basic/adaptive/query";
 import { getActivityColor } from "./Colors";
 
 const SessionActivityTitleComponent = (props: { activity: Activity, pieceCredits?: PieceCredits }) => {
     const color = getActivityColor(props.activity.type);
-    const styles = getStyles(color);
+    const size = useDeviceSize();
+    const styles = getStyles(color, size);
     const title = getTimerActivityTitle(props.activity, props.pieceCredits);
 
     return (

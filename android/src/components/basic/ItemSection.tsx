@@ -1,7 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { AppPaddingStyle } from "../../AppStyle";
+import { Font } from "../../sizes";
 import { useTheme } from "../../theme";
+import { ThemeColors } from "../../theme/colors";
+import { DeviceSize, useDeviceSize } from "./adaptive/query";
 
 type SectionProps = {
     children: JSX.Element | (JSX.Element| undefined)[],
@@ -9,17 +12,20 @@ type SectionProps = {
     activeElem?: JSX.Element,
 };
 
-export const ItemSection = (props: SectionProps) => (
-    <View style={style.wrap}>
-        <View style={style.header}>
-            <Text style={{ color: useTheme().colors.colorFaded }}>{props.title}</Text>
-            {props.activeElem ? props.activeElem : undefined}
+export const ItemSection = (props: SectionProps) => {
+    const style = getStyles( useTheme().colors, useDeviceSize());
+    return (
+        <View style={style.wrap}>
+            <View style={style.header}>
+                <Text style={style.title}>{props.title}</Text>
+                {props.activeElem ? props.activeElem : undefined}
+            </View>
+            {props.children}
         </View>
-        {props.children}
-    </View>
-);
+    );
+};
 
-const style = StyleSheet.create({
+const getStyles = (colors: ThemeColors, size: DeviceSize) => StyleSheet.create({
     wrap: {
         ...AppPaddingStyle,
         paddingTop: 15,
@@ -30,5 +36,9 @@ const style = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 7,
+    },
+    title: {
+        fontSize: Font.Normal[size],
+        color: colors.colorFaded,
     },
 });
