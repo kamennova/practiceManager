@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { FREE_BREAK_TIMER, FREE_SESSION_ACTIVITY_CHOICE } from "../../../NavigationPath";
 import { pushActivity } from "../../../store/actions";
 import { Activity, ActivityType } from "../../../types/activity";
-import { getSeconds } from "../../../utils/time";
+import { getSeconds } from "common/utils/time";
 import { TimeTracker } from "../../basic/timeTrackers";
 import { SessionTimer } from "../SessionTimer";
 

@@ -13,6 +13,7 @@ export type PieceBase = Item & {
     mood?: PieceMood,
     complexity?: PieceComplexity,
     genre?: PieceGenre,
+    inWishlist: boolean,
 };
 
 export type Piece = PieceBase & {
@@ -36,7 +37,6 @@ export enum PieceComplexity {
     Hard = 'Hard',
     Challenging = 'Challenging',
 }
-
 
 export enum PieceGenre {
     Classical = 'Classical',

@@ -4,7 +4,7 @@ import { ActivityTimingStyle, PlanItemStyle as getStyle } from "../../AppStyle";
 import { useTheme } from "../../theme";
 import { ActivitiesReport, ActivityType, getActivitiesReport } from "../../types/activity";
 import { SessionPlan } from "../../types/plan";
-import { formatMinutesShort } from "../../utils/time";
+import { formatMinutesShort } from "common/utils/time";
 
 export const SessionPlanItem = (props: { plan: SessionPlan, onPress: () => void }) => {
     const style = getStyle(useTheme().colors);

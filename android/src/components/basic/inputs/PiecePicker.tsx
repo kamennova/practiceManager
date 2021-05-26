@@ -5,7 +5,7 @@ import { PiecePickerStyles as getStyles } from "../../../AppStyle";
 import { StateShape } from "../../../store/StoreState";
 import { useTheme } from "../../../theme";
 import { PieceBase } from "../../../types/piece";
-import { findItemOrThrowError } from "../../../utils/find";
+import { findItemOrThrowError } from "common/utils/find";
 
 const MAX_TIPS = 10;
 

@@ -9,6 +9,7 @@ import { thunkAddPiece, thunkEditPiece } from "../../store/thunks";
 import { ActionType } from "../../types/ActionType";
 import { FormProps, FormState } from "../../types/item/ItemForm";
 import { EmptyPiece, Piece } from "../../types/piece";
+import { ColumnsWrap } from "../basic/adaptive/Columns";
 import { ErrorAlert } from "../basic/alerts";
 import { SaveButton } from "../basic/buttons/ActionButton";
 import { MyImagePicker } from "../basic/inputs/ImagePicker";
@@ -79,17 +80,19 @@ class PieceFormComponent extends Component<FormProps<Piece, { piece: Piece }>, F
             <ScreenWrapper fav={this.fav()}>
                 <ScrollView contentContainerStyle={styles.wrap}>
                     <View style={AppPaddingStyle}>
+                        <ColumnsWrap child1={
+                            <MyTextInput label={'Title'}
+                                         isRequired={true}
+                                         value={this.state.piece.name}
+                                         autoFocus={this.props.route.params.mode === ActionType.Create}
+                                         onChangeText={this.setName}/>
+                        }
+                                     child2={
+                                         <MyTextInput label='Author'
+                                                      value={this.state.piece.author}
+                                                      onChangeText={this.setAuthor}/>
 
-                        <MyTextInput label={'Title'}
-                                     isRequired={true}
-                                     value={this.state.piece.name}
-                                     autoFocus={this.props.route.params.mode === ActionType.Create}
-                                     onChangeText={this.setName}/>
-
-                        <MyTextInput label='Author'
-                                     value={this.state.piece.author}
-                                     onChangeText={this.setAuthor}/>
-
+                                     }/>
                         <TagInput list={this.state.piece.tags} onUpdateTags={this.setTags}/>
 
                         <MyImagePicker src={this.state.piece.imageUri}

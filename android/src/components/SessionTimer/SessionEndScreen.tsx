@@ -1,12 +1,15 @@
 import { StackActions } from '@react-navigation/native';
+import { secondsToHumanlyFormat } from "common/utils/time";
 import React from 'react';
-import { Dimensions, Text, View } from "react-native";
+import { Dimensions, Text, View, StyleSheet } from "react-native";
 import { connect } from "react-redux";
+import { Font } from "../../sizes";
 import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
+import { ThemeColors } from "../../theme/colors";
 import { ActivitiesReport, getActivitiesReport } from "../../types/activity";
 import { Session } from "../../types/Session";
-import { secondsToHumanlyFormat } from "../../utils/time";
+import { DeviceSize, useDeviceSize } from "../basic/adaptive/query";
 import { Button } from "../basic/buttons/Button";
 import { ModalTitle } from "../basic/titles/ModalTitle";
 
@@ -18,6 +21,7 @@ type SessionEndProps = {
 const SessionEnd = (props: SessionEndProps) => {
     const report = getActivitiesReport(props.session.history);
     const colors = useTheme().colors;
+    const size = useDeviceSize();
 
     return (
         <View style={{
@@ -34,9 +38,8 @@ const SessionEnd = (props: SessionEndProps) => {
 
                 <SessionStats report={report}/>
 
-                <Text style={{ marginTop: 20, marginBottom: 120, color: colors.color }}>
+                <Text style={{ marginTop: 40, marginBottom: 120, color: colors.color, fontSize: Font.Big[size] }}>
                     <Text style={{
-                        fontSize: 15,
                         fontWeight: 'bold'
                     }}> {secondsToHumanlyFormat(report.totalDuration)}</Text> in total
                 </Text>
@@ -57,20 +60,35 @@ const SessionStats = (props: { report: ActivitiesReport }) => (
 );
 
 const ActivityStats = (props: { label: string, duration: number, isLast?: boolean }) => {
-    const color = useTheme().colors.color;
+    const colors = useTheme().colors;
+    const size = useDeviceSize();
+    const style = getStyles(colors, size, props.isLast);
 
     return (
-        <View style={{ paddingLeft: 6, paddingRight: 7, alignItems: 'center', marginRight: props.isLast ? 0 : 15 }}>
-            <Text
-                style={{
-                    color,
-                    fontSize: 23,
-                    fontWeight: 'bold'
-                }}>{secondsToHumanlyFormat(Math.floor(props.duration))}</Text>
-            <Text style={{ color, fontSize: 14 }}>{props.label}</Text>
+        <View style={style.wrap}>
+            <Text style={style.value}>{secondsToHumanlyFormat(Math.floor(props.duration))}</Text>
+            <Text style={style.label}>{props.label}</Text>
         </View>
     );
 };
+
+const getStyles = (colors: ThemeColors, size: DeviceSize, isLast?: boolean) => StyleSheet.create({
+    wrap: {
+         paddingLeft: 6,
+        paddingRight: 7,
+        alignItems: 'center',
+        marginRight: isLast ? 0 : (size > DeviceSize.Small ? 24 : 15),
+    },
+    value: {
+        color: colors.color,
+        fontSize: Font.Big[size],
+        fontWeight: 'bold',
+    },
+    label: {
+        color: colors.color,
+        fontSize: Font.Normal[size],
+    }
+});
 
 const mapStateToProps = (state: StateShape) => ({
     session: state.sessions.items[state.sessions.items.length - 1],

@@ -4,11 +4,13 @@ import { connect } from "react-redux";
 import { AppPaddingStyle } from "../../AppStyle";
 import { addNoteToDb, deleteNoteFromDb, getPieceById } from "../../db/piece";
 import { cancelPieceNotif, schedulePieceNotif, updatePieceNotifInterval } from "../../notifications";
+import { Font } from "../../sizes";
 import { StateShape } from "../../store/StoreState";
 import { thunkDeletePiece, thunkTogglePieceFav } from "../../store/thunks";
 import { ThemeColors, useTheme } from "../../theme";
 import { ItemScreenProps } from "../../types/item/ItemScreen";
 import { EmptyPiece, Piece, PieceBase } from "../../types/piece";
+import { DeviceSize, useDeviceSize } from "../basic/adaptive/query";
 import { getSideIds } from "../basic/Item/getSideIds";
 import { ItemScreenWrapper } from "../basic/Item/ItemScreenWrapper";
 import { PieceNoteModal } from "../basic/PieceNoteModal";
@@ -109,13 +111,13 @@ const PieceComponent = (props: PieceScreenProps) => {
 const PieceAuthor = (props: { author: string }) => {
     const colors = useTheme().colors;
     return (
-        <Text style={getStyles(colors).authors}>
+        <Text style={getStyles(colors, useDeviceSize()).authors}>
             {props.author}
         </Text>
     )
 };
 
-const PieceImage = (props: { uri: string }) => (<Image source={{ uri: props.uri }} style={picStyles}/>);
+const PieceImage = (props: { uri: string }) => (<Image source={{ uri: props.uri }} style={picStyles(useDeviceSize())}/>);
 
 const mapStateToProps = (state: StateShape, ownProps: PieceScreenProps) => ({
     sideIds: getSideIds(state.pieces.items, ownProps.route.params.id),
@@ -130,11 +132,14 @@ const mapDispatchToProps = (dispatch: any, ownProps: PieceScreenProps) => ({
 const PieceScreen = connect(mapStateToProps, mapDispatchToProps)(PieceComponent);
 export default PieceScreen;
 
-const getStyles = (colors: ThemeColors) => StyleSheet.create({
-    authors: { fontSize: 15, marginBottom: 15, color: colors.colorFaded },
+const getStyles = (colors: ThemeColors, size: DeviceSize) => StyleSheet.create({
+    authors: { fontSize: Font.Medium[size], marginBottom: 15, color: colors.colorFaded },
 });
 
-const picStyles = { width: '100%', height: 260 };
+const picStyles = (size: DeviceSize) => ({
+    width: '100%',
+    height: size > DeviceSize.Medium ? 360 : 260,
+});
 
 const screenHeadStyle = (showPic: boolean) => ({
     ...AppPaddingStyle,

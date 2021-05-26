@@ -1,6 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { AppHeaderStyle, AppSidePadding } from "./AppStyle";
+import { DeviceSize, useDeviceSize } from "./components/basic/adaptive/query";
 import { BackIcon, NavIcon } from "./components/basic/icons/Header";
 import { Dashboard } from "./components/Dashboard";
 import { PieceForm } from "./components/Pieces/PieceForm";
@@ -35,16 +36,17 @@ import {
     SESSION_START,
     SETTINGS
 } from "./NavigationPath";
+import { Font } from "./sizes";
 import { ThemeColors, useTheme } from "./theme";
 import { MyTransition } from "./Transition";
 import { ActionType } from "./types/ActionType";
 
 const Stack = createStackNavigator();
 
-const options = (colors: ThemeColors) => ({
+const options = (colors: ThemeColors, size: DeviceSize) => ({
     cardStyle: { backgroundColor: colors.appBg },
     headerStyle: AppHeaderStyle(colors),
-    headerTitleStyle: { fontWeight: '500', fontFamily: 'Roboto', color: colors.color, marginLeft: -4 },
+    headerTitleStyle: { fontWeight: '500', fontFamily: 'Roboto', color: colors.color, marginLeft: -4, fontSize: Font.Medium[size] },
     headerLeftContainerStyle: { paddingLeft: AppSidePadding },
     headerRightContainerStyle: { paddingRight: AppSidePadding },
 });
@@ -54,7 +56,7 @@ const timerOptions = { title: '', headerTransparent: true, headerLeft: () => '' 
 export const Root = () => (
     <Stack.Navigator
         screenOptions={{
-            ...options(useTheme().colors),
+            ...options(useTheme().colors, useDeviceSize()),
             cardOverlayEnabled: true,
             gestureEnabled: true,
             ...MyTransition,

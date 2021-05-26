@@ -1,7 +1,7 @@
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { DrawerActions, StackActions } from '@react-navigation/native';
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { DASHBOARD, REPERTOIRE, SESSION_PLAN_LIST, SESSION_START, SETTINGS } from "../../NavigationPath";
 import { ThemeColors, useTheme } from "../../theme";
 import { StartButton } from "./buttons/ActionButton";
@@ -26,8 +26,9 @@ export const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             <CustomDrawerItem label={'Pieces'} onPress={jumpTo(REPERTOIRE)} icon={<RepertoireIcon/>}/>
             <CustomDrawerItem label={'Practice plans'} onPress={jumpTo(SESSION_PLAN_LIST)} icon={<PlansIcon/>}/>
             <CustomDrawerItem label={'Settings'} onPress={jumpTo(SETTINGS)} icon={<SettingsIcon/>}/>
-            <DrawerItem label={() => <StartButton onPress={push(SESSION_START)}/>}
-                        onPress={push(SESSION_START)} style={drawerStyle.btnWrap}/>
+            <View style={drawerStyle.btnWrap}>
+                <StartButton onPress={push(SESSION_START)}/>
+            </View>
         </DrawerContentScrollView>
     );
 };
@@ -52,11 +53,12 @@ const drawerStyle = StyleSheet.create({
         justifyContent: 'center',
         paddingBottom: 140,
         paddingLeft: 20,
+        paddingRight: 20,
     },
     btnWrap: {
         alignSelf: 'center',
         position: 'absolute',
-        bottom: 20,
+        bottom: 40,
     },
 });
 

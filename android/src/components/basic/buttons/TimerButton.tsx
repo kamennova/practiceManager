@@ -3,8 +3,13 @@ import React from 'react';
 import { Text, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
 import { useTheme } from "../../../theme";
 import { TimerButtonStyle as getStyles } from "../../../AppStyle";
+import { DeviceSize, useDeviceSize } from "../adaptive/query";
 
-const IconSize = 24;
+const IconSize = {
+    [DeviceSize.Small]: 24,
+    [DeviceSize.Medium]: 26,
+    [DeviceSize.Big]: 42,
+};
 
 type ButtonProps = {
     onPress?: () => void,
@@ -12,12 +17,13 @@ type ButtonProps = {
 
 const TimerButton = (props: ButtonProps & { label: string, icon?: string }) => {
     const colors = useTheme().colors;
-    const styles = getStyles(colors);
+    const size = useDeviceSize();
+    const styles = getStyles(colors, size);
 
     return (
         <TouchableWithoutFeedback onPress={props.onPress}>
             <View style={styles.wrap}>
-                <MaterialIcons name={props.icon} color={colors.color} size={IconSize}/>
+                <MaterialIcons name={props.icon} color={colors.color} size={IconSize[size]}/>
                 <Text style={styles.label}>
                     {props.label}
                 </Text>

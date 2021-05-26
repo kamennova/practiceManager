@@ -5,8 +5,8 @@ import { ActivityBlockStyle as getStyles } from "../../AppStyle";
 import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
 import { SessionActivity } from "../../types/activity";
-import { formatMinutesShort } from "../../utils/time";
-import { getActivityTitle, getPieceCredits, PieceCredits } from "../../utils/title";
+import { formatMinutesShort } from "common/utils/time";
+import { getActivityTitle, getPieceCredits, PieceCredits } from "common/utils/title";
 
 export type BlockProps = {
     activity: SessionActivity,

@@ -2,13 +2,14 @@ import React from "react";
 import { Text, View } from "react-native";
 import { FeaturesStyle as getStyles } from "../../../AppStyle";
 import { useTheme } from "../../../theme";
+import { useDeviceSize } from "../adaptive/query";
 
 type FeaturesProps = {
   items: Array<{label: string, val: number|string}>
 };
 
 export const ItemFeatures = (props: FeaturesProps) => {
-    const styles = getStyles(useTheme().colors);
+    const styles = getStyles(useTheme().colors, useDeviceSize());
 
     return (
         <View style={styles.wrap}>
@@ -24,7 +25,7 @@ type FeatureProps = {
 
 export const Feature = (props: FeatureProps) => {
     const colors = useTheme().colors;
-    const styles = getStyles(colors);
+    const styles = getStyles(colors, useDeviceSize());
 
     return (
         <View style={{

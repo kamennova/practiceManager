@@ -11,10 +11,13 @@ export type MenuOption = {
 export const ItemMenu = (props: { options: MenuOption[], postFunc?: () => void, style?: ViewStyle }) => {
     return (
         <View style={{ ...ItemMenuStyle(useTheme().colors), ...props.style }}>
-            {props.options.map(item => (<OptionItem label={item.label} onPress={async () => {
-                await item.func();
-                if (props.postFunc !== undefined) props.postFunc();
-            }}/>))}
+            {props.options.map(item => (
+                <OptionItem key={item.label}
+                            label={item.label}
+                            onPress={async () => {
+                                await item.func();
+                                if (props.postFunc !== undefined) props.postFunc();
+                            }}/>))}
         </View>
     );
 };

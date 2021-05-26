@@ -1,5 +1,5 @@
 import { SessionPlan } from "../../types/plan";
-import { replaceItem } from "../../utils/array";
+import { replaceItem } from "common/utils/array";
 import { ADD_PLAN, DELETE_PLAN, EDIT_PLAN, PlanActionTypes, SET_PLANS } from "../actions";
 import { initialState, ItemsShape } from "../StoreState";
 

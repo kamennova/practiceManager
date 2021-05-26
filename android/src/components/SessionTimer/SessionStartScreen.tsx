@@ -8,7 +8,7 @@ import { startSession } from "../../store/actions";
 import { StateShape } from "../../store/StoreState";
 import { useTheme } from "../../theme";
 import { SessionPlan } from "../../types/plan";
-import { findItemOrThrowError } from "../../utils/find";
+import { findItemOrThrowError } from "common/utils/find";
 import { Button, MinorButton } from "../basic/buttons/Button";
 import { TimerIcon, TimerOffIcon } from "../basic/icons/Timer";
 import { MyPicker } from "../basic/inputs/Picker";

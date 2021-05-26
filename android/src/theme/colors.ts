@@ -7,7 +7,7 @@ export const ThemeColors: { [key in Theme]: ThemeColors } = {
         appBg: '#f1f1f3',
         appBgFaded: 'rgba(241, 241, 243, 0.5)',
         appBgLight: '#e6edff',
-        primary: '#6895ff',
+        primary: '#62443A',
         border: 'lightgrey',
         borderFaded: '#dedede',
         colorFaded: 'grey',

@@ -26,7 +26,7 @@ export const addPieceToDb = async (piece: Piece): Promise<number> => {
 
 export const updatePieceInDb = async (piece: Piece): Promise<void> => {
     await Promise.all([
-        executeSql('UPDATE Pieces SET name = ?, imageUri = ?, authors  = ? WHERE id = ?',
+        executeSql('UPDATE Pieces SET name = ?, imageUri = ?, author = ? WHERE id = ?',
             [
                 piece.name,
                 piece.imageUri !== undefined ? piece.imageUri : null,
@@ -44,7 +44,7 @@ const deleteTags = async (pieceId: number): Promise<void> => {
 
 export const insertPiece = async (piece: Piece): Promise<number> =>
     await executeSql(
-            `INSERT INTO Pieces (name, addedOn, notifsOn, notifsInterval, imageUri, isFavourite, timeSpent, authors)
+            `INSERT INTO Pieces (name, addedOn, notifsOn, notifsInterval, imageUri, isFavourite, timeSpent, author)
              values (?, ?, ?, ?, ?, ?, ?, ?)`,
         [
             piece.name,
@@ -129,7 +129,7 @@ export const deleteNoteFromDb = async (id: number): Promise<void> => {
 };
 
 export const updateNotifInterval = async (pieceId: number, interval: number): Promise<void> => {
-    await executeSql('UPDATE Pieces SET notifInterval = ? WHERE id = ?',
+    await executeSql('UPDATE Pieces SET notifsInterval = ? WHERE id = ?',
         [interval, pieceId],
     );
 };

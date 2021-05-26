@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from "react-native";
 import { ItemBtnsStyle } from "../../../AppStyle";
 
-export const ItemButtonsWrap = (props: { children: JSX.Element[] }) => (
+export const ItemButtonsWrap = (props: { children: JSX.Element[] | JSX.Element }) => (
     <View style={ItemBtnsStyle()}>
         {props.children}
     </View>

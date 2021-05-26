@@ -30,6 +30,6 @@ export const sessions = (state: SessionsShape = initialState.sessions, action: S
 
 const end = (state: SessionsShape): SessionsShape => ({
     ...state,
-    current: { ...state.current, isOn: false },
+    current: { ...state.current, isOn: false, finishedOn: Date.now() },
 });
 

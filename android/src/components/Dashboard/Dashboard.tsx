@@ -1,13 +1,16 @@
+import { secondsToHumanlyFormat } from "common/utils/time";
 import React from 'react';
+import { View } from "react-native";
 import { connect } from "react-redux";
 import { StateShape } from "../../store/StoreState";
+import { useTheme } from "../../theme";
 import { getActivitiesReport, totalDuration } from "../../types/activity";
 import { PieceBase, PieceStatus } from "../../types/piece";
 import { Session } from "../../types/Session";
-import { secondsToHumanlyFormat } from "../../utils/time";
 import { ItemFeatures } from "../basic/Item/ItemFeatures";
 import { ItemSection } from "../basic/ItemSection";
 import { ScreenWrapper } from "../basic/ScreenWrapper";
+import {RowContainerStyle as getStyle} from "../../AppStyle";
 
 type DashboardProps = {
     pieces: PieceBase[],
@@ -22,19 +25,31 @@ const _Dashboard = (props: DashboardProps) => {
     return (
         <ScreenWrapper>
             <ItemSection title={'Pieces overview'}>
-                <ItemFeatures items={piecesOverview}/>
+                <RowContainer>
+                    <ItemFeatures items={piecesOverview}/>
+                </RowContainer>
             </ItemSection>
 
             <ItemSection title={'Sessions overview'}>
-                <ItemFeatures items={sessionsOverview}/>
+                <RowContainer>
+                    <ItemFeatures items={sessionsOverview}/>
+                </RowContainer>
             </ItemSection>
 
             <ItemSection title={'Activities overview'}>
-                <ItemFeatures items={activitiesOverview}/>
+                <RowContainer>
+                    <ItemFeatures items={activitiesOverview}/>
+                </RowContainer>
             </ItemSection>
         </ScreenWrapper>
     );
 };
+
+const RowContainer = (props: { children: JSX.Element }) => (
+    <View style={getStyle(useTheme().colors)}>
+        {props.children}
+    </View>
+);
 
 const getPiecesOverview = (pieces: PieceBase[]) => {
     const inWork = pieces.filter(p => p.status === PieceStatus.InWork).length;
